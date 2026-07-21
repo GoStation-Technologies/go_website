@@ -145,4 +145,14 @@ export const en = {
     terms: "Terms",
     rights: "All rights reserved.",
   },
+  chat: {
+    open: "Open chat",
+    close: "Close chat",
+    send: "Send",
+    title: "GoStation Assistant",
+    subtitle: "Ask about stations, franchise, careers…",
+    placeholder: "Type your message…",
+    greeting: "Hi! I'm the GoStation assistant. How can I help?",
+    error: "Something went wrong. Please try again.",
+  },
 };
