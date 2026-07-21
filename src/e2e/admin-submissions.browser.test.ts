@@ -103,11 +103,11 @@ maybe("Admin submissions — status updates & access control", () => {
     // Row for the seeded submission should appear
     const row = page.locator("tr", { hasText: seededEmail });
     await row.waitFor({ state: "visible", timeout: 15_000 });
-    await expect(row).toContainText(seededName);
+    expect(await row.innerText()).toContain(seededName);
 
     // Change status new → reviewing via the row's select
     const statusSelect = row.locator("select");
-    await expect(statusSelect).toHaveValue("new");
+    expect(await statusSelect.inputValue()).toBe("new");
     await statusSelect.selectOption("reviewing");
 
     // Wait for the DB to reflect the change (mutation runs through server fn)
@@ -125,12 +125,12 @@ maybe("Admin submissions — status updates & access control", () => {
     expect(dbStatus).toBe("reviewing");
 
     // Filter to "reviewing" and confirm the row is still present
-    await page.locator('select').first().selectOption("reviewing");
+    await page.locator("select").first().selectOption("reviewing");
     await page.locator("tr", { hasText: seededEmail }).first().waitFor({ state: "visible", timeout: 10_000 });
 
     // Filter to "new" and confirm it is gone (status changed)
-    await page.locator('select').first().selectOption("new");
-    await expect(page.locator("tr", { hasText: seededEmail })).toHaveCount(0, { timeout: 10_000 });
+    await page.locator("select").first().selectOption("new");
+    await page.locator("tr", { hasText: seededEmail }).first().waitFor({ state: "detached", timeout: 10_000 });
 
     await context.close();
   }, 90_000);
