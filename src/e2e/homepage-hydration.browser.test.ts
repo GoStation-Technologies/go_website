@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { chromium, type Browser } from "playwright";
+import AxeBuilder from "@axe-core/playwright";
 
 const BASE_URL = process.env.E2E_URL ?? "http://localhost:8080";
 
@@ -54,6 +55,42 @@ describe("Arabic homepage hydration", () => {
     );
     expect(hydrationErrors, hydrationErrors.join("\n")).toEqual([]);
 
+    // 5. Axe accessibility audit — no critical violations, with explicit
+    //    focus on RTL layout and ARIA attribute rules.
+    const results = await new AxeBuilder({ page: page as never })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+
+    const critical = results.violations.filter((v) => v.impact === "critical");
+    const summary = critical
+      .map((v) => `${v.id} (${v.impact}): ${v.help} [${v.nodes.length} nodes]`)
+      .join("\n");
+    expect(critical, `Axe critical violations:\n${summary}`).toEqual([]);
+
+    // Targeted RTL + ARIA rules must always pass regardless of impact tuning.
+    const rtlAriaRuleIds = new Set([
+      "html-has-lang",
+      "html-lang-valid",
+      "html-xml-lang-mismatch",
+      "valid-lang",
+      "aria-valid-attr",
+      "aria-valid-attr-value",
+      "aria-required-attr",
+      "aria-required-children",
+      "aria-required-parent",
+      "aria-roles",
+      "aria-allowed-attr",
+      "aria-hidden-body",
+      "aria-hidden-focus",
+    ]);
+    const rtlAriaViolations = results.violations.filter((v) =>
+      rtlAriaRuleIds.has(v.id),
+    );
+    expect(
+      rtlAriaViolations,
+      rtlAriaViolations.map((v) => `${v.id}: ${v.help}`).join("\n"),
+    ).toEqual([]);
+
     await context.close();
-  }, 60_000);
+  }, 90_000);
 });
