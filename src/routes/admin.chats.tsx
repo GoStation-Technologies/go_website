@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -11,6 +11,7 @@ const searchSchema = z.object({
   page: fallback(z.number().int(), 1).default(1),
   pageSize: fallback(z.number().int(), 10).default(10),
   sort: fallback(z.string(), "newest").default("newest"),
+  q: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/admin/chats")({
@@ -63,18 +64,30 @@ async function coerceError(e: unknown): Promise<ChatsError> {
 }
 
 function ChatsPage() {
-  const { page, pageSize, sort } = Route.useSearch();
+  const { page, pageSize, sort, q } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/chats" });
 
-  const [filter, setFilter] = useState("");
+  // Local state for the search input, debounced into the URL so typing
+  // doesn't fire a request on every keystroke.
+  const [qInput, setQInput] = useState(q);
+  useEffect(() => setQInput(q), [q]);
+  useEffect(() => {
+    if (qInput === q) return;
+    const t = setTimeout(() => {
+      navigate({
+        search: (prev: Record<string, unknown>) => ({ ...prev, q: qInput, page: 1 }),
+      });
+    }, 250);
+    return () => clearTimeout(t);
+  }, [qInput, q, navigate]);
 
   const { data, error, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["admin", "chats", page, pageSize, sort],
+    queryKey: ["admin", "chats", page, pageSize, sort, q],
     // Pass URL params through as-is; the server owns validation + clamping and
     // is the source of truth for the normalized page/pageSize/sort we render.
     queryFn: async () => {
       try {
-        return await adminListChats({ data: { page, pageSize, sort } });
+        return await adminListChats({ data: { page, pageSize, sort, q } });
       } catch (e) {
         throw await coerceError(e);
       }
@@ -93,19 +106,16 @@ function ChatsPage() {
   const total = data?.total ?? 0;
   const pageCount = data?.pageCount ?? 1;
 
-  const visibleSessions = useMemo(() => {
-    const all = data?.sessions ?? [];
-    const q = filter.trim().toLowerCase();
-    return q ? all.filter((s) => s.sessionId.toLowerCase().includes(q)) : all;
-  }, [data, filter]);
+  const visibleSessions = data?.sessions ?? [];
 
-  const setSearch = (patch: Partial<{ page: number; pageSize: number; sort: string }>) =>
+  const setSearch = (patch: Partial<{ page: number; pageSize: number; sort: string; q: string }>) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }) });
 
   const selectSort = (SORTS as readonly string[]).includes(shownSort)
     ? (shownSort as (typeof SORTS)[number])
     : "newest";
   const selectPageSize = [5, 10, 25, 50].includes(shownPageSize) ? shownPageSize : 10;
+
 
   return (
     <div className="space-y-4">
