@@ -338,3 +338,98 @@ function Stat({ label, value }: { label: string; value: number | string }) {
     </div>
   );
 }
+
+type ExportJob = {
+  id: string;
+  kind: string;
+  filters: Record<string, unknown> | null;
+  status: string;
+  row_count: number | null;
+  storage_path: string | null;
+  error: string | null;
+  created_at: string;
+  finished_at: string | null;
+  expires_at: string;
+};
+
+function ExportJobsPanel({
+  jobs,
+  onDownload,
+  onRefresh,
+  isFetching,
+}: {
+  jobs: ExportJob[];
+  onDownload: (id: string) => void;
+  onRefresh: () => void;
+  isFetching: boolean;
+}) {
+  if (!jobs.length) return null;
+  const badge = (s: string) => {
+    const cls =
+      s === "ready"
+        ? "bg-emerald-500/10 text-emerald-600"
+        : s === "failed"
+          ? "bg-destructive/10 text-destructive"
+          : s === "processing"
+            ? "bg-blue-500/10 text-blue-600"
+            : "bg-muted text-muted-foreground";
+    return <span className={`rounded px-2 py-0.5 text-xs ${cls}`}>{s}</span>;
+  };
+  return (
+    <section className="rounded-xl border bg-background shadow-sm">
+      <div className="flex items-center justify-between border-b p-4">
+        <h2 className="text-sm font-medium text-muted-foreground">Export jobs</h2>
+        <button
+          onClick={onRefresh}
+          className="rounded-md border px-2 py-1 text-xs hover:bg-accent/10"
+        >
+          {isFetching ? "Refreshing…" : "Refresh"}
+        </button>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
+            <tr>
+              <th className="p-3">Created</th>
+              <th className="p-3">Filters</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Rows</th>
+              <th className="p-3">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {jobs.map((j) => {
+              const f = j.filters ?? {};
+              const expired = new Date(j.expires_at).getTime() < Date.now();
+              return (
+                <tr key={j.id} className="border-t">
+                  <td className="p-3 whitespace-nowrap">{new Date(j.created_at).toLocaleString()}</td>
+                  <td className="p-3 font-mono text-xs">
+                    {String(f.windowHours ?? "?")}h{f.reason ? ` · ${String(f.reason)}` : ""}
+                  </td>
+                  <td className="p-3">
+                    {badge(expired && j.status === "ready" ? "expired" : j.status)}
+                    {j.error && <p className="mt-1 text-xs text-destructive">{j.error}</p>}
+                  </td>
+                  <td className="p-3">{j.row_count?.toLocaleString() ?? "—"}</td>
+                  <td className="p-3">
+                    {j.status === "ready" && !expired ? (
+                      <button
+                        onClick={() => onDownload(j.id)}
+                        className="rounded-md border px-2 py-1 text-xs hover:bg-accent/10"
+                      >
+                        Download
+                      </button>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
