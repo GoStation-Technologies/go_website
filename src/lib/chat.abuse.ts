@@ -102,3 +102,69 @@ export function extractIp(headers: Headers): string {
     ""
   );
 }
+
+// Non-cryptographic short hash for IPs so we can group/dedupe without
+// persisting raw IP addresses.
+export async function hashIp(ip: string): Promise<string> {
+  if (!ip) return "";
+  try {
+    const buf = new TextEncoder().encode(ip);
+    const digest = await crypto.subtle.digest("SHA-256", buf);
+    const hex = Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    return hex.slice(0, 16);
+  } catch {
+    return "";
+  }
+}
+
+export type AbuseEvent = {
+  reason: AbuseReason;
+  key?: string | null;
+  sessionId?: string | null;
+  ipHash?: string | null;
+  lang?: Lang;
+  currentCount?: number | null;
+  metadata?: Record<string, unknown>;
+};
+
+// Best-effort structured log + persistent record. Never throws — logging
+// must not take the chat down. Writes go through service_role, so RLS
+// does not block them.
+export async function recordAbuseEvent(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  ev: AbuseEvent,
+): Promise<void> {
+  // Structured console log picked up by edge/function logs.
+  try {
+    console.warn(
+      JSON.stringify({
+        evt: "abuse_hit",
+        reason: ev.reason,
+        key: ev.key ?? null,
+        session_id: ev.sessionId ?? null,
+        ip_hash: ev.ipHash ?? null,
+        lang: ev.lang ?? null,
+        current_count: ev.currentCount ?? null,
+        ...ev.metadata,
+      }),
+    );
+  } catch {
+    // ignore
+  }
+  try {
+    await supabase.from("abuse_events").insert({
+      reason: ev.reason,
+      key: ev.key ?? null,
+      session_id: ev.sessionId ?? null,
+      ip_hash: ev.ipHash ?? null,
+      lang: ev.lang ?? null,
+      current_count: ev.currentCount ?? null,
+      metadata: ev.metadata ?? {},
+    });
+  } catch {
+    // Never fail the request on logging.
+  }
+}
