@@ -1,5 +1,113 @@
 import { describe, it, expect } from "vitest";
-import { ChatsInput, paginateSessions } from "./admin.pagination";
+import { ChatsInput, paginateSessions, validateChatsInput } from "./admin.pagination";
+
+async function catchResponse(fn: () => unknown): Promise<Response> {
+  try {
+    await fn();
+  } catch (e) {
+    if (e instanceof Response) return e;
+    throw e;
+  }
+  throw new Error("expected validateChatsInput to throw a Response, but it returned");
+}
+
+type ErrorBody = {
+  error: string;
+  message: string;
+  fields: string[];
+  fieldErrors: Record<string, string[]>;
+};
+
+describe("validateChatsInput — 400 Response error body shape", () => {
+  it("returns parsed data (no throw) for valid input", () => {
+    expect(validateChatsInput({ page: 2, pageSize: 25, sort: "oldest" })).toEqual({
+      page: 2, pageSize: 25, sort: "oldest",
+    });
+    expect(validateChatsInput({})).toEqual({ page: 1, pageSize: 10, sort: "newest" });
+  });
+
+  const singleFieldCases: Array<{ label: string; input: unknown; field: "page" | "pageSize" | "sort" }> = [
+    { label: "page=0",        input: { page: 0,   pageSize: 10, sort: "newest" }, field: "page" },
+    { label: "page=-5",       input: { page: -5,  pageSize: 10, sort: "newest" }, field: "page" },
+    { label: "page=1.5",      input: { page: 1.5, pageSize: 10, sort: "newest" }, field: "page" },
+    { label: 'page="1"',      input: { page: "1", pageSize: 10, sort: "newest" }, field: "page" },
+    { label: "pageSize=0",    input: { page: 1, pageSize: 0,      sort: "newest" }, field: "pageSize" },
+    { label: "pageSize=101",  input: { page: 1, pageSize: 101,    sort: "newest" }, field: "pageSize" },
+    { label: "pageSize=huge", input: { page: 1, pageSize: 999999, sort: "newest" }, field: "pageSize" },
+    { label: "pageSize=2.5",  input: { page: 1, pageSize: 2.5,    sort: "newest" }, field: "pageSize" },
+    { label: "sort=bogus",    input: { page: 1, pageSize: 10, sort: "bogus" }, field: "sort" },
+    { label: "sort=empty",    input: { page: 1, pageSize: 10, sort: "" },      field: "sort" },
+    { label: "sort=number",   input: { page: 1, pageSize: 10, sort: 123 },     field: "sort" },
+  ];
+
+  it.each(singleFieldCases)("single-field: $label → 400 with fieldErrors.$field populated", async ({ input, field }) => {
+    const res = await catchResponse(() => validateChatsInput(input));
+
+    // Response envelope
+    expect(res).toBeInstanceOf(Response);
+    expect(res.status).toBe(400);
+    expect(res.headers.get("content-type")).toBe("application/json");
+
+    const body = (await res.json()) as ErrorBody;
+
+    // Exact top-level shape
+    expect(Object.keys(body).sort()).toEqual(["error", "fieldErrors", "fields", "message"]);
+    expect(body.error).toBe("invalid_input");
+    expect(body.message).toBe("One or more pagination parameters are invalid.");
+
+    // Only the offending field should be reported
+    expect(body.fields).toEqual([field]);
+    expect(Object.keys(body.fieldErrors)).toEqual([field]);
+
+    const msgs = body.fieldErrors[field];
+    expect(Array.isArray(msgs)).toBe(true);
+    expect(msgs.length).toBeGreaterThan(0);
+    for (const m of msgs) {
+      expect(typeof m).toBe("string");
+      expect(m.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("multi-field: reports every invalid field with non-empty messages", async () => {
+    const res = await catchResponse(() =>
+      validateChatsInput({ page: -1, pageSize: 0, sort: "bogus" }),
+    );
+
+    expect(res.status).toBe(400);
+    expect(res.headers.get("content-type")).toBe("application/json");
+
+    const body = (await res.json()) as ErrorBody;
+
+    expect(Object.keys(body).sort()).toEqual(["error", "fieldErrors", "fields", "message"]);
+    expect(body.error).toBe("invalid_input");
+    expect(body.message).toBe("One or more pagination parameters are invalid.");
+
+    // All three offenders present (order-agnostic), and no extras
+    expect(new Set(body.fields)).toEqual(new Set(["page", "pageSize", "sort"]));
+    expect(new Set(Object.keys(body.fieldErrors))).toEqual(new Set(["page", "pageSize", "sort"]));
+
+    for (const f of ["page", "pageSize", "sort"] as const) {
+      const msgs = body.fieldErrors[f];
+      expect(Array.isArray(msgs)).toBe(true);
+      expect(msgs.length).toBeGreaterThan(0);
+      expect(msgs.every((m) => typeof m === "string" && m.length > 0)).toBe(true);
+    }
+
+    // `fields` is derived from `fieldErrors` — keep them consistent
+    expect([...body.fields].sort()).toEqual(Object.keys(body.fieldErrors).sort());
+  });
+
+  it("multi-field with two offenders leaves the valid field out of the error body", async () => {
+    const res = await catchResponse(() =>
+      validateChatsInput({ page: 0, pageSize: 500, sort: "newest" }),
+    );
+    const body = (await res.json()) as ErrorBody;
+
+    expect(res.status).toBe(400);
+    expect(new Set(body.fields)).toEqual(new Set(["page", "pageSize"]));
+    expect(Object.keys(body.fieldErrors)).not.toContain("sort");
+  });
+});
 
 describe("adminListChats input validation (ChatsInput)", () => {
   it("applies defaults for empty input", () => {
