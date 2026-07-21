@@ -101,8 +101,3 @@ export function extractIp(headers: Headers): string {
     ""
   );
 }
-
-// Helper used by unit tests to reset the IP store.
-export function __resetIpStore() {
-  ipStore.clear();
-}
