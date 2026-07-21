@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { retrieveGrounding, formatGrounding } from "./chat.grounding";
 
 const Input = z.object({
   sessionId: z.string().uuid(),
@@ -65,8 +66,14 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       content: data.message,
     });
 
+    // Retrieve grounding context from stations, news, jobs
+    const grounding = await retrieveGrounding(supabaseAdmin, data.message, data.lang);
+    const groundingBlock = formatGrounding(grounding, data.lang);
+
+    const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (groundingBlock ? `\n\n${groundingBlock}` : "");
+
     const messages = [
-      { role: "system", content: data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN },
+      { role: "system", content: systemPrompt },
       ...(history ?? []).map((m) => ({ role: m.role, content: m.content })),
       { role: "user", content: data.message },
     ];
