@@ -109,6 +109,88 @@ describe("validateChatsInput — 400 Response error body shape", () => {
   });
 });
 
+describe("validateChatsInput — missing / undefined / null / non-numeric handling", () => {
+  const DEFAULTS = { page: 1, pageSize: 10, sort: "newest" as const };
+
+  // Missing keys and `undefined` values must fall back to defaults, never 400.
+  const defaultCases: Array<{ label: string; input: unknown }> = [
+    { label: "missing: undefined input", input: undefined },
+    { label: "missing: null input",      input: null }, // safeParse(null ?? {}) → {}
+    { label: "missing: empty object",    input: {} },
+    { label: "missing: page only",       input: { pageSize: 25, sort: "oldest" } },
+    { label: "missing: pageSize only",   input: { page: 3, sort: "messages" } },
+    { label: "missing: sort only",       input: { page: 2, pageSize: 5 } },
+    { label: "undefined: page",          input: { page: undefined, pageSize: 25, sort: "oldest" } },
+    { label: "undefined: pageSize",      input: { page: 3, pageSize: undefined, sort: "messages" } },
+    { label: "undefined: sort",          input: { page: 2, pageSize: 5, sort: undefined } },
+    { label: "undefined: all three",     input: { page: undefined, pageSize: undefined, sort: undefined } },
+  ];
+
+  it.each(defaultCases)("defaults: $label → parsed data, no throw", ({ input }) => {
+    const parsed = validateChatsInput(input);
+    // Merge defaults with any explicit values on the input for expectation
+    const rec = (input && typeof input === "object" ? input : {}) as Record<string, unknown>;
+    const expected = {
+      page: rec.page === undefined ? DEFAULTS.page : rec.page,
+      pageSize: rec.pageSize === undefined ? DEFAULTS.pageSize : rec.pageSize,
+      sort: rec.sort === undefined ? DEFAULTS.sort : rec.sort,
+    };
+    expect(parsed).toEqual(expected);
+  });
+
+  // Null and non-numeric values on required-typed fields must produce the
+  // structured 400 body — same shape as any other invalid input.
+  const rejectCases: Array<{ label: string; input: unknown; fields: string[] }> = [
+    { label: "null page",             input: { page: null,   pageSize: 10, sort: "newest" }, fields: ["page"] },
+    { label: "null pageSize",         input: { page: 1, pageSize: null,   sort: "newest" }, fields: ["pageSize"] },
+    { label: "null sort",             input: { page: 1, pageSize: 10, sort: null },          fields: ["sort"] },
+    { label: "string page 'abc'",     input: { page: "abc", pageSize: 10, sort: "newest" }, fields: ["page"] },
+    { label: "string page ''",        input: { page: "",    pageSize: 10, sort: "newest" }, fields: ["page"] },
+    { label: "string pageSize 'ten'", input: { page: 1, pageSize: "ten",  sort: "newest" }, fields: ["pageSize"] },
+    { label: "boolean page",          input: { page: true, pageSize: 10, sort: "newest" },  fields: ["page"] },
+    { label: "array page",            input: { page: [1],  pageSize: 10, sort: "newest" },  fields: ["page"] },
+    { label: "object pageSize",       input: { page: 1, pageSize: {},    sort: "newest" },  fields: ["pageSize"] },
+    { label: "NaN page",              input: { page: NaN,  pageSize: 10, sort: "newest" },  fields: ["page"] },
+    { label: "Infinity pageSize",     input: { page: 1, pageSize: Infinity, sort: "newest" }, fields: ["pageSize"] },
+    { label: "number sort",           input: { page: 1, pageSize: 10, sort: 3 },             fields: ["sort"] },
+    { label: "null page + non-numeric pageSize + bad sort",
+      input: { page: null, pageSize: "x", sort: "bogus" }, fields: ["page", "pageSize", "sort"] },
+    { label: "non-object input: string",  input: "not-an-object",  fields: ["_root"] },
+    { label: "non-object input: number",  input: 42,               fields: ["_root"] },
+    { label: "non-object input: boolean", input: true,             fields: ["_root"] },
+    { label: "non-object input: array",   input: [1, 2, 3],        fields: ["_root"] },
+  ];
+
+  it.each(rejectCases)("rejects: $label → 400 with exact error body shape", async ({ input, fields }) => {
+    const res = await catchResponse(() => validateChatsInput(input));
+
+    expect(res).toBeInstanceOf(Response);
+    expect(res.status).toBe(400);
+    expect(res.headers.get("content-type")).toBe("application/json");
+
+    const body = (await res.json()) as ErrorBody;
+
+    // Exact top-level shape — no extra keys, no missing keys.
+    expect(Object.keys(body).sort()).toEqual(["error", "fieldErrors", "fields", "message"]);
+    expect(body.error).toBe("invalid_input");
+    expect(body.message).toBe("One or more pagination parameters are invalid.");
+
+    // Order-agnostic field set; `fields` mirrors `fieldErrors` keys.
+    expect(new Set(body.fields)).toEqual(new Set(fields));
+    expect(new Set(Object.keys(body.fieldErrors))).toEqual(new Set(fields));
+    expect([...body.fields].sort()).toEqual(Object.keys(body.fieldErrors).sort());
+
+    // Every reported field carries at least one non-empty string message.
+    for (const f of fields) {
+      const msgs = body.fieldErrors[f];
+      expect(Array.isArray(msgs)).toBe(true);
+      expect(msgs.length).toBeGreaterThan(0);
+      expect(msgs.every((m) => typeof m === "string" && m.length > 0)).toBe(true);
+    }
+  });
+});
+
+
 describe("adminListChats input validation (ChatsInput)", () => {
   it("applies defaults for empty input", () => {
     const parsed = ChatsInput.parse({});
