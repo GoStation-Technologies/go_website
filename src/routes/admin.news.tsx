@@ -47,6 +47,17 @@ function NewsPage() {
   });
 
   const rows = (data?.rows ?? []) as News[];
+  const view = useListView<News>({
+    rows,
+    search: (n) => `${n.title_en} ${n.title_ar} ${n.slug} ${n.kind}`,
+    sort: {
+      newest: () => 0,
+      title_en: (a, b) => a.title_en.localeCompare(b.title_en),
+      kind: (a, b) => a.kind.localeCompare(b.kind),
+      published_first: (a, b) => Number(b.is_published) - Number(a.is_published),
+    },
+    defaultSort: "newest",
+  });
   const edit = (n: News) => { setForm({ ...empty, ...n }); setOpen(true); };
   const create = () => { setForm(empty); setOpen(true); };
 
