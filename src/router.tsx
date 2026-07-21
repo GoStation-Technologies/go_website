@@ -2,7 +2,8 @@ import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { routeTree } from "./routeTree.gen";
-import { getLangFromCookieHeader, type ContentLanguage } from "@/lib/i18n";
+import { getContentLanguage, getLangFromCookieHeader, type ContentLanguage } from "@/lib/i18n";
+import { getRequestHeader } from "@tanstack/react-start/server";
 
 const detectRequestLanguage = createIsomorphicFn()
   .client((): ContentLanguage => {
@@ -10,9 +11,13 @@ const detectRequestLanguage = createIsomorphicFn()
     return fromCookie ?? "en";
   })
   .server((): ContentLanguage => {
-    // Lazy require so the server-only module never enters the client graph.
-    const { detectRequestLanguageServer } = require("@/lib/detect-language.server") as typeof import("@/lib/detect-language.server");
-    return detectRequestLanguageServer();
+    try {
+      const fromCookie = getLangFromCookieHeader(getRequestHeader("cookie"));
+      if (fromCookie) return fromCookie;
+      return getContentLanguage(getRequestHeader("accept-language"));
+    } catch {
+      return "en";
+    }
   });
 
 export const getRouter = () => {
