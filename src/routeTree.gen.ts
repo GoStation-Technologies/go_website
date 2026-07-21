@@ -16,10 +16,14 @@ import { Route as FranchiseRouteImport } from './routes/franchise'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
+import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
+import { Route as AdminChatsRouteImport } from './routes/admin.chats'
 
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
@@ -56,6 +60,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AcquisitionsRoute = AcquisitionsRouteImport.update({
   id: '/acquisitions',
   path: '/acquisitions',
@@ -71,16 +80,32 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const MediaSlugRoute = MediaSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => MediaRoute,
+} as any)
+const AdminSubmissionsRoute = AdminSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminChatsRoute = AdminChatsRouteImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -88,7 +113,10 @@ export interface FileRoutesByFullPath {
   '/investors': typeof InvestorsRoute
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
+  '/admin/chats': typeof AdminChatsRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -101,13 +129,17 @@ export interface FileRoutesByTo {
   '/investors': typeof InvestorsRoute
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
+  '/admin/chats': typeof AdminChatsRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -115,7 +147,10 @@ export interface FileRoutesById {
   '/investors': typeof InvestorsRoute
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
+  '/admin/chats': typeof AdminChatsRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,6 +158,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/acquisitions'
+    | '/admin'
     | '/auth'
     | '/careers'
     | '/contact'
@@ -130,7 +166,10 @@ export interface FileRouteTypes {
     | '/investors'
     | '/media'
     | '/stations'
+    | '/admin/chats'
+    | '/admin/submissions'
     | '/media/$slug'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -143,12 +182,16 @@ export interface FileRouteTypes {
     | '/investors'
     | '/media'
     | '/stations'
+    | '/admin/chats'
+    | '/admin/submissions'
     | '/media/$slug'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/acquisitions'
+    | '/admin'
     | '/auth'
     | '/careers'
     | '/contact'
@@ -156,13 +199,17 @@ export interface FileRouteTypes {
     | '/investors'
     | '/media'
     | '/stations'
+    | '/admin/chats'
+    | '/admin/submissions'
     | '/media/$slug'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AcquisitionsRoute: typeof AcquisitionsRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
@@ -223,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/acquisitions': {
       id: '/acquisitions'
       path: '/acquisitions'
@@ -244,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/media/$slug': {
       id: '/media/$slug'
       path: '/$slug'
@@ -251,8 +312,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaSlugRouteImport
       parentRoute: typeof MediaRoute
     }
+    '/admin/submissions': {
+      id: '/admin/submissions'
+      path: '/submissions'
+      fullPath: '/admin/submissions'
+      preLoaderRoute: typeof AdminSubmissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/chats': {
+      id: '/admin/chats'
+      path: '/chats'
+      fullPath: '/admin/chats'
+      preLoaderRoute: typeof AdminChatsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminChatsRoute: typeof AdminChatsRoute
+  AdminSubmissionsRoute: typeof AdminSubmissionsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminChatsRoute: AdminChatsRoute,
+  AdminSubmissionsRoute: AdminSubmissionsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface MediaRouteChildren {
   MediaSlugRoute: typeof MediaSlugRoute
@@ -268,6 +357,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AcquisitionsRoute: AcquisitionsRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,

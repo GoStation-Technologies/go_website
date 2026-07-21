@@ -13,7 +13,7 @@ const TABS: { key: Kind; label: string }[] = [
 ];
 const STATUSES = ["new", "reviewing", "closed"] as const;
 
-export const Route = createFileRoute("/_admin/submissions")({
+export const Route = createFileRoute("/admin/submissions")({
   component: SubmissionsPage,
 });
 

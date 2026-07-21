@@ -6,7 +6,7 @@ import { getMyStaffRoles } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { LogOut, LayoutDashboard, Inbox, MessageSquare } from "lucide-react";
 
-export const Route = createFileRoute("/_admin")({
+export const Route = createFileRoute("/admin")({
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
@@ -37,7 +37,7 @@ function AdminLayout() {
     <div className="min-h-screen bg-muted/30">
       <header className="sticky top-0 z-30 border-b bg-background">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link to="/_admin" className="flex items-center gap-2 font-semibold text-primary">
+          <Link to="/admin" className="flex items-center gap-2 font-semibold text-primary">
             <LayoutDashboard className="h-5 w-5" />
             GoStation Admin
           </Link>
@@ -51,9 +51,9 @@ function AdminLayout() {
       </header>
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[220px_1fr]">
         <aside className="space-y-1">
-          <SideLink to="/_admin" icon={<LayoutDashboard className="h-4 w-4" />}>Overview</SideLink>
-          <SideLink to="/_admin/submissions" icon={<Inbox className="h-4 w-4" />}>Submissions</SideLink>
-          <SideLink to="/_admin/chats" icon={<MessageSquare className="h-4 w-4" />}>Chat logs</SideLink>
+          <SideLink to="/admin" icon={<LayoutDashboard className="h-4 w-4" />}>Overview</SideLink>
+          <SideLink to="/admin/submissions" icon={<Inbox className="h-4 w-4" />}>Submissions</SideLink>
+          <SideLink to="/admin/chats" icon={<MessageSquare className="h-4 w-4" />}>Chat logs</SideLink>
         </aside>
         <main className="min-w-0">
           <Outlet />

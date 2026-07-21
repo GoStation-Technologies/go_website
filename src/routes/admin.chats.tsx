@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { adminListChats } from "@/lib/admin.functions";
 
-export const Route = createFileRoute("/_admin/chats")({
+export const Route = createFileRoute("/admin/chats")({
   component: ChatsPage,
 });
 
