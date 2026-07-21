@@ -100,3 +100,38 @@ export const adminAbuseMetrics = createServerFn({ method: "POST" })
       recent: recent ?? [],
     };
   });
+
+const ExportInput = z.object({
+  windowHours: z.number().int().min(1).max(24 * 30).default(24),
+  reason: z.string().min(1).max(64).optional(),
+  limit: z.number().int().min(1).max(10000).default(10000),
+});
+
+/**
+ * Returns filtered abuse_events rows for CSV export. Requires super_admin.
+ */
+export const adminAbuseExport = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => ExportInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "super_admin",
+    });
+    if (!isAdmin) throw new Response("Forbidden", { status: 403 });
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const since = new Date(Date.now() - data.windowHours * 3600_000).toISOString();
+
+    let q = supabaseAdmin
+      .from("abuse_events")
+      .select("id, created_at, reason, key, session_id, ip_hash, current_count, lang, metadata")
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(data.limit);
+    if (data.reason) q = q.eq("reason", data.reason);
+
+    const { data: rows, error } = await q;
+    if (error) throw new Response(error.message, { status: 500 });
+    return { rows: rows ?? [] };
+  });
