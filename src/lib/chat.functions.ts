@@ -42,21 +42,65 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       return { ok: false as const, error: "AI is not configured yet." };
     }
 
+    // Content filter (URL flood, char repetition, script tags)
+    const contentReason = messageLooksAbusive(data.message);
+    if (contentReason) {
+      return { ok: false as const, error: errorMessage(contentReason, data.lang) };
+    }
+
+    // Per-IP rate limit (in-memory, best-effort per Worker isolate)
+    try {
+      const req = getRequest();
+      const ip = extractIp(req.headers);
+      const ipReason = checkIpRate(ip);
+      if (ipReason) {
+        return { ok: false as const, error: errorMessage(ipReason, data.lang) };
+      }
+    } catch {
+      // getRequest may be unavailable in some contexts; skip IP check.
+    }
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Rate limit: 20 messages per session per 10 min.
-    const since = new Date(Date.now() - 10 * 60_000).toISOString();
-    const { count } = await supabaseAdmin
+    // Session-based rate limits + duplicate/flood detection.
+    const now = Date.now();
+    const dayAgo = new Date(now - 24 * 3_600_000).toISOString();
+    const { data: recent } = await supabaseAdmin
       .from("chatbot_messages")
-      .select("id", { count: "exact", head: true })
+      .select("content, created_at")
       .eq("session_id", data.sessionId)
       .eq("role", "user")
-      .gte("created_at", since);
-    if ((count ?? 0) >= 20) {
-      return {
-        ok: false as const,
-        error: data.lang === "ar" ? "تجاوزت الحد. حاول لاحقاً." : "Rate limit exceeded. Try again shortly.",
-      };
+      .gte("created_at", dayAgo)
+      .order("created_at", { ascending: false })
+      .limit(LIMITS.perSessionPerDay + 1);
+
+    const times = (recent ?? []).map((r) => new Date(r.created_at as string).getTime());
+    const last = times[0];
+    if (last && now - last < LIMITS.minIntervalMs) {
+      return { ok: false as const, error: errorMessage("too_fast", data.lang) };
+    }
+    // Duplicate message within window
+    const dupSince = now - LIMITS.duplicateWindowMs;
+    if (
+      (recent ?? []).some(
+        (r) =>
+          r.content === data.message &&
+          new Date(r.created_at as string).getTime() > dupSince,
+      )
+    ) {
+      return { ok: false as const, error: errorMessage("duplicate", data.lang) };
+    }
+    const inMinute = times.filter((t) => t > now - 60_000).length;
+    const inHour = times.filter((t) => t > now - 3_600_000).length;
+    const inDay = times.length;
+    if (inMinute >= LIMITS.perSessionPerMinute) {
+      return { ok: false as const, error: errorMessage("session_minute", data.lang) };
+    }
+    if (inHour >= LIMITS.perSessionPerHour) {
+      return { ok: false as const, error: errorMessage("session_hour", data.lang) };
+    }
+    if (inDay >= LIMITS.perSessionPerDay) {
+      return { ok: false as const, error: errorMessage("session_day", data.lang) };
     }
 
     // Load recent history (last 20).
