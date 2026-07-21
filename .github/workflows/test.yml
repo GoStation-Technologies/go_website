@@ -80,6 +80,19 @@ jobs:
         env:
           E2E_URL: http://127.0.0.1:8181
         run: bun run test:e2e:prod
+      - name: Arabic SSR smoke (dir="rtl" + translated content)
+        run: |
+          set -euo pipefail
+          curl -sf -H 'cookie: gs_lang=ar' -H 'accept-language: ar' \
+            http://127.0.0.1:8181/ -o ar.html
+          echo "--- <html> tag ---"
+          grep -oE '<html[^>]*>' ar.html | head -1
+          grep -qE '<html[^>]*\blang="ar"' ar.html || { echo "missing lang=ar"; exit 1; }
+          grep -qE '<html[^>]*\bdir="rtl"'  ar.html || { echo "missing dir=rtl"; exit 1; }
+          grep -q 'قوستيشن' ar.html || { echo "missing Arabic brand"; exit 1; }
+          grep -q 'من نحن'  ar.html || { echo "missing Arabic nav.about"; exit 1; }
+          grep -qE '"unhandled"\s*:\s*true' ar.html && { echo "h3-swallowed error body"; exit 1; } || true
+          echo "Arabic SSR OK"
       - name: Stop production worker
         if: always()
         run: kill $(cat wrangler.pid) || true
