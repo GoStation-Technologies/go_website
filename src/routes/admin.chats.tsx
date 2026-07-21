@@ -210,7 +210,7 @@ function ChatsPage() {
               data-session-id={s.sessionId}
               data-message-count={s.messageCount}
               data-last-at={s.lastAt ?? ""}
-              open={Boolean(filter)}
+              open={Boolean(q)}
             >
               <summary className="cursor-pointer text-sm font-medium">
                 <span className="font-mono text-xs text-muted-foreground">
