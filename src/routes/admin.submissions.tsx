@@ -106,18 +106,30 @@ function SubmissionsPage() {
                     {new Date(String(r.created_at)).toLocaleString()}
                   </td>
                   <td className="px-3 py-2">
-                    <select
-                      value={String(r.status ?? "new")}
-                      onChange={(e) =>
-                        updateMut.mutate({ id: String(r.id), status: e.target.value as (typeof STATUSES)[number] })
-                      }
-                      className="rounded-md border bg-background px-2 py-1 text-xs"
-                      disabled={updateMut.isPending}
-                    >
-                      {STATUSES.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
-                    </select>
+                    <div className="flex items-center gap-2">
+                      <span
+                        aria-label={`status ${String(r.status ?? "new")}`}
+                        className={`inline-block h-2 w-2 rounded-full ${
+                          String(r.status ?? "new") === "new"
+                            ? "bg-blue-500"
+                            : String(r.status) === "reviewing"
+                              ? "bg-amber-500"
+                              : "bg-emerald-500"
+                        }`}
+                      />
+                      <select
+                        value={String(r.status ?? "new")}
+                        onChange={(e) =>
+                          updateMut.mutate({ id: String(r.id), status: e.target.value as (typeof STATUSES)[number] })
+                        }
+                        className="rounded-md border bg-background px-2 py-1 text-xs"
+                        disabled={updateMut.isPending}
+                      >
+                        {STATUSES.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                    </div>
                   </td>
                 </tr>
               ))}
