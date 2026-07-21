@@ -28,7 +28,6 @@ export function createI18nInstance(lng: ContentLanguage): I18n {
     supportedLngs: ["en", "ar"],
     defaultNS: "t",
     interpolation: { escapeValue: false },
-    initImmediate: false, // synchronous — SSR must have translations ready
     react: { useSuspense: false },
   });
   return instance;
