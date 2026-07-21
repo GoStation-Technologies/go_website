@@ -7,7 +7,10 @@ import {
   checkPersistentRate,
   errorMessage,
   extractIp,
+  hashIp,
   messageLooksAbusive,
+  recordAbuseEvent,
+  type AbuseReason,
 } from "./chat.abuse";
 
 const Input = z.object({
