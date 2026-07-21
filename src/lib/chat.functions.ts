@@ -1,7 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
 
 const Input = z.object({
   sessionId: z.string().uuid(),
@@ -27,24 +25,6 @@ const SYSTEM_AR = `أنت المساعد ثنائي اللغة لخدمة عمل
 - لا تخترع محطات أو أسعاراً أو وظائف.
 - أجب بنفس لغة رسالة المستخدم الأخيرة.`;
 
-function serverSupabase() {
-  const url = process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-  return createClient<Database>(url, key, {
-    auth: { persistSession: false },
-    global: {
-      fetch: (input, init) => {
-        const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) {
-          h.delete("Authorization");
-        }
-        h.set("apikey", key);
-        return fetch(input, { ...init, headers: h });
-      },
-    },
-  });
-}
-
 export const sendChatMessage = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => Input.parse(raw))
   .handler(async ({ data }) => {
@@ -53,11 +33,11 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       return { ok: false as const, error: "AI is not configured yet." };
     }
 
-    const supabase = serverSupabase();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Rate limit: 20 messages per session per 10 min.
     const since = new Date(Date.now() - 10 * 60_000).toISOString();
-    const { count } = await supabase
+    const { count } = await supabaseAdmin
       .from("chatbot_messages")
       .select("id", { count: "exact", head: true })
       .eq("session_id", data.sessionId)
@@ -71,7 +51,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     }
 
     // Load recent history (last 20).
-    const { data: history } = await supabase
+    const { data: history } = await supabaseAdmin
       .from("chatbot_messages")
       .select("role, content")
       .eq("session_id", data.sessionId)
@@ -79,7 +59,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       .limit(20);
 
     // Persist user message.
-    await supabase.from("chatbot_messages").insert({
+    await supabaseAdmin.from("chatbot_messages").insert({
       session_id: data.sessionId,
       role: "user",
       content: data.message,
