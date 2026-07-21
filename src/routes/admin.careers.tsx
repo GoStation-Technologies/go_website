@@ -44,6 +44,18 @@ function CareersPage() {
   });
 
   const rows = (data?.rows ?? []) as Job[];
+  const view = useListView<Job>({
+    rows,
+    search: (j) => `${j.title_en} ${j.title_ar} ${j.slug} ${j.department} ${j.city} ${j.employment_type}`,
+    sort: {
+      newest: () => 0,
+      title_en: (a, b) => a.title_en.localeCompare(b.title_en),
+      department: (a, b) => a.department.localeCompare(b.department),
+      city: (a, b) => a.city.localeCompare(b.city),
+      active_first: (a, b) => Number(b.is_active) - Number(a.is_active),
+    },
+    defaultSort: "newest",
+  });
   const edit = (j: Job) => { setForm({ ...empty, ...j }); setOpen(true); };
   const create = () => { setForm(empty); setOpen(true); };
 
