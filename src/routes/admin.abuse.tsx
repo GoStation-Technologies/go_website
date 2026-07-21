@@ -147,6 +147,13 @@ function AbuseDashboard() {
           >
             {isFetching ? "Refreshing…" : "Refresh"}
           </button>
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="rounded-md border px-3 py-1.5 text-sm hover:bg-accent/10 disabled:opacity-50"
+          >
+            {exporting ? "Exporting…" : "Export CSV"}
+          </button>
         </div>
       </div>
 
