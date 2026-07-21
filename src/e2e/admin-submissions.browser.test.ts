@@ -72,7 +72,9 @@ beforeAll(async () => {
 afterAll(async () => {
   await browser?.close();
   if (!canRun) return;
-  if (seededId) await admin!.from("contact_messages").delete().eq("id", seededId).catch(() => {});
+  if (seededId) {
+    try { await admin!.from("contact_messages").delete().eq("id", seededId); } catch { /* ignore */ }
+  }
   await Promise.all([deleteUser(superAdmin), deleteUser(outsider)]);
 });
 
