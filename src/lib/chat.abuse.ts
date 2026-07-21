@@ -72,7 +72,8 @@ export function errorMessage(reason: AbuseReason, lang: Lang): string {
 // so a transient DB glitch never takes the chat down (session-level limits
 // in chatbot_messages still apply).
 export async function checkPersistentRate(
-  supabase: { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   key: string,
   windowSeconds: number,
   limit: number,
