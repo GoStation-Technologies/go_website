@@ -13,15 +13,21 @@ function visibleTextLength(html: string): number {
   return stripped.length;
 }
 
-async function fetchHome(lang: "en" | "ar"): Promise<{ status: number; html: string }> {
+async function fetchHome(lang: string): Promise<{ status: number; html: string }> {
   const res = await fetch(BASE_URL + "/", {
     headers: { "accept-language": lang, cookie: `i18nextLng=${lang}` },
   });
   return { status: res.status, html: await res.text() };
 }
 
+// Supported languages render in their own locale; unsupported ones must
+// gracefully fall back to English without producing a blank SSR shell.
+const SUPPORTED = ["en", "ar"] as const;
+const FALLBACK = ["fr", "de", "es", "zh-CN", "ja", "pt-BR", "ru", "hi"] as const;
+const ALL_LANGS = [...SUPPORTED, ...FALLBACK];
+
 describe("SSR homepage smoke", () => {
-  for (const lang of ["en", "ar"] as const) {
+  for (const lang of ALL_LANGS) {
     it(`renders non-blank SSR HTML for ${lang}`, async () => {
       const { status, html } = await fetchHome(lang);
       expect(status).toBe(200);
@@ -38,3 +44,4 @@ describe("SSR homepage smoke", () => {
     }, 30_000);
   }
 });
+
