@@ -4,7 +4,7 @@ import { z } from "zod";
 import { retrieveGrounding, formatGrounding } from "./chat.grounding";
 import {
   LIMITS,
-  checkIpRate,
+  checkPersistentRate,
   errorMessage,
   extractIp,
   messageLooksAbusive,
@@ -48,19 +48,66 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       return { ok: false as const, error: errorMessage(contentReason, data.lang) };
     }
 
-    // Per-IP rate limit (in-memory, best-effort per Worker isolate)
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Persistent per-IP rate limits (Postgres-backed, cross-instance).
+    let ip = "";
     try {
       const req = getRequest();
-      const ip = extractIp(req.headers);
-      const ipReason = checkIpRate(ip);
-      if (ipReason) {
-        return { ok: false as const, error: errorMessage(ipReason, data.lang) };
-      }
+      ip = extractIp(req.headers);
     } catch {
-      // getRequest may be unavailable in some contexts; skip IP check.
+      // getRequest unavailable in some contexts.
+    }
+    if (ip) {
+      const minute = await checkPersistentRate(
+        supabaseAdmin,
+        `ip:${ip}:m`,
+        60,
+        LIMITS.perIpPerMinute,
+      );
+      if (!minute.allowed) {
+        return { ok: false as const, error: errorMessage("ip_minute", data.lang) };
+      }
+      const hour = await checkPersistentRate(
+        supabaseAdmin,
+        `ip:${ip}:h`,
+        3600,
+        LIMITS.perIpPerHour,
+      );
+      if (!hour.allowed) {
+        return { ok: false as const, error: errorMessage("ip_hour", data.lang) };
+      }
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    // Persistent per-session rate limits (cross-instance, atomic).
+    const sm = await checkPersistentRate(
+      supabaseAdmin,
+      `sess:${data.sessionId}:m`,
+      60,
+      LIMITS.perSessionPerMinute,
+    );
+    if (!sm.allowed) {
+      return { ok: false as const, error: errorMessage("session_minute", data.lang) };
+    }
+    const sh = await checkPersistentRate(
+      supabaseAdmin,
+      `sess:${data.sessionId}:h`,
+      3600,
+      LIMITS.perSessionPerHour,
+    );
+    if (!sh.allowed) {
+      return { ok: false as const, error: errorMessage("session_hour", data.lang) };
+    }
+    const sd = await checkPersistentRate(
+      supabaseAdmin,
+      `sess:${data.sessionId}:d`,
+      86400,
+      LIMITS.perSessionPerDay,
+    );
+    if (!sd.allowed) {
+      return { ok: false as const, error: errorMessage("session_day", data.lang) };
+    }
+
 
     // Session-based rate limits + duplicate/flood detection.
     const now = Date.now();

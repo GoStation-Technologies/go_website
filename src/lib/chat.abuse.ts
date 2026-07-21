@@ -67,32 +67,31 @@ export function errorMessage(reason: AbuseReason, lang: Lang): string {
   return (lang === "ar" ? ar : en)[reason];
 }
 
-// In-memory IP rate-limit store (per Worker isolate — best-effort).
-type IpBucket = { minute: number[]; hour: number[] };
-const ipStore = new Map<string, IpBucket>();
-const IP_STORE_MAX = 5000;
-
-export function checkIpRate(ip: string, now: number = Date.now()): AbuseReason | null {
-  if (!ip) return null;
-  let b = ipStore.get(ip);
-  if (!b) {
-    if (ipStore.size >= IP_STORE_MAX) {
-      // simple eviction: drop first key
-      const first = ipStore.keys().next().value;
-      if (first) ipStore.delete(first);
+// Persistent, cross-instance rate-limit check backed by the Postgres
+// `rate_limit_hit` RPC. Falls back to allowing the request if the RPC fails,
+// so a transient DB glitch never takes the chat down (session-level limits
+// in chatbot_messages still apply).
+export async function checkPersistentRate(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  key: string,
+  windowSeconds: number,
+  limit: number,
+): Promise<{ allowed: boolean; count: number; resetAt: string | null }> {
+  try {
+    const { data, error } = await supabase.rpc("rate_limit_hit", {
+      _key: key,
+      _window_seconds: windowSeconds,
+      _limit: limit,
+    });
+    if (error || !Array.isArray(data) || data.length === 0) {
+      return { allowed: true, count: 0, resetAt: null };
     }
-    b = { minute: [], hour: [] };
-    ipStore.set(ip, b);
+    const row = data[0] as { allowed: boolean; current_count: number; reset_at: string };
+    return { allowed: row.allowed, count: row.current_count, resetAt: row.reset_at };
+  } catch {
+    return { allowed: true, count: 0, resetAt: null };
   }
-  const minuteAgo = now - 60_000;
-  const hourAgo = now - 3_600_000;
-  b.minute = b.minute.filter((t) => t > minuteAgo);
-  b.hour = b.hour.filter((t) => t > hourAgo);
-  if (b.minute.length >= LIMITS.perIpPerMinute) return "ip_minute";
-  if (b.hour.length >= LIMITS.perIpPerHour) return "ip_hour";
-  b.minute.push(now);
-  b.hour.push(now);
-  return null;
 }
 
 export function extractIp(headers: Headers): string {
@@ -102,9 +101,4 @@ export function extractIp(headers: Headers): string {
     headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     ""
   );
-}
-
-// Helper used by unit tests to reset the IP store.
-export function __resetIpStore() {
-  ipStore.clear();
 }

@@ -717,6 +717,27 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          count: number
+          key: string
+          updated_at: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          key: string
+          updated_at?: string
+          window_start?: string
+        }
+        Update: {
+          count?: number
+          key?: string
+          updated_at?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       report_downloads: {
         Row: {
           downloaded_at: string
@@ -913,6 +934,18 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      rate_limit_hit: {
+        Args: { _key: string; _limit: number; _window_seconds: number }
+        Returns: {
+          allowed: boolean
+          current_count: number
+          reset_at: string
+        }[]
+      }
+      rate_limit_purge: {
+        Args: { _older_than_seconds?: number }
+        Returns: number
+      }
     }
     Enums: {
       app_role: "super_admin" | "bd" | "hr" | "media" | "ir" | "ops" | "support"
