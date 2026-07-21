@@ -46,7 +46,7 @@ function ChatsPage() {
   const pageCount = data?.pageCount ?? 1;
 
   const setSearch = (patch: Partial<{ page: number; pageSize: number; sort: string }>) =>
-    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }) });
 
   return (
     <div className="space-y-4">
