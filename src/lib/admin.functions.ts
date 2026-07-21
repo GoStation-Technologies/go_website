@@ -83,12 +83,8 @@ export const adminUpdateStatus = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-const ChatsInput = z.object({
-  page: z.number().int().min(1).default(1),
-  pageSize: z.number().int().min(1).max(100).default(10),
-  sort: z.enum(["newest", "oldest", "messages"]).default("newest"),
-});
-export type AdminListChatsInput = z.infer<typeof ChatsInput>;
+export { ChatsInput, paginateSessions, type AdminListChatsInput } from "./admin.pagination";
+import { ChatsInput } from "./admin.pagination";
 
 export const adminListChats = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
