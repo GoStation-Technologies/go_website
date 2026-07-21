@@ -124,11 +124,12 @@ function ChatsPage() {
         <div className="flex flex-wrap items-center gap-2">
           <input
             type="search"
-            aria-label="Filter by session ID"
-            placeholder="Filter by session ID…"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="w-64 rounded-md border bg-background px-3 py-1.5 font-mono text-xs"
+            aria-label="Search chats"
+            placeholder="Search by keyword or session ID…"
+            value={qInput}
+            onChange={(e) => setQInput(e.target.value)}
+            data-testid="chats-search"
+            className="w-72 rounded-md border bg-background px-3 py-1.5 text-xs"
           />
           <label className="text-xs text-muted-foreground" htmlFor="chats-sort">
             Sort
