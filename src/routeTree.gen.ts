@@ -23,6 +23,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
 import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
+import { Route as AdminStationsRouteImport } from './routes/admin.stations'
 import { Route as AdminChatsRouteImport } from './routes/admin.chats'
 
 const StationsRoute = StationsRouteImport.update({
@@ -95,6 +96,11 @@ const AdminSubmissionsRoute = AdminSubmissionsRouteImport.update({
   path: '/submissions',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminStationsRoute = AdminStationsRouteImport.update({
+  id: '/stations',
+  path: '/stations',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminChatsRoute = AdminChatsRouteImport.update({
   id: '/chats',
   path: '/chats',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/admin/chats': typeof AdminChatsRoute
+  '/admin/stations': typeof AdminStationsRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/admin/chats': typeof AdminChatsRoute
+  '/admin/stations': typeof AdminStationsRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/admin/chats': typeof AdminChatsRoute
+  '/admin/stations': typeof AdminStationsRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/stations'
     | '/admin/chats'
+    | '/admin/stations'
     | '/admin/submissions'
     | '/media/$slug'
     | '/admin/'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/stations'
     | '/admin/chats'
+    | '/admin/stations'
     | '/admin/submissions'
     | '/media/$slug'
     | '/admin'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/stations'
     | '/admin/chats'
+    | '/admin/stations'
     | '/admin/submissions'
     | '/media/$slug'
     | '/admin/'
@@ -319,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSubmissionsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/stations': {
+      id: '/admin/stations'
+      path: '/stations'
+      fullPath: '/admin/stations'
+      preLoaderRoute: typeof AdminStationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/chats': {
       id: '/admin/chats'
       path: '/chats'
@@ -331,12 +350,14 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminChatsRoute: typeof AdminChatsRoute
+  AdminStationsRoute: typeof AdminStationsRoute
   AdminSubmissionsRoute: typeof AdminSubmissionsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminChatsRoute: AdminChatsRoute,
+  AdminStationsRoute: AdminStationsRoute,
   AdminSubmissionsRoute: AdminSubmissionsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
