@@ -44,38 +44,45 @@ describe("SSR homepage smoke", () => {
     }, 30_000);
   }
 
-  // RTL / Arabic-specific: SSR for `ar` must not crash and must ship a fully
-  // formed document shell so client-side hydration (LangBoot) can flip
-  // <html dir="rtl" lang="ar"> without layout thrash or missing landmarks.
-  // Note: content localization happens client-side (i18next detects language
-  // in the browser), so SSR text is still the English fallback — that's by
-  // design. These assertions cover the "page doesn't break" contract.
-  it("renders a stable, RTL-ready SSR shell for ar", async () => {
+  // RTL / Arabic-specific: with the `gs_lang=ar` cookie, SSR must render
+  // Arabic content directly (no client-only i18n hydration hop) and ship an
+  // <html lang="ar" dir="rtl"> shell so the layout doesn't flash LTR.
+  it("renders Arabic content and RTL shell under SSR for ar", async () => {
     const { status, html } = await fetchHome("ar");
     expect(status).toBe(200);
     expect(html).not.toMatch(/"unhandled"\s*:\s*true/);
 
-    // Full document skeleton is present.
-    expect(html).toMatch(/<html[^>]*>/i);
-    expect(html).toMatch(/<head[\s>]/i);
-    expect(html).toMatch(/<body[^>]*>/i);
+    // RTL-ready shell straight from the server.
+    expect(html).toMatch(/<html[^>]*\blang="ar"/i);
+    expect(html).toMatch(/<html[^>]*\bdir="rtl"/i);
 
-    // Layout landmarks render (header/main/footer didn't collapse under ar).
+    // Layout landmarks are present (RTL didn't collapse the tree).
     expect(html).toMatch(/<header[\s>]/i);
     expect(html).toMatch(/<main[\s>]/i);
     expect(html).toMatch(/<footer[\s>]/i);
 
-    // Homepage hero + nav render enough content to hydrate against.
-    const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-    expect(bodyMatch).toBeTruthy();
-    expect(bodyMatch![1].length).toBeGreaterThan(1000);
+    // Contains Arabic script characters (rules out an English fallback).
+    const arabicChars = html.match(/\p{Script=Arabic}/gu) ?? [];
+    expect(arabicChars.length, "no Arabic characters in SSR HTML").toBeGreaterThan(50);
 
-    // Title tag present so <head> merge won't blow up on hydration.
-    expect(html).toMatch(/<title>[^<]+<\/title>/);
+    // Brand + key nav labels from the ar locale render server-side.
+    expect(html).toContain("قوستيشن"); // brand.name
+    expect(html).toContain("من نحن"); // nav.about
+    expect(html).toContain("المحطات"); // nav.stations
+    expect(html).toContain("تواصل معنا"); // nav.contact
 
-    // No React SSR error markers that would indicate a broken tree.
+    // No React SSR error markers.
     expect(html).not.toMatch(/Minified React error/i);
     expect(html).not.toMatch(/Cannot read propert(y|ies) of undefined/i);
+  }, 30_000);
+
+  // Baseline: default (no cookie) SSR renders in English.
+  it("renders an LTR English shell by default", async () => {
+    const res = await fetch(BASE_URL + "/");
+    const html = await res.text();
+    expect(res.status).toBe(200);
+    expect(html).toMatch(/<html[^>]*\blang="en"/i);
+    expect(html).toMatch(/<html[^>]*\bdir="ltr"/i);
   }, 30_000);
 });
 

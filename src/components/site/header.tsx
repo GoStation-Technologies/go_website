@@ -29,6 +29,8 @@ export function SiteHeader() {
 
   const toggleLang = () => {
     const next = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar" ? "en" : "ar";
+    // Persist so the next SSR render for this visitor uses the chosen language.
+    document.cookie = `gs_lang=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
     i18n.changeLanguage(next);
   };
 
