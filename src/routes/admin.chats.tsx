@@ -63,29 +63,26 @@ async function coerceError(e: unknown): Promise<ChatsError> {
   return { status: 500, message: e instanceof Error ? e.message : "Request failed." };
 }
 
-function escapeRegExp(s: string) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+import { splitHighlight } from "@/lib/highlight";
 
 function highlight(text: string, query: string) {
-  const q = query.trim();
-  if (!q) return text;
-  const re = new RegExp(`(${escapeRegExp(q)})`, "gi");
-  const parts = text.split(re);
-  return parts.map((part, i) =>
-    i % 2 === 1 ? (
+  const segs = splitHighlight(text, query);
+  if (segs.length === 1 && !segs[0].match) return text;
+  return segs.map((seg, i) =>
+    seg.match ? (
       <mark
         key={i}
         data-testid="chats-highlight"
         className="rounded-sm bg-yellow-200 px-0.5 text-inherit dark:bg-yellow-500/40"
       >
-        {part}
+        {seg.text}
       </mark>
     ) : (
-      <span key={i}>{part}</span>
+      <span key={i}>{seg.text}</span>
     ),
   );
 }
+
 
 function ChatsPage() {
   const { page, pageSize, sort, q } = Route.useSearch();
