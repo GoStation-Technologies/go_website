@@ -93,15 +93,30 @@ function CareersPage() {
         </Dialog>
       </div>
 
+      <ListToolbar
+        q={view.q} onQ={view.setQ}
+        sort={view.sort} onSort={view.setSort}
+        sortOptions={[
+          { value: "newest", label: "Newest" },
+          { value: "title_en", label: "Title A→Z" },
+          { value: "department", label: "Department" },
+          { value: "city", label: "City" },
+          { value: "active_first", label: "Active first" },
+        ]}
+        pageSize={view.pageSize} onPageSize={view.setPageSize}
+        page={view.page} pageCount={view.pageCount} total={view.total} onPage={view.setPage}
+        searchPlaceholder="Search title, dept, city…"
+      />
+
       <div className="overflow-x-auto rounded-lg border bg-background">
         {isFetching && !rows.length ? <p className="p-6 text-sm text-muted-foreground">Loading…</p> :
-         rows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No openings.</p> : (
+         view.pageRows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No openings.</p> : (
           <table className="min-w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
               <tr><th className="px-3 py-2 text-start">Title</th><th className="px-3 py-2 text-start">Dept</th><th className="px-3 py-2 text-start">City</th><th className="px-3 py-2 text-start">Type</th><th className="px-3 py-2 text-start">Status</th><th className="px-3 py-2"></th></tr>
             </thead>
             <tbody>
-              {rows.map((j) => (
+              {view.pageRows.map((j) => (
                 <tr key={j.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{j.title_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{j.title_ar}</div></td>
                   <td className="px-3 py-2 text-xs">{j.department}</td>
