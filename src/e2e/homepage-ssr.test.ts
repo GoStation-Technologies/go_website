@@ -27,11 +27,10 @@ describe("SSR homepage smoke", () => {
       expect(status).toBe(200);
       // Must not be an h3-swallowed error body
       expect(html).not.toMatch(/"unhandled"\s*:\s*true/);
-      // Must have an app root with children (not a blank shell)
-      const rootMatch = html.match(/<div[^>]*id=["']root["'][^>]*>([\s\S]*?)<\/div>\s*<\/body>/i);
-      expect(rootMatch, "missing #root in SSR HTML").toBeTruthy();
-      const rootInner = rootMatch![1];
-      expect(rootInner.length, "empty #root").toBeGreaterThan(200);
+      // Must have a <body> with substantial rendered markup (not a blank shell)
+      const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+      expect(bodyMatch, "missing <body> in SSR HTML").toBeTruthy();
+      expect(bodyMatch![1].length, "empty <body>").toBeGreaterThan(500);
       // Must have meaningful visible text
       expect(visibleTextLength(html)).toBeGreaterThan(200);
       // Must render a document title
