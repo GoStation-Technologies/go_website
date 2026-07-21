@@ -6,7 +6,6 @@ import { z } from "zod";
 import { adminListChats } from "@/lib/admin.functions";
 
 const SORTS = ["newest", "oldest", "messages"] as const;
-type Sort = (typeof SORTS)[number];
 
 const searchSchema = z.object({
   page: fallback(z.number().int(), 1).default(1),
@@ -19,22 +18,80 @@ export const Route = createFileRoute("/admin/chats")({
   component: ChatsPage,
 });
 
+type ChatsError = {
+  status: number;
+  error?: string;
+  message: string;
+  fields?: string[];
+  fieldErrors?: Record<string, string[]>;
+};
+
+/** Try to normalize whatever the server-fn client threw into a ChatsError. */
+async function coerceError(e: unknown): Promise<ChatsError> {
+  if (e instanceof Response) {
+    try {
+      const body = (await e.json()) as Partial<ChatsError>;
+      return {
+        status: e.status,
+        error: body.error ?? "error",
+        message: body.message ?? `Request failed with status ${e.status}`,
+        fields: body.fields,
+        fieldErrors: body.fieldErrors,
+      };
+    } catch {
+      return { status: e.status, message: `Request failed with status ${e.status}` };
+    }
+  }
+  if (e && typeof e === "object") {
+    const rec = e as Record<string, unknown>;
+    // Some server-fn transports surface a structured payload directly.
+    const status = typeof rec.status === "number" ? rec.status : 500;
+    const message =
+      typeof rec.message === "string" ? rec.message : "Request failed.";
+    return {
+      status,
+      error: typeof rec.error === "string" ? rec.error : undefined,
+      message,
+      fields: Array.isArray(rec.fields) ? (rec.fields as string[]) : undefined,
+      fieldErrors:
+        rec.fieldErrors && typeof rec.fieldErrors === "object"
+          ? (rec.fieldErrors as Record<string, string[]>)
+          : undefined,
+    };
+  }
+  return { status: 500, message: e instanceof Error ? e.message : "Request failed." };
+}
+
 function ChatsPage() {
   const { page, pageSize, sort } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/chats" });
 
-  const safePage = Math.max(1, Math.min(1000, page));
-  const safePageSize = Math.max(1, Math.min(100, pageSize));
-  const safeSort: Sort = (SORTS as readonly string[]).includes(sort) ? (sort as Sort) : "newest";
-
   const [filter, setFilter] = useState("");
 
-  const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["admin", "chats", safePage, safePageSize, safeSort],
-    queryFn: () =>
-      adminListChats({ data: { page: safePage, pageSize: safePageSize, sort: safeSort } }),
+  const { data, error, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["admin", "chats", page, pageSize, sort],
+    // Pass URL params through as-is; the server owns validation + clamping and
+    // is the source of truth for the normalized page/pageSize/sort we render.
+    queryFn: async () => {
+      try {
+        return await adminListChats({ data: { page, pageSize, sort } });
+      } catch (e) {
+        throw await coerceError(e);
+      }
+    },
     placeholderData: keepPreviousData,
+    retry: false,
   });
+
+  const chatsError = isError ? (error as unknown as ChatsError) : null;
+
+  // Prefer server-normalized values; fall back to URL for the very first
+  // render before any response arrives.
+  const shownPage = data?.page ?? page;
+  const shownPageSize = data?.pageSize ?? pageSize;
+  const shownSort = data?.sort ?? sort;
+  const total = data?.total ?? 0;
+  const pageCount = data?.pageCount ?? 1;
 
   const visibleSessions = useMemo(() => {
     const all = data?.sessions ?? [];
@@ -42,11 +99,13 @@ function ChatsPage() {
     return q ? all.filter((s) => s.sessionId.toLowerCase().includes(q)) : all;
   }, [data, filter]);
 
-  const total = data?.total ?? 0;
-  const pageCount = data?.pageCount ?? 1;
-
   const setSearch = (patch: Partial<{ page: number; pageSize: number; sort: string }>) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }) });
+
+  const selectSort = (SORTS as readonly string[]).includes(shownSort)
+    ? (shownSort as (typeof SORTS)[number])
+    : "newest";
+  const selectPageSize = [5, 10, 25, 50].includes(shownPageSize) ? shownPageSize : 10;
 
   return (
     <div className="space-y-4">
@@ -67,7 +126,7 @@ function ChatsPage() {
           <select
             id="chats-sort"
             aria-label="Sort chats"
-            value={safeSort}
+            value={selectSort}
             onChange={(e) => setSearch({ sort: e.target.value, page: 1 })}
             className="rounded-md border bg-background px-2 py-1.5 text-sm"
           >
@@ -81,7 +140,7 @@ function ChatsPage() {
           <select
             id="chats-page-size"
             aria-label="Rows per page"
-            value={safePageSize}
+            value={selectPageSize}
             onChange={(e) => setSearch({ pageSize: Number(e.target.value), page: 1 })}
             className="rounded-md border bg-background px-2 py-1.5 text-sm"
           >
@@ -92,7 +151,32 @@ function ChatsPage() {
         </div>
       </div>
 
-      {isLoading ? (
+      {chatsError ? (
+        <div
+          role="alert"
+          data-testid="chats-error"
+          data-status={chatsError.status}
+          data-error={chatsError.error ?? ""}
+          data-fields={(chatsError.fields ?? []).join(",")}
+          className="rounded-md border border-destructive/40 bg-destructive/5 p-4 text-sm"
+        >
+          <p className="font-medium text-destructive" data-testid="chats-error-message">
+            {chatsError.message}
+          </p>
+          {chatsError.fields && chatsError.fields.length > 0 ? (
+            <ul className="mt-2 list-disc ps-5 text-destructive/90" data-testid="chats-error-fields">
+              {chatsError.fields.map((f) => (
+                <li key={f} data-field={f}>
+                  <span className="font-mono">{f}</span>
+                  {chatsError.fieldErrors?.[f]?.length
+                    ? `: ${chatsError.fieldErrors[f].join("; ")}`
+                    : null}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : isLoading ? (
         <p className="text-sm text-muted-foreground">Loading…</p>
       ) : !visibleSessions.length ? (
         <p className="text-sm text-muted-foreground" data-testid="chats-empty">
@@ -103,10 +187,10 @@ function ChatsPage() {
           className="space-y-4"
           data-testid="chats-list"
           data-total={total}
-          data-page={safePage}
-          data-page-size={safePageSize}
+          data-page={shownPage}
+          data-page-size={shownPageSize}
           data-page-count={pageCount}
-          data-sort={safeSort}
+          data-sort={shownSort}
         >
           {visibleSessions.map((s) => (
             <details
@@ -147,17 +231,19 @@ function ChatsPage() {
 
       <div className="flex items-center justify-between gap-3 text-sm">
         <p className="text-xs text-muted-foreground" data-testid="chats-summary">
-          {total === 0
-            ? "0 sessions"
-            : `Page ${safePage} of ${pageCount} · ${total} sessions`}
-          {isFetching ? " · updating…" : ""}
+          {chatsError
+            ? "—"
+            : total === 0
+              ? "0 sessions"
+              : `Page ${shownPage} of ${pageCount} · ${total} sessions`}
+          {isFetching && !chatsError ? " · updating…" : ""}
         </p>
         <div className="flex items-center gap-2">
           <button
             type="button"
             aria-label="Previous page"
-            onClick={() => setSearch({ page: Math.max(1, safePage - 1) })}
-            disabled={safePage <= 1}
+            onClick={() => setSearch({ page: Math.max(1, shownPage - 1) })}
+            disabled={Boolean(chatsError) || shownPage <= 1}
             className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
           >
             Prev
@@ -165,8 +251,8 @@ function ChatsPage() {
           <button
             type="button"
             aria-label="Next page"
-            onClick={() => setSearch({ page: Math.min(pageCount, safePage + 1) })}
-            disabled={safePage >= pageCount}
+            onClick={() => setSearch({ page: Math.min(pageCount, shownPage + 1) })}
+            disabled={Boolean(chatsError) || shownPage >= pageCount}
             className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
           >
             Next
