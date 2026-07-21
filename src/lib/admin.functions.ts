@@ -88,7 +88,25 @@ import { ChatsInput } from "./admin.pagination";
 
 export const adminListChats = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => ChatsInput.parse(raw ?? {}))
+  .inputValidator((raw: unknown) => {
+    const parsed = ChatsInput.safeParse(raw ?? {});
+    if (parsed.success) return parsed.data;
+    // Return a structured 400 so clients can surface which fields are invalid.
+    const fieldErrors: Record<string, string[]> = {};
+    for (const issue of parsed.error.issues) {
+      const key = issue.path.length ? String(issue.path[0]) : "_root";
+      (fieldErrors[key] ??= []).push(issue.message);
+    }
+    throw new Response(
+      JSON.stringify({
+        error: "invalid_input",
+        message: "One or more pagination parameters are invalid.",
+        fields: Object.keys(fieldErrors),
+        fieldErrors,
+      }),
+      { status: 400, headers: { "content-type": "application/json" } },
+    );
+  })
   .handler(async ({ data, context }) => {
     // Fetch a bounded window of recent messages, group by session in memory,
     // then sort + paginate. Enough for the admin logs view; move to an RPC if
