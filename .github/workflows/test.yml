@@ -80,6 +80,12 @@ jobs:
         env:
           E2E_URL: http://127.0.0.1:8181
         run: bun run test:e2e:prod
+      - name: Install Playwright chromium
+        run: bunx playwright install --with-deps chromium
+      - name: Arabic hydration browser test
+        env:
+          E2E_URL: http://127.0.0.1:8181
+        run: bun run test:e2e:browser
       - name: Arabic SSR smoke (dir="rtl" + translated content)
         run: |
           set -euo pipefail
