@@ -196,6 +196,17 @@ function AbuseDashboard() {
         </div>
       </div>
 
+      {exportMsg && (
+        <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-sm">{exportMsg}</div>
+      )}
+
+      <ExportJobsPanel
+        jobs={jobsQuery.data?.jobs ?? []}
+        onDownload={handleDownloadJob}
+        onRefresh={() => jobsQuery.refetch()}
+        isFetching={jobsQuery.isFetching}
+      />
+
       {isError && (
         <div className="rounded-md border border-destructive/40 bg-destructive/5 p-4 text-sm text-destructive">
           Failed to load metrics: {(error as Error).message}
