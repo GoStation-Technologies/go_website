@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { adminAbuseMetrics } from "@/lib/abuse.functions";
+import { adminAbuseMetrics, adminAbuseExport } from "@/lib/abuse.functions";
+import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   ResponsiveContainer,
@@ -51,6 +52,36 @@ const REASONS = [
 function AbuseDashboard() {
   const { windowHours, reason } = Route.useSearch();
   const navigate = Route.useNavigate();
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const { rows } = await adminAbuseExport({ data: { windowHours, reason, limit: 10000 } });
+      const headers = ["id", "created_at", "reason", "key", "session_id", "ip_hash", "current_count", "lang", "metadata"];
+      const esc = (v: unknown) => {
+        if (v === null || v === undefined) return "";
+        const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+        return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      };
+      const csv = [
+        headers.join(","),
+        ...rows.map((r) => headers.map((h) => esc((r as Record<string, unknown>)[h])).join(",")),
+      ].join("\n");
+      const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+      a.href = url;
+      a.download = `abuse-events_${windowHours}h${reason ? `_${reason}` : ""}_${stamp}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
     queryKey: ["admin", "abuse", windowHours, reason ?? null],
@@ -115,6 +146,13 @@ function AbuseDashboard() {
             className="rounded-md border px-3 py-1.5 text-sm hover:bg-accent/10"
           >
             {isFetching ? "Refreshing…" : "Refresh"}
+          </button>
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="rounded-md border px-3 py-1.5 text-sm hover:bg-accent/10 disabled:opacity-50"
+          >
+            {exporting ? "Exporting…" : "Export CSV"}
           </button>
         </div>
       </div>
