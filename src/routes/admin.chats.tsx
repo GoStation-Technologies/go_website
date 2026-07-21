@@ -83,7 +83,7 @@ function ChatsPage() {
     retry: false,
   });
 
-  const chatsError = isError ? (error as ChatsError) : null;
+  const chatsError = isError ? (error as unknown as ChatsError) : null;
 
   // Prefer server-normalized values; fall back to URL for the very first
   // render before any response arrives.
