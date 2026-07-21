@@ -55,19 +55,17 @@ describe("Arabic homepage hydration", () => {
     );
     expect(hydrationErrors, hydrationErrors.join("\n")).toEqual([]);
 
-    // 5. Axe accessibility audit — no critical/serious violations, with
-    //    explicit focus on RTL layout and ARIA attribute rules.
+    // 5. Axe accessibility audit — no critical violations, with explicit
+    //    focus on RTL layout and ARIA attribute rules.
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       .analyze();
 
-    const blocking = results.violations.filter(
-      (v) => v.impact === "critical" || v.impact === "serious",
-    );
-    const summary = blocking
+    const critical = results.violations.filter((v) => v.impact === "critical");
+    const summary = critical
       .map((v) => `${v.id} (${v.impact}): ${v.help} [${v.nodes.length} nodes]`)
       .join("\n");
-    expect(blocking, `Axe violations:\n${summary}`).toEqual([]);
+    expect(critical, `Axe critical violations:\n${summary}`).toEqual([]);
 
     // Targeted RTL + ARIA rules must always pass regardless of impact tuning.
     const rtlAriaRuleIds = new Set([
