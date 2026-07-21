@@ -43,5 +43,28 @@ describe("SSR homepage smoke", () => {
       expect(html).toMatch(/<title>[^<]+<\/title>/);
     }, 30_000);
   }
+
+  // RTL-specific: Arabic SSR must render Arabic content and key nav elements,
+  // and must not crash into the h3-swallowed error shell.
+  it("renders Arabic content and key nav under SSR for ar", async () => {
+    const { status, html } = await fetchHome("ar");
+    expect(status).toBe(200);
+    expect(html).not.toMatch(/"unhandled"\s*:\s*true/);
+
+    // Contains Arabic script characters (rules out an accidental English fallback).
+    const arabicChars = html.match(/\p{Script=Arabic}/gu) ?? [];
+    expect(arabicChars.length, "no Arabic characters in SSR HTML").toBeGreaterThan(50);
+
+    // Brand name and nav labels from ar locale render server-side.
+    expect(html).toContain("قوستيشن"); // brand.name
+    expect(html).toContain("من نحن"); // nav.about
+    expect(html).toContain("المحطات"); // nav.stations
+    expect(html).toContain("تواصل معنا"); // nav.contact
+
+    // Header, main, and footer landmarks are present (layout didn't collapse).
+    expect(html).toMatch(/<header[\s>]/i);
+    expect(html).toMatch(/<main[\s>]/i);
+    expect(html).toMatch(/<footer[\s>]/i);
+  }, 30_000);
 });
 
