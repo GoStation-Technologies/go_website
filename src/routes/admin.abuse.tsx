@@ -86,7 +86,7 @@ function AbuseDashboard() {
           <Select
             value={String(windowHours)}
             onValueChange={(v) =>
-              navigate({ search: (p) => ({ ...p, windowHours: Number(v) }) })
+              navigate({ search: (p: z.infer<typeof searchSchema>) => ({ ...p, windowHours: Number(v) }) })
             }
           >
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>

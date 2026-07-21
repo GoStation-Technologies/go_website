@@ -27,6 +27,7 @@ import { Route as AdminStationsRouteImport } from './routes/admin.stations'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminChatsRouteImport } from './routes/admin.chats'
 import { Route as AdminCareersRouteImport } from './routes/admin.careers'
+import { Route as AdminAbuseRouteImport } from './routes/admin.abuse'
 
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
@@ -118,6 +119,11 @@ const AdminCareersRoute = AdminCareersRouteImport.update({
   path: '/careers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAbuseRoute = AdminAbuseRouteImport.update({
+  id: '/abuse',
+  path: '/abuse',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/investors': typeof InvestorsRoute
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
+  '/admin/abuse': typeof AdminAbuseRoute
   '/admin/careers': typeof AdminCareersRoute
   '/admin/chats': typeof AdminChatsRoute
   '/admin/news': typeof AdminNewsRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/investors': typeof InvestorsRoute
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
+  '/admin/abuse': typeof AdminAbuseRoute
   '/admin/careers': typeof AdminCareersRoute
   '/admin/chats': typeof AdminChatsRoute
   '/admin/news': typeof AdminNewsRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/investors': typeof InvestorsRoute
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
+  '/admin/abuse': typeof AdminAbuseRoute
   '/admin/careers': typeof AdminCareersRoute
   '/admin/chats': typeof AdminChatsRoute
   '/admin/news': typeof AdminNewsRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/investors'
     | '/media'
     | '/stations'
+    | '/admin/abuse'
     | '/admin/careers'
     | '/admin/chats'
     | '/admin/news'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/investors'
     | '/media'
     | '/stations'
+    | '/admin/abuse'
     | '/admin/careers'
     | '/admin/chats'
     | '/admin/news'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/investors'
     | '/media'
     | '/stations'
+    | '/admin/abuse'
     | '/admin/careers'
     | '/admin/chats'
     | '/admin/news'
@@ -383,10 +395,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCareersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/abuse': {
+      id: '/admin/abuse'
+      path: '/abuse'
+      fullPath: '/admin/abuse'
+      preLoaderRoute: typeof AdminAbuseRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminAbuseRoute: typeof AdminAbuseRoute
   AdminCareersRoute: typeof AdminCareersRoute
   AdminChatsRoute: typeof AdminChatsRoute
   AdminNewsRoute: typeof AdminNewsRoute
@@ -396,6 +416,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAbuseRoute: AdminAbuseRoute,
   AdminCareersRoute: AdminCareersRoute,
   AdminChatsRoute: AdminChatsRoute,
   AdminNewsRoute: AdminNewsRoute,
