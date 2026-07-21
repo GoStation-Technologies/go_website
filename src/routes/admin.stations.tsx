@@ -102,15 +102,29 @@ function StationsPage() {
         </Dialog>
       </div>
 
+      <ListToolbar
+        q={view.q} onQ={view.setQ}
+        sort={view.sort} onSort={view.setSort}
+        sortOptions={[
+          { value: "newest", label: "Newest" },
+          { value: "name_en", label: "Name A→Z" },
+          { value: "city_en", label: "City A→Z" },
+          { value: "active_first", label: "Active first" },
+        ]}
+        pageSize={view.pageSize} onPageSize={view.setPageSize}
+        page={view.page} pageCount={view.pageCount} total={view.total} onPage={view.setPage}
+        searchPlaceholder="Search name, city, district…"
+      />
+
       <div className="overflow-x-auto rounded-lg border bg-background">
         {isFetching && !rows.length ? <p className="p-6 text-sm text-muted-foreground">Loading…</p> :
-         rows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No stations.</p> : (
+         view.pageRows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No stations.</p> : (
           <table className="min-w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
               <tr><th className="px-3 py-2 text-start">Name</th><th className="px-3 py-2 text-start">City</th><th className="px-3 py-2 text-start">Coords</th><th className="px-3 py-2 text-start">Status</th><th className="px-3 py-2"></th></tr>
             </thead>
             <tbody>
-              {rows.map((s) => (
+              {view.pageRows.map((s) => (
                 <tr key={s.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{s.name_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{s.name_ar}</div></td>
                   <td className="px-3 py-2">{s.city_en}</td>
