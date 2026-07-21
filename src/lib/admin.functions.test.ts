@@ -140,7 +140,7 @@ describe("validateChatsInput — missing / undefined / null / non-numeric handli
 
   // Null and non-numeric values on required-typed fields must produce the
   // structured 400 body — same shape as any other invalid input.
-  const rejectCases: Array<{ label: string; input: unknown; fields: Array<"page" | "pageSize" | "sort"> }> = [
+  const rejectCases: Array<{ label: string; input: unknown; fields: string[] }> = [
     { label: "null page",             input: { page: null,   pageSize: 10, sort: "newest" }, fields: ["page"] },
     { label: "null pageSize",         input: { page: 1, pageSize: null,   sort: "newest" }, fields: ["pageSize"] },
     { label: "null sort",             input: { page: 1, pageSize: 10, sort: null },          fields: ["sort"] },
