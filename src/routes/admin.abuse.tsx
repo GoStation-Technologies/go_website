@@ -201,7 +201,7 @@ function AbuseDashboard() {
       )}
 
       <ExportJobsPanel
-        jobs={jobsQuery.data?.jobs ?? []}
+        jobs={(jobsQuery.data?.jobs ?? []) as unknown as ExportJob[]}
         onDownload={handleDownloadJob}
         onRefresh={() => jobsQuery.refetch()}
         isFetching={jobsQuery.isFetching}
