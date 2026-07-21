@@ -1,8 +1,16 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export type SortOption<K extends string = string> = { value: K; label: string };
+
+export type ListViewSearch = {
+  q?: string;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
+};
 
 export function useListView<T>(opts: {
   rows: T[];
@@ -11,10 +19,29 @@ export function useListView<T>(opts: {
   defaultSort: string;
   defaultPageSize?: number;
 }) {
-  const [q, setQ] = useState("");
-  const [sort, setSort] = useState(opts.defaultSort);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(opts.defaultPageSize ?? 10);
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false }) as ListViewSearch;
+
+  const q = search.q ?? "";
+  const sort = search.sort ?? opts.defaultSort;
+  const pageSize = search.pageSize ?? opts.defaultPageSize ?? 10;
+  const page = search.page ?? 1;
+
+  const update = (patch: ListViewSearch) => {
+    navigate({
+      to: ".",
+      search: (prev: ListViewSearch) => {
+        const next: ListViewSearch = { ...prev, ...patch };
+        // strip defaults so URL stays clean
+        if (!next.q) delete next.q;
+        if (!next.sort || next.sort === opts.defaultSort) delete next.sort;
+        if (!next.pageSize || next.pageSize === (opts.defaultPageSize ?? 10)) delete next.pageSize;
+        if (!next.page || next.page === 1) delete next.page;
+        return next;
+      },
+      replace: true,
+    });
+  };
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -33,10 +60,10 @@ export function useListView<T>(opts: {
   const pageRows = filtered.slice(start, start + pageSize);
 
   return {
-    q, setQ: (v: string) => { setQ(v); setPage(1); },
-    sort, setSort: (v: string) => { setSort(v); setPage(1); },
-    page: safePage, setPage,
-    pageSize, setPageSize: (v: number) => { setPageSize(v); setPage(1); },
+    q, setQ: (v: string) => update({ q: v, page: 1 }),
+    sort, setSort: (v: string) => update({ sort: v, page: 1 }),
+    page: safePage, setPage: (n: number) => update({ page: n }),
+    pageSize, setPageSize: (v: number) => update({ pageSize: v, page: 1 }),
     pageCount, total, pageRows,
   };
 }
@@ -87,4 +114,30 @@ export function ListToolbar(props: {
       </div>
     </div>
   );
+}
+
+export const listViewSearchSchema = {
+  q: (v: unknown) => (typeof v === "string" ? v : undefined),
+  sort: (v: unknown) => (typeof v === "string" ? v : undefined),
+  page: (v: unknown) => {
+    const n = typeof v === "string" ? Number(v) : typeof v === "number" ? v : NaN;
+    return Number.isFinite(n) && n >= 1 ? Math.floor(n) : undefined;
+  },
+  pageSize: (v: unknown) => {
+    const n = typeof v === "string" ? Number(v) : typeof v === "number" ? v : NaN;
+    return Number.isFinite(n) && n >= 1 ? Math.floor(n) : undefined;
+  },
+};
+
+export function validateListViewSearch(input: Record<string, unknown>): ListViewSearch {
+  const out: ListViewSearch = {};
+  const q = listViewSearchSchema.q(input.q);
+  const sort = listViewSearchSchema.sort(input.sort);
+  const page = listViewSearchSchema.page(input.page);
+  const pageSize = listViewSearchSchema.pageSize(input.pageSize);
+  if (q) out.q = q;
+  if (sort) out.sort = sort;
+  if (page) out.page = page;
+  if (pageSize) out.pageSize = pageSize;
+  return out;
 }

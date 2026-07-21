@@ -9,9 +9,12 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
-import { useListView, ListToolbar } from "@/components/admin/list-toolbar";
+import { useListView, ListToolbar, validateListViewSearch } from "@/components/admin/list-toolbar";
 
-export const Route = createFileRoute("/admin/stations")({ component: StationsPage });
+export const Route = createFileRoute("/admin/stations")({
+  component: StationsPage,
+  validateSearch: (s: Record<string, unknown>) => validateListViewSearch(s),
+});
 
 type Station = {
   id?: string; name_ar: string; name_en: string; city_ar: string; city_en: string;
