@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "test:e2e:prod": "vitest run --config vitest.e2e.config.ts",
+    "test:e2e:browser": "vitest run --config vitest.e2e.config.ts src/e2e/homepage-hydration.browser.test.ts",
     "serve:prod": "wrangler dev --config dist/server/wrangler.json --port 8181 --ip 127.0.0.1"
   },
   "dependencies": {
