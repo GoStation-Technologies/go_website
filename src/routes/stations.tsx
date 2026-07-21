@@ -17,7 +17,7 @@ export const Route = createFileRoute("/stations")({
 
 function StationsPage() {
   const { t, i18n } = useTranslation();
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
   const [q, setQ] = useState("");
   const { data = [] } = useQuery({
     queryKey: ["stations"],

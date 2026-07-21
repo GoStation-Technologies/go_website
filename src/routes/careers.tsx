@@ -21,7 +21,7 @@ export const Route = createFileRoute("/careers")({
 
 function CareersPage() {
   const { t, i18n } = useTranslation();
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
   const { data: jobs = [] } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {

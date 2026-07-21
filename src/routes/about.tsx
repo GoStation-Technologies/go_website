@@ -14,7 +14,7 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   const { t, i18n } = useTranslation();
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
 
   const pages = useQuery({
     queryKey: ["about-pages"],
