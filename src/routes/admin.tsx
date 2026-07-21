@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut, LayoutDashboard, Inbox, MessageSquare } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
+  ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
