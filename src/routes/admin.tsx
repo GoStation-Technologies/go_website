@@ -74,5 +74,3 @@ function SideLink({ to, icon, children }: { to: string; icon: React.ReactNode; c
     </Link>
   );
 }
-
-export { useQueryClient, useServerFn };
