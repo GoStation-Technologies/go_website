@@ -1,6 +1,4 @@
 import { createFileRoute, Link, Outlet, redirect, useRouter } from "@tanstack/react-router";
-import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyStaffRoles } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
@@ -10,7 +8,7 @@ export const Route = createFileRoute("/admin")({
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
-      throw redirect({ to: "/auth", search: { next: "/admin" } as never });
+      throw redirect({ to: "/auth" });
     }
   },
   loader: async () => {
