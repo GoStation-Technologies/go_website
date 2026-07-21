@@ -96,15 +96,29 @@ function NewsPage() {
         </Dialog>
       </div>
 
+      <ListToolbar
+        q={view.q} onQ={view.setQ}
+        sort={view.sort} onSort={view.setSort}
+        sortOptions={[
+          { value: "newest", label: "Newest" },
+          { value: "title_en", label: "Title A→Z" },
+          { value: "kind", label: "Kind" },
+          { value: "published_first", label: "Published first" },
+        ]}
+        pageSize={view.pageSize} onPageSize={view.setPageSize}
+        page={view.page} pageCount={view.pageCount} total={view.total} onPage={view.setPage}
+        searchPlaceholder="Search title, slug, kind…"
+      />
+
       <div className="overflow-x-auto rounded-lg border bg-background">
         {isFetching && !rows.length ? <p className="p-6 text-sm text-muted-foreground">Loading…</p> :
-         rows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No articles.</p> : (
+         view.pageRows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No articles.</p> : (
           <table className="min-w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
               <tr><th className="px-3 py-2 text-start">Title</th><th className="px-3 py-2 text-start">Kind</th><th className="px-3 py-2 text-start">Status</th><th className="px-3 py-2"></th></tr>
             </thead>
             <tbody>
-              {rows.map((n) => (
+              {view.pageRows.map((n) => (
                 <tr key={n.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{n.title_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{n.title_ar}</div><div className="font-mono text-xs text-muted-foreground">{n.slug}</div></td>
                   <td className="px-3 py-2 text-xs">{n.kind}</td>
