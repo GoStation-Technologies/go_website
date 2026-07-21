@@ -83,27 +83,59 @@ export const adminUpdateStatus = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const adminListChats = createServerFn({ method: "GET" })
+const ChatsInput = z.object({
+  page: z.number().int().min(1).default(1),
+  pageSize: z.number().int().min(1).max(100).default(10),
+  sort: z.enum(["newest", "oldest", "messages"]).default("newest"),
+});
+export type AdminListChatsInput = z.infer<typeof ChatsInput>;
+
+export const adminListChats = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const { data, error } = await context.supabase
+  .inputValidator((raw: unknown) => ChatsInput.parse(raw ?? {}))
+  .handler(async ({ data, context }) => {
+    // Fetch a bounded window of recent messages, group by session in memory,
+    // then sort + paginate. Enough for the admin logs view; move to an RPC if
+    // the window ever needs to grow past this bound.
+    const WINDOW = 2000;
+    const { data: rows, error } = await context.supabase
       .from("chatbot_messages")
       .select("session_id, role, content, created_at")
       .order("created_at", { ascending: false })
-      .limit(500);
+      .limit(WINDOW);
     if (error) throw new Error(error.message);
-    // Group by session_id
+
     const groups = new Map<string, Array<{ role: string; content: string; created_at: string }>>();
-    for (const m of data ?? []) {
+    for (const m of rows ?? []) {
       const arr = groups.get(m.session_id) ?? [];
       arr.push({ role: m.role, content: m.content, created_at: m.created_at });
       groups.set(m.session_id, arr);
     }
-    const sessions = Array.from(groups.entries()).map(([sessionId, msgs]) => ({
+    const all = Array.from(groups.entries()).map(([sessionId, msgs]) => ({
       sessionId,
-      messages: msgs.reverse(),
-      lastAt: msgs[0]?.created_at,
+      messages: msgs.slice().reverse(), // chronological (oldest → newest)
+      lastAt: msgs[0]?.created_at ?? null,
+      firstAt: msgs[msgs.length - 1]?.created_at ?? null,
+      messageCount: msgs.length,
     }));
-    sessions.sort((a, b) => (b.lastAt ?? "").localeCompare(a.lastAt ?? ""));
-    return { sessions: sessions.slice(0, 50) };
+
+    const cmp = (a: typeof all[number], b: typeof all[number]) => {
+      if (data.sort === "oldest") return (a.firstAt ?? "").localeCompare(b.firstAt ?? "");
+      if (data.sort === "messages") {
+        if (b.messageCount !== a.messageCount) return b.messageCount - a.messageCount;
+        return (b.lastAt ?? "").localeCompare(a.lastAt ?? "");
+      }
+      return (b.lastAt ?? "").localeCompare(a.lastAt ?? "");
+    };
+    all.sort(cmp);
+
+    const total = all.length;
+    const pageSize = data.pageSize;
+    const pageCount = Math.max(1, Math.ceil(total / pageSize));
+    const page = Math.min(Math.max(1, data.page), pageCount);
+    const start = (page - 1) * pageSize;
+    const sessions = all.slice(start, start + pageSize);
+
+    return { sessions, total, page, pageSize, pageCount, sort: data.sort };
   });
+
