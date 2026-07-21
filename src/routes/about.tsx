@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   const { t, i18n } = useTranslation();
-  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
+  const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
   const pages = useQuery({
     queryKey: ["about-pages"],

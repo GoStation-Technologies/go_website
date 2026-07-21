@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/stations")({
 
 function StationsPage() {
   const { t, i18n } = useTranslation();
-  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
+  const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const [q, setQ] = useState("");
   const { data = [] } = useQuery({
     queryKey: ["stations"],

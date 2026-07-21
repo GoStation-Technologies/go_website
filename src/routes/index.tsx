@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { FuelTicker } from "@/components/site/fuel-ticker";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { t, i18n } = useTranslation();
-  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
+  const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
   const news = useQuery({
     queryKey: ["home-news"],

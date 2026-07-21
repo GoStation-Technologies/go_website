@@ -24,4 +24,9 @@ if (!i18n.isInitialized) {
 }
 
 export default i18n;
-export const isRtl = (lng: string) => lng.startsWith("ar");
+export type ContentLanguage = "en" | "ar";
+
+export const getContentLanguage = (lng?: unknown): ContentLanguage =>
+  typeof lng === "string" && lng.toLowerCase().startsWith("ar") ? "ar" : "en";
+
+export const isRtl = (lng?: unknown) => getContentLanguage(lng) === "ar";
