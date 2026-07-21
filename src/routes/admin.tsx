@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, redirect, useRouter } from "@tanstack/re
 import { supabase } from "@/integrations/supabase/client";
 import { getMyStaffRoles } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, Inbox, MessageSquare, MapPin, Newspaper, Briefcase } from "lucide-react";
+import { LogOut, LayoutDashboard, Inbox, MessageSquare, MapPin, Newspaper, Briefcase, ShieldAlert } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
