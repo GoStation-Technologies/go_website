@@ -80,9 +80,9 @@ export const Route = createFileRoute("/api/public/hooks/process-exports")({
               if (error) throw new Error(error.message);
               if (!rows || rows.length === 0) break;
 
-              for (const r of rows) {
+              for (const r of rows as unknown as Array<Record<string, unknown>>) {
                 chunks.push(
-                  headers.map((h) => csvEscape((r as Record<string, unknown>)[h])).join(","),
+                  headers.map((h) => csvEscape(r[h])).join(","),
                 );
               }
               fetched += rows.length;
