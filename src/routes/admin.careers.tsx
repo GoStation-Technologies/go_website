@@ -10,9 +10,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
-import { useListView, ListToolbar } from "@/components/admin/list-toolbar";
+import { useListView, ListToolbar, validateListViewSearch } from "@/components/admin/list-toolbar";
 
-export const Route = createFileRoute("/admin/careers")({ component: CareersPage });
+export const Route = createFileRoute("/admin/careers")({
+  component: CareersPage,
+  validateSearch: (s: Record<string, unknown>) => validateListViewSearch(s),
+});
 
 type Job = {
   id?: string; slug: string; title_ar: string; title_en: string;
