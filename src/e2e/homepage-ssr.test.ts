@@ -43,5 +43,39 @@ describe("SSR homepage smoke", () => {
       expect(html).toMatch(/<title>[^<]+<\/title>/);
     }, 30_000);
   }
+
+  // RTL / Arabic-specific: SSR for `ar` must not crash and must ship a fully
+  // formed document shell so client-side hydration (LangBoot) can flip
+  // <html dir="rtl" lang="ar"> without layout thrash or missing landmarks.
+  // Note: content localization happens client-side (i18next detects language
+  // in the browser), so SSR text is still the English fallback — that's by
+  // design. These assertions cover the "page doesn't break" contract.
+  it("renders a stable, RTL-ready SSR shell for ar", async () => {
+    const { status, html } = await fetchHome("ar");
+    expect(status).toBe(200);
+    expect(html).not.toMatch(/"unhandled"\s*:\s*true/);
+
+    // Full document skeleton is present.
+    expect(html).toMatch(/<html[^>]*>/i);
+    expect(html).toMatch(/<head[\s>]/i);
+    expect(html).toMatch(/<body[^>]*>/i);
+
+    // Layout landmarks render (header/main/footer didn't collapse under ar).
+    expect(html).toMatch(/<header[\s>]/i);
+    expect(html).toMatch(/<main[\s>]/i);
+    expect(html).toMatch(/<footer[\s>]/i);
+
+    // Homepage hero + nav render enough content to hydrate against.
+    const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    expect(bodyMatch).toBeTruthy();
+    expect(bodyMatch![1].length).toBeGreaterThan(1000);
+
+    // Title tag present so <head> merge won't blow up on hydration.
+    expect(html).toMatch(/<title>[^<]+<\/title>/);
+
+    // No React SSR error markers that would indicate a broken tree.
+    expect(html).not.toMatch(/Minified React error/i);
+    expect(html).not.toMatch(/Cannot read propert(y|ies) of undefined/i);
+  }, 30_000);
 });
 
