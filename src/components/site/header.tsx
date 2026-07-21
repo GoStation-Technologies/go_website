@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Menu, Globe, Fuel } from "lucide-react";
 import { useState } from "react";
+import { getContentLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -27,7 +28,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   const toggleLang = () => {
-    const next = (i18n.language || "en").startsWith("ar") ? "en" : "ar";
+    const next = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar" ? "en" : "ar";
     i18n.changeLanguage(next);
   };
 
