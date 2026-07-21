@@ -27,7 +27,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   const toggleLang = () => {
-    const next = i18n.language.startsWith("ar") ? "en" : "ar";
+    const next = (i18n.language || "en").startsWith("ar") ? "en" : "ar";
     i18n.changeLanguage(next);
   };
 

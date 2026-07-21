@@ -20,7 +20,7 @@ export const Route = createFileRoute("/investors")({
 
 function IRPage() {
   const { t, i18n } = useTranslation();
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
   const { data: reports = [] } = useQuery({
     queryKey: ["reports"],
     queryFn: async () => {

@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { t, i18n } = useTranslation();
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
 
   const news = useQuery({
     queryKey: ["home-news"],

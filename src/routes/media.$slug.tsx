@@ -12,7 +12,7 @@ export const Route = createFileRoute("/media/$slug")({
 function ArticlePage() {
   const { slug } = Route.useParams();
   const { t, i18n } = useTranslation();
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
   const { data, isLoading } = useQuery({
     queryKey: ["article", slug],
     queryFn: async () => {

@@ -7,9 +7,9 @@ export function LangBoot() {
   const { i18n } = useTranslation();
   useEffect(() => {
     const lng = i18n.language || "en";
-    const dir = lng.startsWith("ar") ? "rtl" : "ltr";
-    document.documentElement.lang = lng.startsWith("ar") ? "ar" : "en";
-    document.documentElement.dir = dir;
+    const isAr = lng.startsWith("ar");
+    document.documentElement.lang = isAr ? "ar" : "en";
+    document.documentElement.dir = isAr ? "rtl" : "ltr";
   }, [i18n.language]);
   return null;
 }

@@ -15,7 +15,7 @@ export const Route = createFileRoute("/media")({
 
 function MediaPage() {
   const { t, i18n } = useTranslation();
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
   const { data = [] } = useQuery({
     queryKey: ["media"],
     queryFn: async () => {

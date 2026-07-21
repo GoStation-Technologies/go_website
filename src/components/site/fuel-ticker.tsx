@@ -20,7 +20,7 @@ export function FuelTicker() {
     "98": { en: "Petrol 98", ar: "بنزين 98" },
     diesel: { en: "Diesel", ar: "ديزل" },
   };
-  const lng = i18n.language.startsWith("ar") ? "ar" : "en";
+  const lng = (i18n.language || "en").startsWith("ar") ? "ar" : "en";
   const doubled = [...items, ...items];
 
   return (
