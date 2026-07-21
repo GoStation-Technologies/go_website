@@ -109,7 +109,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       reply = data.lang === "ar" ? "عذراً، لم أستطع الرد الآن." : "Sorry, I couldn't answer just now.";
     }
 
-    await supabase.from("chatbot_messages").insert({
+    await supabaseAdmin.from("chatbot_messages").insert({
       session_id: data.sessionId,
       role: "assistant",
       content: reply,
