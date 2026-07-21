@@ -63,6 +63,30 @@ async function coerceError(e: unknown): Promise<ChatsError> {
   return { status: 500, message: e instanceof Error ? e.message : "Request failed." };
 }
 
+function escapeRegExp(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function highlight(text: string, query: string) {
+  const q = query.trim();
+  if (!q) return text;
+  const re = new RegExp(`(${escapeRegExp(q)})`, "gi");
+  const parts = text.split(re);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <mark
+        key={i}
+        data-testid="chats-highlight"
+        className="rounded-sm bg-yellow-200 px-0.5 text-inherit dark:bg-yellow-500/40"
+      >
+        {part}
+      </mark>
+    ) : (
+      <span key={i}>{part}</span>
+    ),
+  );
+}
+
 function ChatsPage() {
   const { page, pageSize, sort, q } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/chats" });
@@ -213,8 +237,8 @@ function ChatsPage() {
               open={Boolean(q)}
             >
               <summary className="cursor-pointer text-sm font-medium">
-                <span className="font-mono text-xs text-muted-foreground">
-                  {s.sessionId.slice(0, 8)}
+                <span className="font-mono text-xs text-muted-foreground" data-testid="chats-session-id">
+                  {highlight(s.sessionId.slice(0, 8), q)}
                 </span>
                 <span className="ms-3 text-xs text-muted-foreground">
                   {s.lastAt ? new Date(s.lastAt).toLocaleString() : ""}
@@ -226,11 +250,12 @@ function ChatsPage() {
                   <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
                       data-role={m.role}
+                      data-testid="chats-message-content"
                       className={`max-w-[80%] whitespace-pre-wrap rounded-lg px-3 py-2 text-sm ${
                         m.role === "user" ? "bg-primary/10 text-primary" : "bg-muted"
                       }`}
                     >
-                      {m.content}
+                      {highlight(m.content, q)}
                     </div>
                   </div>
                 ))}
