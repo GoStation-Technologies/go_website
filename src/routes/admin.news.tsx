@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useListView, ListToolbar } from "@/components/admin/list-toolbar";
 
 export const Route = createFileRoute("/admin/news")({ component: NewsPage });
 
