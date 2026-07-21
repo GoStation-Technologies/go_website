@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { retrieveGrounding, formatGrounding } from "./chat.grounding";
 
 const Input = z.object({
   sessionId: z.string().uuid(),
