@@ -222,7 +222,7 @@ function AbuseDashboard() {
                     </tr>
                   ) : (
                     data.recent.map((r) => (
-                      <tr key={r.id as string} className="border-t">
+                      <tr key={String(r.id)} className="border-t">
                         <td className="p-3 whitespace-nowrap">{new Date(r.created_at as string).toLocaleString()}</td>
                         <td className="p-3"><span className="rounded bg-destructive/10 px-2 py-0.5 text-xs text-destructive">{r.reason as string}</span></td>
                         <td className="p-3 font-mono text-xs">{(r.key as string) ?? "—"}</td>
