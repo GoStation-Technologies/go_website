@@ -112,7 +112,7 @@ maybe("Admin chats UI — sends pagination params & renders normalized/errored r
     expect(posted.data).toEqual({ page: 99999, pageSize: 5, sort: "newest" });
 
     // No error banner and the list rendered with server-normalized attributes.
-    await expect(page.getByTestId("chats-error")).toHaveCount(0);
+    expect(await page.getByTestId("chats-error").count()).toBe(0);
     const list = page.getByTestId("chats-list");
     await list.waitFor({ state: "visible", timeout: 15_000 });
 
@@ -173,13 +173,13 @@ maybe("Admin chats UI — sends pagination params & renders normalized/errored r
 
     // Field list is rendered with a per-field bullet and a non-empty message.
     const fieldItem = page.locator('[data-testid="chats-error-fields"] li[data-field="pageSize"]');
-    await expect(fieldItem).toHaveCount(1);
+    expect(await fieldItem.count()).toBe(1);
     const fieldText = await fieldItem.innerText();
     expect(fieldText).toContain("pageSize");
     expect(fieldText.length).toBeGreaterThan("pageSize".length + 1);
 
     // Results list must NOT be visible when the error banner is shown.
-    await expect(page.getByTestId("chats-list")).toHaveCount(0);
+    expect(await page.getByTestId("chats-list").count()).toBe(0);
     // Pagination controls disabled while errored.
     expect(await page.getByRole("button", { name: "Next page" }).isDisabled()).toBe(true);
     expect(await page.getByRole("button", { name: "Previous page" }).isDisabled()).toBe(true);
@@ -206,7 +206,7 @@ maybe("Admin chats UI — sends pagination params & renders normalized/errored r
 
     for (const f of ["page", "pageSize", "sort"]) {
       const item = page.locator(`[data-testid="chats-error-fields"] li[data-field="${f}"]`);
-      await expect(item, `missing bullet for ${f}`).toHaveCount(1);
+      expect(await item.count(), `missing bullet for ${f}`).toBe(1);
     }
 
     await context.close();
