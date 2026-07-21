@@ -115,6 +115,15 @@ export const adminListChats = createServerFn({ method: "POST" })
       messageCount: msgs.length,
     }));
 
+    const q = data.q.trim().toLowerCase();
+    const filtered = q
+      ? all.filter(
+          (s) =>
+            s.sessionId.toLowerCase().includes(q) ||
+            s.messages.some((m) => m.content.toLowerCase().includes(q)),
+        )
+      : all;
+
     const cmp = (a: typeof all[number], b: typeof all[number]) => {
       if (data.sort === "oldest") return (a.firstAt ?? "").localeCompare(b.firstAt ?? "");
       if (data.sort === "messages") {
@@ -123,15 +132,15 @@ export const adminListChats = createServerFn({ method: "POST" })
       }
       return (b.lastAt ?? "").localeCompare(a.lastAt ?? "");
     };
-    all.sort(cmp);
+    filtered.sort(cmp);
 
-    const total = all.length;
+    const total = filtered.length;
     const pageSize = data.pageSize;
     const pageCount = Math.max(1, Math.ceil(total / pageSize));
     const page = Math.min(Math.max(1, data.page), pageCount);
     const start = (page - 1) * pageSize;
-    const sessions = all.slice(start, start + pageSize);
+    const sessions = filtered.slice(start, start + pageSize);
 
-    return { sessions, total, page, pageSize, pageCount, sort: data.sort };
+    return { sessions, total, page, pageSize, pageCount, sort: data.sort, q };
   });
 

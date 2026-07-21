@@ -4,6 +4,7 @@ export const ChatsInput = z.object({
   page: z.number().int().min(1).default(1),
   pageSize: z.number().int().min(1).max(100).default(10),
   sort: z.enum(["newest", "oldest", "messages"]).default("newest"),
+  q: z.string().max(200).default(""),
 });
 export type AdminListChatsInput = z.infer<typeof ChatsInput>;
 
