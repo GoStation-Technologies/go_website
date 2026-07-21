@@ -31,9 +31,9 @@ describe("Arabic chat widget", () => {
     await openBtn.click();
 
     // Greeting appears in Arabic.
-    await expect(
-      page.getByText("مرحباً! أنا مساعد قوستيشن. كيف أستطيع مساعدتك؟"),
-    ).toBeVisible({ timeout: 5_000 });
+    await page
+      .getByText("مرحباً! أنا مساعد قوستيشن. كيف أستطيع مساعدتك؟")
+      .waitFor({ state: "visible", timeout: 5_000 });
 
     // 2. Send a user message in Arabic.
     const userMsg = "أين أقرب محطة قوستيشن في الرياض؟";
@@ -42,7 +42,7 @@ describe("Arabic chat widget", () => {
     await page.getByRole("button", { name: "إرسال" }).click();
 
     // 3. User message renders immediately.
-    await expect(page.getByText(userMsg)).toBeVisible();
+    await page.getByText(userMsg).waitFor({ state: "visible", timeout: 5_000 });
 
     // 4. Wait for the assistant reply. Widget renders one assistant bubble
     //    (greeting) initially; wait until a second assistant bubble appears
