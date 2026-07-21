@@ -58,33 +58,67 @@ function AbuseDashboard() {
   const { windowHours, reason } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [exporting, setExporting] = useState(false);
+  const [exportMsg, setExportMsg] = useState<string | null>(null);
+
+  const jobsQuery = useQuery({
+    queryKey: ["admin", "export-jobs"],
+    queryFn: () => adminExportJobsList(),
+    refetchInterval: (q) => {
+      const jobs = (q.state.data as { jobs: Array<{ status: string }> } | undefined)?.jobs ?? [];
+      return jobs.some((j) => j.status === "queued" || j.status === "processing") ? 3000 : false;
+    },
+  });
+
+  const downloadInline = (rows: Array<Record<string, unknown>>) => {
+    const headers = ["id", "created_at", "reason", "key", "session_id", "ip_hash", "current_count", "lang", "metadata"];
+    const esc = (v: unknown) => {
+      if (v === null || v === undefined) return "";
+      const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+      return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const csv = [
+      headers.join(","),
+      ...rows.map((r) => headers.map((h) => esc(r[h])).join(",")),
+    ].join("\n");
+    const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    a.href = url;
+    a.download = `abuse-events_${windowHours}h${reason ? `_${reason}` : ""}_${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
 
   const handleExport = async () => {
     setExporting(true);
+    setExportMsg(null);
     try {
-      const { rows } = await adminAbuseExport({ data: { windowHours, reason, limit: 10000 } });
-      const headers = ["id", "created_at", "reason", "key", "session_id", "ip_hash", "current_count", "lang", "metadata"];
-      const esc = (v: unknown) => {
-        if (v === null || v === undefined) return "";
-        const s = typeof v === "object" ? JSON.stringify(v) : String(v);
-        return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-      };
-      const csv = [
-        headers.join(","),
-        ...rows.map((r) => headers.map((h) => esc((r as Record<string, unknown>)[h])).join(",")),
-      ].join("\n");
-      const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-      a.href = url;
-      a.download = `abuse-events_${windowHours}h${reason ? `_${reason}` : ""}_${stamp}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      const res = await adminAbuseExportSubmit({ data: { windowHours, reason } });
+      if (res.mode === "inline") {
+        downloadInline(res.rows as Array<Record<string, unknown>>);
+        setExportMsg(`Downloaded ${res.total.toLocaleString()} rows.`);
+      } else {
+        setExportMsg(
+          `Large export queued (${res.total.toLocaleString()} rows). It will appear in Export jobs below when ready.`,
+        );
+        jobsQuery.refetch();
+      }
+    } catch (err) {
+      setExportMsg(`Export failed: ${(err as Error).message}`);
     } finally {
       setExporting(false);
+    }
+  };
+
+  const handleDownloadJob = async (jobId: string) => {
+    try {
+      const { url } = await adminExportJobDownload({ data: { jobId } });
+      window.open(url, "_blank", "noopener");
+    } catch (err) {
+      setExportMsg(`Download failed: ${(err as Error).message}`);
     }
   };
 
