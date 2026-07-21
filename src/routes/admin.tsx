@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, redirect, useRouter } from "@tanstack/re
 import { supabase } from "@/integrations/supabase/client";
 import { getMyStaffRoles } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, Inbox, MessageSquare, MapPin, Newspaper, Briefcase } from "lucide-react";
+import { LogOut, LayoutDashboard, Inbox, MessageSquare, MapPin, Newspaper, Briefcase, ShieldAlert } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -56,6 +56,7 @@ function AdminLayout() {
           <SideLink to="/admin/careers" icon={<Briefcase className="h-4 w-4" />}>Careers</SideLink>
           <SideLink to="/admin/submissions" icon={<Inbox className="h-4 w-4" />}>Submissions</SideLink>
           <SideLink to="/admin/chats" icon={<MessageSquare className="h-4 w-4" />}>Chat logs</SideLink>
+          <SideLink to="/admin/abuse" icon={<ShieldAlert className="h-4 w-4" />}>Abuse events</SideLink>
         </aside>
         <main className="min-w-0">
           <Outlet />
