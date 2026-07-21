@@ -56,6 +56,7 @@ function AdminLayout() {
           <SideLink to="/admin/careers" icon={<Briefcase className="h-4 w-4" />}>Careers</SideLink>
           <SideLink to="/admin/submissions" icon={<Inbox className="h-4 w-4" />}>Submissions</SideLink>
           <SideLink to="/admin/chats" icon={<MessageSquare className="h-4 w-4" />}>Chat logs</SideLink>
+          <SideLink to="/admin/abuse" icon={<ShieldAlert className="h-4 w-4" />}>Abuse events</SideLink>
         </aside>
         <main className="min-w-0">
           <Outlet />
