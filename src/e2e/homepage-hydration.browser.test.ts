@@ -57,7 +57,7 @@ describe("Arabic homepage hydration", () => {
 
     // 5. Axe accessibility audit — no critical violations, with explicit
     //    focus on RTL layout and ARIA attribute rules.
-    const results = await new AxeBuilder({ page })
+    const results = await new AxeBuilder({ page: page as never })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       .analyze();
 
