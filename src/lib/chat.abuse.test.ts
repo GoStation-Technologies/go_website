@@ -1,10 +1,8 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import {
   messageLooksAbusive,
-  checkIpRate,
   extractIp,
-  __resetIpStore,
-  LIMITS,
+  checkPersistentRate,
 } from "./chat.abuse";
 
 describe("messageLooksAbusive", () => {
@@ -23,21 +21,6 @@ describe("messageLooksAbusive", () => {
   });
 });
 
-describe("checkIpRate", () => {
-  beforeEach(() => __resetIpStore());
-  it("allows within limits", () => {
-    expect(checkIpRate("1.1.1.1")).toBeNull();
-  });
-  it("blocks after per-minute cap", () => {
-    const now = Date.now();
-    for (let i = 0; i < LIMITS.perIpPerMinute; i++) checkIpRate("2.2.2.2", now);
-    expect(checkIpRate("2.2.2.2", now)).toBe("ip_minute");
-  });
-  it("ignores empty ip", () => {
-    expect(checkIpRate("")).toBeNull();
-  });
-});
-
 describe("extractIp", () => {
   it("prefers cf-connecting-ip", () => {
     const h = new Headers({ "cf-connecting-ip": "9.9.9.9", "x-forwarded-for": "1.1.1.1" });
@@ -49,5 +32,40 @@ describe("extractIp", () => {
   });
   it("returns empty when no headers", () => {
     expect(extractIp(new Headers())).toBe("");
+  });
+});
+
+describe("checkPersistentRate", () => {
+  const mkRpc = (
+    rows: Array<{ allowed: boolean; current_count: number; reset_at: string }> | null,
+    error: unknown = null,
+  ) => ({
+    rpc: async () => ({ data: rows, error }),
+  });
+
+  it("returns allowed when RPC row says so", async () => {
+    const r = await checkPersistentRate(
+      mkRpc([{ allowed: true, current_count: 3, reset_at: "2030-01-01T00:00:00Z" }]),
+      "ip:1.1.1.1:minute",
+      60,
+      30,
+    );
+    expect(r.allowed).toBe(true);
+    expect(r.count).toBe(3);
+  });
+
+  it("returns blocked when RPC row denies", async () => {
+    const r = await checkPersistentRate(
+      mkRpc([{ allowed: false, current_count: 31, reset_at: "2030-01-01T00:00:00Z" }]),
+      "ip:1.1.1.1:minute",
+      60,
+      30,
+    );
+    expect(r.allowed).toBe(false);
+  });
+
+  it("fails open when RPC errors", async () => {
+    const r = await checkPersistentRate(mkRpc(null, new Error("boom")), "k", 60, 10);
+    expect(r.allowed).toBe(true);
   });
 });
