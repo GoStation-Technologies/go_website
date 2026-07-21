@@ -50,6 +50,17 @@ function StationsPage() {
   });
 
   const rows = (data?.rows ?? []) as Station[];
+  const view = useListView<Station>({
+    rows,
+    search: (s) => `${s.name_en} ${s.name_ar} ${s.city_en} ${s.city_ar} ${s.district_en ?? ""} ${s.district_ar ?? ""}`,
+    sort: {
+      newest: () => 0,
+      name_en: (a, b) => a.name_en.localeCompare(b.name_en),
+      city_en: (a, b) => a.city_en.localeCompare(b.city_en),
+      active_first: (a, b) => Number(b.is_active) - Number(a.is_active),
+    },
+    defaultSort: "newest",
+  });
 
   const edit = (s: Station) => { setForm({ ...empty, ...s }); setOpen(true); };
   const create = () => { setForm(empty); setOpen(true); };
