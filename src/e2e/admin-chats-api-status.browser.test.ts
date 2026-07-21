@@ -159,29 +159,51 @@ maybe("Admin chats server-fn — HTTP status + normalized response", () => {
     await context.close();
   }, 120_000);
 
-  it("rejects invalid inputs with a non-2xx status (does not silently coerce)", async () => {
+  it("returns 400 + structured error body naming the invalid fields", async () => {
     const { context, page } = await signInAndGetPage();
 
-    const cases: Array<{ label: string; payload: unknown }> = [
-      { label: "page=0",        payload: { page: 0,   pageSize: 10, sort: "newest" } },
-      { label: "page=-5",       payload: { page: -5,  pageSize: 10, sort: "newest" } },
-      { label: "page=1.5",      payload: { page: 1.5, pageSize: 10, sort: "newest" } },
-      { label: 'page="1"',      payload: { page: "1", pageSize: 10, sort: "newest" } },
-      { label: "pageSize=0",    payload: { page: 1, pageSize: 0,      sort: "newest" } },
-      { label: "pageSize=101",  payload: { page: 1, pageSize: 101,    sort: "newest" } },
-      { label: "pageSize=huge", payload: { page: 1, pageSize: 999999, sort: "newest" } },
-      { label: "sort=bogus",    payload: { page: 1, pageSize: 10, sort: "bogus" } },
-      { label: "sort=empty",    payload: { page: 1, pageSize: 10, sort: "" } },
+    type Case = { label: string; payload: unknown; fields: string[] };
+    const cases: Case[] = [
+      { label: "page=0",        payload: { page: 0,   pageSize: 10, sort: "newest" }, fields: ["page"] },
+      { label: "page=-5",       payload: { page: -5,  pageSize: 10, sort: "newest" }, fields: ["page"] },
+      { label: "page=1.5",      payload: { page: 1.5, pageSize: 10, sort: "newest" }, fields: ["page"] },
+      { label: 'page="1"',      payload: { page: "1", pageSize: 10, sort: "newest" }, fields: ["page"] },
+      { label: "pageSize=0",    payload: { page: 1, pageSize: 0,      sort: "newest" }, fields: ["pageSize"] },
+      { label: "pageSize=101",  payload: { page: 1, pageSize: 101,    sort: "newest" }, fields: ["pageSize"] },
+      { label: "pageSize=huge", payload: { page: 1, pageSize: 999999, sort: "newest" }, fields: ["pageSize"] },
+      { label: "sort=bogus",    payload: { page: 1, pageSize: 10, sort: "bogus" }, fields: ["sort"] },
+      { label: "sort=empty",    payload: { page: 1, pageSize: 10, sort: "" },      fields: ["sort"] },
+      { label: "multi-invalid", payload: { page: -1, pageSize: 0, sort: "bogus" }, fields: ["page", "pageSize", "sort"] },
     ];
 
     for (const c of cases) {
       const res = await callServerFn(page, c.payload);
+
       expect(
-        res.status >= 400 && res.status < 600,
-        `expected non-2xx for ${c.label}, got ${res.status}: ${res.text.slice(0, 200)}`,
-      ).toBe(true);
-      // On rejection the server must NOT return a normalized results envelope.
+        res.status,
+        `expected 400 for ${c.label}, got ${res.status}: ${res.text.slice(0, 300)}`,
+      ).toBe(400);
+
+      // Body must be JSON with a structured error envelope, not the results shape.
       expect(extractResult(res.json), `unexpected results envelope for ${c.label}`).toBeNull();
+      expect(res.json, `expected JSON error body for ${c.label}, got: ${res.text.slice(0, 200)}`)
+        .not.toBeNull();
+
+      const body = res.json as {
+        error?: string; message?: string;
+        fields?: string[]; fieldErrors?: Record<string, string[]>;
+      };
+      expect(body.error).toBe("invalid_input");
+      expect(typeof body.message).toBe("string");
+      expect(body.message!.length).toBeGreaterThan(0);
+      expect(Array.isArray(body.fields)).toBe(true);
+      expect(body.fieldErrors && typeof body.fieldErrors === "object").toBe(true);
+
+      for (const f of c.fields) {
+        expect(body.fields, `${c.label}: fields missing ${f}`).toContain(f);
+        const msgs = body.fieldErrors?.[f];
+        expect(Array.isArray(msgs) && msgs.length > 0, `${c.label}: fieldErrors.${f} empty`).toBe(true);
+      }
     }
 
     await context.close();
