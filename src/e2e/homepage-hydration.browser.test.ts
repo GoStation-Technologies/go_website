@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { chromium, type Browser } from "playwright";
+import AxeBuilder from "@axe-core/playwright";
 
 const BASE_URL = process.env.E2E_URL ?? "http://localhost:8080";
 
