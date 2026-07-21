@@ -127,7 +127,7 @@ maybe("Admin chat logs — last-page behavior", () => {
     const last = await readList(page);
     expect(last.pageIdx).toBe(first.pageCount);
     expect(last.pageCount).toBe(first.pageCount);
-    expect(last.rendered_length ?? last.ids.length).toBeGreaterThan(0);
+    expect(last.ids.length).toBeGreaterThan(0);
     expect(last.ids.length).toBeLessThanOrEqual(pageSize);
 
     // Next disabled, Prev enabled
