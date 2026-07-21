@@ -99,7 +99,7 @@ function AbuseDashboard() {
           <Select
             value={reason ?? "all"}
             onValueChange={(v) =>
-              navigate({ search: (p) => ({ ...p, reason: v === "all" ? undefined : v }) })
+              navigate({ search: (p: z.infer<typeof searchSchema>) => ({ ...p, reason: v === "all" ? undefined : v }) })
             }
           >
             <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
