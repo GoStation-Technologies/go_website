@@ -7,10 +7,12 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
+import { I18nextProvider } from "react-i18next";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { createI18nInstance, type ContentLanguage } from "@/lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -72,7 +74,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+  lang: ContentLanguage;
+}>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -100,8 +105,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const { lang } = Route.useRouteContext();
+  const dir = lang === "ar" ? "rtl" : "ltr";
   return (
-    <html lang="en">
+    <html lang={lang} dir={dir} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -114,12 +121,17 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
+  const { queryClient, lang } = Route.useRouteContext();
+  // One i18next instance per request on the server; recreated on the client
+  // only if the negotiated language changes (normally never — hydration uses
+  // the same cookie-derived lang the server used).
+  const i18n = useMemo(() => createI18nInstance(lang), [lang]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <I18nextProvider i18n={i18n} defaultNS="t">
+        <Outlet />
+      </I18nextProvider>
     </QueryClientProvider>
   );
 }
