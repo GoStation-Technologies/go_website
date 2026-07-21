@@ -45,15 +45,9 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       return { ok: false as const, error: "AI is not configured yet." };
     }
 
-    // Content filter (URL flood, char repetition, script tags)
-    const contentReason = messageLooksAbusive(data.message);
-    if (contentReason) {
-      return { ok: false as const, error: errorMessage(contentReason, data.lang) };
-    }
-
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Persistent per-IP rate limits (Postgres-backed, cross-instance).
+    // Resolve IP + hash early so every abuse event can be attributed.
     let ip = "";
     try {
       const req = getRequest();
@@ -61,56 +55,57 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     } catch {
       // getRequest unavailable in some contexts.
     }
+    const ipHash = await hashIp(ip);
+
+    const reject = async (
+      reason: AbuseReason,
+      extra: { key?: string; currentCount?: number | null; metadata?: Record<string, unknown> } = {},
+    ) => {
+      await recordAbuseEvent(supabaseAdmin, {
+        reason,
+        key: extra.key ?? null,
+        sessionId: data.sessionId,
+        ipHash: ipHash || null,
+        lang: data.lang,
+        currentCount: extra.currentCount ?? null,
+        metadata: {
+          message_length: data.message.length,
+          ...(extra.metadata ?? {}),
+        },
+      });
+      return { ok: false as const, error: errorMessage(reason, data.lang) };
+    };
+
+    // Content filter (URL flood, char repetition, script tags)
+    const contentReason = messageLooksAbusive(data.message);
+    if (contentReason) {
+      return reject(contentReason, { key: "content_filter" });
+    }
+
+    // Persistent per-IP rate limits (Postgres-backed, cross-instance).
     if (ip) {
-      const minute = await checkPersistentRate(
-        supabaseAdmin,
-        `ip:${ip}:m`,
-        60,
-        LIMITS.perIpPerMinute,
-      );
+      const ipMinKey = `ip:${ipHash || ip}:m`;
+      const minute = await checkPersistentRate(supabaseAdmin, ipMinKey, 60, LIMITS.perIpPerMinute);
       if (!minute.allowed) {
-        return { ok: false as const, error: errorMessage("ip_minute", data.lang) };
+        return reject("ip_minute", { key: ipMinKey, currentCount: minute.count });
       }
-      const hour = await checkPersistentRate(
-        supabaseAdmin,
-        `ip:${ip}:h`,
-        3600,
-        LIMITS.perIpPerHour,
-      );
+      const ipHrKey = `ip:${ipHash || ip}:h`;
+      const hour = await checkPersistentRate(supabaseAdmin, ipHrKey, 3600, LIMITS.perIpPerHour);
       if (!hour.allowed) {
-        return { ok: false as const, error: errorMessage("ip_hour", data.lang) };
+        return reject("ip_hour", { key: ipHrKey, currentCount: hour.count });
       }
     }
 
     // Persistent per-session rate limits (cross-instance, atomic).
-    const sm = await checkPersistentRate(
-      supabaseAdmin,
-      `sess:${data.sessionId}:m`,
-      60,
-      LIMITS.perSessionPerMinute,
-    );
-    if (!sm.allowed) {
-      return { ok: false as const, error: errorMessage("session_minute", data.lang) };
-    }
-    const sh = await checkPersistentRate(
-      supabaseAdmin,
-      `sess:${data.sessionId}:h`,
-      3600,
-      LIMITS.perSessionPerHour,
-    );
-    if (!sh.allowed) {
-      return { ok: false as const, error: errorMessage("session_hour", data.lang) };
-    }
-    const sd = await checkPersistentRate(
-      supabaseAdmin,
-      `sess:${data.sessionId}:d`,
-      86400,
-      LIMITS.perSessionPerDay,
-    );
-    if (!sd.allowed) {
-      return { ok: false as const, error: errorMessage("session_day", data.lang) };
-    }
-
+    const smKey = `sess:${data.sessionId}:m`;
+    const sm = await checkPersistentRate(supabaseAdmin, smKey, 60, LIMITS.perSessionPerMinute);
+    if (!sm.allowed) return reject("session_minute", { key: smKey, currentCount: sm.count });
+    const shKey = `sess:${data.sessionId}:h`;
+    const sh = await checkPersistentRate(supabaseAdmin, shKey, 3600, LIMITS.perSessionPerHour);
+    if (!sh.allowed) return reject("session_hour", { key: shKey, currentCount: sh.count });
+    const sdKey = `sess:${data.sessionId}:d`;
+    const sd = await checkPersistentRate(supabaseAdmin, sdKey, 86400, LIMITS.perSessionPerDay);
+    if (!sd.allowed) return reject("session_day", { key: sdKey, currentCount: sd.count });
 
     // Session-based rate limits + duplicate/flood detection.
     const now = Date.now();
@@ -127,7 +122,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     const times = (recent ?? []).map((r) => new Date(r.created_at as string).getTime());
     const last = times[0];
     if (last && now - last < LIMITS.minIntervalMs) {
-      return { ok: false as const, error: errorMessage("too_fast", data.lang) };
+      return reject("too_fast", { key: `sess:${data.sessionId}:interval` });
     }
     // Duplicate message within window
     const dupSince = now - LIMITS.duplicateWindowMs;
@@ -138,20 +133,21 @@ export const sendChatMessage = createServerFn({ method: "POST" })
           new Date(r.created_at as string).getTime() > dupSince,
       )
     ) {
-      return { ok: false as const, error: errorMessage("duplicate", data.lang) };
+      return reject("duplicate", { key: `sess:${data.sessionId}:dup` });
     }
     const inMinute = times.filter((t) => t > now - 60_000).length;
     const inHour = times.filter((t) => t > now - 3_600_000).length;
     const inDay = times.length;
     if (inMinute >= LIMITS.perSessionPerMinute) {
-      return { ok: false as const, error: errorMessage("session_minute", data.lang) };
+      return reject("session_minute", { key: smKey, currentCount: inMinute });
     }
     if (inHour >= LIMITS.perSessionPerHour) {
-      return { ok: false as const, error: errorMessage("session_hour", data.lang) };
+      return reject("session_hour", { key: shKey, currentCount: inHour });
     }
     if (inDay >= LIMITS.perSessionPerDay) {
-      return { ok: false as const, error: errorMessage("session_day", data.lang) };
+      return reject("session_day", { key: sdKey, currentCount: inDay });
     }
+
 
     // Load recent history (last 20).
     const { data: history } = await supabaseAdmin
