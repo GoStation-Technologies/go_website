@@ -28,6 +28,7 @@ import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminChatsRouteImport } from './routes/admin.chats'
 import { Route as AdminCareersRouteImport } from './routes/admin.careers'
 import { Route as AdminAbuseRouteImport } from './routes/admin.abuse'
+import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
@@ -124,6 +125,12 @@ const AdminAbuseRoute = AdminAbuseRouteImport.update({
   path: '/abuse',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiPublicHooksProcessExportsRoute =
+  ApiPublicHooksProcessExportsRouteImport.update({
+    id: '/api/public/hooks/process-exports',
+    path: '/api/public/hooks/process-exports',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -165,6 +173,7 @@ export interface FileRoutesByTo {
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -187,6 +196,7 @@ export interface FileRoutesById {
   '/admin/submissions': typeof AdminSubmissionsRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/admin/submissions'
     | '/media/$slug'
     | '/admin/'
+    | '/api/public/hooks/process-exports'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/admin/submissions'
     | '/media/$slug'
     | '/admin'
+    | '/api/public/hooks/process-exports'
   id:
     | '__root__'
     | '/'
@@ -251,6 +263,7 @@ export interface FileRouteTypes {
     | '/admin/submissions'
     | '/media/$slug'
     | '/admin/'
+    | '/api/public/hooks/process-exports'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -265,6 +278,7 @@ export interface RootRouteChildren {
   InvestorsRoute: typeof InvestorsRoute
   MediaRoute: typeof MediaRouteWithChildren
   StationsRoute: typeof StationsRoute
+  ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -402,6 +416,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAbuseRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/public/hooks/process-exports': {
+      id: '/api/public/hooks/process-exports'
+      path: '/api/public/hooks/process-exports'
+      fullPath: '/api/public/hooks/process-exports'
+      preLoaderRoute: typeof ApiPublicHooksProcessExportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -449,6 +470,7 @@ const rootRouteChildren: RootRouteChildren = {
   InvestorsRoute: InvestorsRoute,
   MediaRoute: MediaRouteWithChildren,
   StationsRoute: StationsRoute,
+  ApiPublicHooksProcessExportsRoute: ApiPublicHooksProcessExportsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

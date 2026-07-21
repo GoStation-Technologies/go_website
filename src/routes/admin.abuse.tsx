@@ -3,7 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { adminAbuseMetrics, adminAbuseExport } from "@/lib/abuse.functions";
+import {
+  adminAbuseMetrics,
+  adminAbuseExportSubmit,
+  adminExportJobsList,
+  adminExportJobDownload,
+} from "@/lib/abuse.functions";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -53,33 +58,67 @@ function AbuseDashboard() {
   const { windowHours, reason } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [exporting, setExporting] = useState(false);
+  const [exportMsg, setExportMsg] = useState<string | null>(null);
+
+  const jobsQuery = useQuery({
+    queryKey: ["admin", "export-jobs"],
+    queryFn: () => adminExportJobsList(),
+    refetchInterval: (q) => {
+      const jobs = (q.state.data as { jobs: Array<{ status: string }> } | undefined)?.jobs ?? [];
+      return jobs.some((j) => j.status === "queued" || j.status === "processing") ? 3000 : false;
+    },
+  });
+
+  const downloadInline = (rows: Array<Record<string, unknown>>) => {
+    const headers = ["id", "created_at", "reason", "key", "session_id", "ip_hash", "current_count", "lang", "metadata"];
+    const esc = (v: unknown) => {
+      if (v === null || v === undefined) return "";
+      const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+      return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const csv = [
+      headers.join(","),
+      ...rows.map((r) => headers.map((h) => esc(r[h])).join(",")),
+    ].join("\n");
+    const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    a.href = url;
+    a.download = `abuse-events_${windowHours}h${reason ? `_${reason}` : ""}_${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
 
   const handleExport = async () => {
     setExporting(true);
+    setExportMsg(null);
     try {
-      const { rows } = await adminAbuseExport({ data: { windowHours, reason, limit: 10000 } });
-      const headers = ["id", "created_at", "reason", "key", "session_id", "ip_hash", "current_count", "lang", "metadata"];
-      const esc = (v: unknown) => {
-        if (v === null || v === undefined) return "";
-        const s = typeof v === "object" ? JSON.stringify(v) : String(v);
-        return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-      };
-      const csv = [
-        headers.join(","),
-        ...rows.map((r) => headers.map((h) => esc((r as Record<string, unknown>)[h])).join(",")),
-      ].join("\n");
-      const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-      a.href = url;
-      a.download = `abuse-events_${windowHours}h${reason ? `_${reason}` : ""}_${stamp}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      const res = await adminAbuseExportSubmit({ data: { windowHours, reason } });
+      if (res.mode === "inline") {
+        downloadInline(res.rows as Array<Record<string, unknown>>);
+        setExportMsg(`Downloaded ${res.total.toLocaleString()} rows.`);
+      } else {
+        setExportMsg(
+          `Large export queued (${res.total.toLocaleString()} rows). It will appear in Export jobs below when ready.`,
+        );
+        jobsQuery.refetch();
+      }
+    } catch (err) {
+      setExportMsg(`Export failed: ${(err as Error).message}`);
     } finally {
       setExporting(false);
+    }
+  };
+
+  const handleDownloadJob = async (jobId: string) => {
+    try {
+      const { url } = await adminExportJobDownload({ data: { jobId } });
+      window.open(url, "_blank", "noopener");
+    } catch (err) {
+      setExportMsg(`Download failed: ${(err as Error).message}`);
     }
   };
 
@@ -156,6 +195,17 @@ function AbuseDashboard() {
           </button>
         </div>
       </div>
+
+      {exportMsg && (
+        <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-sm">{exportMsg}</div>
+      )}
+
+      <ExportJobsPanel
+        jobs={(jobsQuery.data?.jobs ?? []) as unknown as ExportJob[]}
+        onDownload={handleDownloadJob}
+        onRefresh={() => jobsQuery.refetch()}
+        isFetching={jobsQuery.isFetching}
+      />
 
       {isError && (
         <div className="rounded-md border border-destructive/40 bg-destructive/5 p-4 text-sm text-destructive">
@@ -286,5 +336,100 @@ function Stat({ label, value }: { label: string; value: number | string }) {
       <p className="text-sm text-muted-foreground">{label}</p>
       <p className="mt-2 text-3xl font-bold text-primary">{value}</p>
     </div>
+  );
+}
+
+type ExportJob = {
+  id: string;
+  kind: string;
+  filters: Record<string, unknown> | null;
+  status: string;
+  row_count: number | null;
+  storage_path: string | null;
+  error: string | null;
+  created_at: string;
+  finished_at: string | null;
+  expires_at: string;
+};
+
+function ExportJobsPanel({
+  jobs,
+  onDownload,
+  onRefresh,
+  isFetching,
+}: {
+  jobs: ExportJob[];
+  onDownload: (id: string) => void;
+  onRefresh: () => void;
+  isFetching: boolean;
+}) {
+  if (!jobs.length) return null;
+  const badge = (s: string) => {
+    const cls =
+      s === "ready"
+        ? "bg-emerald-500/10 text-emerald-600"
+        : s === "failed"
+          ? "bg-destructive/10 text-destructive"
+          : s === "processing"
+            ? "bg-blue-500/10 text-blue-600"
+            : "bg-muted text-muted-foreground";
+    return <span className={`rounded px-2 py-0.5 text-xs ${cls}`}>{s}</span>;
+  };
+  return (
+    <section className="rounded-xl border bg-background shadow-sm">
+      <div className="flex items-center justify-between border-b p-4">
+        <h2 className="text-sm font-medium text-muted-foreground">Export jobs</h2>
+        <button
+          onClick={onRefresh}
+          className="rounded-md border px-2 py-1 text-xs hover:bg-accent/10"
+        >
+          {isFetching ? "Refreshing…" : "Refresh"}
+        </button>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
+            <tr>
+              <th className="p-3">Created</th>
+              <th className="p-3">Filters</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Rows</th>
+              <th className="p-3">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {jobs.map((j) => {
+              const f = j.filters ?? {};
+              const expired = new Date(j.expires_at).getTime() < Date.now();
+              return (
+                <tr key={j.id} className="border-t">
+                  <td className="p-3 whitespace-nowrap">{new Date(j.created_at).toLocaleString()}</td>
+                  <td className="p-3 font-mono text-xs">
+                    {String(f.windowHours ?? "?")}h{f.reason ? ` · ${String(f.reason)}` : ""}
+                  </td>
+                  <td className="p-3">
+                    {badge(expired && j.status === "ready" ? "expired" : j.status)}
+                    {j.error && <p className="mt-1 text-xs text-destructive">{j.error}</p>}
+                  </td>
+                  <td className="p-3">{j.row_count?.toLocaleString() ?? "—"}</td>
+                  <td className="p-3">
+                    {j.status === "ready" && !expired ? (
+                      <button
+                        onClick={() => onDownload(j.id)}
+                        className="rounded-md border px-2 py-1 text-xs hover:bg-accent/10"
+                      >
+                        Download
+                      </button>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }

@@ -265,6 +265,57 @@ export type Database = {
         }
         Relationships: []
       }
+      export_jobs: {
+        Row: {
+          attempts: number
+          created_at: string
+          error: string | null
+          expires_at: string
+          filters: Json
+          finished_at: string | null
+          id: string
+          kind: string
+          row_count: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["export_job_status"]
+          storage_path: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          error?: string | null
+          expires_at?: string
+          filters?: Json
+          finished_at?: string | null
+          id?: string
+          kind: string
+          row_count?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["export_job_status"]
+          storage_path?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          error?: string | null
+          expires_at?: string
+          filters?: Json
+          finished_at?: string | null
+          id?: string
+          kind?: string
+          row_count?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["export_job_status"]
+          storage_path?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       financial_reports: {
         Row: {
           created_at: string
@@ -961,6 +1012,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      export_jobs_lease: {
+        Args: { _limit?: number }
+        Returns: {
+          attempts: number
+          created_at: string
+          error: string | null
+          expires_at: string
+          filters: Json
+          finished_at: string | null
+          id: string
+          kind: string
+          row_count: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["export_job_status"]
+          storage_path: string | null
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "export_jobs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       generate_reference: { Args: { prefix: string }; Returns: string }
       has_role: {
         Args: {
@@ -985,6 +1061,12 @@ export type Database = {
     }
     Enums: {
       app_role: "super_admin" | "bd" | "hr" | "media" | "ir" | "ops" | "support"
+      export_job_status:
+        | "queued"
+        | "processing"
+        | "ready"
+        | "failed"
+        | "expired"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1113,6 +1195,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["super_admin", "bd", "hr", "media", "ir", "ops", "support"],
+      export_job_status: ["queued", "processing", "ready", "failed", "expired"],
     },
   },
 } as const
