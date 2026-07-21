@@ -144,3 +144,137 @@ export const adminListChats = createServerFn({ method: "POST" })
     return { sessions, total, page, pageSize, pageCount, sort: data.sort, q };
   });
 
+// ─── Stations CRUD (ops / super_admin via RLS) ──────────────────────────
+const StationInput = z.object({
+  id: z.string().uuid().optional(),
+  name_ar: z.string().min(1),
+  name_en: z.string().min(1),
+  city_ar: z.string().min(1),
+  city_en: z.string().min(1),
+  district_ar: z.string().optional().nullable(),
+  district_en: z.string().optional().nullable(),
+  address_ar: z.string().optional().nullable(),
+  address_en: z.string().optional().nullable(),
+  lat: z.number(),
+  lng: z.number(),
+  is_24h: z.boolean().default(false),
+  is_active: z.boolean().default(true),
+  fuel_types: z.array(z.string()).default([]),
+  services: z.array(z.string()).default([]),
+  photo_url: z.string().optional().nullable(),
+});
+
+export const adminListStations = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("stations").select("*").order("created_at", { ascending: false }).limit(500);
+    if (error) throw new Error(error.message);
+    return { rows: data ?? [] };
+  });
+
+export const adminUpsertStation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => StationInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("stations").upsert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminDeleteStation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ id: z.string().uuid() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("stations").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ─── News CRUD (media / super_admin) ────────────────────────────────────
+const NewsInput = z.object({
+  id: z.string().uuid().optional(),
+  slug: z.string().min(1),
+  kind: z.enum(["news", "event", "press"]).default("news"),
+  title_ar: z.string().min(1),
+  title_en: z.string().min(1),
+  excerpt_ar: z.string().optional().nullable(),
+  excerpt_en: z.string().optional().nullable(),
+  body_ar: z.string().optional().nullable(),
+  body_en: z.string().optional().nullable(),
+  cover_url: z.string().optional().nullable(),
+  is_published: z.boolean().default(false),
+  is_featured: z.boolean().default(false),
+  published_at: z.string().optional().nullable(),
+});
+
+export const adminListNews = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("news_articles").select("*").order("created_at", { ascending: false }).limit(500);
+    if (error) throw new Error(error.message);
+    return { rows: data ?? [] };
+  });
+
+export const adminUpsertNews = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => NewsInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const payload = { ...data, published_at: data.is_published && !data.published_at ? new Date().toISOString() : data.published_at };
+    const { error } = await context.supabase.from("news_articles").upsert(payload);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminDeleteNews = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ id: z.string().uuid() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("news_articles").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ─── Careers / Job Openings CRUD (hr / super_admin) ─────────────────────
+const JobInput = z.object({
+  id: z.string().uuid().optional(),
+  slug: z.string().min(1),
+  title_ar: z.string().min(1),
+  title_en: z.string().min(1),
+  department: z.string().min(1),
+  city: z.string().min(1),
+  employment_type: z.string().min(1),
+  description_ar: z.string().optional().nullable(),
+  description_en: z.string().optional().nullable(),
+  is_active: z.boolean().default(true),
+});
+
+export const adminListJobs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("job_openings").select("*").order("created_at", { ascending: false }).limit(500);
+    if (error) throw new Error(error.message);
+    return { rows: data ?? [] };
+  });
+
+export const adminUpsertJob = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => JobInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("job_openings").upsert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminDeleteJob = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ id: z.string().uuid() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("job_openings").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+
