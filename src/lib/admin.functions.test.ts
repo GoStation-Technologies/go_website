@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ChatsInput, paginateSessions } from "./admin.functions";
+import { ChatsInput, paginateSessions } from "./admin.pagination";
 
 describe("adminListChats input validation (ChatsInput)", () => {
   it("applies defaults for empty input", () => {
