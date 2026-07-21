@@ -3,6 +3,7 @@ import { SiteHeader } from "./header";
 import { SiteFooter } from "./footer";
 import { CookieBanner } from "./cookie-banner";
 import { LangBoot } from "./lang-boot";
+import { ChatWidget } from "./chat-widget";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <main>{children}</main>
       <SiteFooter />
       <CookieBanner />
+      <ChatWidget />
     </div>
   );
 }
