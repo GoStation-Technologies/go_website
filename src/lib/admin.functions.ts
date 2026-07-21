@@ -84,7 +84,7 @@ export const adminUpdateStatus = createServerFn({ method: "POST" })
   });
 
 export { ChatsInput, paginateSessions, type AdminListChatsInput } from "./admin.pagination";
-import { ChatsInput as _ChatsInput } from "./admin.pagination";
+import { ChatsInput } from "./admin.pagination";
 
 export const adminListChats = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
