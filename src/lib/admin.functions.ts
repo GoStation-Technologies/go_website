@@ -603,8 +603,10 @@ export const adminListAuditLog = createServerFn({ method: "POST" })
       action: string;
       entity: string;
       entity_ids: string[] | null;
-      diff: unknown | null;
-      meta: unknown | null;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      diff: any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      meta: any;
     };
     return { rows: (rows ?? []) as AuditRow[], total: (count ?? 0) as number, page: data.page, pageSize: data.pageSize };
   });
