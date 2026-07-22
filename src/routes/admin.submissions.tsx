@@ -411,10 +411,11 @@ function SubmissionsPage() {
                             <option key={s} value={s}>{s}</option>
                           ))}
                         </select>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
