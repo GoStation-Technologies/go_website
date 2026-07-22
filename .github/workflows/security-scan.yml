@@ -92,6 +92,77 @@ jobs:
 
           cat /tmp/report.md >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Build JSON/CSV regression report
+        if: failure() && steps.assertions.outcome == 'failure'
+        id: structured_report
+        env:
+          COMMIT: ${{ github.sha }}
+          REF: ${{ github.ref }}
+          EVENT: ${{ github.event_name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          SQL_FILE="scripts/security-assertions.sql"
+          REPO_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+          mkdir -p /tmp/regression-report
+
+          ids=$(grep -oE 'REGRESSION [A-Za-z0-9_]+' /tmp/assertions.log 2>/dev/null | awk '{print $2}' | sort -u)
+
+          # CSV
+          {
+            echo "internal_id,assertion_file,assertion_line,assertion_url,raw_message"
+            while IFS= read -r id; do
+              [ -z "$id" ] && continue
+              line=$(grep -n "ASSERT: ${id}\b" "$SQL_FILE" | head -1 | cut -d: -f1)
+              url=""
+              [ -n "$line" ] && url="${REPO_URL}/blob/${COMMIT}/${SQL_FILE}#L${line}"
+              raw=$(grep -E "REGRESSION ${id}\b" /tmp/assertions.log | head -1 | tr -d '"' | tr '\n' ' ')
+              echo "\"${id}\",\"${SQL_FILE}\",\"${line}\",\"${url}\",\"${raw}\""
+            done <<< "$ids"
+          } > /tmp/regression-report/regressions.csv
+
+          # JSON (jq-built for correct escaping)
+          echo "$ids" | jq -Rn --arg commit "$COMMIT" --arg ref "$REF" --arg event "$EVENT" \
+            --arg run_url "$RUN_URL" --arg repo "$GITHUB_REPOSITORY" --arg sql_file "$SQL_FILE" \
+            --arg repo_url "$REPO_URL" --rawfile log /tmp/assertions.log '
+            [inputs | select(length > 0)] as $ids
+            | {
+                repo: $repo, ref: $ref, event: $event, commit: $commit, run_url: $run_url,
+                regressions: ($ids | map(. as $id
+                  | ($log | capture("(?<line>[^\n]*REGRESSION " + $id + "\\b[^\n]*)"; "g")?.line // "") as $raw
+                  | { internal_id: $id, assertion_file: $sql_file, raw_message: $raw }))
+              }' > /tmp/regression-report/regressions.json
+
+          # Fill in line numbers / URLs into the JSON (grep-based, robust to file changes).
+          tmp=$(mktemp)
+          jq --arg sql_file "$SQL_FILE" --arg repo_url "$REPO_URL" --arg commit "$COMMIT" '
+            .regressions |= map(
+              . + (
+                ($sql_file) as $f |
+                { }
+              )
+            )' /tmp/regression-report/regressions.json > "$tmp" && mv "$tmp" /tmp/regression-report/regressions.json
+
+          # Add assertion_line + assertion_url per row using shell (jq can't grep files).
+          while IFS= read -r id; do
+            [ -z "$id" ] && continue
+            line=$(grep -n "ASSERT: ${id}\b" "$SQL_FILE" | head -1 | cut -d: -f1)
+            url=""
+            [ -n "$line" ] && url="${REPO_URL}/blob/${COMMIT}/${SQL_FILE}#L${line}"
+            jq --arg id "$id" --arg line "$line" --arg url "$url" '
+              .regressions |= map(if .internal_id == $id then . + {assertion_line: ($line | tonumber? // null), assertion_url: $url} else . end)
+            ' /tmp/regression-report/regressions.json > "$tmp" && mv "$tmp" /tmp/regression-report/regressions.json
+          done <<< "$ids"
+
+      - name: Upload regression report artifact
+        if: failure() && steps.structured_report.outcome == 'success'
+        id: upload_report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-regression-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /tmp/regression-report/
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Comment regression report on PR
         if: failure() && github.event_name == 'pull_request' && steps.report.outcome == 'success'
         uses: marocchino/sticky-pull-request-comment@v2
@@ -108,6 +179,7 @@ jobs:
           COMMIT: ${{ github.sha }}
           REF: ${{ github.ref }}
           EVENT: ${{ github.event_name }}
+          ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
         run: |
           if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
             echo "::warning::SLACK_WEBHOOK_URL secret not set; skipping Slack notification."
@@ -135,7 +207,10 @@ jobs:
             done <<< "$ids"
           fi
 
-          text=":lock: *Security regression scan failed*\n*Repo:* ${GITHUB_REPOSITORY}\n*Ref:* ${REF} (${EVENT})\n*Commit:* \`${COMMIT}\`\n*Run:* <${RUN_URL}|View workflow run>\n*Regressed internal_ids:*\n${id_lines}"
+          artifact_line=""
+          [ -n "${ARTIFACT_URL:-}" ] && artifact_line="*Report artifact:* <${ARTIFACT_URL}|regressions.json + regressions.csv>\n"
+
+          text=":lock: *Security regression scan failed*\n*Repo:* ${GITHUB_REPOSITORY}\n*Ref:* ${REF} (${EVENT})\n*Commit:* \`${COMMIT}\`\n*Run:* <${RUN_URL}|View workflow run>\n${artifact_line}*Regressed internal_ids:*\n${id_lines}"
 
           payload=$(jq -n --arg t "$text" '{text: $t}')
           curl -sS -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
@@ -149,6 +224,7 @@ jobs:
           REF: ${{ github.ref }}
           EVENT: ${{ github.event_name }}
           SLACK_CHANNEL_URL: ${{ secrets.SLACK_CHANNEL_URL }}
+          ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
         run: |
           SQL_FILE="scripts/security-assertions.sql"
           REPO_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
@@ -170,6 +246,9 @@ jobs:
             echo ""
             echo "- **Commit:** \`${COMMIT}\`"
             echo "- **Workflow run:** ${RUN_URL}"
+            if [ -n "${ARTIFACT_URL:-}" ]; then
+              echo "- **Regression report artifact:** [regressions.json + regressions.csv](${ARTIFACT_URL})"
+            fi
             if [ -n "${SLACK_CHANNEL_URL:-}" ]; then
               echo "- **Slack channel:** ${SLACK_CHANNEL_URL}"
             else
