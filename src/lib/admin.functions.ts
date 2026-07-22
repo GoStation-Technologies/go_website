@@ -595,5 +595,16 @@ export const adminListAuditLog = createServerFn({ method: "POST" })
     if (data.actorId) q = q.eq("actor_id", data.actorId);
     const { data: rows, error, count } = await q;
     if (error) throw new Error(error.message);
-    return { rows: (rows ?? []) as Array<Record<string, unknown>>, total: count ?? 0, page: data.page, pageSize: data.pageSize };
+    type AuditRow = {
+      id: string;
+      created_at: string;
+      actor_id: string | null;
+      actor_email: string | null;
+      action: string;
+      entity: string;
+      entity_ids: string[] | null;
+      diff: unknown;
+      meta: unknown;
+    };
+    return { rows: (rows ?? []) as AuditRow[], total: (count ?? 0) as number, page: data.page, pageSize: data.pageSize };
   });
