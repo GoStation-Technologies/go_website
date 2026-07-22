@@ -23,6 +23,9 @@ beforeEach(() => {
     key: () => null,
     length: 0,
   } as Storage;
+  // The store's isBrowser() gate also checks for `window`; without this the
+  // module short-circuits every read to [] and the tests can't observe cache.
+  (globalThis as { window?: unknown }).window = globalThis;
   // Reset internal cache by removing every known entry.
   undoStore.list().forEach((e) => undoStore.remove(e.id));
 });
