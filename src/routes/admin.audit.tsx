@@ -93,6 +93,38 @@ function AuditPage() {
 
   const total = q.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / pageSize));
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const { csv, count } = await adminExportAuditLog({
+        data: {
+          entity: search.entity,
+          action: search.action,
+          sinceHours: search.sinceHours,
+        },
+      });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const parts = [`audit-log`, `${search.sinceHours}h`];
+      if (search.entity) parts.push(search.entity);
+      if (search.action) parts.push(search.action);
+      a.href = url;
+      a.download = `${parts.join("_")}_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${count.toLocaleString()} row${count === 1 ? "" : "s"}${count >= 10000 ? " (capped at 10,000)" : ""}.`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Export failed");
+    } finally {
+      setExporting(false);
+    }
+  };
+
 
   return (
     <div className="p-6 space-y-6">
