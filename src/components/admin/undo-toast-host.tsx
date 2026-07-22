@@ -23,11 +23,28 @@ export function UndoToastHost() {
     return () => clearInterval(id);
   }, []);
 
+  // Live-region announcement text. Updated when a new undo entry appears
+  // AND when an undo attempt resolves (success/error), so screen readers
+  // hear each state change exactly once.
+  const [announcement, setAnnouncement] = useState("");
+  const announcedRef = useRef<Set<string>>(new Set());
+  const announceSeqRef = useRef(0);
+
+  // Ensure two consecutive announcements with the same text still fire
+  // by appending a growing run of the invisible-separator char (U+2063),
+  // which screen readers ignore but React treats as a distinct string.
+  const announce = (text: string) => {
+    announceSeqRef.current += 1;
+    const pad = "\u2063".repeat(announceSeqRef.current % 3);
+    setAnnouncement(text + pad);
+  };
+
   // Shared undo trigger used by both the toast action button and the
   // keyboard shortcut (Ctrl/Cmd+Z).
   const runUndo = (entry: UndoEntry) => {
     if (entry.payload.kind !== "submissions") return;
     const submissionKind = entry.payload.submissionKind;
+    announce("Reverting undo action.");
     toast.promise(
       adminBulkRestoreSubmissions({
         data: {
@@ -41,9 +58,16 @@ export function UndoToastHost() {
       }),
       {
         loading: "Reverting…",
-        success: (r) =>
-          `Reverted ${r.restored} submission${r.restored === 1 ? "" : "s"}`,
-        error: (e: Error) => e.message || "Undo failed",
+        success: (r) => {
+          const msg = `Reverted ${r.restored} submission${r.restored === 1 ? "" : "s"}`;
+          announce(`${msg}. Undo successful.`);
+          return msg;
+        },
+        error: (e: Error) => {
+          const msg = e.message || "Undo failed";
+          announce(`Undo failed: ${msg}.`);
+          return msg;
+        },
         finally: () => {
           undoStore.remove(entry.id);
           toast.dismiss(entry.id);
@@ -55,6 +79,7 @@ export function UndoToastHost() {
       },
     );
   };
+
 
   // Global keyboard shortcut: Ctrl+Z (or Cmd+Z on macOS) triggers the same
   // undo action as clicking the Undo button on the most recent live entry.
