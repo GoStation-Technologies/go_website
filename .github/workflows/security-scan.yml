@@ -99,3 +99,25 @@ jobs:
           header: security-regression-scan
           recreate: true
           path: /tmp/report.md
+
+      - name: Notify Slack on failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+ສ          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMMIT: ${{ github.sha }}
+          REF: ${{ github.ref }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+            echo "::warning::SLACK_WEBHOOK_URL secret not set; skipping Slack notification."
+            exit 0
+          fi
+
+          ids=$(grep -oE 'REGRESSION [A-Za-z0-9_]+' /tmp/assertions.log 2>/dev/null | awk '{print $2}' | sort -u | paste -sd ', ' -)
+          [ -z "$ids" ] && ids="(none captured — see workflow log)"
+
+          text=":lock: *Security regression scan failed*\n*Repo:* ${GITHUB_REPOSITORY}\n*Ref:* ${REF} (${EVENT})\n*Commit:* \`${COMMIT}\`\n*Regressed internal_ids:* ${ids}\n*Run:* ${RUN_URL}"
+
+          payload=$(jq -n --arg t "$text" '{text: $t}')
+          curl -sS -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
