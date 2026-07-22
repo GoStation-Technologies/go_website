@@ -139,3 +139,76 @@ jobs:
 
           payload=$(jq -n --arg t "$text" '{text: $t}')
           curl -sS -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
+
+      - name: Open GitHub issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMMIT: ${{ github.sha }}
+          REF: ${{ github.ref }}
+          EVENT: ${{ github.event_name }}
+          SLACK_CHANNEL_URL: ${{ secrets.SLACK_CHANNEL_URL }}
+        run: |
+          SQL_FILE="scripts/security-assertions.sql"
+          REPO_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+          LABEL="security-regression"
+
+          ids=$(grep -oE 'REGRESSION [A-Za-z0-9_]+' /tmp/assertions.log 2>/dev/null | awk '{print $2}' | sort -u)
+
+          # Only open an issue when at least one internal_id actually regressed.
+          if [ -z "$ids" ]; then
+            echo "No REGRESSION notices captured; skipping GitHub issue."
+            exit 0
+          fi
+
+          # Ensure label exists (ignore error if it already does).
+          gh label create "$LABEL" --color B60205 --description "Automated security assertion regression" 2>/dev/null || true
+
+          {
+            echo "A security assertion regressed on \`${REF}\` (${EVENT})."
+            echo ""
+            echo "- **Commit:** \`${COMMIT}\`"
+            echo "- **Workflow run:** ${RUN_URL}"
+            if [ -n "${SLACK_CHANNEL_URL:-}" ]; then
+              echo "- **Slack channel:** ${SLACK_CHANNEL_URL}"
+            else
+              echo "- **Slack:** notification posted via webhook (set \`SLACK_CHANNEL_URL\` secret to link the channel here)"
+            fi
+            echo ""
+            echo "## Regressed internal_ids"
+            echo ""
+            echo "| internal_id | Failing assertion |"
+            echo "|---|---|"
+            while IFS= read -r id; do
+              [ -z "$id" ] && continue
+              line=$(grep -n "ASSERT: ${id}\b" "$SQL_FILE" | head -1 | cut -d: -f1)
+              if [ -n "$line" ]; then
+                link="${REPO_URL}/blob/${COMMIT}/${SQL_FILE}#L${line}"
+                echo "| \`${id}\` | [${SQL_FILE}:L${line}](${link}) |"
+              else
+                echo "| \`${id}\` | (marker not found in ${SQL_FILE}) |"
+              fi
+            done <<< "$ids"
+            echo ""
+            echo "<details><summary>Raw REGRESSION messages</summary>"
+            echo ""
+            echo '```'
+            grep -E 'REGRESSION ' /tmp/assertions.log || true
+            echo '```'
+            echo ""
+            echo "</details>"
+          } > /tmp/issue.md
+
+          TITLE="Security regression: $(echo "$ids" | paste -sd ', ' -)"
+
+          # Reuse an existing open issue for the same regressed set if present; else create.
+          existing=$(gh issue list --label "$LABEL" --state open --search "$TITLE in:title" --json number,title \
+            --jq ".[] | select(.title == \"$TITLE\") | .number" | head -1)
+
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/issue.md
+            echo "Commented on existing issue #$existing"
+          else
+            gh issue create --title "$TITLE" --label "$LABEL" --body-file /tmp/issue.md
+          fi
