@@ -1,0 +1,142 @@
+// @vitest-environment jsdom
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { Profiler, StrictMode } from "react";
+import { render, screen, cleanup, act, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Toaster } from "sonner";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// Mock the server function BEFORE importing the host that pulls it in.
+const restoreMock = vi.fn(async () => ({ restored: 2 }));
+vi.mock("@/lib/admin.functions", () => ({
+  adminBulkRestoreSubmissions: restoreMock,
+}));
+
+import { UndoToastHost } from "@/components/admin/undo-toast-host";
+import { undoStore, type UndoEntry } from "@/lib/undo-store";
+
+function makeEntry(overrides: Partial<UndoEntry> = {}): UndoEntry {
+  const now = Date.now();
+  return {
+    id: overrides.id ?? "undo-1",
+    message: overrides.message ?? "Approved 2 submissions",
+    createdAt: now,
+    expiresAt: now + 30_000,
+    payload: overrides.payload ?? {
+      kind: "submissions",
+      submissionKind: "contact",
+      rows: [
+        { id: "row-a", status: "new", assigned_to: null },
+        { id: "row-b", status: "new", assigned_to: "user-1" },
+      ],
+    },
+    ...overrides,
+  };
+}
+
+function renderHost() {
+  const renderCount = { current: 0 };
+  const qc = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  const utils = render(
+    <StrictMode>
+      <QueryClientProvider client={qc}>
+        <Profiler id="host" onRender={() => (renderCount.current += 1)}>
+          <UndoToastHost />
+        </Profiler>
+        <Toaster />
+      </QueryClientProvider>
+    </StrictMode>,
+  );
+  return { ...utils, renderCount, qc };
+}
+
+beforeEach(() => {
+  restoreMock.mockClear();
+  // Fresh localStorage per test so the persistent store starts empty.
+  window.localStorage.clear();
+  for (const e of [...undoStore.list()]) undoStore.remove(e.id);
+});
+
+afterEach(() => {
+  cleanup();
+  for (const e of [...undoStore.list()]) undoStore.remove(e.id);
+});
+
+describe("UndoToastHost", () => {
+  it("renders the countdown toast when an undo entry is pushed", async () => {
+    renderHost();
+
+    act(() => {
+      undoStore.push(makeEntry({ message: "Approved 2 submissions" }));
+    });
+
+    // The message from the sonner toast body rendered by UndoToastContent.
+    expect(
+      await screen.findByText("Approved 2 submissions"),
+    ).toBeInTheDocument();
+    // The countdown seconds label lives next to the progress bar.
+    expect(await screen.findByText(/^\d+s$/)).toBeInTheDocument();
+    // And the Undo action button is exposed by sonner.
+    expect(
+      await screen.findByRole("button", { name: /undo/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("clicking Undo calls adminBulkRestoreSubmissions with the entry payload and dismisses the toast", async () => {
+    const user = userEvent.setup();
+    renderHost();
+
+    const payload = {
+      kind: "submissions" as const,
+      submissionKind: "franchise" as const,
+      rows: [
+        { id: "row-1", status: "approved", assigned_to: null },
+        { id: "row-2", status: "closed", assigned_to: "user-9" },
+      ],
+    };
+    act(() => {
+      undoStore.push(makeEntry({ id: "undo-x", payload }));
+    });
+
+    const undoBtn = await screen.findByRole("button", { name: /undo/i });
+    await user.click(undoBtn);
+
+    await waitFor(() => expect(restoreMock).toHaveBeenCalledTimes(1));
+    expect(restoreMock).toHaveBeenCalledWith({
+      data: {
+        kind: "franchise",
+        rows: [
+          { id: "row-1", status: "approved", assigned_to: null },
+          { id: "row-2", status: "closed", assigned_to: "user-9" },
+        ],
+      },
+    });
+
+    // The onSettled path removes the entry from the store.
+    await waitFor(() => expect(undoStore.list()).toHaveLength(0));
+  });
+
+  it("does not enter a render loop while the countdown ticks", async () => {
+    const { renderCount } = renderHost();
+
+    act(() => {
+      undoStore.push(makeEntry({ id: "loop-check" }));
+    });
+
+    // Let the initial subscribe + toast mount settle.
+    await screen.findByRole("button", { name: /undo/i });
+    const settled = renderCount.current;
+
+    // The countdown component ticks every 200ms; over ~1.2s the host should
+    // stay effectively idle. If useSyncExternalStore's snapshot became
+    // unstable (as in the earlier bug) React would re-render every tick.
+    await new Promise((r) => setTimeout(r, 1200));
+
+    const delta = renderCount.current - settled;
+    // A healthy host renders 0 extra times here; StrictMode double-invoke
+    // effects can add a handful. Anything unbounded (>10) means a loop.
+    expect(delta).toBeLessThanOrEqual(4);
+  });
+});
