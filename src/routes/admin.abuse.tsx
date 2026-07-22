@@ -25,7 +25,7 @@ import {
 } from "recharts";
 
 const searchSchema = z.object({
-  windowHours: z.coerce.number().int().min(1).max(720).catch(24).default(24),
+  windowHours: z.coerce.number().int().min(1).max(24 * 90).catch(24).default(24),
   reason: z.string().min(1).max(64).optional(),
 });
 
