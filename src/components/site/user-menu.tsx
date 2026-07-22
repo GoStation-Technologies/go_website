@@ -70,11 +70,19 @@ export function UserMenu() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="icon"
-          className="h-9 w-9 rounded-full bg-primary/10 text-xs font-bold text-primary"
-          aria-label="Account"
+          size="sm"
+          className="h-9 gap-2 rounded-full pe-3 ps-1 text-xs font-semibold"
+          aria-label={`Signed in as ${email}`}
         >
-          {initial}
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+            {initial}
+          </span>
+          <span className="hidden sm:inline text-[11px] font-normal text-muted-foreground">
+            Signed in as
+          </span>
+          <span className="hidden max-w-[160px] truncate sm:inline text-foreground">
+            {email}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
