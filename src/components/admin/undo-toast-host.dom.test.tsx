@@ -7,7 +7,9 @@ import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Mock the server function BEFORE importing the host that pulls it in.
-const restoreMock = vi.fn(async () => ({ restored: 2 }));
+const { restoreMock } = vi.hoisted(() => ({
+  restoreMock: vi.fn(async () => ({ restored: 2 })),
+}));
 vi.mock("@/lib/admin.functions", () => ({
   adminBulkRestoreSubmissions: restoreMock,
 }));
