@@ -397,6 +397,7 @@ function ExportJobsPanel({
               <th className="p-3">Created</th>
               <th className="p-3">Filters</th>
               <th className="p-3">Status</th>
+              <th className="p-3 min-w-[180px]">Progress</th>
               <th className="p-3">Rows</th>
               <th className="p-3">Action</th>
             </tr>
@@ -405,6 +406,17 @@ function ExportJobsPanel({
             {jobs.map((j) => {
               const f = j.filters ?? {};
               const expired = new Date(j.expires_at).getTime() < Date.now();
+              const active = j.status === "queued" || j.status === "processing";
+              const processed = j.processed_rows ?? 0;
+              const total = j.total_rows ?? 0;
+              const pct =
+                j.status === "ready"
+                  ? 100
+                  : total > 0
+                    ? Math.min(100, Math.round((processed / total) * 100))
+                    : j.status === "processing"
+                      ? null // indeterminate
+                      : 0;
               return (
                 <tr key={j.id} className="border-t">
                   <td className="p-3 whitespace-nowrap">{new Date(j.created_at).toLocaleString()}</td>
@@ -414,6 +426,37 @@ function ExportJobsPanel({
                   <td className="p-3">
                     {badge(expired && j.status === "ready" ? "expired" : j.status)}
                     {j.error && <p className="mt-1 text-xs text-destructive">{j.error}</p>}
+                  </td>
+                  <td className="p-3">
+                    {active || j.status === "ready" ? (
+                      <div className="space-y-1">
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                          {pct === null ? (
+                            <div className="h-full w-1/3 animate-pulse rounded-full bg-blue-500/60" />
+                          ) : (
+                            <div
+                              className={`h-full rounded-full transition-all ${
+                                j.status === "ready" ? "bg-emerald-500" : "bg-blue-500"
+                              }`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          )}
+                        </div>
+                        <div className="text-[11px] tabular-nums text-muted-foreground">
+                          {total > 0
+                            ? `${processed.toLocaleString()} / ${total.toLocaleString()}`
+                            : active
+                              ? "Preparing…"
+                              : "—"}
+                          {(j.pages_processed ?? 0) > 0 && (
+                            <> · {j.pages_processed} page{j.pages_processed === 1 ? "" : "s"}</>
+                          )}
+                          {pct !== null && <> · {pct}%</>}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    )}
                   </td>
                   <td className="p-3">{j.row_count?.toLocaleString() ?? "—"}</td>
                   <td className="p-3">
