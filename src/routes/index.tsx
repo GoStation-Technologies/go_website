@@ -6,17 +6,42 @@ import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { FuelTicker } from "@/components/site/fuel-ticker";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Users, TrendingUp, Building2, Star, MapPin } from "lucide-react";
+import {
+  ArrowUpRight,
+  MapPin,
+  Fuel,
+  Truck,
+  Store,
+  Building2,
+  Star,
+  Trophy,
+  Sparkles,
+  ShieldCheck,
+  Leaf,
+  Handshake,
+} from "lucide-react";
+import logoAsset from "@/assets/gostation-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
       { title: "GoStation — A station and more" },
-      { name: "description", content: "The fastest-growing fuel network in Saudi Arabia — live fuel prices, franchise opportunities, and a full station experience." },
+      {
+        name: "description",
+        content:
+          "GoStation — the fastest-growing fuel network in Saudi Arabia. 180+ stations, 13 regions, and a full station experience: fuel, retail, fleet, and franchise.",
+      },
+      { property: "og:title", content: "GoStation — A station and more" },
+      {
+        property: "og:description",
+        content:
+          "180+ stations. 13 regions. One brand redefining the Saudi station experience.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://org-story-weaver.lovable.app/" },
     ],
+    links: [{ rel: "canonical", href: "https://org-story-weaver.lovable.app/" }],
   }),
 });
 
@@ -30,8 +55,10 @@ function HomePage() {
       const { data } = await supabase
         .from("news_articles")
         .select("id, slug, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at")
-        .eq("is_published", true).eq("kind", "news")
-        .order("published_at", { ascending: false }).limit(3);
+        .eq("is_published", true)
+        .eq("kind", "news")
+        .order("published_at", { ascending: false })
+        .limit(3);
       return data ?? [];
     },
   });
@@ -39,47 +66,138 @@ function HomePage() {
   const reviews = useQuery({
     queryKey: ["home-reviews"],
     queryFn: async () => {
-      const { data } = await supabase.from("system_cache").select("value").eq("key", "google_reviews").maybeSingle();
-      return (data?.value as { reviews: Array<{ author: string; rating: number; text: string; lang: string }> })?.reviews ?? [];
+      const { data } = await supabase
+        .from("system_cache")
+        .select("value")
+        .eq("key", "google_reviews")
+        .maybeSingle();
+      return (
+        (data?.value as { reviews: Array<{ author: string; rating: number; text: string; lang: string }> })?.reviews ?? []
+      );
     },
   });
 
   const stats = [
     { key: "statsStations", val: "180+" },
     { key: "statsRegions", val: "13" },
-    { key: "statsYears", val: "12" },
+    { key: "statsYears", val: "8" },
     { key: "statsDaily", val: "50k+" },
   ] as const;
 
+  const services = [
+    { icon: Fuel, k: "fuel", href: "/stations" },
+    { icon: Store, k: "retail", href: "/franchise" },
+    { icon: Truck, k: "fleet", href: "/contact" },
+    { icon: Building2, k: "invest", href: "/acquisitions" },
+  ] as const;
+
+  const values = [
+    { icon: Sparkles, k: "excellence" },
+    { icon: ShieldCheck, k: "integrity" },
+    { icon: Leaf, k: "community" },
+    { icon: Handshake, k: "innovation" },
+  ] as const;
+
+  const regions = [
+    "Riyadh", "Makkah", "Madinah", "Eastern", "Asir", "Tabuk",
+    "Qassim", "Hail", "Jazan", "Najran", "Al-Baha", "Northern Borders", "Al-Jouf",
+  ];
+
   return (
     <SiteLayout>
-      {/* Hero */}
-      <section className="bg-brand-radial text-primary-foreground">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 pt-20 pb-24 md:grid-cols-2 md:items-center md:pt-28 md:pb-32">
-          <div>
-            <Badge className="border-none bg-accent/20 text-accent hover:bg-accent/25">{t("home.heroBadge")}</Badge>
-            <h1 className="mt-4 text-5xl font-extrabold leading-tight md:text-6xl">{t("home.heroTitle")}</h1>
-            <p className="mt-4 max-w-lg text-lg text-primary-foreground/80">{t("home.heroSub")}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link to="/franchise">{t("home.ctaFranchise")} <ArrowRight className="ms-1 h-4 w-4 rtl:rotate-180" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/stations">{t("home.ctaStations")}</Link>
-              </Button>
-            </div>
-          </div>
-          <div className="relative hidden md:block">
-            <div className="aspect-[4/3] rounded-3xl bg-gradient-to-br from-accent/30 via-primary-foreground/5 to-transparent p-1 shadow-2xl">
-              <div className="flex h-full items-center justify-center rounded-[calc(1.5rem-4px)] bg-primary/60 backdrop-blur">
-                <div className="grid grid-cols-2 gap-6 p-8">
-                  {stats.map((s) => (
-                    <div key={s.key} className="text-center">
-                      <div className="text-4xl font-extrabold text-accent">{s.val}</div>
-                      <div className="mt-1 text-sm text-primary-foreground/70">{t(`home.${s.key}`)}</div>
+      {/* ============ HERO ============ */}
+      <section className="relative overflow-hidden bg-hero-ink text-primary-foreground">
+        <div className="absolute inset-0 bg-grid-ink opacity-50" aria-hidden />
+        <div
+          className="pointer-events-none absolute -top-24 end-[-6rem] h-[36rem] w-[36rem] rounded-full bg-ember opacity-20 blur-3xl animate-pulse-glow"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute bottom-[-10rem] start-[-6rem] h-[28rem] w-[28rem] rounded-full bg-primary opacity-40 blur-3xl"
+          aria-hidden
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 md:pb-32 md:pt-24">
+          <div className="grid gap-14 md:grid-cols-[1.15fr_1fr] md:items-center">
+            <div className="animate-rise-in">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-foreground/85 backdrop-blur">
+                <Trophy className="h-3.5 w-3.5 text-ember-glow" />
+                {t("home.awardBadge")}
+              </div>
+
+              <h1 className="mt-6 text-balance text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[0.95] tracking-tight">
+                <span className="block">{t("home.heroLine1")}</span>
+                <span className="block bg-gradient-to-r from-ember-glow via-ember to-ember-glow bg-clip-text text-transparent">
+                  {t("home.heroLine2")}
+                </span>
+              </h1>
+
+              <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-primary-foreground/75">
+                {t("home.heroSub")}
+              </p>
+
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-12 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:bg-accent/90"
+                >
+                  <Link to="/franchise">
+                    {t("home.ctaFranchise")}
+                    <ArrowUpRight className="ms-1 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="h-12 rounded-full border-white/25 bg-transparent px-6 text-sm font-semibold text-primary-foreground hover:bg-white/10"
+                >
+                  <Link to="/stations">
+                    <MapPin className="me-2 h-4 w-4" />
+                    {t("home.ctaStations")}
+                  </Link>
+                </Button>
+              </div>
+
+              <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-primary-foreground/60">
+                <div className="flex -space-x-2 rtl:space-x-reverse">
+                  {["A", "B", "C", "D"].map((c) => (
+                    <div
+                      key={c}
+                      className="grid h-8 w-8 place-items-center rounded-full border border-white/20 bg-primary text-[11px] font-bold text-ember-glow"
+                    >
+                      {c}
                     </div>
                   ))}
                 </div>
+                <div className="uppercase tracking-[0.18em]">{t("home.trustedBy")}</div>
+              </div>
+            </div>
+
+            {/* Hero right — logo lockup + KPI */}
+            <div className="relative">
+              <div className="relative mx-auto aspect-square w-full max-w-md">
+                {/* Ambient rings */}
+                <div className="absolute inset-0 rounded-full border border-white/10 animate-pulse-glow" />
+                <div className="absolute inset-8 rounded-full border border-white/10" />
+                <div className="absolute inset-16 rounded-full border border-white/5" />
+                {/* Logo */}
+                <div className="absolute inset-0 grid place-items-center">
+                  <div className="relative animate-float-slow">
+                    <div className="absolute inset-0 -m-8 rounded-full bg-ember/25 blur-3xl" aria-hidden />
+                    <img
+                      src={logoAsset.url}
+                      alt="GoStation"
+                      className="relative h-52 w-52 drop-shadow-[0_20px_50px_rgba(255,107,0,0.35)]"
+                    />
+                  </div>
+                </div>
+                {/* Orbiting KPI chips */}
+                <KpiChip className="absolute start-0 top-8" label={t("home.statsStations")} val="180+" />
+                <KpiChip className="absolute end-0 top-24" label={t("home.statsRegions")} val="13" />
+                <KpiChip className="absolute start-4 bottom-16" label={t("home.statsYears")} val="8" />
+                <KpiChip className="absolute end-4 bottom-4" label={t("home.statsDaily")} val="50k+" />
               </div>
             </div>
           </div>
@@ -88,109 +206,420 @@ function HomePage() {
 
       <FuelTicker />
 
-      {/* Mobile stats */}
-      <section className="border-b bg-muted/40 py-10 md:hidden">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 text-center">
-          {stats.map((s) => (
-            <div key={s.key}>
-              <div className="text-3xl font-extrabold text-primary">{s.val}</div>
-              <div className="mt-1 text-xs text-muted-foreground">{t(`home.${s.key}`)}</div>
+      {/* ============ AWARDS / TRUST STRIP ============ */}
+      <section className="border-b bg-sand/60">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 md:grid-cols-4">
+          {stats.map((s, i) => (
+            <div
+              key={s.key}
+              className={`flex flex-col ${i > 0 ? "md:border-s md:border-border/60 md:ps-6" : ""}`}
+            >
+              <div className="font-display text-4xl font-black tracking-tight text-primary md:text-5xl">
+                {s.val}
+              </div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                {t(`home.${s.key}`)}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Why us */}
-      <section className="mx-auto max-w-7xl px-4 py-20">
-        <h2 className="text-center text-3xl font-bold md:text-4xl">{t("home.whyTitle")}</h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {[
-            { icon: Users, k: "Customer", href: "/stations" },
-            { icon: TrendingUp, k: "Investor", href: "/investors" },
-            { icon: Building2, k: "Owner", href: "/franchise" },
-          ].map(({ icon: Icon, k, href }) => (
-            <Card key={k} className="group border-border/60 transition hover:border-accent hover:shadow-lg">
-              <CardContent className="p-8">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-semibold">{t(`home.why${k}`)}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{t(`home.why${k}Text`)}</p>
-                <Link to={href} className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">
-                  {t("common.learnMore")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                </Link>
-              </CardContent>
-            </Card>
-          ))}
+      {/* ============ SERVICES BENTO ============ */}
+      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32">
+        <div className="grid gap-10 md:grid-cols-[1fr_1.6fr] md:items-end">
+          <div>
+            <div className="eyebrow">{t("home.servicesEyebrow")}</div>
+            <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
+              {t("home.servicesTitle")}
+            </h2>
+          </div>
+          <p className="max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
+            {t("home.servicesSub")}
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-4 md:grid-cols-6 md:grid-rows-2">
+          {/* Featured — Fuel */}
+          <ServiceCard
+            className="md:col-span-4 md:row-span-2"
+            featured
+            icon={services[0].icon}
+            title={t(`home.svc.${services[0].k}.title`)}
+            body={t(`home.svc.${services[0].k}.body`)}
+            href={services[0].href}
+            cta={t("common.learnMore")}
+          />
+          <ServiceCard
+            className="md:col-span-2"
+            icon={services[1].icon}
+            title={t(`home.svc.${services[1].k}.title`)}
+            body={t(`home.svc.${services[1].k}.body`)}
+            href={services[1].href}
+            cta={t("common.learnMore")}
+          />
+          <ServiceCard
+            className="md:col-span-1"
+            compact
+            icon={services[2].icon}
+            title={t(`home.svc.${services[2].k}.title`)}
+            body={t(`home.svc.${services[2].k}.body`)}
+            href={services[2].href}
+            cta={t("common.learnMore")}
+          />
+          <ServiceCard
+            className="md:col-span-1"
+            compact
+            icon={services[3].icon}
+            title={t(`home.svc.${services[3].k}.title`)}
+            body={t(`home.svc.${services[3].k}.body`)}
+            href={services[3].href}
+            cta={t("common.learnMore")}
+          />
         </div>
       </section>
 
-      {/* News */}
-      <section className="bg-muted/30 py-20">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-8 flex items-end justify-between">
-            <h2 className="text-3xl font-bold md:text-4xl">{t("home.newsTitle")}</h2>
-            <Link to="/media" className="text-sm font-medium text-accent hover:underline">{t("common.viewAll")}</Link>
+      {/* ============ PULL QUOTE ============ */}
+      <section className="relative overflow-hidden bg-hero-ink py-24 text-primary-foreground md:py-32">
+        <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5">
+            <span className="font-display text-3xl text-ember">"</span>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {(news.data ?? []).map((n) => (
-              <Link key={n.id} to="/media/$slug" params={{ slug: n.slug }}>
-                <Card className="h-full overflow-hidden transition hover:shadow-lg">
-                  <div className="aspect-[16/9] bg-gradient-to-br from-primary to-accent/60" />
-                  <CardContent className="p-6">
-                    <div className="text-xs text-muted-foreground">
-                      {n.published_at ? new Date(n.published_at).toLocaleDateString(lng === "ar" ? "ar-SA" : "en-US") : ""}
-                    </div>
-                    <h3 className="mt-2 line-clamp-2 text-lg font-semibold">{lng === "ar" ? n.title_ar : n.title_en}</h3>
-                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{lng === "ar" ? n.excerpt_ar : n.excerpt_en}</p>
-                  </CardContent>
-                </Card>
+          <blockquote className="mx-auto mt-8 max-w-4xl text-balance text-3xl font-medium leading-[1.25] md:text-4xl lg:text-5xl">
+            {t("home.quote")}
+          </blockquote>
+          <div className="mt-8 text-sm uppercase tracking-[0.2em] text-ember-glow">
+            {t("home.quoteAuthor")}
+          </div>
+          <div className="mt-1 text-xs text-primary-foreground/60">{t("home.quoteRole")}</div>
+        </div>
+      </section>
+
+      {/* ============ COVERAGE ============ */}
+      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32">
+        <div className="grid gap-14 md:grid-cols-[1fr_1fr] md:items-center">
+          <div>
+            <div className="eyebrow">{t("home.coverageEyebrow")}</div>
+            <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
+              {t("home.coverageTitle")}
+            </h2>
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">
+              {t("home.coverageSub")}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {regions.map((r) => (
+                <span
+                  key={r}
+                  className="rounded-full border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground/80 transition hover:border-accent hover:text-accent"
+                >
+                  {r}
+                </span>
+              ))}
+            </div>
+            <Button
+              asChild
+              size="lg"
+              className="mt-10 h-12 rounded-full bg-primary px-6 text-sm font-semibold shadow-elegant"
+            >
+              <Link to="/stations">
+                {t("home.ctaStations")}
+                <ArrowUpRight className="ms-1 h-4 w-4" />
               </Link>
+            </Button>
+          </div>
+
+          {/* Stylised map card */}
+          <div className="relative">
+            <div className="relative overflow-hidden rounded-3xl bg-hero-ink p-8 shadow-elegant">
+              <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
+              <div className="relative">
+                <div className="flex items-center justify-between text-primary-foreground/70">
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em]">KSA</span>
+                  <span className="text-xs">2026</span>
+                </div>
+                {/* Dot cluster */}
+                <div className="relative mt-4 aspect-[4/3] w-full">
+                  {Array.from({ length: 32 }).map((_, i) => {
+                    const seed = (i * 9301 + 49297) % 233280;
+                    const x = ((seed / 233280) * 90 + 5);
+                    const y = (((i * 6151) % 233280) / 233280) * 90 + 5;
+                    const big = i % 7 === 0;
+                    return (
+                      <span
+                        key={i}
+                        style={{ left: `${x}%`, top: `${y}%` }}
+                        className={`absolute rounded-full ${
+                          big ? "h-2.5 w-2.5 bg-ember shadow-glow" : "h-1.5 w-1.5 bg-white/50"
+                        }`}
+                      />
+                    );
+                  })}
+                  {/* Central pulse */}
+                  <span className="absolute left-[46%] top-[52%] h-4 w-4 rounded-full bg-ember shadow-glow animate-pulse-glow" />
+                </div>
+                <div className="mt-6 grid grid-cols-2 gap-4 border-t border-white/10 pt-6 text-primary-foreground">
+                  <div>
+                    <div className="font-display text-3xl font-black text-ember">180+</div>
+                    <div className="text-xs text-primary-foreground/60">{t("home.statsStations")}</div>
+                  </div>
+                  <div>
+                    <div className="font-display text-3xl font-black text-ember">13</div>
+                    <div className="text-xs text-primary-foreground/60">{t("home.statsRegions")}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ VALUES ============ */}
+      <section className="border-y bg-sand/50 py-24 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="max-w-3xl">
+            <div className="eyebrow">{t("home.valuesEyebrow")}</div>
+            <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
+              {t("home.valuesTitle")}
+            </h2>
+          </div>
+          <div className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-border md:grid-cols-4">
+            {values.map(({ icon: Icon, k }) => (
+              <div
+                key={k}
+                className="group relative bg-background p-8 transition hover:bg-background"
+              >
+                <div className="mb-6 grid h-11 w-11 place-items-center rounded-xl bg-primary/5 text-primary transition group-hover:bg-accent group-hover:text-accent-foreground">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-display text-lg font-bold">{t(`home.values.${k}.title`)}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {t(`home.values.${k}.body`)}
+                </p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Reviews */}
-      <section className="mx-auto max-w-7xl px-4 py-20">
-        <h2 className="text-center text-3xl font-bold md:text-4xl">{t("home.reviewsTitle")}</h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {(reviews.data ?? []).slice(0, 3).map((r, i) => (
-            <Card key={i} className="border-border/60">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-0.5 text-accent">
-                  {Array.from({ length: r.rating }).map((_, j) => <Star key={j} className="h-4 w-4 fill-current" />)}
+      {/* ============ NEWS ============ */}
+      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32">
+        <div className="flex items-end justify-between">
+          <div>
+            <div className="eyebrow">{t("home.newsEyebrow")}</div>
+            <h2 className="mt-4 text-4xl font-bold md:text-5xl">{t("home.newsTitle")}</h2>
+          </div>
+          <Link
+            to="/media"
+            className="hidden items-center gap-1.5 text-sm font-semibold text-accent hover:underline sm:inline-flex"
+          >
+            {t("common.viewAll")} <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {(news.data ?? []).map((n) => (
+            <Link key={n.id} to="/media/$slug" params={{ slug: n.slug }} className="group block">
+              <article className="h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
+                <div className="relative aspect-[16/10] overflow-hidden bg-hero-ink">
+                  <div className="absolute inset-0 bg-grid-ink opacity-40" />
+                  <div className="absolute inset-0 grid place-items-center">
+                    <img src={logoAsset.url} alt="" className="h-16 w-16 opacity-30" />
+                  </div>
+                  <div className="absolute end-3 top-3 rounded-full bg-ember px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
+                    {t("media.news")}
+                  </div>
                 </div>
-                <p className="mt-3 text-sm text-foreground/90">"{r.text}"</p>
-                <div className="mt-4 flex items-center gap-2 text-sm">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent" />
-                  <span className="font-medium">{r.author}</span>
+                <div className="p-6">
+                  <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    {n.published_at
+                      ? new Date(n.published_at).toLocaleDateString(lng === "ar" ? "ar-SA" : "en-US", {
+                          year: "numeric",
+                          month: "long",
+                        })
+                      : ""}
+                  </div>
+                  <h3 className="mt-3 line-clamp-2 font-display text-lg font-bold leading-tight transition group-hover:text-accent">
+                    {lng === "ar" ? n.title_ar : n.title_en}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                    {lng === "ar" ? n.excerpt_ar : n.excerpt_en}
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+              </article>
+            </Link>
           ))}
+          {(!news.data || news.data.length === 0) && (
+            <div className="col-span-3 rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+              {t("media.empty")}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* CTA banner */}
-      <section className="mx-auto max-w-7xl px-4 pb-20">
-        <div className="overflow-hidden rounded-3xl bg-brand-radial px-8 py-12 text-primary-foreground md:px-16 md:py-16">
-          <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+      {/* ============ REVIEWS ============ */}
+      {(reviews.data?.length ?? 0) > 0 && (
+        <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
+          <div className="max-w-2xl">
+            <div className="eyebrow">{t("home.reviewsEyebrow")}</div>
+            <h2 className="mt-4 text-4xl font-bold md:text-5xl">{t("home.reviewsTitle")}</h2>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {(reviews.data ?? []).slice(0, 3).map((r, i) => (
+              <div
+                key={i}
+                className="rounded-2xl border border-border/60 bg-card p-8 transition hover:-translate-y-1 hover:shadow-card"
+              >
+                <div className="flex items-center gap-0.5 text-ember">
+                  {Array.from({ length: r.rating }).map((_, j) => (
+                    <Star key={j} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+                <p className="mt-4 text-[15px] leading-relaxed text-foreground/90">"{r.text}"</p>
+                <div className="mt-6 flex items-center gap-3">
+                  <div className="grid h-10 w-10 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                    {r.author?.[0] ?? "G"}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold">{r.author}</div>
+                    <div className="text-xs text-muted-foreground">Google review</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ============ FINAL CTA ============ */}
+      <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
+        <div className="relative overflow-hidden rounded-3xl bg-hero-ink px-8 py-16 text-primary-foreground shadow-elegant md:px-16 md:py-20">
+          <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
+          <div
+            className="pointer-events-none absolute -end-32 -top-32 h-96 w-96 rounded-full bg-ember opacity-25 blur-3xl animate-pulse-glow"
+            aria-hidden
+          />
+          <div className="relative grid gap-8 md:grid-cols-[1.4fr_auto] md:items-center">
             <div>
-              <h2 className="text-3xl font-bold md:text-4xl">{t("home.ctaBanner")}</h2>
-              <p className="mt-2 max-w-xl text-primary-foreground/80">{t("home.ctaBannerText")}</p>
+              <div className="eyebrow text-ember-glow">{t("home.ctaBannerEyebrow")}</div>
+              <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
+                {t("home.ctaBanner")}
+              </h2>
+              <p className="mt-4 max-w-xl text-lg text-primary-foreground/75">
+                {t("home.ctaBannerText")}
+              </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <Button
+                asChild
+                size="lg"
+                className="h-12 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-glow hover:bg-accent/90"
+              >
                 <Link to="/franchise">{t("nav.franchise")}</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/acquisitions"><MapPin className="me-2 h-4 w-4" /> {t("nav.acquisitions")}</Link>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-12 rounded-full border-white/25 bg-transparent px-6 text-sm font-semibold text-primary-foreground hover:bg-white/10"
+              >
+                <Link to="/acquisitions">
+                  <MapPin className="me-2 h-4 w-4" /> {t("nav.acquisitions")}
+                </Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
     </SiteLayout>
+  );
+}
+
+function KpiChip({ className = "", label, val }: { className?: string; label: string; val: string }) {
+  return (
+    <div className={`glass-ink rounded-2xl px-3.5 py-2.5 shadow-elegant ${className}`}>
+      <div className="font-display text-xl font-black leading-none text-primary-foreground">
+        <span className="bg-gradient-to-r from-ember-glow to-ember bg-clip-text text-transparent">
+          {val}
+        </span>
+      </div>
+      <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.14em] text-primary-foreground/70">
+        {label}
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({
+  className = "",
+  featured,
+  compact,
+  icon: Icon,
+  title,
+  body,
+  href,
+  cta,
+}: {
+  className?: string;
+  featured?: boolean;
+  compact?: boolean;
+  icon: typeof Fuel;
+  title: string;
+  body: string;
+  href: string;
+  cta: string;
+}) {
+  if (featured) {
+    return (
+      <Link
+        to={href as never}
+        className={`group relative overflow-hidden rounded-3xl bg-hero-ink p-10 text-primary-foreground shadow-elegant transition hover:-translate-y-1 ${className}`}
+      >
+        <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
+        <div
+          className="pointer-events-none absolute -end-20 -bottom-20 h-72 w-72 rounded-full bg-ember opacity-30 blur-3xl transition-all duration-700 group-hover:scale-110 group-hover:opacity-45"
+          aria-hidden
+        />
+        <div className="relative flex h-full flex-col justify-between gap-10">
+          <div>
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-ember text-accent-foreground shadow-glow">
+              <Icon className="h-6 w-6" />
+            </div>
+            <h3 className="mt-8 max-w-md font-display text-4xl font-bold leading-tight md:text-5xl">
+              {title}
+            </h3>
+            <p className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-primary-foreground/75">
+              {body}
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 text-sm font-semibold text-ember-glow">
+            {cta}
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </div>
+        </div>
+      </Link>
+    );
+  }
+  return (
+    <Link
+      to={href as never}
+      className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-card transition hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant ${className}`}
+    >
+      <div>
+        <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/5 text-primary transition group-hover:bg-accent group-hover:text-accent-foreground">
+          <Icon className="h-5 w-5" />
+        </div>
+        <h3 className={`mt-5 font-display font-bold leading-tight ${compact ? "text-lg" : "text-2xl"}`}>
+          {title}
+        </h3>
+        {!compact && (
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+        )}
+      </div>
+      <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-accent">
+        {cta}
+        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </div>
+    </Link>
   );
 }
