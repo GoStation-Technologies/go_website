@@ -227,6 +227,17 @@ export const adminBulkUpdateSubmissions = createServerFn({ method: "POST" })
       .update(patch, { count: "exact" })
       .in("id", data.ids);
     if (error) throw new Error(error.message);
+    await writeAudit(
+      context.supabase,
+      { id: context.userId, email: (context.claims as { email?: string } | undefined)?.email ?? null },
+      {
+        action: "bulk_update",
+        entity: table as AuditEntity,
+        entity_ids: data.ids,
+        diff: { patch, updated: count ?? data.ids.length },
+        meta: { before },
+      },
+    );
     return { ok: true, updated: count ?? data.ids.length, before };
   });
 
