@@ -116,6 +116,7 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang={lang} dir={dir} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
