@@ -1,0 +1,38 @@
+name: Security regression scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Daily at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  db-security-assertions:
+    name: DB security assertions
+    runs-on: ubuntu-latest
+    # GitHub emails the workflow owner on failure by default (Settings → Notifications).
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install psql
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends postgresql-client
+
+      - name: Verify SUPABASE_DB_URL secret is set
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -z "${SUPABASE_DB_URL}" ]; then
+            echo "::error::Missing repository secret SUPABASE_DB_URL (Postgres connection string)."
+            exit 1
+          fi
+
+      - name: Run security assertions
+        env:
+          PGCONN: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          psql "$PGCONN" -v ON_ERROR_STOP=1 -f scripts/security-assertions.sql
