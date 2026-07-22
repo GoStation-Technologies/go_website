@@ -7,7 +7,9 @@ import {
   Newspaper,
   Briefcase,
   ShieldAlert,
+  ScrollText,
 } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
