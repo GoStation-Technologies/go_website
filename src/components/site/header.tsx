@@ -12,6 +12,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const NAV = [
   { to: "/about", key: "about" },
