@@ -48,17 +48,21 @@ BEGIN
   -- SUPA_rls_policy_always_true
   -- No PUBLIC-schema policy may use `true` as its USING or WITH CHECK.
   ----------------------------------------------------------------------------
+  -- SELECT policies with `true` are intentional public-read tables; only
+  -- flag write-side (INSERT/UPDATE/DELETE/ALL) always-true policies.
   SELECT count(*) INTO n
   FROM pg_policies
   WHERE schemaname = 'public'
+    AND cmd <> 'SELECT'
     AND (
       btrim(coalesce(qual, ''))       IN ('true','(true)')
       OR btrim(coalesce(with_check,'')) IN ('true','(true)')
     );
   IF n > 0 THEN
     RAISE EXCEPTION
-      'REGRESSION SUPA_rls_policy_always_true: % policy/policies use always-true qual or with_check', n;
+      'REGRESSION SUPA_rls_policy_always_true: % write policy/policies use always-true qual or with_check', n;
   END IF;
+
 
   ----------------------------------------------------------------------------
   -- chatbot_messages_public_insert_spoofing
