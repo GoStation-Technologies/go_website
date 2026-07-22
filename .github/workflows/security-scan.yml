@@ -114,10 +114,28 @@ jobs:
             exit 0
           fi
 
-          ids=$(grep -oE 'REGRESSION [A-Za-z0-9_]+' /tmp/assertions.log 2>/dev/null | awk '{print $2}' | sort -u | paste -sd ', ' -)
-          [ -z "$ids" ] && ids="(none captured — see workflow log)"
+          SQL_FILE="scripts/security-assertions.sql"
+          REPO_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
 
-          text=":lock: *Security regression scan failed*\n*Repo:* ${GITHUB_REPOSITORY}\n*Ref:* ${REF} (${EVENT})\n*Commit:* \`${COMMIT}\`\n*Regressed internal_ids:* ${ids}\n*Run:* ${RUN_URL}"
+          ids=$(grep -oE 'REGRESSION [A-Za-z0-9_]+' /tmp/assertions.log 2>/dev/null | awk '{print $2}' | sort -u)
+
+          if [ -z "$ids" ]; then
+            id_lines="_(none captured — see workflow log)_"
+          else
+            id_lines=""
+            while IFS= read -r id; do
+              [ -z "$id" ] && continue
+              line=$(grep -n "ASSERT: ${id}\b" "$SQL_FILE" | head -1 | cut -d: -f1)
+              if [ -n "$line" ]; then
+                link="${REPO_URL}/blob/${COMMIT}/${SQL_FILE}#L${line}"
+                id_lines="${id_lines}• \`${id}\` → <${link}|${SQL_FILE}:L${line}>\n"
+              else
+                id_lines="${id_lines}• \`${id}\` → _(marker not found in ${SQL_FILE})_\n"
+              fi
+            done <<< "$ids"
+          fi
+
+          text=":lock: *Security regression scan failed*\n*Repo:* ${GITHUB_REPOSITORY}\n*Ref:* ${REF} (${EVENT})\n*Commit:* \`${COMMIT}\`\n*Run:* <${RUN_URL}|View workflow run>\n*Regressed internal_ids:*\n${id_lines}"
 
           payload=$(jq -n --arg t "$text" '{text: $t}')
           curl -sS -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
