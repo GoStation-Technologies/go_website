@@ -151,14 +151,72 @@ function SubmissionsPage() {
       adminBulkUpdateSubmissions({
         data: { kind, ids: Array.from(selected), patch },
       }),
-    onSuccess: (res) => {
-      toast.success(`Updated ${res.updated} submission${res.updated === 1 ? "" : "s"}`);
+    onSuccess: (res, patch) => {
+      const label = patch.status
+        ? `marked ${patch.status}`
+        : patch.assigned_to === null
+          ? "unassigned"
+          : "reassigned";
+      toast.success(
+        `${res.updated} submission${res.updated === 1 ? "" : "s"} ${label}`,
+      );
       setSelected(new Set());
+      setConfirm(null);
       qc.invalidateQueries({ queryKey: ["admin", "submissions", kind] });
       qc.invalidateQueries({ queryKey: ["admin", "overview"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message || "Bulk update failed"),
   });
+
+  // Pending bulk action awaiting confirmation. Null = no dialog open.
+  type PendingAction =
+    | { kind: "status"; status: Status }
+    | { kind: "assign"; userId: string; name: string }
+    | { kind: "unassign" };
+  const [confirm, setConfirm] = useState<PendingAction | null>(null);
+  const confirmCopy = (() => {
+    if (!confirm) return null;
+    const n = selected.size;
+    const plural = n === 1 ? "" : "s";
+    if (confirm.kind === "status") {
+      const verb =
+        confirm.status === "approved"
+          ? "Approve"
+          : confirm.status === "closed"
+            ? "Close"
+            : confirm.status === "reviewing"
+              ? "Move to reviewing"
+              : "Reopen";
+      return {
+        title: `${verb} ${n} submission${plural}?`,
+        desc: `Sets status to "${confirm.status}" on every selected row. This can't be undone in bulk.`,
+        cta: verb,
+        destructive: confirm.status === "closed",
+      };
+    }
+    if (confirm.kind === "assign") {
+      return {
+        title: `Assign ${n} submission${plural} to ${confirm.name}?`,
+        desc: `Any existing assignee on the selected rows will be replaced.`,
+        cta: "Assign",
+        destructive: false,
+      };
+    }
+    return {
+      title: `Unassign ${n} submission${plural}?`,
+      desc: `The current assignee on every selected row will be cleared.`,
+      cta: "Unassign",
+      destructive: true,
+    };
+  })();
+  const runConfirm = () => {
+    if (!confirm) return;
+    if (confirm.kind === "status") bulkMut.mutate({ status: confirm.status });
+    else if (confirm.kind === "assign") bulkMut.mutate({ assigned_to: confirm.userId });
+    else bulkMut.mutate({ assigned_to: null });
+  };
+
+
 
 
 
