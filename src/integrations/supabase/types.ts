@@ -125,6 +125,42 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string
+          created_at: string
+          diff: Json | null
+          entity: string
+          entity_ids: string[] | null
+          id: string
+          meta: Json | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id: string
+          created_at?: string
+          diff?: Json | null
+          entity: string
+          entity_ids?: string[] | null
+          id?: string
+          meta?: Json | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string
+          created_at?: string
+          diff?: Json | null
+          entity?: string
+          entity_ids?: string[] | null
+          id?: string
+          meta?: Json | null
+        }
+        Relationships: []
+      }
       application_status_history: {
         Row: {
           changed_by: string | null

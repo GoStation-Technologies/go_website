@@ -194,8 +194,21 @@ export const adminAbuseExportSubmit = createServerFn({ method: "POST" })
       .single();
     if (jobErr || !job) throw new Response(jobErr?.message ?? "Failed to queue export", { status: 500 });
 
+    const { writeAudit } = await import("./audit");
+    await writeAudit(
+      context.supabase,
+      { id: context.userId, email: (context.claims as { email?: string } | undefined)?.email ?? null },
+      {
+        action: "export_start",
+        entity: "abuse_events",
+        entity_ids: [job.id as string],
+        diff: { windowHours: data.windowHours, reason: data.reason ?? null, total },
+      },
+    );
+
     return { mode: "async" as const, total, jobId: job.id as string };
   });
+
 
 /** Lists the caller's recent export jobs (last 20). */
 export const adminExportJobsList = createServerFn({ method: "POST" })

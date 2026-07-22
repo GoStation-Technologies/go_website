@@ -7,7 +7,9 @@ import {
   Newspaper,
   Briefcase,
   ShieldAlert,
+  ScrollText,
 } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -29,7 +31,9 @@ const items: { title: string; url: string; icon: typeof LayoutDashboard; exact?:
   { title: "Submissions", url: "/admin/submissions", icon: Inbox },
   { title: "Chat logs", url: "/admin/chats", icon: MessageSquare },
   { title: "Abuse events", url: "/admin/abuse", icon: ShieldAlert },
+  { title: "Audit log", url: "/admin/audit", icon: ScrollText },
 ];
+
 
 export function AdminSidebar() {
   const { state } = useSidebar();

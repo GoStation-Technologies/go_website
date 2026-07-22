@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { writeAudit, type AuditEntity } from "./audit";
+
 
 /**
  * Returns which staff roles the current user has (if any).
@@ -176,8 +178,19 @@ export const adminUpdateStatus = createServerFn({ method: "POST" })
       .update({ status: data.status })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(
+      context.supabase,
+      { id: context.userId, email: (context.claims as { email?: string } | undefined)?.email ?? null },
+      {
+        action: "update_status",
+        entity: table as AuditEntity,
+        entity_ids: [data.id],
+        diff: { status: data.status },
+      },
+    );
     return { ok: true };
   });
+
 
 // Bulk apply status and/or assignee to many rows of the same kind at once.
 // `assigned_to: null` explicitly unassigns; omitting the key leaves it unchanged.
@@ -214,6 +227,17 @@ export const adminBulkUpdateSubmissions = createServerFn({ method: "POST" })
       .update(patch, { count: "exact" })
       .in("id", data.ids);
     if (error) throw new Error(error.message);
+    await writeAudit(
+      context.supabase,
+      { id: context.userId, email: (context.claims as { email?: string } | undefined)?.email ?? null },
+      {
+        action: "bulk_update",
+        entity: table as AuditEntity,
+        entity_ids: data.ids,
+        diff: { patch, updated: count ?? data.ids.length },
+        meta: { before },
+      },
+    );
     return { ok: true, updated: count ?? data.ids.length, before };
   });
 
@@ -246,8 +270,20 @@ export const adminBulkRestoreSubmissions = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
       restored += 1;
     }
+    await writeAudit(
+      context.supabase,
+      { id: context.userId, email: (context.claims as { email?: string } | undefined)?.email ?? null },
+      {
+        action: "bulk_restore",
+        entity: table as AuditEntity,
+        entity_ids: data.rows.map((r) => r.id),
+        diff: { restored },
+        meta: { rows: data.rows },
+      },
+    );
     return { ok: true, restored };
   });
+
 
 
 // Staff picker for the assign action. Two queries — user_roles has no FK to
@@ -387,12 +423,23 @@ export const adminListStations = createServerFn({ method: "GET" })
     return { rows: data ?? [] };
   });
 
+const auditActor = (context: { userId: string; claims: unknown }) => ({
+  id: context.userId,
+  email: (context.claims as { email?: string } | undefined)?.email ?? null,
+});
+
 export const adminUpsertStation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => StationInput.parse(raw))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("stations").upsert(data);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "upsert",
+      entity: "stations",
+      entity_ids: data.id ? [data.id] : null,
+      diff: data,
+    });
     return { ok: true };
   });
 
@@ -402,6 +449,11 @@ export const adminDeleteStation = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("stations").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "delete",
+      entity: "stations",
+      entity_ids: [data.id],
+    });
     return { ok: true };
   });
 
@@ -438,6 +490,12 @@ export const adminUpsertNews = createServerFn({ method: "POST" })
     const payload = { ...data, published_at: data.is_published && !data.published_at ? new Date().toISOString() : data.published_at };
     const { error } = await context.supabase.from("news_articles").upsert(payload);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "upsert",
+      entity: "news_articles",
+      entity_ids: data.id ? [data.id] : null,
+      diff: payload,
+    });
     return { ok: true };
   });
 
@@ -447,6 +505,11 @@ export const adminDeleteNews = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("news_articles").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "delete",
+      entity: "news_articles",
+      entity_ids: [data.id],
+    });
     return { ok: true };
   });
 
@@ -479,6 +542,12 @@ export const adminUpsertJob = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("job_openings").upsert(data);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "upsert",
+      entity: "job_openings",
+      entity_ids: data.id ? [data.id] : null,
+      diff: data,
+    });
     return { ok: true };
   });
 
@@ -488,7 +557,56 @@ export const adminDeleteJob = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("job_openings").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "delete",
+      entity: "job_openings",
+      entity_ids: [data.id],
+    });
     return { ok: true };
   });
 
 
+
+
+// ─── Audit log (read) ───────────────────────────────────────────────────
+const AuditListInput = z.object({
+  entity: z.string().min(1).max(64).optional(),
+  action: z.string().min(1).max(32).optional(),
+  actorId: z.string().uuid().optional(),
+  sinceHours: z.coerce.number().int().min(1).max(24 * 365).default(24 * 30),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(200).default(50),
+});
+
+export const adminListAuditLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => AuditListInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const since = new Date(Date.now() - data.sinceHours * 3600_000).toISOString();
+    const from = (data.page - 1) * data.pageSize;
+    const to = from + data.pageSize - 1;
+    let q = (context.supabase.from("admin_audit_log") as any)
+      .select("id, created_at, actor_id, actor_email, action, entity, entity_ids, diff, meta", { count: "exact" })
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (data.entity) q = q.eq("entity", data.entity);
+    if (data.action) q = q.eq("action", data.action);
+    if (data.actorId) q = q.eq("actor_id", data.actorId);
+    const { data: rows, error, count } = await q;
+    if (error) throw new Error(error.message);
+    type AuditRow = {
+      id: string;
+      created_at: string;
+      actor_id: string | null;
+      actor_email: string | null;
+      action: string;
+      entity: string;
+      entity_ids: string[] | null;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      diff: any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      meta: any;
+    };
+    return { rows: (rows ?? []) as AuditRow[], total: (count ?? 0) as number, page: data.page, pageSize: data.pageSize };
+  });
