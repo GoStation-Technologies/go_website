@@ -43,6 +43,7 @@ function AdminLayout() {
           </Link>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="hidden sm:inline">{roles.join(" · ")}</span>
+            <ThemeToggle />
             <Button size="sm" variant="ghost" onClick={signOut}>
               <LogOut className="h-4 w-4" />
             </Button>
