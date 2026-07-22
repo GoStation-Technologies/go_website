@@ -177,6 +177,9 @@ describe("UndoToastHost", () => {
 
     first.unmount();
     cleanup();
+    // Sonner keeps a module-level toast registry; a real reload wipes it.
+    const { toast } = await import("sonner");
+    toast.dismiss();
 
     // Simulate the reload: drop the module's in-memory cache so the next read
     // re-hydrates from localStorage exactly like a fresh page would.
