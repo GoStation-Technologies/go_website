@@ -199,6 +199,16 @@ describe("UndoToastHost", () => {
         <FreshToaster />
       </QueryClientProvider>,
     );
+    // Debug: is the effect firing at all?
+    act(() => {
+      freshStore.push({
+        id: "probe",
+        message: "PROBE TOAST",
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 30000,
+        payload: { kind: "submissions", submissionKind: "contact", rows: [] },
+      });
+    });
 
     // Toast rehydrates from persisted store with the original message + countdown.
     expect(await screen.findByText("Closed 2 submissions")).toBeTruthy();
