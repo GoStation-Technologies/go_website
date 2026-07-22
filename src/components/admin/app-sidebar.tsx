@@ -21,7 +21,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const items = [
+const items: { title: string; url: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard, exact: true },
   { title: "Stations", url: "/admin/stations", icon: MapPin },
   { title: "News", url: "/admin/news", icon: Newspaper },
@@ -29,7 +29,7 @@ const items = [
   { title: "Submissions", url: "/admin/submissions", icon: Inbox },
   { title: "Chat logs", url: "/admin/chats", icon: MessageSquare },
   { title: "Abuse events", url: "/admin/abuse", icon: ShieldAlert },
-] as const;
+];
 
 export function AdminSidebar() {
   const { state } = useSidebar();
