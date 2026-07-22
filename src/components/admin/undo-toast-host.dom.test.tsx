@@ -199,20 +199,12 @@ describe("UndoToastHost", () => {
         <FreshToaster />
       </QueryClientProvider>,
     );
-    // Debug: is the effect firing at all?
-    act(() => {
-      freshStore.push({
-        id: "probe",
-        message: "PROBE TOAST",
-        createdAt: Date.now(),
-        expiresAt: Date.now() + 30000,
-        payload: { kind: "submissions", submissionKind: "contact", rows: [] },
-      });
-    });
 
     // Toast rehydrates from persisted store with the original message + countdown.
-    expect(await screen.findByText("Closed 2 submissions")).toBeTruthy();
-    expect(await screen.findByText(/^\d+s$/)).toBeTruthy();
+    // Sonner renders both a visible node and an aria-live announcement, so match all.
+    const matches = await screen.findAllByText("Closed 2 submissions");
+    expect(matches.length).toBeGreaterThan(0);
+    expect((await screen.findAllByText(/^\d+s$/)).length).toBeGreaterThan(0);
 
     // And Undo still works end-to-end against the restored payload.
     const undoBtn = await screen.findByRole("button", { name: /undo/i });
