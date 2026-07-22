@@ -118,7 +118,7 @@ function Overview() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <ChartCard title="Chatbot messages" subtitle="Daily volume, last 14 days">
+        <ChartCard title="Chatbot messages" subtitle={`Daily volume, last ${days} days`}>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={data.chatsSeries} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
               <defs>
