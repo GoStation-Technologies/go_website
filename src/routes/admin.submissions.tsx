@@ -162,11 +162,17 @@ function SubmissionsPage() {
       const kindAtCall = kind; // capture in case the user switches tabs
       const before = res.before ?? [];
       // 30-second undo window: reapply the snapshotted per-row values.
+      const UNDO_MS = 30_000;
+      const message = `${res.updated} submission${res.updated === 1 ? "" : "s"} ${label}`;
       toast.success(
-        `${res.updated} submission${res.updated === 1 ? "" : "s"} ${label}`,
+        before.length > 0 ? (
+          <UndoToastContent message={message} durationMs={UNDO_MS} />
+        ) : (
+          message
+        ),
         before.length > 0
           ? {
-              duration: 30_000,
+              duration: UNDO_MS,
               action: {
                 label: "Undo",
                 onClick: () => {
