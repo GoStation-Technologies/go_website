@@ -100,25 +100,54 @@
 }
 
 .dark {
-  --background: oklch(0.13 0.03 245);
+  --background: oklch(0.16 0.035 245);
   --foreground: oklch(0.97 0.01 250);
-  --card: oklch(0.17 0.04 245);
+  --card: oklch(0.20 0.045 245);
   --card-foreground: oklch(0.97 0.01 250);
-  --popover: oklch(0.17 0.04 245);
+  --popover: oklch(0.20 0.045 245);
   --popover-foreground: oklch(0.97 0.01 250);
-  --primary: oklch(0.80 0.14 240);
-  --primary-foreground: oklch(0.13 0.03 245);
-  --secondary: oklch(0.23 0.04 250);
+  --primary: oklch(0.97 0.01 250);
+  --primary-foreground: oklch(0.16 0.035 245);
+  --secondary: oklch(0.25 0.04 250);
   --secondary-foreground: oklch(0.97 0.01 250);
-  --muted: oklch(0.23 0.04 250);
-  --muted-foreground: oklch(0.72 0.02 250);
-  --accent: oklch(0.72 0.20 42);
-  --accent-foreground: oklch(0.13 0.03 245);
+  --muted: oklch(0.24 0.035 250);
+  --muted-foreground: oklch(0.74 0.02 250);
+  --accent: oklch(0.74 0.19 45);
+  --accent-foreground: oklch(0.16 0.035 245);
   --destructive: oklch(0.7 0.19 22);
   --destructive-foreground: oklch(0.97 0.01 250);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.72 0.20 42);
+  --ring: oklch(0.74 0.19 45);
+  --brand: oklch(0.97 0.01 250);
+  --brand-foreground: oklch(0.16 0.035 245);
+
+  /* Recompose gradients so hero/radial surfaces stay cinematic in dark mode too */
+  --shadow-elegant: 0 20px 60px -20px oklch(0 0 0 / 0.6);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.4), 0 8px 24px -12px oklch(0 0 0 / 0.5);
+}
+
+/* Any section that paints its own dark ink background must keep light text
+   regardless of the active theme. Scope tokens locally so children (buttons,
+   muted copy, borders) inherit the correct contrast without ad-hoc classes. */
+.bg-hero-ink,
+.bg-brand-radial,
+.glass-ink {
+  --background: var(--ink);
+  --foreground: oklch(0.98 0.005 250);
+  --card: color-mix(in oklab, var(--ink) 78%, white 4%);
+  --card-foreground: oklch(0.98 0.005 250);
+  --popover: color-mix(in oklab, var(--ink) 78%, white 4%);
+  --popover-foreground: oklch(0.98 0.005 250);
+  --primary: oklch(0.98 0.005 250);
+  --primary-foreground: var(--ink);
+  --secondary: color-mix(in oklab, white 8%, transparent);
+  --secondary-foreground: oklch(0.98 0.005 250);
+  --muted: color-mix(in oklab, white 6%, transparent);
+  --muted-foreground: oklch(0.82 0.02 250);
+  --border: color-mix(in oklab, white 12%, transparent);
+  --input: color-mix(in oklab, white 14%, transparent);
+  color: oklch(0.98 0.005 250);
 }
 
 @layer base {
