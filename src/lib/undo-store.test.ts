@@ -15,15 +15,14 @@ function makeEntry(id: string, ttlMs = 30_000): UndoEntry {
 // Minimal localStorage shim so the module treats us as a browser.
 beforeEach(() => {
   const store = new Map<string, string>();
-  // @ts-expect-error test shim
-  globalThis.localStorage = {
+  (globalThis as { localStorage: Storage }).localStorage = {
     getItem: (k: string) => (store.has(k) ? store.get(k)! : null),
     setItem: (k: string, v: string) => void store.set(k, v),
     removeItem: (k: string) => void store.delete(k),
     clear: () => store.clear(),
     key: () => null,
     length: 0,
-  };
+  } as Storage;
   // Reset internal cache by removing every known entry.
   undoStore.list().forEach((e) => undoStore.remove(e.id));
 });
