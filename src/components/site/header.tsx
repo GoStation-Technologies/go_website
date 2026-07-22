@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Menu, Globe, Fuel } from "lucide-react";
-import { useState } from "react";
+import { Menu, Globe, ArrowUpRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { getContentLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import logoAsset from "@/assets/gostation-logo.png.asset.json";
 
 const NAV = [
   { to: "/about", key: "about" },
@@ -26,72 +27,124 @@ const NAV = [
 export function SiteHeader() {
   const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const toggleLang = () => {
     const next = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar" ? "en" : "ar";
-    // Persist so the next SSR render for this visitor uses the chosen language.
     document.cookie = `gs_lang=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
     i18n.changeLanguage(next);
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
-        <Link to="/" className="flex items-center gap-2 font-bold text-primary">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Fuel className="h-5 w-5" />
-          </span>
-          <span className="text-lg tracking-tight">{t("brand.name")}</span>
+    <header
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        scrolled
+          ? "border-b border-border/60 glass shadow-[0_1px_0_0_rgba(0,0,0,0.02)]"
+          : "border-b border-transparent bg-background/40 backdrop-blur-sm"
+      }`}
+    >
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+        <Link to="/" className="group flex items-center gap-2.5">
+          <img
+            src={logoAsset.url}
+            alt="GoStation"
+            className="h-9 w-9 transition-transform duration-500 group-hover:rotate-[8deg]"
+          />
+          <div className="flex flex-col leading-none">
+            <span className="font-display text-[1.05rem] font-bold tracking-tight text-primary">
+              {t("brand.name")}
+            </span>
+            <span className="mt-0.5 hidden text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:block">
+              {t("brand.tagline")}
+            </span>
+          </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-0.5 xl:flex">
           {NAV.map((n) => (
             <Link
               key={n.key}
               to={n.to}
-              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition hover:bg-accent/10 hover:text-foreground"
-              activeProps={{ className: "text-primary" }}
+              className="relative rounded-full px-3.5 py-2 text-[13px] font-medium text-foreground/70 transition hover:text-foreground"
+              activeProps={{
+                className: "text-primary bg-primary/5",
+              }}
             >
               {t(`nav.${n.key}`)}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-1">
-            <Globe className="h-4 w-4" />
-            <span className="hidden sm:inline">{t("common.lang")}</span>
+        <div className="flex items-center gap-1.5">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleLang}
+            className="h-9 gap-1.5 rounded-full text-xs font-semibold"
+          >
+            <Globe className="h-3.5 w-3.5" />
+            <span>{t("common.lang")}</span>
           </Button>
-          <Button asChild size="sm" className="hidden sm:inline-flex bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link to="/franchise">{t("home.ctaFranchise")}</Link>
+          <Button
+            asChild
+            size="sm"
+            className="hidden h-9 rounded-full bg-accent px-4 text-xs font-semibold text-accent-foreground shadow-glow transition-all hover:scale-[1.02] hover:bg-accent/90 sm:inline-flex"
+          >
+            <Link to="/franchise">
+              {t("home.ctaFranchise")}
+              <ArrowUpRight className="ms-1 h-3.5 w-3.5" />
+            </Link>
           </Button>
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Menu">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 rounded-full xl:hidden"
+                aria-label="Menu"
+              >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
-              <SheetHeader>
-                <SheetTitle>{t("brand.name")}</SheetTitle>
+            <SheetContent side="right" className="w-80 border-l">
+              <SheetHeader className="text-start">
+                <SheetTitle className="flex items-center gap-2">
+                  <img src={logoAsset.url} alt="" className="h-7 w-7" />
+                  {t("brand.name")}
+                </SheetTitle>
               </SheetHeader>
-              <nav className="mt-6 flex flex-col gap-1">
+              <nav className="mt-8 flex flex-col gap-0.5">
                 {NAV.map((n) => (
                   <Link
                     key={n.key}
                     to={n.to}
                     onClick={() => setOpen(false)}
-                    className="rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
-                    activeProps={{ className: "bg-muted text-primary" }}
+                    className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
+                    activeProps={{ className: "bg-primary/10 text-primary" }}
                   >
                     {t(`nav.${n.key}`)}
                   </Link>
                 ))}
                 <Link
+                  to="/franchise"
+                  onClick={() => setOpen(false)}
+                  className="mt-4 inline-flex items-center justify-center gap-1 rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground shadow-glow"
+                >
+                  {t("home.ctaFranchise")}
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+                <Link
                   to="/auth"
                   onClick={() => setOpen(false)}
-                  className="mt-2 rounded-md border px-3 py-2 text-sm font-medium"
+                  className="mt-2 rounded-full border px-4 py-2.5 text-center text-sm font-medium"
                 >
                   {t("nav.signin")}
                 </Link>
