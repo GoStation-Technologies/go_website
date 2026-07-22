@@ -21,20 +21,53 @@ export const adminOverviewStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const s = context.supabase;
-    const [stations, franchise, acq, contact, chats24] = await Promise.all([
+    const since14 = new Date(Date.now() - 14 * 24 * 3600_000).toISOString();
+    const since24h = new Date(Date.now() - 24 * 3600_000).toISOString();
+    const [
+      stations, franchise, acq, contact, chats24,
+      news, jobs, abuse24, exportsRunning,
+      chatsSeries, franchiseSeries, abuseSeries,
+    ] = await Promise.all([
       s.from("stations").select("id", { count: "exact", head: true }),
       s.from("franchise_applications").select("id", { count: "exact", head: true }).eq("status", "new"),
       s.from("acquisition_requests").select("id", { count: "exact", head: true }).eq("status", "new"),
       s.from("contact_messages").select("id", { count: "exact", head: true }).eq("status", "new"),
-      s.from("chatbot_messages").select("id", { count: "exact", head: true })
-        .gte("created_at", new Date(Date.now() - 24 * 3600_000).toISOString()),
+      s.from("chatbot_messages").select("id", { count: "exact", head: true }).gte("created_at", since24h),
+      s.from("news_articles").select("id", { count: "exact", head: true }),
+      s.from("job_openings").select("id", { count: "exact", head: true }).eq("is_active", true),
+      s.from("abuse_events").select("id", { count: "exact", head: true }).gte("created_at", since24h),
+      s.from("export_jobs").select("id", { count: "exact", head: true }).in("status", ["queued", "processing"]),
+      s.from("chatbot_messages").select("created_at").gte("created_at", since14),
+      s.from("franchise_applications").select("created_at").gte("created_at", since14),
+      s.from("abuse_events").select("created_at").gte("created_at", since14),
     ]);
+
+    const bucketize = (rows: { created_at: string }[] | null | undefined) => {
+      const map = new Map<string, number>();
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date(Date.now() - i * 24 * 3600_000).toISOString().slice(0, 10);
+        map.set(d, 0);
+      }
+      (rows ?? []).forEach((r) => {
+        const d = (r.created_at ?? "").slice(0, 10);
+        if (map.has(d)) map.set(d, (map.get(d) ?? 0) + 1);
+      });
+      return Array.from(map, ([date, count]) => ({ date, count }));
+    };
+
     return {
       stations: stations.count ?? 0,
       pendingFranchise: franchise.count ?? 0,
       pendingAcquisitions: acq.count ?? 0,
       unreadContacts: contact.count ?? 0,
       chats24h: chats24.count ?? 0,
+      news: news.count ?? 0,
+      activeJobs: jobs.count ?? 0,
+      abuse24h: abuse24.count ?? 0,
+      exportsRunning: exportsRunning.count ?? 0,
+      chatsSeries: bucketize(chatsSeries.data as { created_at: string }[] | null),
+      franchiseSeries: bucketize(franchiseSeries.data as { created_at: string }[] | null),
+      abuseSeries: bucketize(abuseSeries.data as { created_at: string }[] | null),
     };
   });
 
