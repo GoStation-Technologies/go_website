@@ -2,8 +2,22 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { adminListSubmissions, adminUpdateStatus } from "@/lib/admin.functions";
+import { useEffect, useMemo, useState } from "react";
+import {
+  adminBulkUpdateSubmissions,
+  adminListStaff,
+  adminListSubmissions,
+  adminUpdateStatus,
+} from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 
 type Kind = "franchise" | "acquisitions" | "contact";
@@ -12,7 +26,14 @@ const TABS: { key: Kind; label: string }[] = [
   { key: "acquisitions", label: "Acquisitions" },
   { key: "contact", label: "Contact" },
 ];
-const STATUSES = ["new", "reviewing", "closed"] as const;
+const STATUSES = ["new", "reviewing", "approved", "closed"] as const;
+type Status = (typeof STATUSES)[number];
+const STATUS_DOT: Record<Status, string> = {
+  new: "bg-blue-500",
+  reviewing: "bg-amber-500",
+  approved: "bg-emerald-500",
+  closed: "bg-slate-400",
+};
 const SORTS = [
   { v: "newest", label: "Newest" },
   { v: "oldest", label: "Oldest" },
