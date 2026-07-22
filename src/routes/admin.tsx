@@ -33,9 +33,15 @@ function AdminLayout() {
     router.navigate({ to: "/" });
   };
 
+  const defaultOpen =
+    typeof document !== "undefined"
+      ? !/(?:^|;\s*)sidebar_state=false(?:;|$)/.test(document.cookie)
+      : true;
+
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <div className="flex min-h-screen w-full bg-muted/30">
+
         <AdminSidebar />
         <SidebarInset className="min-w-0 flex-1">
           <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background px-4">
