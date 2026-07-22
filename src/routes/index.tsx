@@ -486,21 +486,17 @@ function HomePage() {
         </section>
       )}
 
-      {/* ============ FINAL CTA ============ */}
+      {/* ============ FINAL CTA — airy band ============ */}
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl bg-hero-ink px-8 py-16 text-primary-foreground shadow-elegant md:px-16 md:py-20">
-          <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
-          <div
-            className="pointer-events-none absolute -end-32 -top-32 h-96 w-96 rounded-full bg-ember opacity-25 blur-3xl animate-pulse-glow"
-            aria-hidden
-          />
-          <div className="relative grid gap-8 md:grid-cols-[1.4fr_auto] md:items-center">
+        <div className="relative overflow-hidden rounded-[2rem] bg-secondary px-8 py-16 md:px-16 md:py-20">
+          <div className="pointer-events-none absolute -end-24 -bottom-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" aria-hidden />
+          <div className="relative grid gap-10 md:grid-cols-[1.4fr_auto] md:items-center">
             <div>
-              <div className="eyebrow text-ember-glow">{t("home.ctaBannerEyebrow")}</div>
-              <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
+              <div className="eyebrow">{t("home.ctaBannerEyebrow")}</div>
+              <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-foreground md:text-5xl">
                 {t("home.ctaBanner")}
               </h2>
-              <p className="mt-4 max-w-xl text-lg text-primary-foreground/75">
+              <p className="mt-4 max-w-xl text-lg text-foreground/70">
                 {t("home.ctaBannerText")}
               </p>
             </div>
@@ -508,7 +504,7 @@ function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-glow hover:bg-accent/90"
+                className="h-12 rounded-lg bg-foreground px-7 text-sm font-semibold text-background transition hover:bg-accent hover:text-accent-foreground"
               >
                 <Link to="/franchise">{t("nav.franchise")}</Link>
               </Button>
@@ -516,7 +512,7 @@ function HomePage() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-12 rounded-full border-white/25 bg-transparent px-6 text-sm font-semibold text-primary-foreground hover:bg-white/10"
+                className="h-12 rounded-lg border-2 border-foreground/80 bg-transparent px-7 text-sm font-semibold text-foreground hover:bg-foreground hover:text-background"
               >
                 <Link to="/acquisitions">
                   <MapPin className="me-2 h-4 w-4" /> {t("nav.acquisitions")}
