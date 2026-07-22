@@ -526,20 +526,6 @@ function HomePage() {
   );
 }
 
-function KpiChip({ className = "", label, val }: { className?: string; label: string; val: string }) {
-  return (
-    <div className={`glass-ink rounded-2xl px-3.5 py-2.5 shadow-elegant ${className}`}>
-      <div className="font-display text-xl font-black leading-none text-primary-foreground">
-        <span className="bg-gradient-to-r from-ember-glow to-ember bg-clip-text text-transparent">
-          {val}
-        </span>
-      </div>
-      <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.14em] text-primary-foreground/70">
-        {label}
-      </div>
-    </div>
-  );
-}
 
 function ServiceCard({
   className = "",
