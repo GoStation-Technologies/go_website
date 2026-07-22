@@ -119,8 +119,12 @@
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.74 0.19 45);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.74 0.19 45);
   --brand: oklch(0.97 0.01 250);
   --brand-foreground: oklch(0.16 0.035 245);
+  --sand: oklch(0.22 0.04 245);
 
   /* Recompose gradients so hero/radial surfaces stay cinematic in dark mode too */
   --shadow-elegant: 0 20px 60px -20px oklch(0 0 0 / 0.6);
