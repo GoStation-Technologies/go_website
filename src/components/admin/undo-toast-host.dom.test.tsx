@@ -148,4 +148,75 @@ describe("UndoToastHost", () => {
     // effects can add a handful. Anything unbounded (>10) means a loop.
     expect(delta).toBeLessThanOrEqual(4);
   });
+
+  it("survives a full page reload within the 30s window: the toast and working Undo re-appear from localStorage", async () => {
+    const user = userEvent.setup();
+
+    // First "page load": push an undo entry, confirm it renders, then unmount
+    // as if the tab were closed / navigated away.
+    const first = renderHost();
+    const payload = {
+      kind: "submissions" as const,
+      submissionKind: "contact" as const,
+      rows: [
+        { id: "row-r1", status: "new", assigned_to: null },
+        { id: "row-r2", status: "new", assigned_to: "user-2" },
+      ],
+    };
+    act(() => {
+      undoStore.push(
+        makeEntry({ id: "reload-entry", message: "Closed 2 submissions", payload }),
+      );
+    });
+    expect(await screen.findByText("Closed 2 submissions")).toBeTruthy();
+
+    // Confirm the entry is durably in localStorage (this is what survives reload).
+    const raw = window.localStorage.getItem("gostation:undo-entries:v1");
+    expect(raw).toBeTruthy();
+    expect(JSON.parse(raw!)[0].id).toBe("reload-entry");
+
+    // Simulate a reload: fully unmount the previous render, wipe the store's
+    // in-memory cache so a fresh read re-hydrates from persisted localStorage,
+    // and mount a brand-new host + Toaster tree.
+    first.unmount();
+    cleanup();
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: "gostation:undo-entries:v1" }),
+    );
+
+    // Sanity: the store re-hydrates its list from persisted localStorage.
+    expect(undoStore.list().map((e) => e.id)).toContain("reload-entry");
+
+    const qc2 = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    render(
+      <QueryClientProvider client={qc2}>
+        {/* Toaster mounts first so its subscribe effect runs before the host
+            dispatches rehydrated toasts (React fires effects bottom-up, so the
+            first child's effect runs first). */}
+        <Toaster />
+        <UndoToastHost />
+      </QueryClientProvider>,
+    );
+
+    // Toast rehydrates from persisted store with the original message + countdown.
+    // Sonner renders both a visible node and an aria-live announcement, so match all.
+    expect((await screen.findAllByText("Closed 2 submissions")).length).toBeGreaterThan(0);
+    expect((await screen.findAllByText(/^\d+s$/)).length).toBeGreaterThan(0);
+
+    // And Undo still works end-to-end against the restored payload.
+    const undoBtn = await screen.findByRole("button", { name: /undo/i });
+    await user.click(undoBtn);
+
+    await waitFor(() => expect(restoreMock).toHaveBeenCalledTimes(1));
+    expect(restoreMock).toHaveBeenCalledWith({
+      data: {
+        kind: "contact",
+        rows: [
+          { id: "row-r1", status: "new", assigned_to: null },
+          { id: "row-r2", status: "new", assigned_to: "user-2" },
+        ],
+      },
+    });
+    await waitFor(() => expect(undoStore.list()).toHaveLength(0));
+  });
 });
