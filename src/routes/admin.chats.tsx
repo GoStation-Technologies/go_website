@@ -86,7 +86,7 @@ function highlight(text: string, query: string) {
 
 
 function ChatsPage() {
-  const { page, pageSize, sort, q } = Route.useSearch();
+  const { page, pageSize, sort, q, sinceHours } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/chats" });
 
   // Local state for the search input, debounced into the URL so typing
@@ -104,12 +104,10 @@ function ChatsPage() {
   }, [qInput, q, navigate]);
 
   const { data, error, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["admin", "chats", page, pageSize, sort, q],
-    // Pass URL params through as-is; the server owns validation + clamping and
-    // is the source of truth for the normalized page/pageSize/sort we render.
+    queryKey: ["admin", "chats", page, pageSize, sort, q, sinceHours],
     queryFn: async () => {
       try {
-        return await adminListChats({ data: { page, pageSize, sort, q } });
+        return await adminListChats({ data: { page, pageSize, sort, q, sinceHours } });
       } catch (e) {
         throw await coerceError(e);
       }
