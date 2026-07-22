@@ -35,8 +35,8 @@ type Kpi = {
   label: string;
   value: number;
   icon: ComponentType<{ className?: string }>;
-  href: string;
-  hint?: string;
+  to: string;
+  search?: Record<string, unknown>;
   accent?: "primary" | "warn" | "danger";
 };
 
@@ -48,15 +48,15 @@ function Overview() {
   });
 
   const kpis: Kpi[] = [
-    { label: "Stations", value: data.stations, icon: MapPin, href: "/admin/stations" },
-    { label: "Published news", value: data.news, icon: Newspaper, href: "/admin/news" },
-    { label: "Active job openings", value: data.activeJobs, icon: Briefcase, href: "/admin/careers" },
-    { label: "New franchise applications", value: data.pendingFranchise, icon: Handshake, href: "/admin/submissions", accent: "warn" },
-    { label: "New acquisition requests", value: data.pendingAcquisitions, icon: Inbox, href: "/admin/submissions", accent: "warn" },
-    { label: "Unread contact messages", value: data.unreadContacts, icon: Mail, href: "/admin/submissions", accent: "warn" },
-    { label: "Chatbot messages (24h)", value: data.chats24h, icon: MessageSquare, href: "/admin/chats", accent: "primary" },
-    { label: "Abuse events (24h)", value: data.abuse24h, icon: ShieldAlert, href: "/admin/abuse", accent: data.abuse24h > 0 ? "danger" : undefined },
-    { label: "Export jobs running", value: data.exportsRunning, icon: FileDown, href: "/admin/abuse" },
+    { label: "Stations", value: data.stations, icon: MapPin, to: "/admin/stations" },
+    { label: "Published news", value: data.news, icon: Newspaper, to: "/admin/news" },
+    { label: "Active job openings", value: data.activeJobs, icon: Briefcase, to: "/admin/careers" },
+    { label: "New franchise applications", value: data.pendingFranchise, icon: Handshake, to: "/admin/submissions", search: { kind: "franchise", status: "new" }, accent: "warn" },
+    { label: "New acquisition requests", value: data.pendingAcquisitions, icon: Inbox, to: "/admin/submissions", search: { kind: "acquisitions", status: "new" }, accent: "warn" },
+    { label: "Unread contact messages", value: data.unreadContacts, icon: Mail, to: "/admin/submissions", search: { kind: "contact", status: "new" }, accent: "warn" },
+    { label: "Chatbot messages (24h)", value: data.chats24h, icon: MessageSquare, to: "/admin/chats", search: { sinceHours: 24 }, accent: "primary" },
+    { label: "Abuse events (24h)", value: data.abuse24h, icon: ShieldAlert, to: "/admin/abuse", search: { windowHours: 24 }, accent: data.abuse24h > 0 ? "danger" : undefined },
+    { label: "Export jobs running", value: data.exportsRunning, icon: FileDown, to: "/admin/abuse" },
   ];
 
   return (
