@@ -376,7 +376,7 @@ function SubmissionsPage() {
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => bulkMut.mutate({ assigned_to: null })}>
+                <DropdownMenuItem onSelect={() => setConfirm({ kind: "unassign" })}>
                   <span className="text-muted-foreground">Unassign</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
