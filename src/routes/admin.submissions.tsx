@@ -367,7 +367,7 @@ function SubmissionsPage() {
                 {(staffData?.staff ?? []).map((s) => (
                   <DropdownMenuItem
                     key={s.id}
-                    onSelect={() => bulkMut.mutate({ assigned_to: s.id })}
+                    onSelect={() => setConfirm({ kind: "assign", userId: s.id, name: s.name })}
                   >
                     <div className="flex flex-col">
                       <span>{s.name}</span>
