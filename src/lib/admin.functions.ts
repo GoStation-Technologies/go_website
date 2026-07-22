@@ -127,11 +127,16 @@ export const adminListChats = createServerFn({ method: "POST" })
     // then sort + paginate. Enough for the admin logs view; move to an RPC if
     // the window ever needs to grow past this bound.
     const WINDOW = 2000;
-    const { data: rows, error } = await context.supabase
+    let query = context.supabase
       .from("chatbot_messages")
       .select("session_id, role, content, created_at")
       .order("created_at", { ascending: false })
       .limit(WINDOW);
+    if (data.sinceHours) {
+      const cutoff = new Date(Date.now() - data.sinceHours * 3600_000).toISOString();
+      query = query.gte("created_at", cutoff);
+    }
+    const { data: rows, error } = await query;
     if (error) throw new Error(error.message);
 
     const groups = new Map<string, Array<{ role: string; content: string; created_at: string }>>();
