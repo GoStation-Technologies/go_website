@@ -270,8 +270,20 @@ export const adminBulkRestoreSubmissions = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
       restored += 1;
     }
+    await writeAudit(
+      context.supabase,
+      { id: context.userId, email: (context.claims as { email?: string } | undefined)?.email ?? null },
+      {
+        action: "bulk_restore",
+        entity: table as AuditEntity,
+        entity_ids: data.rows.map((r) => r.id),
+        diff: { restored },
+        meta: { rows: data.rows },
+      },
+    );
     return { ok: true, restored };
   });
+
 
 
 // Staff picker for the assign action. Two queries — user_roles has no FK to
