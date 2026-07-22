@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getMyStaffRoles } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { LogOut, LayoutDashboard, Inbox, MessageSquare, MapPin, Newspaper, Briefcase, ShieldAlert } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -42,6 +43,7 @@ function AdminLayout() {
           </Link>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="hidden sm:inline">{roles.join(" · ")}</span>
+            <ThemeToggle />
             <Button size="sm" variant="ghost" onClick={signOut}>
               <LogOut className="h-4 w-4" />
             </Button>
