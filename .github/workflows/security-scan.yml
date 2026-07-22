@@ -224,6 +224,7 @@ jobs:
           REF: ${{ github.ref }}
           EVENT: ${{ github.event_name }}
           SLACK_CHANNEL_URL: ${{ secrets.SLACK_CHANNEL_URL }}
+          ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
         run: |
           SQL_FILE="scripts/security-assertions.sql"
           REPO_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
