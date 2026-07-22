@@ -9,6 +9,11 @@ on:
     - cron: '0 6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   db-security-assertions:
     name: DB security assertions
@@ -32,7 +37,65 @@ jobs:
           fi
 
       - name: Run security assertions
+        id: assertions
         env:
           PGCONN: ${{ secrets.SUPABASE_DB_URL }}
         run: |
-          psql "$PGCONN" -v ON_ERROR_STOP=1 -f scripts/security-assertions.sql
+          set +e
+          psql "$PGCONN" -v ON_ERROR_STOP=1 -f scripts/security-assertions.sql 2>&1 | tee /tmp/assertions.log
+          status=${PIPESTATUS[0]}
+          echo "exit_status=$status" >> "$GITHUB_OUTPUT"
+          exit $status
+
+      - name: Build regression report
+        if: failure() && steps.assertions.outcome == 'failure'
+        id: report
+        run: |
+          SQL_FILE="scripts/security-assertions.sql"
+          REPO_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+          COMMIT="${GITHUB_SHA}"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          # Extract regressed internal_ids from the psql log (NOTICE lines).
+          ids=$(grep -oE 'REGRESSION [A-Za-z0-9_]+' /tmp/assertions.log | awk '{print $2}' | sort -u)
+
+          {
+            echo "## 🔒 Security regression scan failed"
+            echo ""
+            echo "Commit: \`${COMMIT}\` · [Workflow run](${RUN_URL})"
+            echo ""
+            if [ -z "$ids" ]; then
+              echo "psql exited non-zero but no \`REGRESSION\` notices were captured. See the [workflow log](${RUN_URL})."
+            else
+              echo "| internal_id | Failing assertion |"
+              echo "|---|---|"
+              while IFS= read -r id; do
+                [ -z "$id" ] && continue
+                line=$(grep -n "ASSERT: ${id}\b" "$SQL_FILE" | head -1 | cut -d: -f1)
+                if [ -n "$line" ]; then
+                  link="${REPO_URL}/blob/${COMMIT}/${SQL_FILE}#L${line}"
+                  echo "| \`${id}\` | [${SQL_FILE}:L${line}](${link}) |"
+                else
+                  echo "| \`${id}\` | (assertion marker not found in ${SQL_FILE}) |"
+                fi
+              done <<< "$ids"
+              echo ""
+              echo "<details><summary>Failing assertion messages</summary>"
+              echo ""
+              echo '```'
+              grep -E 'REGRESSION ' /tmp/assertions.log || true
+              echo '```'
+              echo ""
+              echo "</details>"
+            fi
+          } > /tmp/report.md
+
+          cat /tmp/report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment regression report on PR
+        if: failure() && github.event_name == 'pull_request' && steps.report.outcome == 'success'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: security-regression-scan
+          recreate: true
+          path: /tmp/report.md
