@@ -567,3 +567,33 @@ export const adminDeleteJob = createServerFn({ method: "POST" })
 
 
 
+
+// ─── Audit log (read) ───────────────────────────────────────────────────
+const AuditListInput = z.object({
+  entity: z.string().min(1).max(64).optional(),
+  action: z.string().min(1).max(32).optional(),
+  actorId: z.string().uuid().optional(),
+  sinceHours: z.coerce.number().int().min(1).max(24 * 365).default(24 * 30),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(200).default(50),
+});
+
+export const adminListAuditLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => AuditListInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const since = new Date(Date.now() - data.sinceHours * 3600_000).toISOString();
+    const from = (data.page - 1) * data.pageSize;
+    const to = from + data.pageSize - 1;
+    let q = (context.supabase.from("admin_audit_log") as any)
+      .select("id, created_at, actor_id, actor_email, action, entity, entity_ids, diff, meta", { count: "exact" })
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (data.entity) q = q.eq("entity", data.entity);
+    if (data.action) q = q.eq("action", data.action);
+    if (data.actorId) q = q.eq("actor_id", data.actorId);
+    const { data: rows, error, count } = await q;
+    if (error) throw new Error(error.message);
+    return { rows: (rows ?? []) as Array<Record<string, unknown>>, total: count ?? 0, page: data.page, pageSize: data.pageSize };
+  });
