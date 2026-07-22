@@ -411,7 +411,7 @@ function HomePage() {
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {(news.data ?? []).map((n) => (
             <Link key={n.id} to="/media/$slug" params={{ slug: n.slug }} className="group block">
-              <article className="h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
+              <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
                 {n.cover_url ? (
                   <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                     <img src={n.cover_url} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
