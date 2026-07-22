@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { adminListAuditLog } from "@/lib/admin.functions";
+import { toast } from "sonner";
+import { adminListAuditLog, adminExportAuditLog } from "@/lib/admin.functions";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+
 
 const ENTITIES = [
   "franchise_applications",
@@ -90,6 +93,38 @@ function AuditPage() {
 
   const total = q.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / pageSize));
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const { csv, count } = await adminExportAuditLog({
+        data: {
+          entity: search.entity,
+          action: search.action,
+          sinceHours: search.sinceHours,
+        },
+      });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const parts = [`audit-log`, `${search.sinceHours}h`];
+      if (search.entity) parts.push(search.entity);
+      if (search.action) parts.push(search.action);
+      a.href = url;
+      a.download = `${parts.join("_")}_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${count.toLocaleString()} row${count === 1 ? "" : "s"}${count >= 10000 ? " (capped at 10,000)" : ""}.`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Export failed");
+    } finally {
+      setExporting(false);
+    }
+  };
+
 
   return (
     <div className="p-6 space-y-6">
@@ -137,10 +172,16 @@ function AuditPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="ml-auto text-sm text-muted-foreground self-center">
-          {q.isFetching ? "Loading…" : `${total.toLocaleString()} events`}
+        <div className="ml-auto flex items-center gap-3 self-center">
+          <span className="text-sm text-muted-foreground">
+            {q.isFetching ? "Loading…" : `${total.toLocaleString()} events`}
+          </span>
+          <Button size="sm" variant="outline" onClick={handleExport} disabled={exporting || total === 0}>
+            <Download className="h-4 w-4 mr-1" /> {exporting ? "Exporting…" : "Export CSV"}
+          </Button>
         </div>
       </div>
+
 
       <div className="rounded-lg border overflow-hidden">
         <table className="w-full text-sm">

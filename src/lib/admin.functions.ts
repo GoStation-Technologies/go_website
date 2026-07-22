@@ -610,3 +610,41 @@ export const adminListAuditLog = createServerFn({ method: "POST" })
     };
     return { rows: (rows ?? []) as AuditRow[], total: (count ?? 0) as number, page: data.page, pageSize: data.pageSize };
   });
+
+const AuditExportInput = z.object({
+  entity: z.string().min(1).max(64).optional(),
+  action: z.string().min(1).max(32).optional(),
+  actorId: z.string().uuid().optional(),
+  sinceHours: z.coerce.number().int().min(1).max(24 * 365).default(24 * 30),
+});
+
+const csvEscape = (v: unknown): string => {
+  if (v === null || v === undefined) return "";
+  const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+  return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+};
+
+/** CSV export of the audit log for the current filters (up to 10k rows). */
+export const adminExportAuditLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => AuditExportInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const since = new Date(Date.now() - data.sinceHours * 3600_000).toISOString();
+    let q = (context.supabase.from("admin_audit_log") as any)
+      .select("id, created_at, actor_id, actor_email, action, entity, entity_ids, diff, meta")
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(10000);
+    if (data.entity) q = q.eq("entity", data.entity);
+    if (data.action) q = q.eq("action", data.action);
+    if (data.actorId) q = q.eq("actor_id", data.actorId);
+    const { data: rows, error } = await q;
+    if (error) throw new Error(error.message);
+
+    const headers = ["id", "created_at", "actor_id", "actor_email", "action", "entity", "entity_ids", "diff", "meta"];
+    const lines: string[] = [headers.join(",")];
+    for (const r of (rows ?? []) as Array<Record<string, unknown>>) {
+      lines.push(headers.map((h) => csvEscape(r[h])).join(","));
+    }
+    return { csv: lines.join("\n"), count: (rows ?? []).length as number };
+  });
