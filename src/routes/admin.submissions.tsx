@@ -89,7 +89,7 @@ function SubmissionsPage() {
 
 
   const updateMut = useMutation({
-    mutationFn: (args: { id: string; status: (typeof STATUSES)[number] }) =>
+    mutationFn: (args: { id: string; status: Status }) =>
       adminUpdateStatus({ data: { kind, ...args } }),
     onSuccess: () => {
       toast.success("Updated");
@@ -99,11 +99,57 @@ function SubmissionsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  // Selection: keyed by row id, cleared whenever the underlying list changes.
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const rows = data?.rows ?? [];
   const total = data?.total ?? 0;
   const pageCount = data?.pageCount ?? 1;
   const rangeStart = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const rangeEnd = Math.min(page * PAGE_SIZE, total);
+  const rowIds = useMemo(() => rows.map((r: Record<string, unknown>) => String(r.id)), [rows]);
+  useEffect(() => {
+    // Prune selections that no longer exist in the current page.
+    setSelected((prev) => {
+      const next = new Set<string>();
+      for (const id of prev) if (rowIds.includes(id)) next.add(id);
+      return next.size === prev.size ? prev : next;
+    });
+  }, [rowIds]);
+  const allSelected = rowIds.length > 0 && rowIds.every((id) => selected.has(id));
+  const someSelected = selected.size > 0 && !allSelected;
+  const toggleAll = () =>
+    setSelected(allSelected ? new Set() : new Set(rowIds));
+  const toggleOne = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  // Staff list is only fetched when the user opens the assign menu.
+  const [staffOpen, setStaffOpen] = useState(false);
+  const { data: staffData, isLoading: staffLoading } = useQuery({
+    queryKey: ["admin", "staff"],
+    queryFn: () => adminListStaff(),
+    enabled: staffOpen,
+    staleTime: 5 * 60_000,
+  });
+
+  const bulkMut = useMutation({
+    mutationFn: (patch: { status?: Status; assigned_to?: string | null }) =>
+      adminBulkUpdateSubmissions({
+        data: { kind, ids: Array.from(selected), patch },
+      }),
+    onSuccess: (res) => {
+      toast.success(`Updated ${res.updated} submission${res.updated === 1 ? "" : "s"}`);
+      setSelected(new Set());
+      qc.invalidateQueries({ queryKey: ["admin", "submissions", kind] });
+      qc.invalidateQueries({ queryKey: ["admin", "overview"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
 
 
   return (
