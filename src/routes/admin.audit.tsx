@@ -103,7 +103,7 @@ function AuditPage() {
           <label className="text-xs text-muted-foreground">Time range</label>
           <Select
             value={String(search.sinceHours)}
-            onValueChange={(v) => navigate({ search: (p) => ({ ...p, sinceHours: Number(v), page: 1 }) })}
+            onValueChange={(v) => navigate({ search: (p: typeof search) => ({ ...p, sinceHours: Number(v), page: 1 }) })}
           >
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -115,7 +115,7 @@ function AuditPage() {
           <label className="text-xs text-muted-foreground">Entity</label>
           <Select
             value={search.entity ?? "all"}
-            onValueChange={(v) => navigate({ search: (p) => ({ ...p, entity: v === "all" ? undefined : (v as (typeof ENTITIES)[number]), page: 1 }) })}
+            onValueChange={(v) => navigate({ search: (p: typeof search) => ({ ...p, entity: v === "all" ? undefined : (v as (typeof ENTITIES)[number]), page: 1 }) })}
           >
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -128,7 +128,7 @@ function AuditPage() {
           <label className="text-xs text-muted-foreground">Action</label>
           <Select
             value={search.action ?? "all"}
-            onValueChange={(v) => navigate({ search: (p) => ({ ...p, action: v === "all" ? undefined : (v as (typeof ACTIONS)[number]), page: 1 }) })}
+            onValueChange={(v) => navigate({ search: (p: typeof search) => ({ ...p, action: v === "all" ? undefined : (v as (typeof ACTIONS)[number]), page: 1 }) })}
           >
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -190,12 +190,12 @@ function AuditPage() {
         <div className="text-muted-foreground">Page {search.page} of {pages}</div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm" disabled={search.page <= 1}>
-            <Link to="/admin/audit" search={(p) => ({ ...p, page: Math.max(1, search.page - 1) })}>
+            <Link to="/admin/audit" search={(p: typeof search) => ({ ...p, page: Math.max(1, search.page - 1) })}>
               <ChevronLeft className="h-4 w-4" /> Prev
             </Link>
           </Button>
           <Button asChild variant="outline" size="sm" disabled={search.page >= pages}>
-            <Link to="/admin/audit" search={(p) => ({ ...p, page: Math.min(pages, search.page + 1) })}>
+            <Link to="/admin/audit" search={(p: typeof search) => ({ ...p, page: Math.min(pages, search.page + 1) })}>
               Next <ChevronRight className="h-4 w-4" />
             </Link>
           </Button>

@@ -27,6 +27,7 @@ import { Route as AdminStationsRouteImport } from './routes/admin.stations'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminChatsRouteImport } from './routes/admin.chats'
 import { Route as AdminCareersRouteImport } from './routes/admin.careers'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminAbuseRouteImport } from './routes/admin.abuse'
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 
@@ -120,6 +121,11 @@ const AdminCareersRoute = AdminCareersRouteImport.update({
   path: '/careers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAbuseRoute = AdminAbuseRouteImport.update({
   id: '/abuse',
   path: '/abuse',
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/admin/abuse': typeof AdminAbuseRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/careers': typeof AdminCareersRoute
   '/admin/chats': typeof AdminChatsRoute
   '/admin/news': typeof AdminNewsRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/admin/abuse': typeof AdminAbuseRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/careers': typeof AdminCareersRoute
   '/admin/chats': typeof AdminChatsRoute
   '/admin/news': typeof AdminNewsRoute
@@ -189,6 +197,7 @@ export interface FileRoutesById {
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/admin/abuse': typeof AdminAbuseRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/careers': typeof AdminCareersRoute
   '/admin/chats': typeof AdminChatsRoute
   '/admin/news': typeof AdminNewsRoute
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/stations'
     | '/admin/abuse'
+    | '/admin/audit'
     | '/admin/careers'
     | '/admin/chats'
     | '/admin/news'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/stations'
     | '/admin/abuse'
+    | '/admin/audit'
     | '/admin/careers'
     | '/admin/chats'
     | '/admin/news'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/stations'
     | '/admin/abuse'
+    | '/admin/audit'
     | '/admin/careers'
     | '/admin/chats'
     | '/admin/news'
@@ -409,6 +421,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCareersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/abuse': {
       id: '/admin/abuse'
       path: '/abuse'
@@ -428,6 +447,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAbuseRoute: typeof AdminAbuseRoute
+  AdminAuditRoute: typeof AdminAuditRoute
   AdminCareersRoute: typeof AdminCareersRoute
   AdminChatsRoute: typeof AdminChatsRoute
   AdminNewsRoute: typeof AdminNewsRoute
@@ -438,6 +458,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAbuseRoute: AdminAbuseRoute,
+  AdminAuditRoute: AdminAuditRoute,
   AdminCareersRoute: AdminCareersRoute,
   AdminChatsRoute: AdminChatsRoute,
   AdminNewsRoute: AdminNewsRoute,
