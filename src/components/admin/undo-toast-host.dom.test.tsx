@@ -73,15 +73,11 @@ describe("UndoToastHost", () => {
     });
 
     // The message from the sonner toast body rendered by UndoToastContent.
-    expect(
-      await screen.findByText("Approved 2 submissions"),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Approved 2 submissions")).toBeTruthy();
     // The countdown seconds label lives next to the progress bar.
-    expect(await screen.findByText(/^\d+s$/)).toBeInTheDocument();
+    expect(await screen.findByText(/^\d+s$/)).toBeTruthy();
     // And the Undo action button is exposed by sonner.
-    expect(
-      await screen.findByRole("button", { name: /undo/i }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /undo/i })).toBeTruthy();
   });
 
   it("clicking Undo calls adminBulkRestoreSubmissions with the entry payload and dismisses the toast", async () => {
