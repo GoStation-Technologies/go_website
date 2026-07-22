@@ -18,6 +18,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
 type Kind = "franchise" | "acquisitions" | "contact";
@@ -141,14 +151,72 @@ function SubmissionsPage() {
       adminBulkUpdateSubmissions({
         data: { kind, ids: Array.from(selected), patch },
       }),
-    onSuccess: (res) => {
-      toast.success(`Updated ${res.updated} submission${res.updated === 1 ? "" : "s"}`);
+    onSuccess: (res, patch) => {
+      const label = patch.status
+        ? `marked ${patch.status}`
+        : patch.assigned_to === null
+          ? "unassigned"
+          : "reassigned";
+      toast.success(
+        `${res.updated} submission${res.updated === 1 ? "" : "s"} ${label}`,
+      );
       setSelected(new Set());
+      setConfirm(null);
       qc.invalidateQueries({ queryKey: ["admin", "submissions", kind] });
       qc.invalidateQueries({ queryKey: ["admin", "overview"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(e.message || "Bulk update failed"),
   });
+
+  // Pending bulk action awaiting confirmation. Null = no dialog open.
+  type PendingAction =
+    | { kind: "status"; status: Status }
+    | { kind: "assign"; userId: string; name: string }
+    | { kind: "unassign" };
+  const [confirm, setConfirm] = useState<PendingAction | null>(null);
+  const confirmCopy = (() => {
+    if (!confirm) return null;
+    const n = selected.size;
+    const plural = n === 1 ? "" : "s";
+    if (confirm.kind === "status") {
+      const verb =
+        confirm.status === "approved"
+          ? "Approve"
+          : confirm.status === "closed"
+            ? "Close"
+            : confirm.status === "reviewing"
+              ? "Move to reviewing"
+              : "Reopen";
+      return {
+        title: `${verb} ${n} submission${plural}?`,
+        desc: `Sets status to "${confirm.status}" on every selected row. This can't be undone in bulk.`,
+        cta: verb,
+        destructive: confirm.status === "closed",
+      };
+    }
+    if (confirm.kind === "assign") {
+      return {
+        title: `Assign ${n} submission${plural} to ${confirm.name}?`,
+        desc: `Any existing assignee on the selected rows will be replaced.`,
+        cta: "Assign",
+        destructive: false,
+      };
+    }
+    return {
+      title: `Unassign ${n} submission${plural}?`,
+      desc: `The current assignee on every selected row will be cleared.`,
+      cta: "Unassign",
+      destructive: true,
+    };
+  })();
+  const runConfirm = () => {
+    if (!confirm) return;
+    if (confirm.kind === "status") bulkMut.mutate({ status: confirm.status });
+    else if (confirm.kind === "assign") bulkMut.mutate({ assigned_to: confirm.userId });
+    else bulkMut.mutate({ assigned_to: null });
+  };
+
+
 
 
 
@@ -269,7 +337,7 @@ function SubmissionsPage() {
               size="sm"
               variant="outline"
               disabled={bulkMut.isPending}
-              onClick={() => bulkMut.mutate({ status: "approved" })}
+              onClick={() => setConfirm({ kind: "status", status: "approved" })}
             >
               Approve
             </Button>
@@ -277,7 +345,7 @@ function SubmissionsPage() {
               size="sm"
               variant="outline"
               disabled={bulkMut.isPending}
-              onClick={() => bulkMut.mutate({ status: "closed" })}
+              onClick={() => setConfirm({ kind: "status", status: "closed" })}
             >
               Close
             </Button>
@@ -299,7 +367,7 @@ function SubmissionsPage() {
                 {(staffData?.staff ?? []).map((s) => (
                   <DropdownMenuItem
                     key={s.id}
-                    onSelect={() => bulkMut.mutate({ assigned_to: s.id })}
+                    onSelect={() => setConfirm({ kind: "assign", userId: s.id, name: s.name })}
                   >
                     <div className="flex flex-col">
                       <span>{s.name}</span>
@@ -308,7 +376,7 @@ function SubmissionsPage() {
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => bulkMut.mutate({ assigned_to: null })}>
+                <DropdownMenuItem onSelect={() => setConfirm({ kind: "unassign" })}>
                   <span className="text-muted-foreground">Unassign</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -447,6 +515,38 @@ function SubmissionsPage() {
           </Button>
         </div>
       </div>
+
+      <AlertDialog
+        open={confirm !== null}
+        onOpenChange={(open) => {
+          if (!open && !bulkMut.isPending) setConfirm(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{confirmCopy?.title}</AlertDialogTitle>
+            <AlertDialogDescription>{confirmCopy?.desc}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkMut.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={bulkMut.isPending}
+              onClick={(e) => {
+                e.preventDefault();
+                runConfirm();
+              }}
+              className={
+                confirmCopy?.destructive
+                  ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  : undefined
+              }
+            >
+              {bulkMut.isPending ? "Applying…" : confirmCopy?.cta}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+
