@@ -126,9 +126,10 @@ export function UndoToastHost() {
           duration: remaining,
           onAutoClose: () => undoStore.remove(entry.id),
           onDismiss: () => undoStore.remove(entry.id),
-          // Give the toast container an accessible name so assistive tech
-          // announces the bulk-action context, not just "notification".
-          ariaLabel: entry.message,
+          // Note: sonner's Toaster already renders toasts inside an
+          // aria-live region; the host's own status region above adds a
+          // one-shot announcement with the undo instructions.
+
           action: {
             // Visible "Undo" plus a hidden, descriptive accessible name so
             // screen-reader users hear which action they'd be reverting.
