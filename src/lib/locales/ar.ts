@@ -49,6 +49,8 @@ export const ar = {
     statsRegions: "منطقة",
     statsYears: "سنوات من النمو",
     statsDaily: "عميل يومياً",
+    alwaysReady: "جاهزون دائماً",
+    alwaysReadySub: "خدمة 24/7 في جميع أنحاء المملكة",
     whyTitle: "مصممة للجميع",
     whyCustomer: "للعملاء",
     whyCustomerText: "قربك، تنوع الخدمات، وأسعار تنافسية في كل محطة.",
