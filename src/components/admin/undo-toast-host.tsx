@@ -23,6 +23,80 @@ export function UndoToastHost() {
     return () => clearInterval(id);
   }, []);
 
+  // Shared undo trigger used by both the toast action button and the
+  // keyboard shortcut (Ctrl/Cmd+Z).
+  const runUndo = (entry: UndoEntry) => {
+    if (entry.payload.kind !== "submissions") return;
+    const submissionKind = entry.payload.submissionKind;
+    toast.promise(
+      adminBulkRestoreSubmissions({
+        data: {
+          kind: submissionKind,
+          rows: entry.payload.rows.map((r) => ({
+            id: r.id,
+            status: r.status as never,
+            assigned_to: r.assigned_to,
+          })),
+        },
+      }),
+      {
+        loading: "Reverting…",
+        success: (r) =>
+          `Reverted ${r.restored} submission${r.restored === 1 ? "" : "s"}`,
+        error: (e: Error) => e.message || "Undo failed",
+        finally: () => {
+          undoStore.remove(entry.id);
+          toast.dismiss(entry.id);
+          qc.invalidateQueries({
+            queryKey: ["admin", "submissions", submissionKind],
+          });
+          qc.invalidateQueries({ queryKey: ["admin", "overview"] });
+        },
+      },
+    );
+  };
+
+  // Global keyboard shortcut: Ctrl+Z (or Cmd+Z on macOS) triggers the same
+  // undo action as clicking the Undo button on the most recent live entry.
+  // Ignored while the user is typing in an input/textarea/contentEditable so
+  // it doesn't hijack native text-editing undo.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const isUndo =
+        (e.ctrlKey || e.metaKey) &&
+        !e.shiftKey &&
+        !e.altKey &&
+        (e.key === "z" || e.key === "Z");
+      if (!isUndo) return;
+
+      const target = e.target as HTMLElement | null;
+      if (target) {
+        const tag = target.tagName;
+        if (
+          tag === "INPUT" ||
+          tag === "TEXTAREA" ||
+          tag === "SELECT" ||
+          target.isContentEditable
+        ) {
+          return;
+        }
+      }
+
+      const now = Date.now();
+      const live = undoStore
+        .list()
+        .filter((entry) => entry.expiresAt > now)
+        .sort((a, b) => b.expiresAt - a.expiresAt);
+      const next = live[0];
+      if (!next) return;
+
+      e.preventDefault();
+      runUndo(next);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [qc]);
+
   useEffect(() => {
     const shown = new Set<string>();
     for (const entry of entries) {
@@ -41,36 +115,7 @@ export function UndoToastHost() {
           onDismiss: () => undoStore.remove(entry.id),
           action: {
             label: "Undo",
-            onClick: () => {
-              if (entry.payload.kind !== "submissions") return;
-              const submissionKind = entry.payload.submissionKind;
-              toast.promise(
-                adminBulkRestoreSubmissions({
-                  data: {
-                    kind: submissionKind,
-                    rows: entry.payload.rows.map((r) => ({
-                      id: r.id,
-                      status: r.status as never,
-                      assigned_to: r.assigned_to,
-                    })),
-                  },
-                }),
-                {
-                  loading: "Reverting…",
-                  success: (r) =>
-                    `Reverted ${r.restored} submission${r.restored === 1 ? "" : "s"}`,
-                  error: (e: Error) => e.message || "Undo failed",
-                  finally: () => {
-                    undoStore.remove(entry.id);
-                    toast.dismiss(entry.id);
-                    qc.invalidateQueries({
-                      queryKey: ["admin", "submissions", submissionKind],
-                    });
-                    qc.invalidateQueries({ queryKey: ["admin", "overview"] });
-                  },
-                },
-              );
-            },
+            onClick: () => runUndo(entry),
           },
         },
       );
@@ -84,3 +129,4 @@ export function UndoToastHost() {
 
   return null;
 }
+
