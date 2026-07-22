@@ -154,6 +154,28 @@ function SubmissionsPage() {
               );
             })}
           </div>
+          <div
+            role="tablist"
+            aria-label="Sort"
+            className="inline-flex items-center rounded-md border bg-background p-0.5 text-xs"
+          >
+            {SORTS.map((s) => {
+              const active = sort === s.v;
+              return (
+                <button
+                  key={s.v}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setSort(s.v)}
+                  className={`rounded px-2 py-1 font-medium transition ${
+                    active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {s.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
