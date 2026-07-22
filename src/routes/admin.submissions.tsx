@@ -17,7 +17,15 @@ const STATUSES = ["new", "reviewing", "closed"] as const;
 const searchSchema = z.object({
   kind: fallback(z.enum(["franchise", "acquisitions", "contact"]), "franchise").default("franchise"),
   status: fallback(z.string(), "").default(""),
+  days: z.number().int().min(1).max(365).optional(),
 });
+
+const DAY_RANGES = [
+  { v: 7, label: "7d" },
+  { v: 14, label: "14d" },
+  { v: 30, label: "30d" },
+  { v: 90, label: "90d" },
+] as const;
 
 export const Route = createFileRoute("/admin/submissions")({
   validateSearch: zodValidator(searchSchema),
@@ -25,17 +33,19 @@ export const Route = createFileRoute("/admin/submissions")({
 });
 
 function SubmissionsPage() {
-  const { kind, status } = Route.useSearch();
+  const { kind, status, days } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/submissions" });
   const setKind = (k: Kind) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, kind: k }) });
   const setStatus = (s: string) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, status: s }) });
+  const setDays = (d: number | undefined) =>
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, days: d }) });
   const qc = useQueryClient();
 
   const { data, isFetching } = useQuery({
-    queryKey: ["admin", "submissions", kind, status],
-    queryFn: () => adminListSubmissions({ data: { kind, status: status || undefined, limit: 100 } }),
+    queryKey: ["admin", "submissions", kind, status, days ?? "all"],
+    queryFn: () => adminListSubmissions({ data: { kind, status: status || undefined, days, limit: 100 } }),
   });
 
   const updateMut = useMutation({
@@ -56,6 +66,35 @@ function SubmissionsPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold tracking-tight">Submissions</h1>
         <div className="flex items-center gap-2">
+          <div
+            role="tablist"
+            aria-label="Time range"
+            className="inline-flex items-center rounded-md border bg-background p-0.5 text-xs"
+          >
+            <button
+              role="tab"
+              aria-selected={!days}
+              onClick={() => setDays(undefined)}
+              className={`rounded px-2 py-1 font-medium transition ${
+                !days ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              All
+            </button>
+            {DAY_RANGES.map((r) => (
+              <button
+                key={r.v}
+                role="tab"
+                aria-selected={days === r.v}
+                onClick={() => setDays(r.v)}
+                className={`rounded px-2 py-1 font-medium transition ${
+                  days === r.v ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -68,6 +107,7 @@ function SubmissionsPage() {
           </select>
         </div>
       </div>
+
 
       <div className="flex gap-1 border-b">
         {TABS.map((t) => (
