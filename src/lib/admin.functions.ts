@@ -178,8 +178,19 @@ export const adminUpdateStatus = createServerFn({ method: "POST" })
       .update({ status: data.status })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(
+      context.supabase,
+      { id: context.userId, email: (context.claims as { email?: string } | undefined)?.email ?? null },
+      {
+        action: "update_status",
+        entity: table as AuditEntity,
+        entity_ids: [data.id],
+        diff: { status: data.status },
+      },
+    );
     return { ok: true };
   });
+
 
 // Bulk apply status and/or assignee to many rows of the same kind at once.
 // `assigned_to: null` explicitly unassigns; omitting the key leaves it unchanged.
