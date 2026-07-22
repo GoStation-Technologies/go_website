@@ -4,6 +4,7 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useEffect, useMemo, useState } from "react";
 import {
+  adminBulkRestoreSubmissions,
   adminBulkUpdateSubmissions,
   adminListStaff,
   adminListSubmissions,
