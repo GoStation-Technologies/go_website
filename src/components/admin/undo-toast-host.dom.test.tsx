@@ -219,4 +219,53 @@ describe("UndoToastHost", () => {
     });
     await waitFor(() => expect(undoStore.list()).toHaveLength(0));
   });
+
+  it("expires the persisted undo after 30 seconds: the Undo button disappears and localStorage is cleared", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      // Toaster mounted before host so its subscribe effect wins the race
+      // (same reason as the reload test above).
+      const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+      render(
+        <QueryClientProvider client={qc}>
+          <Toaster />
+          <UndoToastHost />
+        </QueryClientProvider>,
+      );
+
+      act(() => {
+        undoStore.push(
+          makeEntry({ id: "expire-entry", message: "Approved 2 submissions" }),
+        );
+      });
+
+      // Toast + Undo action are live at t=0.
+      expect(await screen.findByRole("button", { name: /undo/i })).toBeTruthy();
+      expect(
+        window.localStorage.getItem("gostation:undo-entries:v1"),
+      ).toContain("expire-entry");
+      expect(undoStore.list()).toHaveLength(1);
+
+      // Advance past the 30s expiry. Sonner's auto-close (`duration`) fires
+      // onAutoClose which removes the entry; the host's prune interval also
+      // sweeps it. Whichever wins, the observable outcome must be the same.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(31_000);
+      });
+
+      // Undo button is gone.
+      await waitFor(() =>
+        expect(screen.queryByRole("button", { name: /undo/i })).toBeNull(),
+      );
+      // Store is empty and localStorage has been cleared of the entry.
+      expect(undoStore.list()).toHaveLength(0);
+      const raw = window.localStorage.getItem("gostation:undo-entries:v1");
+      expect(raw === null || JSON.parse(raw).length === 0).toBe(true);
+
+      // Invoking the (gone) undo path would call restoreMock — it must not have.
+      expect(restoreMock).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });
