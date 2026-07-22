@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { UserMenu } from "@/components/site/user-menu";
 
 const NAV = [
   { to: "/about", key: "about" },
@@ -104,6 +105,7 @@ export function SiteHeader() {
               <ArrowUpRight className="ms-1 h-3.5 w-3.5" />
             </Link>
           </Button>
+          <UserMenu />
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
