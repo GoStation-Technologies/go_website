@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getMyStaffRoles } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { LogOut, LayoutDashboard, Inbox, MessageSquare, MapPin, Newspaper, Briefcase, ShieldAlert } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
