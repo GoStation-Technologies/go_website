@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { writeAudit, type AuditEntity } from "./audit";
+
 
 /**
  * Returns which staff roles the current user has (if any).
