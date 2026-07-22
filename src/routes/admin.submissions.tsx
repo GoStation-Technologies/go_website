@@ -10,7 +10,7 @@ import {
   adminListSubmissions,
   adminUpdateStatus,
 } from "@/lib/admin.functions";
-import { UndoToastContent } from "@/components/admin/undo-toast";
+import { undoStore } from "@/lib/undo-store";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -161,48 +161,30 @@ function SubmissionsPage() {
           : "reassigned";
       const kindAtCall = kind; // capture in case the user switches tabs
       const before = res.before ?? [];
-      // 30-second undo window: reapply the snapshotted per-row values.
-      const UNDO_MS = 30_000;
       const message = `${res.updated} submission${res.updated === 1 ? "" : "s"} ${label}`;
-      toast.success(
-        before.length > 0 ? (
-          <UndoToastContent message={message} durationMs={UNDO_MS} />
-        ) : (
-          message
-        ),
-        before.length > 0
-          ? {
-              duration: UNDO_MS,
-              action: {
-                label: "Undo",
-                onClick: () => {
-                  toast.promise(
-                    adminBulkRestoreSubmissions({
-                      data: {
-                        kind: kindAtCall,
-                        rows: before.map((r) => ({
-                          id: r.id,
-                          status: r.status as Status,
-                          assigned_to: r.assigned_to,
-                        })),
-                      },
-                    }),
-                    {
-                      loading: "Reverting…",
-                      success: (r) =>
-                        `Reverted ${r.restored} submission${r.restored === 1 ? "" : "s"}`,
-                      error: (e: Error) => e.message || "Undo failed",
-                      finally: () => {
-                        qc.invalidateQueries({ queryKey: ["admin", "submissions", kindAtCall] });
-                        qc.invalidateQueries({ queryKey: ["admin", "overview"] });
-                      },
-                    },
-                  );
-                },
-              },
-            }
-          : undefined,
-      );
+      if (before.length > 0) {
+        // Push into the persistent undo store; the global UndoToastHost owns
+        // rendering, countdown and the Undo action so it survives tab
+        // switches, route changes, and full page reloads within the window.
+        const UNDO_MS = 30_000;
+        undoStore.push({
+          id: `undo-submissions-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          message,
+          createdAt: Date.now(),
+          expiresAt: Date.now() + UNDO_MS,
+          payload: {
+            kind: "submissions",
+            submissionKind: kindAtCall,
+            rows: before.map((r) => ({
+              id: r.id,
+              status: r.status,
+              assigned_to: r.assigned_to,
+            })),
+          },
+        });
+      } else {
+        toast.success(message);
+      }
       setSelected(new Set());
       setConfirm(null);
       qc.invalidateQueries({ queryKey: ["admin", "submissions", kind] });
