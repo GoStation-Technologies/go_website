@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { adminListSubmissions, adminUpdateStatus } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -13,13 +14,23 @@ const TABS: { key: Kind; label: string }[] = [
 ];
 const STATUSES = ["new", "reviewing", "closed"] as const;
 
+const searchSchema = z.object({
+  kind: fallback(z.enum(["franchise", "acquisitions", "contact"]), "franchise").default("franchise"),
+  status: fallback(z.string(), "").default(""),
+});
+
 export const Route = createFileRoute("/admin/submissions")({
+  validateSearch: zodValidator(searchSchema),
   component: SubmissionsPage,
 });
 
 function SubmissionsPage() {
-  const [kind, setKind] = useState<Kind>("franchise");
-  const [status, setStatus] = useState<string>("");
+  const { kind, status } = Route.useSearch();
+  const navigate = useNavigate({ from: "/admin/submissions" });
+  const setKind = (k: Kind) =>
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, kind: k }) });
+  const setStatus = (s: string) =>
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, status: s }) });
   const qc = useQueryClient();
 
   const { data, isFetching } = useQuery({
