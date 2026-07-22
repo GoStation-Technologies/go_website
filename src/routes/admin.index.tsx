@@ -145,7 +145,8 @@ function KpiCard({ kpi }: { kpi: Kpi }) {
   const Icon = kpi.icon;
   return (
     <Link
-      to={kpi.href as never}
+      to={kpi.to as never}
+      search={kpi.search as never}
       className="group rounded-xl border bg-background p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
     >
       <div className="flex items-center justify-between">
