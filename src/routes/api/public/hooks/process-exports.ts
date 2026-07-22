@@ -62,8 +62,25 @@ export const Route = createFileRoute("/api/public/hooks/process-exports")({
               "lang",
               "metadata",
             ];
+
+            // Count total up front so the UI can render a progress bar.
+            let countQ = supabaseAdmin
+              .from("abuse_events")
+              .select("id", { count: "exact", head: true })
+              .gte("created_at", since);
+            if (reason) countQ = countQ.eq("reason", reason);
+            const { count: totalCount, error: countErr } = await countQ;
+            if (countErr) throw new Error(countErr.message);
+            const totalRows = Math.min(totalCount ?? 0, MAX_ROWS);
+
+            await supabaseAdmin
+              .from("export_jobs")
+              .update({ total_rows: totalRows, processed_rows: 0, pages_processed: 0 })
+              .eq("id", job.id);
+
             const chunks: string[] = [headers.join(",")];
             let fetched = 0;
+            let pages = 0;
             let from = 0;
 
             while (fetched < MAX_ROWS) {
@@ -86,6 +103,14 @@ export const Route = createFileRoute("/api/public/hooks/process-exports")({
                 );
               }
               fetched += rows.length;
+              pages += 1;
+
+              // Push progress so the panel's polling picks it up.
+              await supabaseAdmin
+                .from("export_jobs")
+                .update({ processed_rows: fetched, pages_processed: pages })
+                .eq("id", job.id);
+
               if (rows.length < PAGE_SIZE) break;
               from += PAGE_SIZE;
             }
@@ -105,6 +130,9 @@ export const Route = createFileRoute("/api/public/hooks/process-exports")({
               .update({
                 status: "ready",
                 row_count: fetched,
+                processed_rows: fetched,
+                total_rows: totalRows || fetched,
+                pages_processed: pages,
                 storage_path: path,
                 finished_at: new Date().toISOString(),
                 error: null,

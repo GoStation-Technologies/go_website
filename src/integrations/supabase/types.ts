@@ -275,10 +275,13 @@ export type Database = {
           finished_at: string | null
           id: string
           kind: string
+          pages_processed: number
+          processed_rows: number
           row_count: number | null
           started_at: string | null
           status: Database["public"]["Enums"]["export_job_status"]
           storage_path: string | null
+          total_rows: number | null
           updated_at: string
           user_id: string
         }
@@ -291,10 +294,13 @@ export type Database = {
           finished_at?: string | null
           id?: string
           kind: string
+          pages_processed?: number
+          processed_rows?: number
           row_count?: number | null
           started_at?: string | null
           status?: Database["public"]["Enums"]["export_job_status"]
           storage_path?: string | null
+          total_rows?: number | null
           updated_at?: string
           user_id: string
         }
@@ -307,10 +313,13 @@ export type Database = {
           finished_at?: string | null
           id?: string
           kind?: string
+          pages_processed?: number
+          processed_rows?: number
           row_count?: number | null
           started_at?: string | null
           status?: Database["public"]["Enums"]["export_job_status"]
           storage_path?: string | null
+          total_rows?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -1023,10 +1032,13 @@ export type Database = {
           finished_at: string | null
           id: string
           kind: string
+          pages_processed: number
+          processed_rows: number
           row_count: number | null
           started_at: string | null
           status: Database["public"]["Enums"]["export_job_status"]
           storage_path: string | null
+          total_rows: number | null
           updated_at: string
           user_id: string
         }[]
