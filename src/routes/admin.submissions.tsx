@@ -345,7 +345,7 @@ function SubmissionsPage() {
               size="sm"
               variant="outline"
               disabled={bulkMut.isPending}
-              onClick={() => bulkMut.mutate({ status: "closed" })}
+              onClick={() => setConfirm({ kind: "status", status: "closed" })}
             >
               Close
             </Button>
