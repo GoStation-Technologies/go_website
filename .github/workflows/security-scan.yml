@@ -246,6 +246,9 @@ jobs:
             echo ""
             echo "- **Commit:** \`${COMMIT}\`"
             echo "- **Workflow run:** ${RUN_URL}"
+            if [ -n "${ARTIFACT_URL:-}" ]; then
+              echo "- **Regression report artifact:** [regressions.json + regressions.csv](${ARTIFACT_URL})"
+            fi
             if [ -n "${SLACK_CHANNEL_URL:-}" ]; then
               echo "- **Slack channel:** ${SLACK_CHANNEL_URL}"
             else
