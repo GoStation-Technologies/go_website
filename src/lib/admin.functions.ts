@@ -603,8 +603,8 @@ export const adminListAuditLog = createServerFn({ method: "POST" })
       action: string;
       entity: string;
       entity_ids: string[] | null;
-      diff: unknown;
-      meta: unknown;
+      diff: unknown | null;
+      meta: unknown | null;
     };
     return { rows: (rows ?? []) as AuditRow[], total: (count ?? 0) as number, page: data.page, pageSize: data.pageSize };
   });
