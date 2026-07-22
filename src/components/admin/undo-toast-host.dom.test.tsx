@@ -57,10 +57,15 @@ function renderHost() {
 beforeEach(() => {
   restoreMock.mockClear();
   // jsdom doesn't implement pointer capture; sonner's Undo button uses it.
-  if (!("setPointerCapture" in Element.prototype)) {
-    Element.prototype.setPointerCapture = () => {};
-    Element.prototype.releasePointerCapture = () => {};
-    Element.prototype.hasPointerCapture = () => false;
+  const proto = Element.prototype as unknown as {
+    setPointerCapture?: (id: number) => void;
+    releasePointerCapture?: (id: number) => void;
+    hasPointerCapture?: (id: number) => boolean;
+  };
+  if (!proto.setPointerCapture) {
+    proto.setPointerCapture = () => {};
+    proto.releasePointerCapture = () => {};
+    proto.hasPointerCapture = () => false;
   }
   // Fresh localStorage per test so the persistent store starts empty.
   window.localStorage.clear();
