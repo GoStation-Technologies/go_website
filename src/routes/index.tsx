@@ -105,42 +105,33 @@ function HomePage() {
 
   return (
     <SiteLayout>
-      {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden bg-hero-ink text-primary-foreground">
-        <div className="absolute inset-0 bg-grid-ink opacity-50" aria-hidden />
-        <div
-          className="pointer-events-none absolute -top-24 end-[-6rem] h-[36rem] w-[36rem] rounded-full bg-ember opacity-20 blur-3xl animate-pulse-glow"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute bottom-[-10rem] start-[-6rem] h-[28rem] w-[28rem] rounded-full bg-primary opacity-40 blur-3xl"
-          aria-hidden
-        />
-
-        <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 md:pb-32 md:pt-24">
-          <div className="grid gap-14 md:grid-cols-[1.15fr_1fr] md:items-center">
-            <div className="animate-rise-in">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-foreground/85 backdrop-blur">
-                <Trophy className="h-3.5 w-3.5 text-ember-glow" />
-                {t("home.awardBadge")}
+      {/* ============ HERO — airy editorial split ============ */}
+      <section className="relative border-b border-border/60 bg-background">
+        <div className="mx-auto grid max-w-[1440px] items-stretch md:grid-cols-2">
+          {/* Left — copy */}
+          <div className="flex flex-col justify-center px-6 py-20 md:px-14 md:py-28 lg:px-20 lg:py-32">
+            <div className="max-w-xl space-y-8 animate-rise-in">
+              <div className="inline-flex items-center gap-3">
+                <span className="h-px w-8 bg-accent" />
+                <span className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
+                  {t("home.awardBadge")}
+                </span>
               </div>
 
-              <h1 className="mt-6 text-balance text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[0.95] tracking-tight">
+              <h1 className="text-balance font-display text-[clamp(2.75rem,5.6vw,5rem)] font-extrabold leading-[1.02] tracking-tight text-foreground">
                 <span className="block">{t("home.heroLine1")}</span>
-                <span className="block bg-gradient-to-r from-ember-glow via-ember to-ember-glow bg-clip-text text-transparent">
-                  {t("home.heroLine2")}
-                </span>
+                <span className="block text-accent">{t("home.heroLine2")}</span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-primary-foreground/75">
+              <p className="max-w-lg text-pretty text-lg leading-relaxed text-foreground/70">
                 {t("home.heroSub")}
               </p>
 
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 pt-2">
                 <Button
                   asChild
                   size="lg"
-                  className="h-12 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:bg-accent/90"
+                  className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
                 >
                   <Link to="/franchise">
                     {t("home.ctaFranchise")}
@@ -151,7 +142,7 @@ function HomePage() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-12 rounded-full border-white/25 bg-transparent px-6 text-sm font-semibold text-primary-foreground hover:bg-white/10"
+                  className="h-12 rounded-lg border-2 border-foreground bg-transparent px-7 text-sm font-semibold text-foreground hover:bg-foreground hover:text-background"
                 >
                   <Link to="/stations">
                     <MapPin className="me-2 h-4 w-4" />
@@ -160,44 +151,44 @@ function HomePage() {
                 </Button>
               </div>
 
-              <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-primary-foreground/60">
-                <div className="flex -space-x-2 rtl:space-x-reverse">
-                  {["A", "B", "C", "D"].map((c) => (
-                    <div
-                      key={c}
-                      className="grid h-8 w-8 place-items-center rounded-full border border-white/20 bg-primary text-[11px] font-bold text-ember-glow"
-                    >
-                      {c}
-                    </div>
-                  ))}
-                </div>
-                <div className="uppercase tracking-[0.18em]">{t("home.trustedBy")}</div>
+              <div className="mt-6 flex flex-wrap items-center gap-8 border-t border-border pt-8">
+                {stats.slice(0, 3).map((s) => (
+                  <div key={s.key} className="flex flex-col">
+                    <span className="font-display text-3xl font-extrabold tracking-tight text-foreground">
+                      {s.val}
+                    </span>
+                    <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                      {t(`home.${s.key}`)}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
 
-            {/* Hero right — logo lockup + KPI */}
-            <div className="relative">
-              <div className="relative mx-auto aspect-square w-full max-w-md">
-                {/* Ambient rings */}
-                <div className="absolute inset-0 rounded-full border border-white/10 animate-pulse-glow" />
-                <div className="absolute inset-8 rounded-full border border-white/10" />
-                <div className="absolute inset-16 rounded-full border border-white/5" />
-                {/* Logo */}
-                <div className="absolute inset-0 grid place-items-center">
-                  <div className="relative animate-float-slow">
-                    <div className="absolute inset-0 -m-8 rounded-full bg-ember/25 blur-3xl" aria-hidden />
-                    <img
-                      src={logoAsset.url}
-                      alt="GoStation"
-                      className="relative h-52 w-52 drop-shadow-[0_20px_50px_rgba(255,107,0,0.35)]"
-                    />
-                  </div>
+          {/* Right — visual */}
+          <div className="relative min-h-[420px] overflow-hidden bg-secondary md:min-h-[720px]">
+            <img
+              src={heroStation}
+              alt="GoStation flagship canopy in Saudi Arabia"
+              width={1600}
+              height={1600}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-tr from-foreground/10 via-transparent to-transparent" />
+
+            {/* Floating KPI card */}
+            <div className="absolute bottom-8 start-8 max-w-[280px] rounded-2xl border border-white/40 bg-white/95 p-5 shadow-elegant backdrop-blur">
+              <div className="flex items-center gap-4">
+                <div className="grid h-11 w-11 place-items-center rounded-full bg-accent text-accent-foreground">
+                  <Zap className="h-5 w-5" />
                 </div>
-                {/* Orbiting KPI chips */}
-                <KpiChip className="absolute start-0 top-8" label={t("home.statsStations")} val="180+" />
-                <KpiChip className="absolute end-0 top-24" label={t("home.statsRegions")} val="13" />
-                <KpiChip className="absolute start-4 bottom-16" label={t("home.statsYears")} val="8" />
-                <KpiChip className="absolute end-4 bottom-4" label={t("home.statsDaily")} val="50k+" />
+                <div>
+                  <div className="font-display text-base font-bold text-ink">
+                    {t("home.alwaysReady")}
+                  </div>
+                  <div className="text-xs text-ink/60">{t("home.alwaysReadySub")}</div>
+                </div>
               </div>
             </div>
           </div>
