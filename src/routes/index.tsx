@@ -14,13 +14,13 @@ import {
   Store,
   Building2,
   Star,
-  Trophy,
   Sparkles,
   ShieldCheck,
   Leaf,
   Handshake,
+  Zap,
 } from "lucide-react";
-import logoAsset from "@/assets/gostation-logo.png.asset.json";
+import heroStation from "@/assets/hero-station.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -105,42 +105,33 @@ function HomePage() {
 
   return (
     <SiteLayout>
-      {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden bg-hero-ink text-primary-foreground">
-        <div className="absolute inset-0 bg-grid-ink opacity-50" aria-hidden />
-        <div
-          className="pointer-events-none absolute -top-24 end-[-6rem] h-[36rem] w-[36rem] rounded-full bg-ember opacity-20 blur-3xl animate-pulse-glow"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute bottom-[-10rem] start-[-6rem] h-[28rem] w-[28rem] rounded-full bg-primary opacity-40 blur-3xl"
-          aria-hidden
-        />
-
-        <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 md:pb-32 md:pt-24">
-          <div className="grid gap-14 md:grid-cols-[1.15fr_1fr] md:items-center">
-            <div className="animate-rise-in">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-foreground/85 backdrop-blur">
-                <Trophy className="h-3.5 w-3.5 text-ember-glow" />
-                {t("home.awardBadge")}
+      {/* ============ HERO — airy editorial split ============ */}
+      <section className="relative border-b border-border/60 bg-background">
+        <div className="mx-auto grid max-w-[1440px] items-stretch md:grid-cols-2">
+          {/* Left — copy */}
+          <div className="flex flex-col justify-center px-6 py-20 md:px-14 md:py-28 lg:px-20 lg:py-32">
+            <div className="max-w-xl space-y-8 animate-rise-in">
+              <div className="inline-flex items-center gap-3">
+                <span className="h-px w-8 bg-accent" />
+                <span className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
+                  {t("home.awardBadge")}
+                </span>
               </div>
 
-              <h1 className="mt-6 text-balance text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[0.95] tracking-tight">
+              <h1 className="text-balance font-display text-[clamp(2.75rem,5.6vw,5rem)] font-extrabold leading-[1.02] tracking-tight text-foreground">
                 <span className="block">{t("home.heroLine1")}</span>
-                <span className="block bg-gradient-to-r from-ember-glow via-ember to-ember-glow bg-clip-text text-transparent">
-                  {t("home.heroLine2")}
-                </span>
+                <span className="block text-accent">{t("home.heroLine2")}</span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-primary-foreground/75">
+              <p className="max-w-lg text-pretty text-lg leading-relaxed text-foreground/70">
                 {t("home.heroSub")}
               </p>
 
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 pt-2">
                 <Button
                   asChild
                   size="lg"
-                  className="h-12 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:bg-accent/90"
+                  className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
                 >
                   <Link to="/franchise">
                     {t("home.ctaFranchise")}
@@ -151,7 +142,7 @@ function HomePage() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-12 rounded-full border-white/25 bg-transparent px-6 text-sm font-semibold text-primary-foreground hover:bg-white/10"
+                  className="h-12 rounded-lg border-2 border-foreground bg-transparent px-7 text-sm font-semibold text-foreground hover:bg-foreground hover:text-background"
                 >
                   <Link to="/stations">
                     <MapPin className="me-2 h-4 w-4" />
@@ -160,44 +151,44 @@ function HomePage() {
                 </Button>
               </div>
 
-              <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-primary-foreground/60">
-                <div className="flex -space-x-2 rtl:space-x-reverse">
-                  {["A", "B", "C", "D"].map((c) => (
-                    <div
-                      key={c}
-                      className="grid h-8 w-8 place-items-center rounded-full border border-white/20 bg-primary text-[11px] font-bold text-ember-glow"
-                    >
-                      {c}
-                    </div>
-                  ))}
-                </div>
-                <div className="uppercase tracking-[0.18em]">{t("home.trustedBy")}</div>
+              <div className="mt-6 flex flex-wrap items-center gap-8 border-t border-border pt-8">
+                {stats.slice(0, 3).map((s) => (
+                  <div key={s.key} className="flex flex-col">
+                    <span className="font-display text-3xl font-extrabold tracking-tight text-foreground">
+                      {s.val}
+                    </span>
+                    <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                      {t(`home.${s.key}`)}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
 
-            {/* Hero right — logo lockup + KPI */}
-            <div className="relative">
-              <div className="relative mx-auto aspect-square w-full max-w-md">
-                {/* Ambient rings */}
-                <div className="absolute inset-0 rounded-full border border-white/10 animate-pulse-glow" />
-                <div className="absolute inset-8 rounded-full border border-white/10" />
-                <div className="absolute inset-16 rounded-full border border-white/5" />
-                {/* Logo */}
-                <div className="absolute inset-0 grid place-items-center">
-                  <div className="relative animate-float-slow">
-                    <div className="absolute inset-0 -m-8 rounded-full bg-ember/25 blur-3xl" aria-hidden />
-                    <img
-                      src={logoAsset.url}
-                      alt="GoStation"
-                      className="relative h-52 w-52 drop-shadow-[0_20px_50px_rgba(255,107,0,0.35)]"
-                    />
-                  </div>
+          {/* Right — visual */}
+          <div className="relative min-h-[420px] overflow-hidden bg-secondary md:min-h-[720px]">
+            <img
+              src={heroStation}
+              alt="GoStation flagship canopy in Saudi Arabia"
+              width={1600}
+              height={1600}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-tr from-foreground/10 via-transparent to-transparent" />
+
+            {/* Floating KPI card */}
+            <div className="absolute bottom-8 start-8 max-w-[280px] rounded-2xl border border-white/40 bg-white/95 p-5 shadow-elegant backdrop-blur">
+              <div className="flex items-center gap-4">
+                <div className="grid h-11 w-11 place-items-center rounded-full bg-accent text-accent-foreground">
+                  <Zap className="h-5 w-5" />
                 </div>
-                {/* Orbiting KPI chips */}
-                <KpiChip className="absolute start-0 top-8" label={t("home.statsStations")} val="180+" />
-                <KpiChip className="absolute end-0 top-24" label={t("home.statsRegions")} val="13" />
-                <KpiChip className="absolute start-4 bottom-16" label={t("home.statsYears")} val="8" />
-                <KpiChip className="absolute end-4 bottom-4" label={t("home.statsDaily")} val="50k+" />
+                <div>
+                  <div className="font-display text-base font-bold text-ink">
+                    {t("home.alwaysReady")}
+                  </div>
+                  <div className="text-xs text-ink/60">{t("home.alwaysReadySub")}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -280,19 +271,18 @@ function HomePage() {
       </section>
 
       {/* ============ PULL QUOTE ============ */}
-      <section className="relative overflow-hidden bg-hero-ink py-24 text-primary-foreground md:py-32">
-        <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
-        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5">
-            <span className="font-display text-3xl text-ember">"</span>
+      <section className="border-y border-border/60 bg-secondary/40 py-24 md:py-32">
+        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-background text-accent">
+            <span className="font-display text-2xl leading-none">"</span>
           </div>
-          <blockquote className="mx-auto mt-8 max-w-4xl text-balance text-3xl font-medium leading-[1.25] md:text-4xl lg:text-5xl">
+          <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {t("home.quote")}
           </blockquote>
-          <div className="mt-8 text-sm uppercase tracking-[0.2em] text-ember-glow">
+          <div className="mt-8 text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
             {t("home.quoteAuthor")}
           </div>
-          <div className="mt-1 text-xs text-primary-foreground/60">{t("home.quoteRole")}</div>
+          <div className="mt-1 text-xs text-muted-foreground">{t("home.quoteRole")}</div>
         </div>
       </section>
 
@@ -420,15 +410,20 @@ function HomePage() {
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {(news.data ?? []).map((n) => (
             <Link key={n.id} to="/media/$slug" params={{ slug: n.slug }} className="group block">
-              <article className="h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
-                <div className="relative aspect-[16/10] overflow-hidden bg-hero-ink">
-                  <div className="absolute inset-0 bg-grid-ink opacity-40" />
-                  <div className="absolute inset-0 grid place-items-center">
-                    <img src={logoAsset.url} alt="" className="h-16 w-16 opacity-30" />
+              <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
+                {n.cover_url ? (
+                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+                    <img src={n.cover_url} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
                   </div>
-                  <div className="absolute end-3 top-3 rounded-full bg-ember px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
+                ) : (
+                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+                    <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
+                  </div>
+                )}
+                <div className="pointer-events-none absolute end-3 top-3 z-10">
+                  <span className="rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
                     {t("media.news")}
-                  </div>
+                  </span>
                 </div>
                 <div className="p-6">
                   <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -491,21 +486,17 @@ function HomePage() {
         </section>
       )}
 
-      {/* ============ FINAL CTA ============ */}
+      {/* ============ FINAL CTA — airy band ============ */}
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl bg-hero-ink px-8 py-16 text-primary-foreground shadow-elegant md:px-16 md:py-20">
-          <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
-          <div
-            className="pointer-events-none absolute -end-32 -top-32 h-96 w-96 rounded-full bg-ember opacity-25 blur-3xl animate-pulse-glow"
-            aria-hidden
-          />
-          <div className="relative grid gap-8 md:grid-cols-[1.4fr_auto] md:items-center">
+        <div className="relative overflow-hidden rounded-[2rem] bg-secondary px-8 py-16 md:px-16 md:py-20">
+          <div className="pointer-events-none absolute -end-24 -bottom-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" aria-hidden />
+          <div className="relative grid gap-10 md:grid-cols-[1.4fr_auto] md:items-center">
             <div>
-              <div className="eyebrow text-ember-glow">{t("home.ctaBannerEyebrow")}</div>
-              <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
+              <div className="eyebrow">{t("home.ctaBannerEyebrow")}</div>
+              <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-foreground md:text-5xl">
                 {t("home.ctaBanner")}
               </h2>
-              <p className="mt-4 max-w-xl text-lg text-primary-foreground/75">
+              <p className="mt-4 max-w-xl text-lg text-foreground/70">
                 {t("home.ctaBannerText")}
               </p>
             </div>
@@ -513,7 +504,7 @@ function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground shadow-glow hover:bg-accent/90"
+                className="h-12 rounded-lg bg-foreground px-7 text-sm font-semibold text-background transition hover:bg-accent hover:text-accent-foreground"
               >
                 <Link to="/franchise">{t("nav.franchise")}</Link>
               </Button>
@@ -521,7 +512,7 @@ function HomePage() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-12 rounded-full border-white/25 bg-transparent px-6 text-sm font-semibold text-primary-foreground hover:bg-white/10"
+                className="h-12 rounded-lg border-2 border-foreground/80 bg-transparent px-7 text-sm font-semibold text-foreground hover:bg-foreground hover:text-background"
               >
                 <Link to="/acquisitions">
                   <MapPin className="me-2 h-4 w-4" /> {t("nav.acquisitions")}
@@ -535,20 +526,6 @@ function HomePage() {
   );
 }
 
-function KpiChip({ className = "", label, val }: { className?: string; label: string; val: string }) {
-  return (
-    <div className={`glass-ink rounded-2xl px-3.5 py-2.5 shadow-elegant ${className}`}>
-      <div className="font-display text-xl font-black leading-none text-primary-foreground">
-        <span className="bg-gradient-to-r from-ember-glow to-ember bg-clip-text text-transparent">
-          {val}
-        </span>
-      </div>
-      <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.14em] text-primary-foreground/70">
-        {label}
-      </div>
-    </div>
-  );
-}
 
 function ServiceCard({
   className = "",

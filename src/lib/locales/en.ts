@@ -49,6 +49,8 @@ export const en = {
     statsRegions: "Regions",
     statsYears: "Years of growth",
     statsDaily: "Daily customers",
+    alwaysReady: "Always ready",
+    alwaysReadySub: "24/7 service across the Kingdom",
     whyTitle: "Built for everyone",
     whyCustomer: "For customers",
     whyCustomerText: "Proximity, variety of services, and competitive pricing at every station.",
