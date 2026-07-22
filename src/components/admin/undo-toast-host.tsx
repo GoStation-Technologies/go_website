@@ -122,12 +122,6 @@ export function UndoToastHost() {
     return () => window.removeEventListener("keydown", handler);
   }, [qc]);
 
-  // Live-region announcement text. Updated only when a new undo entry
-  // appears (not on every countdown tick), so screen readers hear the
-  // undo opportunity exactly once per bulk action.
-  const [announcement, setAnnouncement] = useState("");
-  const announcedRef = useRef<Set<string>>(new Set());
-
   useEffect(() => {
     const shown = new Set<string>();
     for (const entry of entries) {
@@ -137,10 +131,11 @@ export function UndoToastHost() {
 
       if (!announcedRef.current.has(entry.id)) {
         announcedRef.current.add(entry.id);
-        setAnnouncement(
+        announce(
           `${entry.message}. Press Control or Command Z, or activate the Undo button within 30 seconds to revert.`,
         );
       }
+
 
       // sonner de-dupes by id: subsequent calls with the same id just update
       // the existing toast (safe to call on every render pass).
