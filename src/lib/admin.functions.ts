@@ -423,12 +423,23 @@ export const adminListStations = createServerFn({ method: "GET" })
     return { rows: data ?? [] };
   });
 
+const auditActor = (context: { userId: string; claims: unknown }) => ({
+  id: context.userId,
+  email: (context.claims as { email?: string } | undefined)?.email ?? null,
+});
+
 export const adminUpsertStation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => StationInput.parse(raw))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("stations").upsert(data);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "upsert",
+      entity: "stations",
+      entity_ids: data.id ? [data.id] : null,
+      diff: data,
+    });
     return { ok: true };
   });
 
@@ -438,6 +449,11 @@ export const adminDeleteStation = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("stations").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "delete",
+      entity: "stations",
+      entity_ids: [data.id],
+    });
     return { ok: true };
   });
 
@@ -474,6 +490,12 @@ export const adminUpsertNews = createServerFn({ method: "POST" })
     const payload = { ...data, published_at: data.is_published && !data.published_at ? new Date().toISOString() : data.published_at };
     const { error } = await context.supabase.from("news_articles").upsert(payload);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "upsert",
+      entity: "news_articles",
+      entity_ids: data.id ? [data.id] : null,
+      diff: payload,
+    });
     return { ok: true };
   });
 
@@ -483,6 +505,11 @@ export const adminDeleteNews = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("news_articles").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "delete",
+      entity: "news_articles",
+      entity_ids: [data.id],
+    });
     return { ok: true };
   });
 
@@ -515,6 +542,12 @@ export const adminUpsertJob = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("job_openings").upsert(data);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "upsert",
+      entity: "job_openings",
+      entity_ids: data.id ? [data.id] : null,
+      diff: data,
+    });
     return { ok: true };
   });
 
@@ -524,7 +557,13 @@ export const adminDeleteJob = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("job_openings").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
+    await writeAudit(context.supabase, auditActor(context), {
+      action: "delete",
+      entity: "job_openings",
+      entity_ids: [data.id],
+    });
     return { ok: true };
   });
+
 
 
