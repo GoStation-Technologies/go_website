@@ -13,12 +13,19 @@ const TABS: { key: Kind; label: string }[] = [
   { key: "contact", label: "Contact" },
 ];
 const STATUSES = ["new", "reviewing", "closed"] as const;
+const SORTS = [
+  { v: "newest", label: "Newest" },
+  { v: "oldest", label: "Oldest" },
+  { v: "relevance", label: "Relevance" },
+] as const;
+type Sort = (typeof SORTS)[number]["v"];
 
 const searchSchema = z.object({
   kind: fallback(z.enum(["franchise", "acquisitions", "contact"]), "franchise").default("franchise"),
   status: fallback(z.string(), "").default(""),
   days: z.number().int().min(1).max(365).optional(),
   page: fallback(z.number().int().min(1), 1).default(1),
+  sort: fallback(z.enum(["newest", "oldest", "relevance"]), "newest").default("newest"),
 });
 
 const PAGE_SIZE = 25;
@@ -36,26 +43,29 @@ export const Route = createFileRoute("/admin/submissions")({
 });
 
 function SubmissionsPage() {
-  const { kind, status, days, page } = Route.useSearch();
+  const { kind, status, days, page, sort } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/submissions" });
-  // Any filter change resets page to 1 to avoid landing past the last page.
+  // Any filter/sort change resets page to 1 to avoid landing past the last page.
   const setKind = (k: Kind) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, kind: k, page: 1 }) });
   const setStatus = (s: string) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, status: s, page: 1 }) });
   const setDays = (d: number | undefined) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, days: d, page: 1 }) });
+  const setSort = (s: Sort) =>
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, sort: s, page: 1 }) });
   const setPage = (p: number) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, page: p }) });
   const qc = useQueryClient();
 
   const { data, isFetching } = useQuery({
-    queryKey: ["admin", "submissions", kind, status, days ?? "all", page],
+    queryKey: ["admin", "submissions", kind, status, days ?? "all", page, sort],
     queryFn: () =>
       adminListSubmissions({
-        data: { kind, status: status || undefined, days, limit: PAGE_SIZE, page },
+        data: { kind, status: status || undefined, days, limit: PAGE_SIZE, page, sort },
       }),
   });
+
 
   const updateMut = useMutation({
     mutationFn: (args: { id: string; status: (typeof STATUSES)[number] }) =>
@@ -140,6 +150,28 @@ function SubmissionsPage() {
                 >
                   <span className={`h-1.5 w-1.5 rounded-full ${dot}`} aria-hidden />
                   {s}
+                </button>
+              );
+            })}
+          </div>
+          <div
+            role="tablist"
+            aria-label="Sort"
+            className="inline-flex items-center rounded-md border bg-background p-0.5 text-xs"
+          >
+            {SORTS.map((s) => {
+              const active = sort === s.v;
+              return (
+                <button
+                  key={s.v}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setSort(s.v)}
+                  className={`rounded px-2 py-1 font-medium transition ${
+                    active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {s.label}
                 </button>
               );
             })}
