@@ -190,8 +190,11 @@ describe("UndoToastHost", () => {
     const qc2 = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     render(
       <QueryClientProvider client={qc2}>
-        <UndoToastHost />
+        {/* Toaster mounts first so its subscribe effect runs before the host
+            dispatches rehydrated toasts (React fires effects bottom-up, so the
+            first child's effect runs first). */}
         <Toaster />
+        <UndoToastHost />
       </QueryClientProvider>,
     );
 
