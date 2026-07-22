@@ -17,11 +17,17 @@ export const getMyStaffRoles = createServerFn({ method: "GET" })
     return { roles: (data ?? []).map((r) => r.role as string) };
   });
 
+const OverviewInput = z.object({
+  days: z.number().int().min(1).max(90).default(14),
+}).optional();
+
 export const adminOverviewStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator((data: unknown) => OverviewInput.parse(data))
+  .handler(async ({ data, context }) => {
     const s = context.supabase;
-    const since14 = new Date(Date.now() - 14 * 24 * 3600_000).toISOString();
+    const days = data?.days ?? 14;
+    const sinceRange = new Date(Date.now() - days * 24 * 3600_000).toISOString();
     const since24h = new Date(Date.now() - 24 * 3600_000).toISOString();
     const [
       stations, franchise, acq, contact, chats24,
@@ -37,14 +43,14 @@ export const adminOverviewStats = createServerFn({ method: "GET" })
       s.from("job_openings").select("id", { count: "exact", head: true }).eq("is_active", true),
       s.from("abuse_events").select("id", { count: "exact", head: true }).gte("created_at", since24h),
       s.from("export_jobs").select("id", { count: "exact", head: true }).in("status", ["queued", "processing"]),
-      s.from("chatbot_messages").select("created_at").gte("created_at", since14),
-      s.from("franchise_applications").select("created_at").gte("created_at", since14),
-      s.from("abuse_events").select("created_at").gte("created_at", since14),
+      s.from("chatbot_messages").select("created_at").gte("created_at", sinceRange),
+      s.from("franchise_applications").select("created_at").gte("created_at", sinceRange),
+      s.from("abuse_events").select("created_at").gte("created_at", sinceRange),
     ]);
 
     const bucketize = (rows: { created_at: string }[] | null | undefined) => {
       const map = new Map<string, number>();
-      for (let i = 13; i >= 0; i--) {
+      for (let i = days - 1; i >= 0; i--) {
         const d = new Date(Date.now() - i * 24 * 3600_000).toISOString().slice(0, 10);
         map.set(d, 0);
       }
@@ -56,6 +62,7 @@ export const adminOverviewStats = createServerFn({ method: "GET" })
     };
 
     return {
+      days,
       stations: stations.count ?? 0,
       pendingFranchise: franchise.count ?? 0,
       pendingAcquisitions: acq.count ?? 0,
