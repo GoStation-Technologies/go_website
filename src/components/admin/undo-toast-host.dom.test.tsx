@@ -148,4 +148,63 @@ describe("UndoToastHost", () => {
     // effects can add a handful. Anything unbounded (>10) means a loop.
     expect(delta).toBeLessThanOrEqual(4);
   });
+
+  it("survives a full page reload within the 30s window: the toast and working Undo re-appear from localStorage", async () => {
+    const user = userEvent.setup();
+
+    // First "page load": push an undo entry, confirm it renders, then unmount
+    // as if the tab were closed / navigated away.
+    const first = renderHost();
+    const payload = {
+      kind: "submissions" as const,
+      submissionKind: "contact" as const,
+      rows: [
+        { id: "row-r1", status: "new", assigned_to: null },
+        { id: "row-r2", status: "new", assigned_to: "user-2" },
+      ],
+    };
+    act(() => {
+      undoStore.push(
+        makeEntry({ id: "reload-entry", message: "Closed 2 submissions", payload }),
+      );
+    });
+    expect(await screen.findByText("Closed 2 submissions")).toBeTruthy();
+
+    // Confirm the entry is durably in localStorage (this is what survives reload).
+    const raw = window.localStorage.getItem("gostation:undo-entries:v1");
+    expect(raw).toBeTruthy();
+    expect(JSON.parse(raw!)[0].id).toBe("reload-entry");
+
+    first.unmount();
+    cleanup();
+
+    // Simulate the reload: drop the module's in-memory cache so the next read
+    // re-hydrates from localStorage exactly like a fresh page would.
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: "gostation:undo-entries:v1" }),
+    );
+
+    // Second "page load": fresh QueryClient + host, same localStorage.
+    renderHost();
+
+    // Toast rehydrates from persisted store with the original message + countdown.
+    expect(await screen.findByText("Closed 2 submissions")).toBeTruthy();
+    expect(await screen.findByText(/^\d+s$/)).toBeTruthy();
+
+    // And Undo still works end-to-end against the restored payload.
+    const undoBtn = await screen.findByRole("button", { name: /undo/i });
+    await user.click(undoBtn);
+
+    await waitFor(() => expect(restoreMock).toHaveBeenCalledTimes(1));
+    expect(restoreMock).toHaveBeenCalledWith({
+      data: {
+        kind: "contact",
+        rows: [
+          { id: "row-r1", status: "new", assigned_to: null },
+          { id: "row-r2", status: "new", assigned_to: "user-2" },
+        ],
+      },
+    });
+    await waitFor(() => expect(undoStore.list()).toHaveLength(0));
+  });
 });
