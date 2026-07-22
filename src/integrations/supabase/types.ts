@@ -52,6 +52,7 @@ export type Database = {
       }
       acquisition_requests: {
         Row: {
+          assigned_to: string | null
           avg_daily_sales_sar: number | null
           city: string | null
           created_at: string
@@ -75,6 +76,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          assigned_to?: string | null
           avg_daily_sales_sar?: number | null
           city?: string | null
           created_at?: string
@@ -98,6 +100,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          assigned_to?: string | null
           avg_daily_sales_sar?: number | null
           city?: string | null
           created_at?: string
@@ -228,6 +231,7 @@ export type Database = {
       }
       contact_messages: {
         Row: {
+          assigned_to: string | null
           category: string
           created_at: string
           email: string
@@ -240,6 +244,7 @@ export type Database = {
           subject: string
         }
         Insert: {
+          assigned_to?: string | null
           category: string
           created_at?: string
           email: string
@@ -252,6 +257,7 @@ export type Database = {
           subject: string
         }
         Update: {
+          assigned_to?: string | null
           category?: string
           created_at?: string
           email?: string
@@ -366,6 +372,7 @@ export type Database = {
       }
       franchise_applications: {
         Row: {
+          assigned_to: string | null
           city: string
           cr_number: string | null
           created_at: string
@@ -393,6 +400,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          assigned_to?: string | null
           city: string
           cr_number?: string | null
           created_at?: string
@@ -420,6 +428,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          assigned_to?: string | null
           city?: string
           cr_number?: string | null
           created_at?: string
