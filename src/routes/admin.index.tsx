@@ -63,6 +63,10 @@ function Overview() {
     refetchInterval: 60_000,
   });
 
+  const hours = days * 24;
+  const chatsLabel = days === 1 ? "Chatbot messages (24h)" : `Chatbot messages (${days}d)`;
+  const abuseLabel = days === 1 ? "Abuse events (24h)" : `Abuse events (${days}d)`;
+
   const kpis: Kpi[] = [
     { label: "Stations", value: data.stations, icon: MapPin, to: "/admin/stations" },
     { label: "Published news", value: data.news, icon: Newspaper, to: "/admin/news" },
@@ -70,8 +74,8 @@ function Overview() {
     { label: "New franchise applications", value: data.pendingFranchise, icon: Handshake, to: "/admin/submissions", search: { kind: "franchise", status: "new" }, accent: "warn" },
     { label: "New acquisition requests", value: data.pendingAcquisitions, icon: Inbox, to: "/admin/submissions", search: { kind: "acquisitions", status: "new" }, accent: "warn" },
     { label: "Unread contact messages", value: data.unreadContacts, icon: Mail, to: "/admin/submissions", search: { kind: "contact", status: "new" }, accent: "warn" },
-    { label: "Chatbot messages (24h)", value: data.chats24h, icon: MessageSquare, to: "/admin/chats", search: { sinceHours: 24 }, accent: "primary" },
-    { label: "Abuse events (24h)", value: data.abuse24h, icon: ShieldAlert, to: "/admin/abuse", search: { windowHours: 24 }, accent: data.abuse24h > 0 ? "danger" : undefined },
+    { label: chatsLabel, value: data.chats24h, icon: MessageSquare, to: "/admin/chats", search: { sinceHours: hours }, accent: "primary" },
+    { label: abuseLabel, value: data.abuse24h, icon: ShieldAlert, to: "/admin/abuse", search: { windowHours: hours }, accent: data.abuse24h > 0 ? "danger" : undefined },
     { label: "Export jobs running", value: data.exportsRunning, icon: FileDown, to: "/admin/abuse" },
   ];
 
