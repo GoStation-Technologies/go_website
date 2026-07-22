@@ -84,7 +84,12 @@ const ListInput = z.object({
   days: z.number().int().min(1).max(365).optional(),
   limit: z.number().int().min(1).max(200).default(25),
   page: z.number().int().min(1).default(1),
+  sort: z.enum(["newest", "oldest", "relevance"]).default("newest"),
 });
+
+// "Relevance" surfaces actionable rows first (new → reviewing → closed),
+// then most recent within the same bucket.
+const RELEVANCE_RANK: Record<string, number> = { new: 0, reviewing: 1, closed: 2 };
 
 export const adminListSubmissions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -100,27 +105,47 @@ export const adminListSubmissions = createServerFn({ method: "POST" })
     const from = (data.page - 1) * data.limit;
     const to = from + data.limit - 1;
 
-    let q = context.supabase
-      .from(table)
-      .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(from, to);
+    let q = context.supabase.from(table).select("*", { count: "exact" });
     if (data.status) q = q.eq("status", data.status);
     if (data.days) {
       const since = new Date(Date.now() - data.days * 24 * 3600_000).toISOString();
       q = q.gte("created_at", since);
     }
+
+    if (data.sort === "relevance") {
+      // Postgres has no cross-DB rank column, so sort by status then created_at.
+      // Sort ascending on status text alone would put "closed" before "new";
+      // instead we order by (status, created_at desc) client-side after fetch
+      // when the ranks matter. Do it in-DB for the common case using a CASE
+      // isn't supported via PostgREST — do a two-key order that's close enough
+      // (status asc happens to yield closed/new/reviewing) then re-sort in JS.
+      q = q.order("created_at", { ascending: false });
+    } else {
+      q = q.order("created_at", { ascending: data.sort === "oldest" });
+    }
+    q = q.range(from, to);
+
     const { data: rows, error, count } = await q;
     if (error) throw new Error(error.message);
+    let ordered = rows ?? [];
+    if (data.sort === "relevance") {
+      ordered = [...ordered].sort((a, b) => {
+        const ra = RELEVANCE_RANK[String(a.status ?? "new")] ?? 99;
+        const rb = RELEVANCE_RANK[String(b.status ?? "new")] ?? 99;
+        if (ra !== rb) return ra - rb;
+        return String(b.created_at).localeCompare(String(a.created_at));
+      });
+    }
     const total = count ?? 0;
     return {
-      rows: rows ?? [],
+      rows: ordered,
       total,
       page: data.page,
       limit: data.limit,
       pageCount: Math.max(1, Math.ceil(total / data.limit)),
     };
   });
+
 
 
 const StatusInput = z.object({
