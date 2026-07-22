@@ -81,6 +81,7 @@ export const adminOverviewStats = createServerFn({ method: "GET" })
 const ListInput = z.object({
   kind: z.enum(["franchise", "acquisitions", "contact"]),
   status: z.string().optional(),
+  days: z.number().int().min(1).max(365).optional(),
   limit: z.number().int().min(1).max(200).default(50),
 });
 
@@ -97,6 +98,10 @@ export const adminListSubmissions = createServerFn({ method: "POST" })
 
     let q = context.supabase.from(table).select("*").order("created_at", { ascending: false }).limit(data.limit);
     if (data.status) q = q.eq("status", data.status);
+    if (data.days) {
+      const since = new Date(Date.now() - data.days * 24 * 3600_000).toISOString();
+      q = q.gte("created_at", since);
+    }
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
     return { rows: rows ?? [] };
