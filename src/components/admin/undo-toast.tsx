@@ -2,25 +2,22 @@ import { useEffect, useState } from "react";
 
 export function UndoToastContent({
   message,
-  durationMs,
+  expiresAt,
 }: {
   message: string;
-  durationMs: number;
+  expiresAt: number;
 }) {
-  const [remaining, setRemaining] = useState(durationMs);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const start = Date.now();
-    const id = setInterval(() => {
-      const left = Math.max(0, durationMs - (Date.now() - start));
-      setRemaining(left);
-      if (left <= 0) clearInterval(id);
-    }, 100);
+    const id = setInterval(() => setNow(Date.now()), 200);
     return () => clearInterval(id);
-  }, [durationMs]);
+  }, []);
 
+  const total = 30_000; // canonical undo window used across bulk actions
+  const remaining = Math.max(0, expiresAt - now);
   const seconds = Math.ceil(remaining / 1000);
-  const pct = Math.max(0, Math.min(100, (remaining / durationMs) * 100));
+  const pct = Math.max(0, Math.min(100, (remaining / total) * 100));
 
   return (
     <div className="flex w-full flex-col gap-1.5">
@@ -28,7 +25,7 @@ export function UndoToastContent({
       <div className="flex items-center gap-2">
         <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
           <div
-            className="h-full bg-primary transition-[width] duration-100 ease-linear"
+            className="h-full bg-primary transition-[width] duration-200 ease-linear"
             style={{ width: `${pct}%` }}
           />
         </div>
