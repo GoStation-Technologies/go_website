@@ -412,11 +412,20 @@ function HomePage() {
           {(news.data ?? []).map((n) => (
             <Link key={n.id} to="/media/$slug" params={{ slug: n.slug }} className="group block">
               <article className="h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
-                <div className="relative aspect-[16/10] overflow-hidden bg-hero-ink">
-                  <div className="absolute inset-0 bg-grid-ink opacity-40" />
-                  <div className="absolute inset-0 grid place-items-center">
-                    <img src={logoAsset.url} alt="" className="h-16 w-16 opacity-30" />
+                {n.cover_url ? (
+                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+                    <img src={n.cover_url} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
                   </div>
+                ) : (
+                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+                    <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
+                  </div>
+                )}
+                <div className="pointer-events-none absolute end-3 top-3 z-10">
+                  <span className="rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
+                    {t("media.news")}
+                  </span>
+                </div>
                   <div className="absolute end-3 top-3 rounded-full bg-ember px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
                     {t("media.news")}
                   </div>
