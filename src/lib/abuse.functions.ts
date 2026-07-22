@@ -203,7 +203,7 @@ export const adminExportJobsList = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("export_jobs")
-      .select("id, kind, filters, status, row_count, storage_path, error, created_at, finished_at, expires_at")
+      .select("id, kind, filters, status, row_count, processed_rows, total_rows, pages_processed, storage_path, error, created_at, started_at, finished_at, expires_at")
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false })
       .limit(20);

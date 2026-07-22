@@ -345,9 +345,13 @@ type ExportJob = {
   filters: Record<string, unknown> | null;
   status: string;
   row_count: number | null;
+  processed_rows: number | null;
+  total_rows: number | null;
+  pages_processed: number | null;
   storage_path: string | null;
   error: string | null;
   created_at: string;
+  started_at: string | null;
   finished_at: string | null;
   expires_at: string;
 };
