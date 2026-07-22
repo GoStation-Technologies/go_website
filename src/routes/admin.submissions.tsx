@@ -18,7 +18,10 @@ const searchSchema = z.object({
   kind: fallback(z.enum(["franchise", "acquisitions", "contact"]), "franchise").default("franchise"),
   status: fallback(z.string(), "").default(""),
   days: z.number().int().min(1).max(365).optional(),
+  page: fallback(z.number().int().min(1), 1).default(1),
 });
+
+const PAGE_SIZE = 25;
 
 const DAY_RANGES = [
   { v: 7, label: "7d" },
@@ -33,19 +36,25 @@ export const Route = createFileRoute("/admin/submissions")({
 });
 
 function SubmissionsPage() {
-  const { kind, status, days } = Route.useSearch();
+  const { kind, status, days, page } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/submissions" });
+  // Any filter change resets page to 1 to avoid landing past the last page.
   const setKind = (k: Kind) =>
-    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, kind: k }) });
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, kind: k, page: 1 }) });
   const setStatus = (s: string) =>
-    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, status: s }) });
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, status: s, page: 1 }) });
   const setDays = (d: number | undefined) =>
-    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, days: d }) });
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, days: d, page: 1 }) });
+  const setPage = (p: number) =>
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, page: p }) });
   const qc = useQueryClient();
 
   const { data, isFetching } = useQuery({
-    queryKey: ["admin", "submissions", kind, status, days ?? "all"],
-    queryFn: () => adminListSubmissions({ data: { kind, status: status || undefined, days, limit: 100 } }),
+    queryKey: ["admin", "submissions", kind, status, days ?? "all", page],
+    queryFn: () =>
+      adminListSubmissions({
+        data: { kind, status: status || undefined, days, limit: PAGE_SIZE, page },
+      }),
   });
 
   const updateMut = useMutation({
@@ -60,6 +69,11 @@ function SubmissionsPage() {
   });
 
   const rows = data?.rows ?? [];
+  const total = data?.total ?? 0;
+  const pageCount = data?.pageCount ?? 1;
+  const rangeStart = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const rangeEnd = Math.min(page * PAGE_SIZE, total);
+
 
   return (
     <div className="space-y-4">
@@ -212,6 +226,33 @@ function SubmissionsPage() {
             </tbody>
           </table>
         )}
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+        <div>
+          {total === 0 ? "0 results" : `Showing ${rangeStart}–${rangeEnd} of ${total}`}
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page <= 1 || isFetching}
+            onClick={() => setPage(page - 1)}
+          >
+            Previous
+          </Button>
+          <span className="tabular-nums">
+            Page {page} of {pageCount}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= pageCount || isFetching}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

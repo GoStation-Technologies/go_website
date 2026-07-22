@@ -82,7 +82,8 @@ const ListInput = z.object({
   kind: z.enum(["franchise", "acquisitions", "contact"]),
   status: z.string().optional(),
   days: z.number().int().min(1).max(365).optional(),
-  limit: z.number().int().min(1).max(200).default(50),
+  limit: z.number().int().min(1).max(200).default(25),
+  page: z.number().int().min(1).default(1),
 });
 
 export const adminListSubmissions = createServerFn({ method: "POST" })
@@ -96,16 +97,31 @@ export const adminListSubmissions = createServerFn({ method: "POST" })
           ? "acquisition_requests"
           : "contact_messages";
 
-    let q = context.supabase.from(table).select("*").order("created_at", { ascending: false }).limit(data.limit);
+    const from = (data.page - 1) * data.limit;
+    const to = from + data.limit - 1;
+
+    let q = context.supabase
+      .from(table)
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
     if (data.status) q = q.eq("status", data.status);
     if (data.days) {
       const since = new Date(Date.now() - data.days * 24 * 3600_000).toISOString();
       q = q.gte("created_at", since);
     }
-    const { data: rows, error } = await q;
+    const { data: rows, error, count } = await q;
     if (error) throw new Error(error.message);
-    return { rows: rows ?? [] };
+    const total = count ?? 0;
+    return {
+      rows: rows ?? [],
+      total,
+      page: data.page,
+      limit: data.limit,
+      pageCount: Math.max(1, Math.ceil(total / data.limit)),
+    };
   });
+
 
 const StatusInput = z.object({
   kind: z.enum(["franchise", "acquisitions", "contact"]),
