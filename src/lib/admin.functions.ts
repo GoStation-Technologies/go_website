@@ -199,6 +199,14 @@ export const adminBulkUpdateSubmissions = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => BulkInput.parse(raw))
   .handler(async ({ data, context }) => {
     const table = TABLE_FOR[data.kind];
+    // Snapshot current status + assignee BEFORE the update so the caller
+    // can offer an undo. RLS filters this select the same way as the update.
+    const { data: beforeRows, error: beforeErr } = await (context.supabase.from(table) as any)
+      .select("id, status, assigned_to")
+      .in("id", data.ids);
+    if (beforeErr) throw new Error(beforeErr.message);
+    const before = ((beforeRows ?? []) as Array<{ id: string; status: string; assigned_to: string | null }>);
+
     const patch: Record<string, unknown> = {};
     if (data.patch.status !== undefined) patch.status = data.patch.status;
     if (data.patch.assigned_to !== undefined) patch.assigned_to = data.patch.assigned_to;
@@ -206,8 +214,41 @@ export const adminBulkUpdateSubmissions = createServerFn({ method: "POST" })
       .update(patch, { count: "exact" })
       .in("id", data.ids);
     if (error) throw new Error(error.message);
-    return { ok: true, updated: count ?? data.ids.length };
+    return { ok: true, updated: count ?? data.ids.length, before };
   });
+
+// Restore per-row status + assignee snapshots captured before a bulk update.
+// One UPDATE per row keeps it simple; ids are capped at 200 upstream.
+const RestoreInput = z.object({
+  kind: z.enum(["franchise", "acquisitions", "contact"]),
+  rows: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        status: z.enum(SUBMISSION_STATUSES),
+        assigned_to: z.string().uuid().nullable(),
+      }),
+    )
+    .min(1)
+    .max(200),
+});
+
+export const adminBulkRestoreSubmissions = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => RestoreInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const table = TABLE_FOR[data.kind];
+    let restored = 0;
+    for (const row of data.rows) {
+      const { error } = await (context.supabase.from(table) as any)
+        .update({ status: row.status, assigned_to: row.assigned_to })
+        .eq("id", row.id);
+      if (error) throw new Error(error.message);
+      restored += 1;
+    }
+    return { ok: true, restored };
+  });
+
 
 // Staff picker for the assign action. Two queries — user_roles has no FK to
 // public.profiles so PostgREST cannot embed them. Uses the admin client only

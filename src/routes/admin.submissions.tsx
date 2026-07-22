@@ -4,6 +4,7 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useEffect, useMemo, useState } from "react";
 import {
+  adminBulkRestoreSubmissions,
   adminBulkUpdateSubmissions,
   adminListStaff,
   adminListSubmissions,
@@ -157,8 +158,43 @@ function SubmissionsPage() {
         : patch.assigned_to === null
           ? "unassigned"
           : "reassigned";
+      const kindAtCall = kind; // capture in case the user switches tabs
+      const before = res.before ?? [];
+      // 30-second undo window: reapply the snapshotted per-row values.
       toast.success(
         `${res.updated} submission${res.updated === 1 ? "" : "s"} ${label}`,
+        before.length > 0
+          ? {
+              duration: 30_000,
+              action: {
+                label: "Undo",
+                onClick: () => {
+                  toast.promise(
+                    adminBulkRestoreSubmissions({
+                      data: {
+                        kind: kindAtCall,
+                        rows: before.map((r) => ({
+                          id: r.id,
+                          status: r.status as Status,
+                          assigned_to: r.assigned_to,
+                        })),
+                      },
+                    }),
+                    {
+                      loading: "Reverting…",
+                      success: (r) =>
+                        `Reverted ${r.restored} submission${r.restored === 1 ? "" : "s"}`,
+                      error: (e: Error) => e.message || "Undo failed",
+                      finally: () => {
+                        qc.invalidateQueries({ queryKey: ["admin", "submissions", kindAtCall] });
+                        qc.invalidateQueries({ queryKey: ["admin", "overview"] });
+                      },
+                    },
+                  );
+                },
+              },
+            }
+          : undefined,
       );
       setSelected(new Set());
       setConfirm(null);
@@ -167,6 +203,7 @@ function SubmissionsPage() {
     },
     onError: (e: Error) => toast.error(e.message || "Bulk update failed"),
   });
+
 
   // Pending bulk action awaiting confirmation. Null = no dialog open.
   type PendingAction =
