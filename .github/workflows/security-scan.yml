@@ -207,7 +207,10 @@ jobs:
             done <<< "$ids"
           fi
 
-          text=":lock: *Security regression scan failed*\n*Repo:* ${GITHUB_REPOSITORY}\n*Ref:* ${REF} (${EVENT})\n*Commit:* \`${COMMIT}\`\n*Run:* <${RUN_URL}|View workflow run>\n*Regressed internal_ids:*\n${id_lines}"
+          artifact_line=""
+          [ -n "${ARTIFACT_URL:-}" ] && artifact_line="*Report artifact:* <${ARTIFACT_URL}|regressions.json + regressions.csv>\n"
+
+          text=":lock: *Security regression scan failed*\n*Repo:* ${GITHUB_REPOSITORY}\n*Ref:* ${REF} (${EVENT})\n*Commit:* \`${COMMIT}\`\n*Run:* <${RUN_URL}|View workflow run>\n${artifact_line}*Regressed internal_ids:*\n${id_lines}"
 
           payload=$(jq -n --arg t "$text" '{text: $t}')
           curl -sS -X POST -H 'Content-Type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
