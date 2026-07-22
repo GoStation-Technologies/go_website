@@ -84,6 +84,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5">
+          <ThemeToggle />
           <Button
             variant="ghost"
             size="sm"
