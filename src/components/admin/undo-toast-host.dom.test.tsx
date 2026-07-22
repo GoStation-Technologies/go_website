@@ -177,20 +177,28 @@ describe("UndoToastHost", () => {
 
     first.unmount();
     cleanup();
-    // Sonner keeps a module-level toast registry; a real reload wipes it.
-    const { toast } = await import("sonner");
-    toast.dismiss();
 
-    // Simulate the reload: drop the module's in-memory cache so the next read
-    // re-hydrates from localStorage exactly like a fresh page would.
-    window.dispatchEvent(
-      new StorageEvent("storage", { key: "gostation:undo-entries:v1" }),
+    // Simulate a real reload: reset every module so sonner's toast registry
+    // and undoStore's in-memory cache are wiped, exactly like a fresh page.
+    // localStorage persists across the reset (it's on window, not a module).
+    vi.resetModules();
+    const [{ UndoToastHost: FreshHost }, { undoStore: freshStore }, { Toaster: FreshToaster }] =
+      await Promise.all([
+        import("@/components/admin/undo-toast-host"),
+        import("@/lib/undo-store"),
+        import("sonner"),
+      ]);
+
+    // Sanity: the store re-hydrates its list from persisted localStorage.
+    expect(freshStore.list().map((e) => e.id)).toContain("reload-entry");
+
+    const qc2 = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    render(
+      <QueryClientProvider client={qc2}>
+        <FreshHost />
+        <FreshToaster />
+      </QueryClientProvider>,
     );
-
-    // Second "page load": fresh QueryClient + host, same localStorage.
-    renderHost();
-    // eslint-disable-next-line no-console
-    console.log("AFTER RELOAD entries:", undoStore.list());
 
     // Toast rehydrates from persisted store with the original message + countdown.
     expect(await screen.findByText("Closed 2 submissions")).toBeTruthy();
@@ -210,6 +218,6 @@ describe("UndoToastHost", () => {
         ],
       },
     });
-    await waitFor(() => expect(undoStore.list()).toHaveLength(0));
+    await waitFor(() => expect(freshStore.list()).toHaveLength(0));
   });
 });
