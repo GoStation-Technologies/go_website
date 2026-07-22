@@ -14,13 +14,13 @@ import {
   Store,
   Building2,
   Star,
-  Trophy,
   Sparkles,
   ShieldCheck,
   Leaf,
   Handshake,
+  Zap,
 } from "lucide-react";
-import logoAsset from "@/assets/gostation-logo.png.asset.json";
+import heroStation from "@/assets/hero-station.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
