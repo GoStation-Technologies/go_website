@@ -95,16 +95,41 @@ function SubmissionsPage() {
               </button>
             ))}
           </div>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="rounded-md border bg-background px-2 py-1.5 text-sm"
+          <div
+            role="tablist"
+            aria-label="Status"
+            className="inline-flex items-center rounded-md border bg-background p-0.5 text-xs"
           >
-            <option value="">All statuses</option>
-            {STATUSES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+            <button
+              role="tab"
+              aria-selected={!status}
+              onClick={() => setStatus("")}
+              className={`rounded px-2 py-1 font-medium capitalize transition ${
+                !status ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              All
+            </button>
+            {STATUSES.map((s) => {
+              const active = status === s;
+              const dot =
+                s === "new" ? "bg-blue-500" : s === "reviewing" ? "bg-amber-500" : "bg-emerald-500";
+              return (
+                <button
+                  key={s}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setStatus(s)}
+                  className={`inline-flex items-center gap-1.5 rounded px-2 py-1 font-medium capitalize transition ${
+                    active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <span className={`h-1.5 w-1.5 rounded-full ${dot}`} aria-hidden />
+                  {s}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
