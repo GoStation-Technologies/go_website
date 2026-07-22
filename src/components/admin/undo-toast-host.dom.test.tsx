@@ -189,6 +189,8 @@ describe("UndoToastHost", () => {
 
     // Second "page load": fresh QueryClient + host, same localStorage.
     renderHost();
+    // eslint-disable-next-line no-console
+    console.log("AFTER RELOAD entries:", undoStore.list());
 
     // Toast rehydrates from persisted store with the original message + countdown.
     expect(await screen.findByText("Closed 2 submissions")).toBeTruthy();
