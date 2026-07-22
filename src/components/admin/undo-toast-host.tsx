@@ -1,4 +1,4 @@
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { undoStore, type UndoEntry } from "@/lib/undo-store";
@@ -97,12 +97,25 @@ export function UndoToastHost() {
     return () => window.removeEventListener("keydown", handler);
   }, [qc]);
 
+  // Live-region announcement text. Updated only when a new undo entry
+  // appears (not on every countdown tick), so screen readers hear the
+  // undo opportunity exactly once per bulk action.
+  const [announcement, setAnnouncement] = useState("");
+  const announcedRef = useRef<Set<string>>(new Set());
+
   useEffect(() => {
     const shown = new Set<string>();
     for (const entry of entries) {
       const remaining = entry.expiresAt - Date.now();
       if (remaining <= 0) continue;
       shown.add(entry.id);
+
+      if (!announcedRef.current.has(entry.id)) {
+        announcedRef.current.add(entry.id);
+        setAnnouncement(
+          `${entry.message}. Press Control or Command Z, or activate the Undo button within 30 seconds to revert.`,
+        );
+      }
 
       // sonner de-dupes by id: subsequent calls with the same id just update
       // the existing toast (safe to call on every render pass).
@@ -113,12 +126,28 @@ export function UndoToastHost() {
           duration: remaining,
           onAutoClose: () => undoStore.remove(entry.id),
           onDismiss: () => undoStore.remove(entry.id),
+          // Note: sonner's Toaster already renders toasts inside an
+          // aria-live region; the host's own status region above adds a
+          // one-shot announcement with the undo instructions.
+
           action: {
-            label: "Undo",
+            // Visible "Undo" plus a hidden, descriptive accessible name so
+            // screen-reader users hear which action they'd be reverting.
+            label: (
+              <>
+                <span aria-hidden="true">Undo</span>
+                <span className="sr-only">{`Undo: ${entry.message}`}</span>
+              </>
+            ),
             onClick: () => runUndo(entry),
           },
         },
       );
+    }
+    // Drop announced ids that are no longer live so the same id can
+    // re-announce if it's ever re-pushed after being cleared.
+    for (const id of Array.from(announcedRef.current)) {
+      if (!shown.has(id)) announcedRef.current.delete(id);
     }
     return () => {
       // Nothing to tear down per-render: entries not in the next snapshot
@@ -127,6 +156,16 @@ export function UndoToastHost() {
     };
   }, [entries, qc]);
 
-  return null;
+  return (
+    <div
+      role="status"
+      aria-live="assertive"
+      aria-atomic="true"
+      className="sr-only"
+    >
+      {announcement}
+    </div>
+  );
 }
+
 

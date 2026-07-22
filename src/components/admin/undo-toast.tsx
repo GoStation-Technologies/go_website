@@ -23,15 +23,27 @@ export function UndoToastContent({
     <div className="flex w-full flex-col gap-1.5">
       <div className="text-sm font-medium">{message}</div>
       <div className="flex items-center gap-2">
-        <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
+        <div
+          role="progressbar"
+          aria-label="Time remaining to undo"
+          aria-valuemin={0}
+          aria-valuemax={Math.round(total / 1000)}
+          aria-valuenow={seconds}
+          aria-valuetext={`${seconds} seconds remaining`}
+          className="h-1 flex-1 overflow-hidden rounded-full bg-muted"
+        >
           <div
             className="h-full bg-primary transition-[width] duration-200 ease-linear"
             style={{ width: `${pct}%` }}
           />
         </div>
+        {/* Visual-only countdown. Not aria-live: announcing every 200ms
+            would spam screen readers. The initial announcement is handled
+            by UndoToastHost's live region, and the progressbar above
+            exposes remaining time on demand. */}
         <span
           className="text-xs tabular-nums text-muted-foreground"
-          aria-live="polite"
+          aria-hidden="true"
         >
           {seconds}s
         </span>
@@ -39,3 +51,4 @@ export function UndoToastContent({
     </div>
   );
 }
+
