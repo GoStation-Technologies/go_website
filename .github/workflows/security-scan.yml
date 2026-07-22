@@ -179,6 +179,7 @@ jobs:
           COMMIT: ${{ github.sha }}
           REF: ${{ github.ref }}
           EVENT: ${{ github.event_name }}
+          ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
         run: |
           if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
             echo "::warning::SLACK_WEBHOOK_URL secret not set; skipping Slack notification."
