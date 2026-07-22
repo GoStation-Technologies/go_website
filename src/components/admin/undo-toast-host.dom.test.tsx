@@ -202,8 +202,7 @@ describe("UndoToastHost", () => {
 
     // Toast rehydrates from persisted store with the original message + countdown.
     // Sonner renders both a visible node and an aria-live announcement, so match all.
-    const matches = await screen.findAllByText("Closed 2 submissions");
-    expect(matches.length).toBeGreaterThan(0);
+    expect((await screen.findAllByText("Closed 2 submissions")).length).toBeGreaterThan(0);
     expect((await screen.findAllByText(/^\d+s$/)).length).toBeGreaterThan(0);
 
     // And Undo still works end-to-end against the restored payload.
