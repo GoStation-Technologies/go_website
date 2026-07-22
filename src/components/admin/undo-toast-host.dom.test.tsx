@@ -268,4 +268,105 @@ describe("UndoToastHost", () => {
       vi.useRealTimers();
     }
   });
+
+  it("Ctrl+Z triggers the same undo action as clicking Undo and clears the toast state", async () => {
+    renderHost();
+
+    const payload = {
+      kind: "submissions" as const,
+      submissionKind: "franchise" as const,
+      rows: [
+        { id: "row-k1", status: "approved", assigned_to: null },
+        { id: "row-k2", status: "closed", assigned_to: "user-3" },
+      ],
+    };
+    act(() => {
+      undoStore.push(makeEntry({ id: "kbd-ctrl", payload }));
+    });
+    // Wait for the toast (and its subscribe effect) to be live.
+    await screen.findByRole("button", { name: /undo/i });
+
+    act(() => {
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "z", ctrlKey: true, bubbles: true }),
+      );
+    });
+
+    await waitFor(() => expect(restoreMock).toHaveBeenCalledTimes(1));
+    expect(restoreMock).toHaveBeenCalledWith({
+      data: {
+        kind: "franchise",
+        rows: [
+          { id: "row-k1", status: "approved", assigned_to: null },
+          { id: "row-k2", status: "closed", assigned_to: "user-3" },
+        ],
+      },
+    });
+
+    await waitFor(() => expect(undoStore.list()).toHaveLength(0));
+    await waitFor(() =>
+      expect(screen.queryByRole("button", { name: /undo/i })).toBeNull(),
+    );
+  });
+
+  it("Cmd+Z (metaKey) triggers the same undo action as clicking Undo and clears the toast state", async () => {
+    renderHost();
+
+    const payload = {
+      kind: "submissions" as const,
+      submissionKind: "contact" as const,
+      rows: [{ id: "row-m1", status: "new", assigned_to: null }],
+    };
+    act(() => {
+      undoStore.push(makeEntry({ id: "kbd-meta", payload }));
+    });
+    await screen.findByRole("button", { name: /undo/i });
+
+    act(() => {
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "z", metaKey: true, bubbles: true }),
+      );
+    });
+
+    await waitFor(() => expect(restoreMock).toHaveBeenCalledTimes(1));
+    expect(restoreMock).toHaveBeenCalledWith({
+      data: {
+        kind: "contact",
+        rows: [{ id: "row-m1", status: "new", assigned_to: null }],
+      },
+    });
+
+    await waitFor(() => expect(undoStore.list()).toHaveLength(0));
+    await waitFor(() =>
+      expect(screen.queryByRole("button", { name: /undo/i })).toBeNull(),
+    );
+  });
+
+  it("Ctrl+Z is ignored while typing in an input and does not call the undo action", async () => {
+    renderHost();
+
+    act(() => {
+      undoStore.push(makeEntry({ id: "kbd-input" }));
+    });
+    await screen.findByRole("button", { name: /undo/i });
+
+    // Attach an input to the document and dispatch keydown from it.
+    const input = document.createElement("input");
+    document.body.appendChild(input);
+    input.focus();
+
+    act(() => {
+      input.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "z", ctrlKey: true, bubbles: true }),
+      );
+    });
+
+    // Give any (unexpected) async work a chance to run.
+    await new Promise((r) => setTimeout(r, 50));
+    expect(restoreMock).not.toHaveBeenCalled();
+    expect(undoStore.list()).toHaveLength(1);
+
+    input.remove();
+  });
 });
+
