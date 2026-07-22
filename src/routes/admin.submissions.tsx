@@ -515,6 +515,38 @@ function SubmissionsPage() {
           </Button>
         </div>
       </div>
+
+      <AlertDialog
+        open={confirm !== null}
+        onOpenChange={(open) => {
+          if (!open && !bulkMut.isPending) setConfirm(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{confirmCopy?.title}</AlertDialogTitle>
+            <AlertDialogDescription>{confirmCopy?.desc}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkMut.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={bulkMut.isPending}
+              onClick={(e) => {
+                e.preventDefault();
+                runConfirm();
+              }}
+              className={
+                confirmCopy?.destructive
+                  ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  : undefined
+              }
+            >
+              {bulkMut.isPending ? "Applying…" : confirmCopy?.cta}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+
