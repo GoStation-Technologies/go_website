@@ -172,10 +172,16 @@ function AuditPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="ml-auto text-sm text-muted-foreground self-center">
-          {q.isFetching ? "Loading…" : `${total.toLocaleString()} events`}
+        <div className="ml-auto flex items-center gap-3 self-center">
+          <span className="text-sm text-muted-foreground">
+            {q.isFetching ? "Loading…" : `${total.toLocaleString()} events`}
+          </span>
+          <Button size="sm" variant="outline" onClick={handleExport} disabled={exporting || total === 0}>
+            <Download className="h-4 w-4 mr-1" /> {exporting ? "Exporting…" : "Export CSV"}
+          </Button>
         </div>
       </div>
+
 
       <div className="rounded-lg border overflow-hidden">
         <table className="w-full text-sm">
