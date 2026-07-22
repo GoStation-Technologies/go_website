@@ -12,6 +12,7 @@ const searchSchema = z.object({
   pageSize: fallback(z.number().int(), 10).default(10),
   sort: fallback(z.string(), "newest").default("newest"),
   q: fallback(z.string(), "").default(""),
+  sinceHours: z.number().int().optional(),
 });
 
 export const Route = createFileRoute("/admin/chats")({
@@ -85,7 +86,7 @@ function highlight(text: string, query: string) {
 
 
 function ChatsPage() {
-  const { page, pageSize, sort, q } = Route.useSearch();
+  const { page, pageSize, sort, q, sinceHours } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/chats" });
 
   // Local state for the search input, debounced into the URL so typing
@@ -103,12 +104,10 @@ function ChatsPage() {
   }, [qInput, q, navigate]);
 
   const { data, error, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["admin", "chats", page, pageSize, sort, q],
-    // Pass URL params through as-is; the server owns validation + clamping and
-    // is the source of truth for the normalized page/pageSize/sort we render.
+    queryKey: ["admin", "chats", page, pageSize, sort, q, sinceHours],
     queryFn: async () => {
       try {
-        return await adminListChats({ data: { page, pageSize, sort, q } });
+        return await adminListChats({ data: { page, pageSize, sort, q, sinceHours } });
       } catch (e) {
         throw await coerceError(e);
       }
@@ -141,7 +140,23 @@ function ChatsPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Chat logs</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-semibold tracking-tight">Chat logs</h1>
+          {sinceHours ? (
+            <button
+              type="button"
+              onClick={() =>
+                navigate({
+                  search: (prev: Record<string, unknown>) => ({ ...prev, sinceHours: undefined, page: 1 }),
+                })
+              }
+              className="inline-flex items-center gap-1 rounded-full border bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary hover:bg-primary/15"
+              aria-label="Clear time filter"
+            >
+              Last {sinceHours}h ×
+            </button>
+          ) : null}
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <input
             type="search"
