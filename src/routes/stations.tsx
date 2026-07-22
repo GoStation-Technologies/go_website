@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Fuel, Search, Star, Clock } from "lucide-react";
+import { ClientOnly } from "@tanstack/react-router";
+
+const StationsMap = lazy(() =>
+  import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
+);
 
 export const Route = createFileRoute("/stations")({
   component: StationsPage,
@@ -33,6 +38,23 @@ function StationsPage() {
     return hay.includes(q.toLowerCase());
   });
 
+  const mapPoints = useMemo(
+    () =>
+      filtered
+        .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
+        .map((s) => ({
+          id: s.id,
+          lat: s.lat as number,
+          lng: s.lng as number,
+          title: (lng === "ar" ? s.name_ar : s.name_en) ?? "Station",
+          subtitle: lng === "ar"
+            ? [s.city_ar, s.district_ar].filter(Boolean).join(" · ")
+            : [s.city_en, s.district_en].filter(Boolean).join(" · "),
+          href: `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`,
+        })),
+    [filtered, lng],
+  );
+
   return (
     <SiteLayout>
       <section className="bg-brand-radial py-16 text-primary-foreground">
@@ -52,20 +74,27 @@ function StationsPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-          {/* Placeholder map */}
-          <Card className="min-h-[420px] overflow-hidden">
-            <div className="relative h-full min-h-[420px] bg-gradient-to-br from-primary/10 via-muted to-accent/10">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="mx-auto h-10 w-10 text-accent" />
-                  <p className="mt-2 text-sm text-muted-foreground">Interactive map — Google Maps integration pending</p>
+          <Card className="min-h-[480px] overflow-hidden p-0">
+            <ClientOnly
+              fallback={
+                <div className="flex h-[480px] items-center justify-center bg-muted">
+                  <MapPin className="h-8 w-8 animate-pulse text-accent" />
                 </div>
-              </div>
-              {filtered.slice(0, 8).map((s, i) => (
-                <div key={s.id} className="absolute h-3 w-3 rounded-full bg-accent shadow-lg ring-4 ring-accent/30"
-                  style={{ top: `${15 + (i * 11) % 70}%`, left: `${10 + (i * 17) % 80}%` }} />
-              ))}
-            </div>
+              }
+            >
+              <Suspense
+                fallback={
+                  <div className="flex h-[480px] items-center justify-center bg-muted">
+                    <MapPin className="h-8 w-8 animate-pulse text-accent" />
+                  </div>
+                }
+              >
+                <StationsMap
+                  className="h-[480px] w-full"
+                  points={mapPoints}
+                />
+              </Suspense>
+            </ClientOnly>
           </Card>
           <div className="max-h-[520px] space-y-3 overflow-y-auto pe-2">
             {filtered.map((s) => (
