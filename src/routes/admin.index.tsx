@@ -1,5 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { adminOverviewStats } from "@/lib/admin.functions";
 import {
   Area,
@@ -27,7 +29,19 @@ import {
 } from "lucide-react";
 import type { ComponentType } from "react";
 
+const RANGE_OPTIONS = [
+  { days: 7, label: "7d" },
+  { days: 14, label: "14d" },
+  { days: 30, label: "30d" },
+  { days: 90, label: "90d" },
+] as const;
+
+const searchSchema = z.object({
+  days: fallback(z.number().int().min(1).max(90), 14).default(14),
+});
+
 export const Route = createFileRoute("/admin/")({
+  validateSearch: zodValidator(searchSchema),
   component: Overview,
 });
 
@@ -41,9 +55,11 @@ type Kpi = {
 };
 
 function Overview() {
+  const { days } = Route.useSearch();
+  const navigate = useNavigate({ from: "/admin/" });
   const { data } = useSuspenseQuery({
-    queryKey: ["admin", "overview"],
-    queryFn: () => adminOverviewStats(),
+    queryKey: ["admin", "overview", days],
+    queryFn: () => adminOverviewStats({ data: { days } }),
     refetchInterval: 60_000,
   });
 
@@ -61,10 +77,39 @@ function Overview() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
-        <p className="text-sm text-muted-foreground">Live activity across GoStation — last 14 days.</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
+          <p className="text-sm text-muted-foreground">Live activity across GoStation — last {days} days.</p>
+        </div>
+        <div
+          role="tablist"
+          aria-label="Time range"
+          className="inline-flex items-center rounded-lg border bg-background p-1 shadow-sm"
+        >
+          {RANGE_OPTIONS.map((opt) => {
+            const active = opt.days === days;
+            return (
+              <button
+                key={opt.days}
+                role="tab"
+                aria-selected={active}
+                onClick={() =>
+                  navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, days: opt.days }) })
+                }
+                className={`rounded-md px-3 py-1 text-xs font-medium transition ${
+                  active
+                    ? "bg-primary text-primary-foreground shadow"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
+
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {kpis.map((k) => (
