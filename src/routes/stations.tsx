@@ -38,6 +38,23 @@ function StationsPage() {
     return hay.includes(q.toLowerCase());
   });
 
+  const mapPoints = useMemo(
+    () =>
+      filtered
+        .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
+        .map((s) => ({
+          id: s.id,
+          lat: s.lat as number,
+          lng: s.lng as number,
+          title: (lng === "ar" ? s.name_ar : s.name_en) ?? "Station",
+          subtitle: lng === "ar"
+            ? [s.city_ar, s.district_ar].filter(Boolean).join(" · ")
+            : [s.city_en, s.district_en].filter(Boolean).join(" · "),
+          href: `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`,
+        })),
+    [filtered, lng],
+  );
+
   return (
     <SiteLayout>
       <section className="bg-brand-radial py-16 text-primary-foreground">
