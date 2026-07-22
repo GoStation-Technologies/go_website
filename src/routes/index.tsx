@@ -271,19 +271,18 @@ function HomePage() {
       </section>
 
       {/* ============ PULL QUOTE ============ */}
-      <section className="relative overflow-hidden bg-hero-ink py-24 text-primary-foreground md:py-32">
-        <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
-        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5">
-            <span className="font-display text-3xl text-ember">"</span>
+      <section className="border-y border-border/60 bg-secondary/40 py-24 md:py-32">
+        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-background text-accent">
+            <span className="font-display text-2xl leading-none">"</span>
           </div>
-          <blockquote className="mx-auto mt-8 max-w-4xl text-balance text-3xl font-medium leading-[1.25] md:text-4xl lg:text-5xl">
+          <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {t("home.quote")}
           </blockquote>
-          <div className="mt-8 text-sm uppercase tracking-[0.2em] text-ember-glow">
+          <div className="mt-8 text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
             {t("home.quoteAuthor")}
           </div>
-          <div className="mt-1 text-xs text-primary-foreground/60">{t("home.quoteRole")}</div>
+          <div className="mt-1 text-xs text-muted-foreground">{t("home.quoteRole")}</div>
         </div>
       </section>
 
