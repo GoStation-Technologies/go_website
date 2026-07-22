@@ -2,8 +2,22 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { adminListSubmissions, adminUpdateStatus } from "@/lib/admin.functions";
+import { useEffect, useMemo, useState } from "react";
+import {
+  adminBulkUpdateSubmissions,
+  adminListStaff,
+  adminListSubmissions,
+  adminUpdateStatus,
+} from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 
 type Kind = "franchise" | "acquisitions" | "contact";
@@ -12,7 +26,14 @@ const TABS: { key: Kind; label: string }[] = [
   { key: "acquisitions", label: "Acquisitions" },
   { key: "contact", label: "Contact" },
 ];
-const STATUSES = ["new", "reviewing", "closed"] as const;
+const STATUSES = ["new", "reviewing", "approved", "closed"] as const;
+type Status = (typeof STATUSES)[number];
+const STATUS_DOT: Record<Status, string> = {
+  new: "bg-blue-500",
+  reviewing: "bg-amber-500",
+  approved: "bg-emerald-500",
+  closed: "bg-slate-400",
+};
 const SORTS = [
   { v: "newest", label: "Newest" },
   { v: "oldest", label: "Oldest" },
@@ -68,7 +89,7 @@ function SubmissionsPage() {
 
 
   const updateMut = useMutation({
-    mutationFn: (args: { id: string; status: (typeof STATUSES)[number] }) =>
+    mutationFn: (args: { id: string; status: Status }) =>
       adminUpdateStatus({ data: { kind, ...args } }),
     onSuccess: () => {
       toast.success("Updated");
@@ -78,11 +99,57 @@ function SubmissionsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  // Selection: keyed by row id, cleared whenever the underlying list changes.
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const rows = data?.rows ?? [];
   const total = data?.total ?? 0;
   const pageCount = data?.pageCount ?? 1;
   const rangeStart = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const rangeEnd = Math.min(page * PAGE_SIZE, total);
+  const rowIds = useMemo(() => rows.map((r: Record<string, unknown>) => String(r.id)), [rows]);
+  useEffect(() => {
+    // Prune selections that no longer exist in the current page.
+    setSelected((prev) => {
+      const next = new Set<string>();
+      for (const id of prev) if (rowIds.includes(id)) next.add(id);
+      return next.size === prev.size ? prev : next;
+    });
+  }, [rowIds]);
+  const allSelected = rowIds.length > 0 && rowIds.every((id) => selected.has(id));
+  const someSelected = selected.size > 0 && !allSelected;
+  const toggleAll = () =>
+    setSelected(allSelected ? new Set() : new Set(rowIds));
+  const toggleOne = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  // Staff list is only fetched when the user opens the assign menu.
+  const [staffOpen, setStaffOpen] = useState(false);
+  const { data: staffData, isLoading: staffLoading } = useQuery({
+    queryKey: ["admin", "staff"],
+    queryFn: () => adminListStaff(),
+    enabled: staffOpen,
+    staleTime: 5 * 60_000,
+  });
+
+  const bulkMut = useMutation({
+    mutationFn: (patch: { status?: Status; assigned_to?: string | null }) =>
+      adminBulkUpdateSubmissions({
+        data: { kind, ids: Array.from(selected), patch },
+      }),
+    onSuccess: (res) => {
+      toast.success(`Updated ${res.updated} submission${res.updated === 1 ? "" : "s"}`);
+      setSelected(new Set());
+      qc.invalidateQueries({ queryKey: ["admin", "submissions", kind] });
+      qc.invalidateQueries({ queryKey: ["admin", "overview"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
 
 
   return (
@@ -180,18 +247,82 @@ function SubmissionsPage() {
       </div>
 
 
-      <div className="flex gap-1 border-b">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setKind(t.key)}
-            className={`border-b-2 px-3 py-2 text-sm font-medium transition ${
-              kind === t.key ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-end justify-between gap-3 border-b">
+        <div className="flex gap-1">
+          {TABS.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setKind(t.key)}
+              className={`border-b-2 px-3 py-2 text-sm font-medium transition ${
+                kind === t.key ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        {selected.size > 0 && (
+          <div className="mb-1 flex flex-wrap items-center gap-2 rounded-md border bg-muted/40 px-2 py-1 text-xs">
+            <span className="font-medium">{selected.size} selected</span>
+            <span className="text-muted-foreground">·</span>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkMut.isPending}
+              onClick={() => bulkMut.mutate({ status: "approved" })}
+            >
+              Approve
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkMut.isPending}
+              onClick={() => bulkMut.mutate({ status: "closed" })}
+            >
+              Close
+            </Button>
+            <DropdownMenu open={staffOpen} onOpenChange={setStaffOpen}>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="outline" disabled={bulkMut.isPending}>
+                  Assign
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="max-h-72 w-56 overflow-y-auto">
+                <DropdownMenuLabel>Assign to</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {staffLoading && (
+                  <div className="px-2 py-1.5 text-xs text-muted-foreground">Loading…</div>
+                )}
+                {!staffLoading && (staffData?.staff ?? []).length === 0 && (
+                  <div className="px-2 py-1.5 text-xs text-muted-foreground">No staff found</div>
+                )}
+                {(staffData?.staff ?? []).map((s) => (
+                  <DropdownMenuItem
+                    key={s.id}
+                    onSelect={() => bulkMut.mutate({ assigned_to: s.id })}
+                  >
+                    <div className="flex flex-col">
+                      <span>{s.name}</span>
+                      <span className="text-[10px] text-muted-foreground">{s.roles.join(", ")}</span>
+                    </div>
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => bulkMut.mutate({ assigned_to: null })}>
+                  <span className="text-muted-foreground">Unassign</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setSelected(new Set())}
+              disabled={bulkMut.isPending}
+            >
+              Clear
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="overflow-x-auto rounded-lg border bg-background">
@@ -203,58 +334,88 @@ function SubmissionsPage() {
           <table className="min-w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
+                <th className="w-8 px-3 py-2">
+                  <input
+                    type="checkbox"
+                    aria-label="Select all"
+                    checked={allSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someSelected;
+                    }}
+                    onChange={toggleAll}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                </th>
                 <th className="px-3 py-2 text-start">Ref / ID</th>
                 <th className="px-3 py-2 text-start">Contact</th>
                 <th className="px-3 py-2 text-start">Details</th>
                 <th className="px-3 py-2 text-start">Received</th>
+                <th className="px-3 py-2 text-start">Assignee</th>
                 <th className="px-3 py-2 text-start">Status</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((r: Record<string, unknown>) => (
-                <tr key={String(r.id)} className="border-t align-top">
-                  <td className="px-3 py-2 font-mono text-xs">
-                    {String((r.reference as string) ?? (r.id as string).slice(0, 8))}
-                  </td>
-                  <td className="px-3 py-2">
-                    <div className="font-medium">{String(r.full_name ?? r.name ?? "—")}</div>
-                    <div className="text-xs text-muted-foreground">{String(r.email ?? "")}</div>
-                    <div className="text-xs text-muted-foreground">{String(r.phone ?? "")}</div>
-                  </td>
-                  <td className="max-w-md px-3 py-2 text-xs text-muted-foreground">
-                    {String(r.message ?? r.city ?? r.subject ?? "").slice(0, 200)}
-                  </td>
-                  <td className="px-3 py-2 text-xs text-muted-foreground">
-                    {new Date(String(r.created_at)).toLocaleString()}
-                  </td>
-                  <td className="px-3 py-2">
-                    <div className="flex items-center gap-2">
-                      <span
-                        aria-label={`status ${String(r.status ?? "new")}`}
-                        className={`inline-block h-2 w-2 rounded-full ${
-                          String(r.status ?? "new") === "new"
-                            ? "bg-blue-500"
-                            : String(r.status) === "reviewing"
-                              ? "bg-amber-500"
-                              : "bg-emerald-500"
-                        }`}
+              {rows.map((r: Record<string, unknown>) => {
+                const id = String(r.id);
+                const st = (String(r.status ?? "new") as Status);
+                const assignedId = r.assigned_to ? String(r.assigned_to) : null;
+                const assignedName =
+                  assignedId && (staffData?.staff ?? []).find((s) => s.id === assignedId)?.name;
+                const isChecked = selected.has(id);
+                return (
+                  <tr
+                    key={id}
+                    className={`border-t align-top ${isChecked ? "bg-muted/40" : ""}`}
+                  >
+                    <td className="px-3 py-2">
+                      <input
+                        type="checkbox"
+                        aria-label={`Select ${id}`}
+                        checked={isChecked}
+                        onChange={() => toggleOne(id)}
+                        className="h-4 w-4 rounded border-input"
                       />
-                      <select
-                        value={String(r.status ?? "new")}
-                        onChange={(e) =>
-                          updateMut.mutate({ id: String(r.id), status: e.target.value as (typeof STATUSES)[number] })
-                        }
-                        className="rounded-md border bg-background px-2 py-1 text-xs"
-                        disabled={updateMut.isPending}
-                      >
-                        {STATUSES.map((s) => (
-                          <option key={s} value={s}>{s}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-3 py-2 font-mono text-xs">
+                      {String((r.reference as string) ?? id.slice(0, 8))}
+                    </td>
+                    <td className="px-3 py-2">
+                      <div className="font-medium">{String(r.full_name ?? r.name ?? "—")}</div>
+                      <div className="text-xs text-muted-foreground">{String(r.email ?? "")}</div>
+                      <div className="text-xs text-muted-foreground">{String(r.phone ?? "")}</div>
+                    </td>
+                    <td className="max-w-md px-3 py-2 text-xs text-muted-foreground">
+                      {String(r.message ?? r.city ?? r.subject ?? "").slice(0, 200)}
+                    </td>
+                    <td className="px-3 py-2 text-xs text-muted-foreground">
+                      {new Date(String(r.created_at)).toLocaleString()}
+                    </td>
+                    <td className="px-3 py-2 text-xs text-muted-foreground">
+                      {assignedName ?? (assignedId ? assignedId.slice(0, 8) : "—")}
+                    </td>
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-2">
+                        <span
+                          aria-label={`status ${st}`}
+                          className={`inline-block h-2 w-2 rounded-full ${STATUS_DOT[st] ?? "bg-slate-400"}`}
+                        />
+                        <select
+                          value={st}
+                          onChange={(e) =>
+                            updateMut.mutate({ id, status: e.target.value as Status })
+                          }
+                          className="rounded-md border bg-background px-2 py-1 text-xs"
+                          disabled={updateMut.isPending}
+                        >
+                          {STATUSES.map((s) => (
+                            <option key={s} value={s}>{s}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}

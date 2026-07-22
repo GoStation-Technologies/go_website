@@ -148,26 +148,108 @@ export const adminListSubmissions = createServerFn({ method: "POST" })
 
 
 
+const SUBMISSION_STATUSES = ["new", "reviewing", "approved", "closed"] as const;
+type SubmissionKind = "franchise" | "acquisitions" | "contact";
+type SubmissionTable = "franchise_applications" | "acquisition_requests" | "contact_messages";
+const TABLE_FOR = {
+  franchise: "franchise_applications",
+  acquisitions: "acquisition_requests",
+  contact: "contact_messages",
+} as const satisfies Record<SubmissionKind, SubmissionTable>;
+
+const STAFF_ROLES = ["super_admin", "bd", "hr", "media", "ir", "ops", "support"] as const;
+type StaffRole = (typeof STAFF_ROLES)[number];
+
 const StatusInput = z.object({
   kind: z.enum(["franchise", "acquisitions", "contact"]),
   id: z.string().uuid(),
-  status: z.enum(["new", "reviewing", "closed"]),
+  status: z.enum(SUBMISSION_STATUSES),
 });
 
 export const adminUpdateStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => StatusInput.parse(raw))
   .handler(async ({ data, context }) => {
-    const table =
-      data.kind === "franchise"
-        ? "franchise_applications"
-        : data.kind === "acquisitions"
-          ? "acquisition_requests"
-          : "contact_messages";
-    const { error } = await context.supabase.from(table).update({ status: data.status }).eq("id", data.id);
+    const table = TABLE_FOR[data.kind];
+    // Cast: `.from(dynamicUnion)` collapses to `never` in the generated types.
+    const { error } = await (context.supabase.from(table) as any)
+      .update({ status: data.status })
+      .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// Bulk apply status and/or assignee to many rows of the same kind at once.
+// `assigned_to: null` explicitly unassigns; omitting the key leaves it unchanged.
+const BulkInput = z.object({
+  kind: z.enum(["franchise", "acquisitions", "contact"]),
+  ids: z.array(z.string().uuid()).min(1).max(200),
+  patch: z
+    .object({
+      status: z.enum(SUBMISSION_STATUSES).optional(),
+      assigned_to: z.string().uuid().nullable().optional(),
+    })
+    .refine((p) => p.status !== undefined || p.assigned_to !== undefined, {
+      message: "patch must set status or assigned_to",
+    }),
+});
+
+export const adminBulkUpdateSubmissions = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => BulkInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const table = TABLE_FOR[data.kind];
+    const patch: Record<string, unknown> = {};
+    if (data.patch.status !== undefined) patch.status = data.patch.status;
+    if (data.patch.assigned_to !== undefined) patch.assigned_to = data.patch.assigned_to;
+    const { error, count } = await (context.supabase.from(table) as any)
+      .update(patch, { count: "exact" })
+      .in("id", data.ids);
+    if (error) throw new Error(error.message);
+    return { ok: true, updated: count ?? data.ids.length };
+  });
+
+// Staff picker for the assign action. Two queries — user_roles has no FK to
+// public.profiles so PostgREST cannot embed them. Uses the admin client only
+// after verifying the caller is staff under RLS.
+export const adminListStaff = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: mine, error: meErr } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId);
+    if (meErr) throw new Error(meErr.message);
+    const isStaff = (mine ?? []).some((r) => (STAFF_ROLES as readonly string[]).includes(r.role));
+    if (!isStaff) throw new Error("Forbidden");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: roleRows, error: rolesErr } = await supabaseAdmin
+      .from("user_roles")
+      .select("user_id, role")
+      .in("role", STAFF_ROLES as unknown as StaffRole[]);
+    if (rolesErr) throw new Error(rolesErr.message);
+    const rows = roleRows ?? [];
+    if (!rows.length) return { staff: [] as Array<{ id: string; name: string; roles: string[] }> };
+
+    const userIds = Array.from(new Set(rows.map((r) => r.user_id)));
+    const { data: profiles, error: pErr } = await supabaseAdmin
+      .from("profiles")
+      .select("id, full_name")
+      .in("id", userIds);
+    if (pErr) throw new Error(pErr.message);
+    const nameById = new Map((profiles ?? []).map((p) => [p.id, p.full_name || "Unnamed"] as const));
+
+    const byId = new Map<string, { id: string; name: string; roles: string[] }>();
+    for (const r of rows) {
+      const existing = byId.get(r.user_id) ?? { id: r.user_id, name: nameById.get(r.user_id) ?? "Unnamed", roles: [] };
+      if (!existing.roles.includes(r.role)) existing.roles.push(r.role);
+      byId.set(r.user_id, existing);
+    }
+    return { staff: Array.from(byId.values()).sort((a, b) => a.name.localeCompare(b.name)) };
+  });
+
+
 
 export { ChatsInput, paginateSessions, validateChatsInput, type AdminListChatsInput } from "./admin.pagination";
 import { validateChatsInput } from "./admin.pagination";
