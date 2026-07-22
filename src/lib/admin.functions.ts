@@ -148,26 +148,90 @@ export const adminListSubmissions = createServerFn({ method: "POST" })
 
 
 
+const SUBMISSION_STATUSES = ["new", "reviewing", "approved", "closed"] as const;
+const TABLE_FOR: Record<"franchise" | "acquisitions" | "contact", string> = {
+  franchise: "franchise_applications",
+  acquisitions: "acquisition_requests",
+  contact: "contact_messages",
+};
+
 const StatusInput = z.object({
   kind: z.enum(["franchise", "acquisitions", "contact"]),
   id: z.string().uuid(),
-  status: z.enum(["new", "reviewing", "closed"]),
+  status: z.enum(SUBMISSION_STATUSES),
 });
 
 export const adminUpdateStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => StatusInput.parse(raw))
   .handler(async ({ data, context }) => {
-    const table =
-      data.kind === "franchise"
-        ? "franchise_applications"
-        : data.kind === "acquisitions"
-          ? "acquisition_requests"
-          : "contact_messages";
+    const table = TABLE_FOR[data.kind];
     const { error } = await context.supabase.from(table).update({ status: data.status }).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// Bulk apply status and/or assignee to many rows of the same kind at once.
+// `assigned_to: null` explicitly unassigns; omitting the key leaves it unchanged.
+const BulkInput = z.object({
+  kind: z.enum(["franchise", "acquisitions", "contact"]),
+  ids: z.array(z.string().uuid()).min(1).max(200),
+  patch: z
+    .object({
+      status: z.enum(SUBMISSION_STATUSES).optional(),
+      assigned_to: z.string().uuid().nullable().optional(),
+    })
+    .refine((p) => p.status !== undefined || p.assigned_to !== undefined, {
+      message: "patch must set status or assigned_to",
+    }),
+});
+
+export const adminBulkUpdateSubmissions = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => BulkInput.parse(raw))
+  .handler(async ({ data, context }) => {
+    const table = TABLE_FOR[data.kind];
+    const patch: Record<string, unknown> = {};
+    if (data.patch.status !== undefined) patch.status = data.patch.status;
+    if (data.patch.assigned_to !== undefined) patch.assigned_to = data.patch.assigned_to;
+    const { error, count } = await context.supabase
+      .from(table)
+      .update(patch, { count: "exact" })
+      .in("id", data.ids);
+    if (error) throw new Error(error.message);
+    return { ok: true, updated: count ?? data.ids.length };
+  });
+
+// Staff picker for the assign action. Uses the admin client so we can join
+// user_roles + profiles without granting broad SELECT on user_roles. Callers
+// must already be staff (verified via user_roles under RLS).
+export const adminListStaff = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: mine, error: meErr } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId);
+    if (meErr) throw new Error(meErr.message);
+    const staffRoles = ["super_admin", "bd", "hr", "media", "ir", "ops", "support"];
+    if (!(mine ?? []).some((r) => staffRoles.includes(r.role as string))) {
+      throw new Error("Forbidden");
+    }
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin
+      .from("user_roles")
+      .select("user_id, role, profiles:profiles!inner(id, full_name)")
+      .in("role", staffRoles);
+    if (error) throw new Error(error.message);
+    const byId = new Map<string, { id: string; name: string; roles: string[] }>();
+    for (const r of (rows ?? []) as Array<{ user_id: string; role: string; profiles: { full_name: string | null } | null }>) {
+      const existing = byId.get(r.user_id) ?? { id: r.user_id, name: r.profiles?.full_name || "Unnamed", roles: [] };
+      if (!existing.roles.includes(r.role)) existing.roles.push(r.role);
+      byId.set(r.user_id, existing);
+    }
+    return { staff: Array.from(byId.values()).sort((a, b) => a.name.localeCompare(b.name)) };
+  });
+
 
 export { ChatsInput, paginateSessions, validateChatsInput, type AdminListChatsInput } from "./admin.pagination";
 import { validateChatsInput } from "./admin.pagination";
