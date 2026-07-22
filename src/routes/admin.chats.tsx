@@ -140,7 +140,23 @@ function ChatsPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Chat logs</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-semibold tracking-tight">Chat logs</h1>
+          {sinceHours ? (
+            <button
+              type="button"
+              onClick={() =>
+                navigate({
+                  search: (prev: Record<string, unknown>) => ({ ...prev, sinceHours: undefined, page: 1 }),
+                })
+              }
+              className="inline-flex items-center gap-1 rounded-full border bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary hover:bg-primary/15"
+              aria-label="Clear time filter"
+            >
+              Last {sinceHours}h ×
+            </button>
+          ) : null}
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <input
             type="search"
