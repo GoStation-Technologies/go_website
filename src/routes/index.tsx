@@ -426,10 +426,6 @@ function HomePage() {
                     {t("media.news")}
                   </span>
                 </div>
-                  <div className="absolute end-3 top-3 rounded-full bg-ember px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
-                    {t("media.news")}
-                  </div>
-                </div>
                 <div className="p-6">
                   <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     {n.published_at
