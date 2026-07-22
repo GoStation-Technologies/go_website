@@ -12,6 +12,7 @@ const searchSchema = z.object({
   pageSize: fallback(z.number().int(), 10).default(10),
   sort: fallback(z.string(), "newest").default("newest"),
   q: fallback(z.string(), "").default(""),
+  sinceHours: z.number().int().optional(),
 });
 
 export const Route = createFileRoute("/admin/chats")({
