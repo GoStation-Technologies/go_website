@@ -61,7 +61,10 @@ function write(next: UndoEntry[]) {
 
 export const undoStore = {
   list(): UndoEntry[] {
-    return read().filter((e) => e.expiresAt > Date.now());
+    // Must return a stable reference between mutations — useSyncExternalStore
+    // bails out on Object.is equality. Filtering here would allocate a new
+    // array on every render and loop forever.
+    return read();
   },
   push(entry: UndoEntry) {
     const next = read().filter((e) => e.id !== entry.id && e.expiresAt > Date.now());
@@ -69,8 +72,9 @@ export const undoStore = {
     write(next);
   },
   remove(id: string) {
-    const next = read().filter((e) => e.id !== id);
-    write(next);
+    const current = read();
+    const next = current.filter((e) => e.id !== id);
+    if (next.length !== current.length) write(next);
   },
   prune() {
     const now = Date.now();
