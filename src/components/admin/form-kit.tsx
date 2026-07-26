@@ -68,7 +68,16 @@ export function Field({
   return (
     <div dir={dir} className={cn("min-w-0", align, className)}>
       <Label className="mb-1.5 block text-sm font-semibold text-foreground">{label}</Label>
-      <div className={cn("[&_input]:w-full [&_textarea]:w-full", align, `[&_input]:${align}`)}>{children}</div>
+      <div
+        className={cn(
+          "[&_input]:w-full [&_textarea]:w-full",
+          lang === "en"
+            ? "[&_input]:text-left [&_textarea]:text-left [&_select]:text-left"
+            : "[&_input]:text-right [&_textarea]:text-right [&_select]:text-right",
+        )}
+      >
+        {children}
+      </div>
       {hint ? <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p> : null}
     </div>
   );
