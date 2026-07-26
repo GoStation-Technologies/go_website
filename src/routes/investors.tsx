@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
+import { logReportDownload } from "@/lib/reports.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -93,7 +94,7 @@ function IRPage() {
                     <div className="text-xs text-muted-foreground">{r.report_type} · {r.report_year}</div>
                   </div>
                 </div>
-                <Button asChild variant="outline" size="sm" onClick={() => supabase.from("report_downloads").insert({ report_id: r.id })}>
+                <Button asChild variant="outline" size="sm" onClick={() => { void logReportDownload({ data: { reportId: r.id } }).catch(() => {}); }}>
                   <a href={r.file_url} target="_blank" rel="noreferrer"><Download className="me-1 h-4 w-4" />{t("investors.download")}</a>
                 </Button>
               </CardContent>

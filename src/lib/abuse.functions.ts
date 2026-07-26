@@ -2,6 +2,20 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+/** Server-side role check against the caller's own role rows (RLS scoped). */
+async function isSuperAdmin(
+  supabase: { from: (t: "user_roles") => any },
+  userId: string,
+): Promise<boolean> {
+  const { data } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "super_admin")
+    .maybeSingle();
+  return Boolean(data);
+}
+
 const MetricsInput = z.object({
   windowHours: z.number().int().min(1).max(24 * 30).default(24),
   limitRecent: z.number().int().min(1).max(200).default(50),
@@ -17,11 +31,9 @@ export const adminAbuseMetrics = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => MetricsInput.parse(raw))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "super_admin",
-    });
-    if (!isAdmin) throw new Response("Forbidden", { status: 403 });
+    if (!(await isSuperAdmin(context.supabase, context.userId))) {
+      throw new Response("Forbidden", { status: 403 });
+    }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const sinceMs = Date.now() - data.windowHours * 3600_000;
@@ -114,11 +126,9 @@ export const adminAbuseExport = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => ExportInput.parse(raw))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "super_admin",
-    });
-    if (!isAdmin) throw new Response("Forbidden", { status: 403 });
+    if (!(await isSuperAdmin(context.supabase, context.userId))) {
+      throw new Response("Forbidden", { status: 403 });
+    }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const since = new Date(Date.now() - data.windowHours * 3600_000).toISOString();
@@ -152,11 +162,9 @@ export const adminAbuseExportSubmit = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => SubmitInput.parse(raw))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "super_admin",
-    });
-    if (!isAdmin) throw new Response("Forbidden", { status: 403 });
+    if (!(await isSuperAdmin(context.supabase, context.userId))) {
+      throw new Response("Forbidden", { status: 403 });
+    }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const since = new Date(Date.now() - data.windowHours * 3600_000).toISOString();
