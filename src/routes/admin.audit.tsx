@@ -231,13 +231,13 @@ function AuditPage() {
         <div className="text-muted-foreground">Page {search.page} of {pages}</div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm" disabled={search.page <= 1}>
-            <Link to="/admin/audit" search={(p: typeof search) => ({ ...p, page: Math.max(1, search.page - 1) })}>
-              <ChevronLeft className="h-4 w-4" /> Prev
+            <Link to="/admin/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.max(1, search.page - 1) })}>
+              <ChevronLeft className="h-4 w-4 rtl:rotate-180" /> Prev
             </Link>
           </Button>
           <Button asChild variant="outline" size="sm" disabled={search.page >= pages}>
-            <Link to="/admin/audit" search={(p: typeof search) => ({ ...p, page: Math.min(pages, search.page + 1) })}>
-              Next <ChevronRight className="h-4 w-4" />
+            <Link to="/admin/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.min(pages, search.page + 1) })}>
+              Next <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Link>
           </Button>
         </div>

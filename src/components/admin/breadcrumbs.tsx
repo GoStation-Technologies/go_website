@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,23 +10,26 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Fragment } from "react";
 
-const LABELS: Record<string, string> = {
-  admin: "Admin",
-  stations: "Stations",
-  news: "News",
-  careers: "Careers",
-  submissions: "Submissions",
-  chats: "Chat logs",
-  abuse: "Abuse events",
+const KEYS: Record<string, string> = {
+  admin: "admin.brand",
+  stations: "admin.nav.stations",
+  news: "admin.nav.news",
+  careers: "admin.nav.careers",
+  submissions: "admin.nav.submissions",
+  chats: "admin.nav.chats",
+  abuse: "admin.nav.abuse",
+  audit: "admin.nav.audit",
 };
 
 export function AdminBreadcrumbs() {
+  const { t } = useTranslation();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const parts = pathname.split("/").filter(Boolean);
 
   const crumbs = parts.map((part, i) => {
     const href = "/" + parts.slice(0, i + 1).join("/");
-    const label = LABELS[part] ?? part;
+    const key = KEYS[part];
+    const label = key ? t(key) : part;
     return { href, label, isLast: i === parts.length - 1 };
   });
 
@@ -43,7 +47,7 @@ export function AdminBreadcrumbs() {
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>
-            {!c.isLast && <BreadcrumbSeparator />}
+            {!c.isLast && <BreadcrumbSeparator className="rtl:rotate-180" />}
           </Fragment>
         ))}
       </BreadcrumbList>

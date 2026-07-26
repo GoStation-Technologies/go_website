@@ -15,7 +15,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { createI18nInstance, type ContentLanguage } from "@/lib/i18n";
 import { THEME_INIT_SCRIPT } from "@/components/theme-toggle";
 import { Toaster } from "@/components/ui/sonner";
-import { UndoToastHost } from "@/components/admin/undo-toast-host";
 
 function NotFoundComponent() {
   return (
@@ -140,7 +139,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n} defaultNS="t">
         <Outlet />
-        <UndoToastHost />
         <Toaster />
       </I18nextProvider>
     </QueryClientProvider>
