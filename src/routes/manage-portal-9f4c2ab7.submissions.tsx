@@ -493,7 +493,7 @@ function SubmissionsPage() {
                           onChange={(e) =>
                             updateMut.mutate({ id, status: e.target.value as Status })
                           }
-                          className="rounded-md border bg-background px-2 py-1 text-xs"
+                          className="rounded-md border border-input bg-background px-2 py-1 text-xs shadow-sm focus-visible:ring-2 focus-visible:ring-ring"
                           disabled={updateMut.isPending}
                         >
                           {STATUSES.map((s) => (
