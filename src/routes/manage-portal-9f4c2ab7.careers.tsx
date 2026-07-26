@@ -20,15 +20,28 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7/careers")({
 
 type Job = {
   id?: string; slug: string; title_ar: string; title_en: string;
-  department: string; city: string; employment_type: string;
+  department_en: string; department_ar: string; city_en: string; city_ar: string;
+  employment_type: string;
   description_ar?: string | null; description_en?: string | null; is_active: boolean;
 };
 
 const empty: Job = {
   slug: "", title_ar: "", title_en: "",
-  department: "", city: "", employment_type: "full_time",
+  department_en: "", department_ar: "", city_en: "", city_ar: "",
+  employment_type: "full_time",
   description_ar: "", description_en: "", is_active: true,
 };
+
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 
 function CareersPage() {
   const { t } = useTranslation();
