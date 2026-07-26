@@ -16,8 +16,9 @@ import { getContentLanguage } from "@/lib/i18n";
 async function waitForSession() {
   const { data } = await supabase.auth.getSession();
   if (data.session) return data.session;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // Give the client one tick to finish restoring from storage / an OAuth hash.
-  return await new Promise<typeof data.session>((resolve) => {
+  return await new Promise<any>((resolve) => {
     const timer = setTimeout(() => {
       sub.data.subscription.unsubscribe();
       resolve(null);
