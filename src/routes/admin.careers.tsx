@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { adminListJobs, adminUpsertJob, adminDeleteJob } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ const empty: Job = {
 };
 
 function CareersPage() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Job>(empty);
@@ -37,12 +39,12 @@ function CareersPage() {
   const { data, isFetching } = useQuery({ queryKey: ["admin", "jobs"], queryFn: () => adminListJobs() });
   const upsert = useMutation({
     mutationFn: (j: Job) => adminUpsertJob({ data: j }),
-    onSuccess: () => { toast.success("Saved"); setOpen(false); qc.invalidateQueries({ queryKey: ["admin", "jobs"] }); },
+    onSuccess: () => { toast.success(t("admin.common.saved")); setOpen(false); qc.invalidateQueries({ queryKey: ["admin", "jobs"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
   const del = useMutation({
     mutationFn: (id: string) => adminDeleteJob({ data: { id } }),
-    onSuccess: () => { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin", "jobs"] }); },
+    onSuccess: () => { toast.success(t("admin.common.deleted")); qc.invalidateQueries({ queryKey: ["admin", "jobs"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -65,32 +67,32 @@ function CareersPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Careers</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("admin.careers.title")}</h1>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />New opening</Button></DialogTrigger>
+          <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />{t("admin.careers.new")}</Button></DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader><DialogTitle>{form.id ? "Edit job" : "New job"}</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>{form.id ? t("admin.careers.editTitle") : t("admin.careers.newTitle")}</DialogTitle></DialogHeader>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Slug"><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
-              <Field label="Employment type">
+              <Field label={t("admin.common.slug")}><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.employmentType")}>
                 <select value={form.employment_type} onChange={(e) => setForm({ ...form, employment_type: e.target.value })} className="h-9 w-full rounded-md border bg-background px-2 text-sm">
-                  <option value="full_time">Full-time</option><option value="part_time">Part-time</option>
-                  <option value="contract">Contract</option><option value="internship">Internship</option>
+                  <option value="full_time">{t("admin.careers.types.full_time")}</option><option value="part_time">{t("admin.careers.types.part_time")}</option>
+                  <option value="contract">{t("admin.careers.types.contract")}</option><option value="internship">{t("admin.careers.types.internship")}</option>
                 </select>
               </Field>
-              <Field label="Title (EN)"><Input value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
-              <Field label="Title (AR)"><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
-              <Field label="Department"><Input value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} /></Field>
-              <Field label="City"><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
-              <Field label="Description (EN)"><Textarea rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
-              <Field label="Description (AR)"><Textarea dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.titleEn")}><Input value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.titleAr")}><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+              <Field label={t("admin.common.department")}><Input value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} /></Field>
+              <Field label={t("admin.common.city")}><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.descriptionEn")}><Textarea rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.descriptionAr")}><Textarea dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
               <div className="col-span-2 pt-2">
-                <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />Active (visible on careers page)</label>
+                <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />{t("admin.careers.f.activeHint")}</label>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-              <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>Save</Button>
+              <Button variant="ghost" onClick={() => setOpen(false)}>{t("admin.common.cancel")}</Button>
+              <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>{t("admin.common.save")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -100,23 +102,23 @@ function CareersPage() {
         q={view.q} onQ={view.setQ}
         sort={view.sort} onSort={view.setSort}
         sortOptions={[
-          { value: "newest", label: "Newest" },
-          { value: "title_en", label: "Title A→Z" },
-          { value: "department", label: "Department" },
-          { value: "city", label: "City" },
-          { value: "active_first", label: "Active first" },
+          { value: "newest", label: t("admin.common.newest") },
+          { value: "title_en", label: t("admin.common.titleAz") },
+          { value: "department", label: t("admin.common.department") },
+          { value: "city", label: t("admin.common.city") },
+          { value: "active_first", label: t("admin.common.activeFirst") },
         ]}
         pageSize={view.pageSize} onPageSize={view.setPageSize}
         page={view.page} pageCount={view.pageCount} total={view.total} onPage={view.setPage}
-        searchPlaceholder="Search title, dept, city…"
+        searchPlaceholder={t("admin.careers.searchPlaceholder")}
       />
 
       <div className="overflow-x-auto rounded-lg border bg-background">
-        {isFetching && !rows.length ? <p className="p-6 text-sm text-muted-foreground">Loading…</p> :
-         view.pageRows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No openings.</p> : (
+        {isFetching && !rows.length ? <p className="p-6 text-sm text-muted-foreground">{t("admin.common.loading")}</p> :
+         view.pageRows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">{t("admin.careers.empty")}</p> : (
           <table className="min-w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
-              <tr><th className="px-3 py-2 text-start">Title</th><th className="px-3 py-2 text-start">Dept</th><th className="px-3 py-2 text-start">City</th><th className="px-3 py-2 text-start">Type</th><th className="px-3 py-2 text-start">Status</th><th className="px-3 py-2"></th></tr>
+              <tr><th className="px-3 py-2 text-start">{t("admin.common.title")}</th><th className="px-3 py-2 text-start">{t("admin.common.department")}</th><th className="px-3 py-2 text-start">{t("admin.common.city")}</th><th className="px-3 py-2 text-start">{t("admin.common.type")}</th><th className="px-3 py-2 text-start">{t("admin.common.status")}</th><th className="px-3 py-2"></th></tr>
             </thead>
             <tbody>
               {view.pageRows.map((j) => (
@@ -124,11 +126,11 @@ function CareersPage() {
                   <td className="px-3 py-2"><div className="font-medium">{j.title_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{j.title_ar}</div></td>
                   <td className="px-3 py-2 text-xs">{j.department}</td>
                   <td className="px-3 py-2 text-xs">{j.city}</td>
-                  <td className="px-3 py-2 text-xs">{j.employment_type}</td>
-                  <td className="px-3 py-2 text-xs">{j.is_active ? "Active" : "Closed"}</td>
+                  <td className="px-3 py-2 text-xs">{t(`admin.careers.types.${j.employment_type}`, { defaultValue: j.employment_type })}</td>
+                  <td className="px-3 py-2 text-xs">{j.is_active ? t("admin.common.active") : t("admin.common.closed")}</td>
                   <td className="px-3 py-2 text-end">
                     <Button size="sm" variant="ghost" onClick={() => edit(j)}><Pencil className="h-4 w-4" /></Button>
-                    <Button size="sm" variant="ghost" onClick={() => { if (confirm("Delete opening?") && j.id) del.mutate(j.id); }}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    <Button size="sm" variant="ghost" onClick={() => { if (confirm(t("admin.careers.confirmDelete")) && j.id) del.mutate(j.id); }}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                   </td>
                 </tr>
               ))}
