@@ -88,36 +88,38 @@ function CareersPage() {
         <h1 className="text-2xl font-semibold tracking-tight">{t("admin.careers.title")}</h1>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />{t("admin.careers.new")}</Button></DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
             <DialogHeader><DialogTitle>{form.id ? t("admin.careers.editTitle") : t("admin.careers.newTitle")}</DialogTitle></DialogHeader>
-            <div dir="ltr" className="grid grid-cols-2 gap-3">
-              <Field label={t("admin.common.slug")} hint={t("admin.careers.f.slugHint")}>
+            <div dir="ltr" className="grid grid-cols-2 gap-6">
+              <Field label={t("admin.common.slug")}>
                 <Input
                   dir="ltr"
+                  disabled
+                  readOnly
                   value={form.slug}
-                  onChange={(e) => { setSlugTouched(true); setForm({ ...form, slug: slugify(e.target.value) }); }}
+                  className={inputCls + " cursor-not-allowed bg-muted text-muted-foreground disabled:opacity-100"}
                 />
               </Field>
               <Field label={t("admin.careers.f.employmentType")} rtl>
-                <select value={form.employment_type} onChange={(e) => setForm({ ...form, employment_type: e.target.value })} className="h-9 w-full rounded-md border bg-background px-2 text-sm">
+                <select value={form.employment_type} onChange={(e) => setForm({ ...form, employment_type: e.target.value })} className={"h-10 w-full px-2 text-sm " + inputCls}>
                   <option value="full_time">{t("admin.careers.types.full_time")}</option><option value="part_time">{t("admin.careers.types.part_time")}</option>
                   <option value="contract">{t("admin.careers.types.contract")}</option><option value="internship">{t("admin.careers.types.internship")}</option>
                 </select>
               </Field>
-              <Field label={t("admin.careers.f.titleEn")}><Input value={form.title_en} onChange={(e) => onTitleEn(e.target.value)} /></Field>
-              <Field label={t("admin.careers.f.titleAr")} rtl><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.departmentEn")}><Input value={form.department_en} onChange={(e) => setForm({ ...form, department_en: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.departmentAr")} rtl><Input dir="rtl" value={form.department_ar} onChange={(e) => setForm({ ...form, department_ar: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.cityEn")}><Input value={form.city_en} onChange={(e) => setForm({ ...form, city_en: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.cityAr")} rtl><Input dir="rtl" value={form.city_ar} onChange={(e) => setForm({ ...form, city_ar: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.descriptionEn")}><Textarea rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.descriptionAr")} rtl><Textarea dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
-              <div className="col-span-2 pt-2">
+              <Field label={t("admin.careers.f.titleEn")}><Input className={inputCls} value={form.title_en} onChange={(e) => onTitleEn(e.target.value)} /></Field>
+              <Field label={t("admin.careers.f.titleAr")} rtl><Input className={inputCls} dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.departmentEn")}><Input className={inputCls} value={form.department_en} onChange={(e) => setForm({ ...form, department_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.departmentAr")} rtl><Input className={inputCls} dir="rtl" value={form.department_ar} onChange={(e) => setForm({ ...form, department_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.cityEn")}><Input className={inputCls} value={form.city_en} onChange={(e) => setForm({ ...form, city_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.cityAr")} rtl><Input className={inputCls} dir="rtl" value={form.city_ar} onChange={(e) => setForm({ ...form, city_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.descriptionEn")}><Textarea className={inputCls} rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.descriptionAr")} rtl><Textarea className={inputCls} dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
+              <div className="col-span-2 mt-6 border-t pt-6">
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />{t("admin.careers.f.activeHint")}</label>
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="mt-2">
               <Button variant="ghost" onClick={() => setOpen(false)}>{t("admin.common.cancel")}</Button>
               <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>{t("admin.common.save")}</Button>
             </DialogFooter>
@@ -170,12 +172,15 @@ function CareersPage() {
   );
 }
 
+const inputCls =
+  "rounded-md border border-input bg-background shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring";
+
 function Field({ label, children, hint, rtl }: { label: string; children: React.ReactNode; hint?: string; rtl?: boolean }) {
   return (
-    <div dir={rtl ? "rtl" : "ltr"} className="space-y-1">
-      <Label className="text-xs">{label}</Label>
+    <div dir={rtl ? "rtl" : "ltr"}>
+      <Label className="mb-1.5 block text-sm font-semibold text-foreground">{label}</Label>
       {children}
-      {hint ? <p className="text-[11px] text-muted-foreground">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }
