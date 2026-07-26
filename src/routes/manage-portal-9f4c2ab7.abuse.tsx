@@ -30,7 +30,7 @@ const searchSchema = z.object({
   reason: z.string().min(1).max(64).optional(),
 });
 
-export const Route = createFileRoute("/admin/abuse")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7/abuse")({
   validateSearch: zodValidator(searchSchema),
   component: AbuseDashboard,
 });

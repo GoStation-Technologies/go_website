@@ -16,7 +16,7 @@ const searchSchema = z.object({
   sinceHours: z.number().int().optional(),
 });
 
-export const Route = createFileRoute("/admin/chats")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7/chats")({
   validateSearch: zodValidator(searchSchema),
   component: ChatsPage,
 });
@@ -88,7 +88,7 @@ function highlight(text: string, query: string) {
 
 function ChatsPage() {
   const { page, pageSize, sort, q, sinceHours } = Route.useSearch();
-  const navigate = useNavigate({ from: "/admin/chats" });
+  const navigate = useNavigate({ from: "/manage-portal-9f4c2ab7/chats" });
 
   // Local state for the search input, debounced into the URL so typing
   // doesn't fire a request on every keystroke.

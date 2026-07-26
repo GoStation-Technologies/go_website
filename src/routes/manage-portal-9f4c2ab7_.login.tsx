@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/admin_/login")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7_/login")({
   ssr: false,
   component: AdminLoginPage,
   head: () => ({
@@ -35,12 +35,12 @@ function AdminLoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
-    navigate({ to: "/admin" });
+    navigate({ to: "/manage-portal-9f4c2ab7" });
   };
 
   const google = async () => {
     const r = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/admin/login`,
+      redirect_uri: `${window.location.origin}/manage-portal-9f4c2ab7/login`,
     });
     if (r.error) toast.error(r.error.message ?? "Google sign-in failed");
   };

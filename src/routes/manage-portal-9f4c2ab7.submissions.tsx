@@ -63,7 +63,7 @@ const DAY_RANGES = [
   { v: 90, label: "90d" },
 ] as const;
 
-export const Route = createFileRoute("/admin/submissions")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7/submissions")({
   validateSearch: zodValidator(searchSchema),
   component: SubmissionsPage,
 });
@@ -71,7 +71,7 @@ export const Route = createFileRoute("/admin/submissions")({
 function SubmissionsPage() {
   const { t } = useTranslation();
   const { kind, status, days, page, sort } = Route.useSearch();
-  const navigate = useNavigate({ from: "/admin/submissions" });
+  const navigate = useNavigate({ from: "/manage-portal-9f4c2ab7/submissions" });
   // Any filter/sort change resets page to 1 to avoid landing past the last page.
   const setKind = (k: Kind) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, kind: k, page: 1 }) });

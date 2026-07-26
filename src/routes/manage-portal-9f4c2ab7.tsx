@@ -13,11 +13,11 @@ import { UndoToastHost } from "@/components/admin/undo-toast-host";
 import { LangBoot } from "@/components/site/lang-boot";
 import { getContentLanguage } from "@/lib/i18n";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
-    if (!data.session) throw redirect({ to: "/admin/login" });
+    if (!data.session) throw redirect({ to: "/manage-portal-9f4c2ab7/login" });
   },
   loader: async () => {
     const res = await getMyStaffRoles();
@@ -42,7 +42,7 @@ function AdminLayout() {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    router.navigate({ to: "/admin/login" });
+    router.navigate({ to: "/manage-portal-9f4c2ab7/login" });
   };
 
   const defaultOpen =

@@ -40,7 +40,7 @@ const searchSchema = z.object({
   page: z.coerce.number().int().min(1).catch(1).default(1),
 });
 
-export const Route = createFileRoute("/admin/audit")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7/audit")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
@@ -233,12 +233,12 @@ function AuditPage() {
         <div className="text-muted-foreground">{t("admin.subs.pageOf", { page: search.page, count: pages })}</div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm" disabled={search.page <= 1}>
-            <Link to="/admin/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.max(1, search.page - 1) })}>
+            <Link to="/manage-portal-9f4c2ab7/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.max(1, search.page - 1) })}>
               <ChevronLeft className="h-4 w-4 rtl:rotate-180" /> {t("admin.common.prev")}
             </Link>
           </Button>
           <Button asChild variant="outline" size="sm" disabled={search.page >= pages}>
-            <Link to="/admin/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.min(pages, search.page + 1) })}>
+            <Link to="/manage-portal-9f4c2ab7/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.min(pages, search.page + 1) })}>
               {t("admin.common.next")} <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Link>
           </Button>

@@ -25,14 +25,14 @@ import {
 } from "@/components/ui/sidebar";
 
 const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
-  { key: "overview", url: "/admin", icon: LayoutDashboard, exact: true },
-  { key: "stations", url: "/admin/stations", icon: MapPin },
-  { key: "news", url: "/admin/news", icon: Newspaper },
-  { key: "careers", url: "/admin/careers", icon: Briefcase },
-  { key: "submissions", url: "/admin/submissions", icon: Inbox },
-  { key: "chats", url: "/admin/chats", icon: MessageSquare },
-  { key: "abuse", url: "/admin/abuse", icon: ShieldAlert },
-  { key: "audit", url: "/admin/audit", icon: ScrollText },
+  { key: "overview", url: "/manage-portal-9f4c2ab7", icon: LayoutDashboard, exact: true },
+  { key: "stations", url: "/manage-portal-9f4c2ab7/stations", icon: MapPin },
+  { key: "news", url: "/manage-portal-9f4c2ab7/news", icon: Newspaper },
+  { key: "careers", url: "/manage-portal-9f4c2ab7/careers", icon: Briefcase },
+  { key: "submissions", url: "/manage-portal-9f4c2ab7/submissions", icon: Inbox },
+  { key: "chats", url: "/manage-portal-9f4c2ab7/chats", icon: MessageSquare },
+  { key: "abuse", url: "/manage-portal-9f4c2ab7/abuse", icon: ShieldAlert },
+  { key: "audit", url: "/manage-portal-9f4c2ab7/audit", icon: ScrollText },
 ];
 
 export function AdminSidebar() {
@@ -47,7 +47,7 @@ export function AdminSidebar() {
     <Sidebar collapsible="icon" side={rtl ? "right" : "left"}>
       <SidebarHeader className="border-b p-2">
         <Link
-          to="/admin"
+          to="/manage-portal-9f4c2ab7"
           className="flex h-10 items-center gap-2 overflow-hidden rounded-md px-2 font-semibold text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
           <LayoutDashboard className="h-5 w-5 shrink-0" />

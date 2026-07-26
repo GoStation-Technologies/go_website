@@ -13,7 +13,7 @@ import { Pencil, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useListView, ListToolbar, validateListViewSearch } from "@/components/admin/list-toolbar";
 
-export const Route = createFileRoute("/admin/careers")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7/careers")({
   component: CareersPage,
   validateSearch: (s: Record<string, unknown>) => validateListViewSearch(s),
 });

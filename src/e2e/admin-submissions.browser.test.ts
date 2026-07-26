@@ -81,7 +81,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -94,8 +94,8 @@ async function signIn(user: TestUser) {
 maybe("Admin submissions — status updates & access control", () => {
   it("super_admin sees the seeded submission and status change persists in DB", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(BASE_URL + "/admin/submissions", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/admin/submissions");
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/submissions", { waitUntil: "networkidle" });
+    expect(new URL(page.url()).pathname).toBe("/manage-portal-9f4c2ab7/submissions");
 
     // Switch to Contact tab
     await page.getByRole("button", { name: "Contact" }).click();
@@ -140,8 +140,8 @@ maybe("Admin submissions — status updates & access control", () => {
     await admin!.from("contact_messages").update({ status: "new" }).eq("id", seededId!);
 
     const { context, page } = await signIn(outsider!);
-    // /admin/submissions must not render the admin page for a non-staff user
-    await page.goto(BASE_URL + "/admin/submissions", { waitUntil: "networkidle" });
+    // /manage-portal-9f4c2ab7/submissions must not render the admin page for a non-staff user
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/submissions", { waitUntil: "networkidle" });
     const pathname = new URL(page.url()).pathname;
     expect(pathname).not.toMatch(/^\/admin(\/|$)/);
 
@@ -166,8 +166,8 @@ maybe("Admin submissions — status updates & access control", () => {
     await admin!.from("contact_messages").update({ status: "new" }).eq("id", seededId!);
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto(BASE_URL + "/admin/submissions", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/admin/login");
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/submissions", { waitUntil: "networkidle" });
+    expect(new URL(page.url()).pathname).toBe("/manage-portal-9f4c2ab7/login");
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain(seededEmail.toLowerCase());
     expect(body).not.toContain(seededMessage.toLowerCase());
