@@ -48,6 +48,8 @@ function CareersPage() {
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Job>(empty);
+  const [slugTouched, setSlugTouched] = useState(false);
+
 
   const { data, isFetching } = useQuery({ queryKey: ["admin", "jobs"], queryFn: () => adminListJobs() });
   const upsert = useMutation({
