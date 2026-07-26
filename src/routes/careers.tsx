@@ -33,10 +33,10 @@ function CareersPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-16 text-primary-foreground">
+      <section className="bg-brand-radial py-16 text-white">
         <div className="mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{t("careers.title")}</h1>
-          <p className="mt-3 max-w-2xl text-primary-foreground/80">{t("careers.intro")}</p>
+          <p className="mt-3 max-w-2xl text-white/80">{t("careers.intro")}</p>
         </div>
       </section>
       <section className="mx-auto max-w-5xl px-4 py-16">

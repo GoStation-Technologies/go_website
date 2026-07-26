@@ -30,7 +30,7 @@ function MediaPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-16 text-primary-foreground">
+      <section className="bg-brand-radial py-16 text-white">
         <div className="mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{t("media.title")}</h1>
         </div>

@@ -47,10 +47,10 @@ function AboutPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-20 text-primary-foreground">
+      <section className="bg-brand-radial py-20 text-white">
         <div className="mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{t("about.title")}</h1>
-          <p className="mt-4 max-w-2xl text-primary-foreground/80">{get("story_body")}</p>
+          <p className="mt-4 max-w-2xl text-white/80">{get("story_body")}</p>
         </div>
       </section>
 

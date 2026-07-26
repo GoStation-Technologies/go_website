@@ -57,10 +57,10 @@ function StationsPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-16 text-primary-foreground">
+      <section className="bg-brand-radial py-16 text-white">
         <div className="mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{t("stations.title")}</h1>
-          <p className="mt-3 max-w-2xl text-primary-foreground/80">{t("stations.intro")}</p>
+          <p className="mt-3 max-w-2xl text-white/80">{t("stations.intro")}</p>
         </div>
       </section>
 
