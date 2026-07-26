@@ -15,8 +15,9 @@ export const disabledCls =
   "cursor-not-allowed bg-muted text-muted-foreground disabled:opacity-100";
 
 /**
- * Admin form grid. Always RTL: the first cell lands on the right,
- * so English fields (declared first) sit right and Arabic fields sit left.
+ * Admin form grid. Column order is pinned with an explicit LTR container so it
+ * never mirrors with the UI language: the first declared cell is always the
+ * left column (English) and the second is always the right column (Arabic).
  */
 export function FormGrid({
   children,
@@ -29,7 +30,7 @@ export function FormGrid({
 }) {
   return (
     <div
-      dir="rtl"
+      dir="ltr"
       className={cn("grid gap-6", cols === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1", className)}
     >
       {children}
