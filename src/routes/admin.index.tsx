@@ -57,6 +57,7 @@ type Kpi = {
 
 function Overview() {
   const { t, i18n } = useTranslation();
+  const rtl = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("ar");
   const locale = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("ar") ? "ar-SA" : "en-US";
   const { days } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/" });
@@ -129,7 +130,7 @@ function Overview() {
       <div className="grid gap-4 lg:grid-cols-2">
         <ChartCard title={t("admin.charts.chats")} subtitle={t("admin.charts.chatsSub", { days })}>
           <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={data.chatsSeries} reverseStackOrder margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
+            <AreaChart data={data.chatsSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="gChats" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
@@ -137,8 +138,8 @@ function Overview() {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-              <XAxis dataKey="date" tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
-              <YAxis allowDecimals={false} fontSize={11} />
+              <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
+              <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
               <Area type="monotone" dataKey="count" stroke="hsl(var(--primary))" fill="url(#gChats)" strokeWidth={2} />
             </AreaChart>
@@ -147,10 +148,10 @@ function Overview() {
 
         <ChartCard title={t("admin.charts.franchise")} subtitle={t("admin.charts.franchiseSub")}>
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={data.franchiseSeries} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
+            <BarChart data={data.franchiseSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-              <XAxis dataKey="date" tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
-              <YAxis allowDecimals={false} fontSize={11} />
+              <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
+              <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
               <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -159,10 +160,10 @@ function Overview() {
 
         <ChartCard title={t("admin.charts.abuse")} subtitle={t("admin.charts.abuseSub")} className="lg:col-span-2">
           <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={data.abuseSeries} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
+            <LineChart data={data.abuseSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-              <XAxis dataKey="date" tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
-              <YAxis allowDecimals={false} fontSize={11} />
+              <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
+              <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
               <Line type="monotone" dataKey="count" stroke="hsl(var(--destructive))" strokeWidth={2} dot={false} />
             </LineChart>
