@@ -5,12 +5,12 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { adminListStations, adminUpsertStation, adminDeleteStation } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useListView, ListToolbar, validateListViewSearch } from "@/components/admin/list-toolbar";
+import { Field, FormGrid, FormRow, inputCls } from "@/components/admin/form-kit";
 
 export const Route = createFileRoute("/manage-portal-9f4c2ab7/stations")({
   component: StationsPage,
@@ -78,27 +78,27 @@ function StationsPage() {
           <DialogTrigger asChild>
             <Button onClick={create}><Plus className="me-1 h-4 w-4" />{t("admin.stations.new")}</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
             <DialogHeader><DialogTitle>{form.id ? t("admin.stations.editTitle") : t("admin.stations.newTitle")}</DialogTitle></DialogHeader>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label={t("admin.stations.f.nameEn")}><Input value={form.name_en} onChange={(e) => setForm({ ...form, name_en: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.nameAr")}><Input dir="rtl" value={form.name_ar} onChange={(e) => setForm({ ...form, name_ar: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.cityEn")}><Input value={form.city_en} onChange={(e) => setForm({ ...form, city_en: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.cityAr")}><Input dir="rtl" value={form.city_ar} onChange={(e) => setForm({ ...form, city_ar: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.districtEn")}><Input value={form.district_en ?? ""} onChange={(e) => setForm({ ...form, district_en: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.districtAr")}><Input dir="rtl" value={form.district_ar ?? ""} onChange={(e) => setForm({ ...form, district_ar: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.addressEn")}><Input value={form.address_en ?? ""} onChange={(e) => setForm({ ...form, address_en: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.addressAr")}><Input dir="rtl" value={form.address_ar ?? ""} onChange={(e) => setForm({ ...form, address_ar: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.lat")}><Input type="number" step="any" value={form.lat} onChange={(e) => setForm({ ...form, lat: Number(e.target.value) })} /></Field>
-              <Field label={t("admin.stations.f.lng")}><Input type="number" step="any" value={form.lng} onChange={(e) => setForm({ ...form, lng: Number(e.target.value) })} /></Field>
-              <Field label={t("admin.stations.f.fuelTypes")}><Input value={form.fuel_types.join(",")} onChange={(e) => setForm({ ...form, fuel_types: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
-              <Field label={t("admin.stations.f.services")}><Input value={form.services.join(",")} onChange={(e) => setForm({ ...form, services: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
-              <Field label={t("admin.stations.f.photoUrl")}><Input value={form.photo_url ?? ""} onChange={(e) => setForm({ ...form, photo_url: e.target.value })} /></Field>
-              <div className="flex items-center gap-6 pt-6">
+            <FormGrid>
+              <Field label={t("admin.stations.f.nameEn")} lang="en"><Input className={inputCls} value={form.name_en} onChange={(e) => setForm({ ...form, name_en: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.nameAr")} lang="ar"><Input dir="rtl" className={inputCls} value={form.name_ar} onChange={(e) => setForm({ ...form, name_ar: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.cityEn")} lang="en"><Input className={inputCls} value={form.city_en} onChange={(e) => setForm({ ...form, city_en: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.cityAr")} lang="ar"><Input dir="rtl" className={inputCls} value={form.city_ar} onChange={(e) => setForm({ ...form, city_ar: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.districtEn")} lang="en"><Input className={inputCls} value={form.district_en ?? ""} onChange={(e) => setForm({ ...form, district_en: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.districtAr")} lang="ar"><Input dir="rtl" className={inputCls} value={form.district_ar ?? ""} onChange={(e) => setForm({ ...form, district_ar: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.addressEn")} lang="en"><Input className={inputCls} value={form.address_en ?? ""} onChange={(e) => setForm({ ...form, address_en: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.addressAr")} lang="ar"><Input dir="rtl" className={inputCls} value={form.address_ar ?? ""} onChange={(e) => setForm({ ...form, address_ar: e.target.value })} /></Field>
+              <Field label={t("admin.stations.f.lat")} lang="en"><Input type="number" step="any" className={inputCls} value={form.lat} onChange={(e) => setForm({ ...form, lat: Number(e.target.value) })} /></Field>
+              <Field label={t("admin.stations.f.lng")} lang="en"><Input type="number" step="any" className={inputCls} value={form.lng} onChange={(e) => setForm({ ...form, lng: Number(e.target.value) })} /></Field>
+              <Field label={t("admin.stations.f.fuelTypes")} lang="en"><Input className={inputCls} value={form.fuel_types.join(",")} onChange={(e) => setForm({ ...form, fuel_types: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
+              <Field label={t("admin.stations.f.services")} lang="en"><Input className={inputCls} value={form.services.join(",")} onChange={(e) => setForm({ ...form, services: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
+              <Field label={t("admin.stations.f.photoUrl")} lang="en"><Input className={inputCls} value={form.photo_url ?? ""} onChange={(e) => setForm({ ...form, photo_url: e.target.value })} /></Field>
+              <FormRow>
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_24h} onCheckedChange={(v) => setForm({ ...form, is_24h: v })} />{t("admin.stations.f.open24")}</label>
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />{t("admin.common.active")}</label>
-              </div>
-            </div>
+              </FormRow>
+            </FormGrid>
             <DialogFooter>
               <Button variant="ghost" onClick={() => setOpen(false)}>{t("admin.common.cancel")}</Button>
               <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>{t("admin.common.save")}</Button>
@@ -149,6 +149,3 @@ function StationsPage() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="space-y-1"><Label className="text-xs">{label}</Label>{children}</div>;
-}
