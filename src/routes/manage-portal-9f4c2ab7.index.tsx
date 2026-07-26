@@ -41,7 +41,7 @@ const searchSchema = z.object({
   days: fallback(z.number().int().min(1).max(90), 14).default(14),
 });
 
-export const Route = createFileRoute("/admin/")({
+export const Route = createFileRoute("/manage-portal-9f4c2ab7/")({
   validateSearch: zodValidator(searchSchema),
   component: Overview,
 });
@@ -60,7 +60,7 @@ function Overview() {
   const rtl = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("ar");
   const locale = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("ar") ? "ar-SA" : "en-US";
   const { days } = Route.useSearch();
-  const navigate = useNavigate({ from: "/admin/" });
+  const navigate = useNavigate({ from: "/manage-portal-9f4c2ab7/" });
   const { data } = useSuspenseQuery({
     queryKey: ["admin", "overview", days],
     queryFn: () => adminOverviewStats({ data: { days } }),
@@ -74,15 +74,15 @@ function Overview() {
   const abuseTotal = data.abuseSeries.reduce((a, b) => a + b.count, 0);
 
   const kpis: Kpi[] = [
-    { label: t("admin.kpi.stations"), value: data.stations, icon: MapPin, to: "/admin/stations" },
-    { label: t("admin.kpi.news"), value: data.news, icon: Newspaper, to: "/admin/news" },
-    { label: t("admin.kpi.activeJobs"), value: data.activeJobs, icon: Briefcase, to: "/admin/careers" },
-    { label: t("admin.kpi.franchise"), value: data.pendingFranchise, icon: Handshake, to: "/admin/submissions", search: { kind: "franchise", status: "new", days }, accent: "warn" },
-    { label: t("admin.kpi.acquisitions"), value: data.pendingAcquisitions, icon: Inbox, to: "/admin/submissions", search: { kind: "acquisitions", status: "new", days }, accent: "warn" },
-    { label: t("admin.kpi.contacts"), value: data.unreadContacts, icon: Mail, to: "/admin/submissions", search: { kind: "contact", status: "new", days }, accent: "warn" },
-    { label: chatsLabel, value: chatsTotal, icon: MessageSquare, to: "/admin/chats", search: { sinceHours: hours }, accent: "primary" },
-    { label: abuseLabel, value: abuseTotal, icon: ShieldAlert, to: "/admin/abuse", search: { windowHours: hours }, accent: abuseTotal > 0 ? "danger" : undefined },
-    { label: t("admin.kpi.exports"), value: data.exportsRunning, icon: FileDown, to: "/admin/abuse" },
+    { label: t("admin.kpi.stations"), value: data.stations, icon: MapPin, to: "/manage-portal-9f4c2ab7/stations" },
+    { label: t("admin.kpi.news"), value: data.news, icon: Newspaper, to: "/manage-portal-9f4c2ab7/news" },
+    { label: t("admin.kpi.activeJobs"), value: data.activeJobs, icon: Briefcase, to: "/manage-portal-9f4c2ab7/careers" },
+    { label: t("admin.kpi.franchise"), value: data.pendingFranchise, icon: Handshake, to: "/manage-portal-9f4c2ab7/submissions", search: { kind: "franchise", status: "new", days }, accent: "warn" },
+    { label: t("admin.kpi.acquisitions"), value: data.pendingAcquisitions, icon: Inbox, to: "/manage-portal-9f4c2ab7/submissions", search: { kind: "acquisitions", status: "new", days }, accent: "warn" },
+    { label: t("admin.kpi.contacts"), value: data.unreadContacts, icon: Mail, to: "/manage-portal-9f4c2ab7/submissions", search: { kind: "contact", status: "new", days }, accent: "warn" },
+    { label: chatsLabel, value: chatsTotal, icon: MessageSquare, to: "/manage-portal-9f4c2ab7/chats", search: { sinceHours: hours }, accent: "primary" },
+    { label: abuseLabel, value: abuseTotal, icon: ShieldAlert, to: "/manage-portal-9f4c2ab7/abuse", search: { windowHours: hours }, accent: abuseTotal > 0 ? "danger" : undefined },
+    { label: t("admin.kpi.exports"), value: data.exportsRunning, icon: FileDown, to: "/manage-portal-9f4c2ab7/abuse" },
   ];
 
   return (

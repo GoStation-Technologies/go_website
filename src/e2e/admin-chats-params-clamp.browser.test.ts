@@ -81,7 +81,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -110,7 +110,7 @@ maybe("Admin chat logs — query param clamping & rejection", () => {
 
     // 1) Garbage sort → falls back to "newest"; garbage numbers → defaults.
     await page.goto(
-      BASE_URL + `/admin/chats?page=abc&pageSize=xyz&sort=bogus`,
+      BASE_URL + `/manage-portal-9f4c2ab7/chats?page=abc&pageSize=xyz&sort=bogus`,
       { waitUntil: "networkidle" },
     );
     const garbage = await readList(page);
@@ -123,7 +123,7 @@ maybe("Admin chat logs — query param clamping & rejection", () => {
 
     // 2) Negative / zero values → clamped to sane minimums.
     await page.goto(
-      BASE_URL + `/admin/chats?page=-5&pageSize=0&sort=newest`,
+      BASE_URL + `/manage-portal-9f4c2ab7/chats?page=-5&pageSize=0&sort=newest`,
       { waitUntil: "networkidle" },
     );
     const neg = await readList(page);
@@ -134,7 +134,7 @@ maybe("Admin chat logs — query param clamping & rejection", () => {
     // 3) Absurdly huge page → server clamps to last page; Next disabled, Prev enabled.
     const total = neg.total;
     await page.goto(
-      BASE_URL + `/admin/chats?page=99999&pageSize=5&sort=newest`,
+      BASE_URL + `/manage-portal-9f4c2ab7/chats?page=99999&pageSize=5&sort=newest`,
       { waitUntil: "networkidle" },
     );
     const huge = await readList(page);
@@ -151,7 +151,7 @@ maybe("Admin chat logs — query param clamping & rejection", () => {
 
     // 4) Excessively large pageSize → clamped (server caps at 100). Still renders page 1.
     await page.goto(
-      BASE_URL + `/admin/chats?page=1&pageSize=999999&sort=newest`,
+      BASE_URL + `/manage-portal-9f4c2ab7/chats?page=1&pageSize=999999&sort=newest`,
       { waitUntil: "networkidle" },
     );
     const bigSize = await readList(page);

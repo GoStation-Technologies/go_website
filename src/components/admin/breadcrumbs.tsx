@@ -11,7 +11,7 @@ import {
 import { Fragment } from "react";
 
 const KEYS: Record<string, string> = {
-  admin: "admin.brand",
+  "manage-portal-9f4c2ab7": "admin.brand",
   stations: "admin.nav.stations",
   news: "admin.nav.news",
   careers: "admin.nav.careers",

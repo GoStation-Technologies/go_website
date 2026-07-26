@@ -11,24 +11,24 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StationsRouteImport } from './routes/stations'
 import { Route as MediaRouteImport } from './routes/media'
+import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
 import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-portal-9f4c2ab7.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
-import { Route as AdminLoginRouteImport } from './routes/admin_.login'
-import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
-import { Route as AdminStationsRouteImport } from './routes/admin.stations'
-import { Route as AdminNewsRouteImport } from './routes/admin.news'
-import { Route as AdminChatsRouteImport } from './routes/admin.chats'
-import { Route as AdminCareersRouteImport } from './routes/admin.careers'
-import { Route as AdminAuditRouteImport } from './routes/admin.audit'
-import { Route as AdminAbuseRouteImport } from './routes/admin.abuse'
+import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
+import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
+import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
+import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-portal-9f4c2ab7.news'
+import { Route as ManagePortal9f4c2ab7ChatsRouteImport } from './routes/manage-portal-9f4c2ab7.chats'
+import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage-portal-9f4c2ab7.careers'
+import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
+import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 
 const StationsRoute = StationsRouteImport.update({
@@ -39,6 +39,11 @@ const StationsRoute = StationsRouteImport.update({
 const MediaRoute = MediaRouteImport.update({
   id: '/media',
   path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
+  id: '/manage-portal-9f4c2ab7',
+  path: '/manage-portal-9f4c2ab7',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvestorsRoute = InvestorsRouteImport.update({
@@ -61,11 +66,6 @@ const CareersRoute = CareersRouteImport.update({
   path: '/careers',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AcquisitionsRoute = AcquisitionsRouteImport.update({
   id: '/acquisitions',
   path: '/acquisitions',
@@ -81,56 +81,65 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
+const ManagePortal9f4c2ab7IndexRoute =
+  ManagePortal9f4c2ab7IndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const MediaSlugRoute = MediaSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => MediaRoute,
 } as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin_/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminSubmissionsRoute = AdminSubmissionsRouteImport.update({
-  id: '/submissions',
-  path: '/submissions',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminStationsRoute = AdminStationsRouteImport.update({
-  id: '/stations',
-  path: '/stations',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminNewsRoute = AdminNewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminChatsRoute = AdminChatsRouteImport.update({
-  id: '/chats',
-  path: '/chats',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCareersRoute = AdminCareersRouteImport.update({
-  id: '/careers',
-  path: '/careers',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAuditRoute = AdminAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAbuseRoute = AdminAbuseRouteImport.update({
-  id: '/abuse',
-  path: '/abuse',
-  getParentRoute: () => AdminRoute,
-} as any)
+const ManagePortal9f4c2ab7LoginRoute =
+  ManagePortal9f4c2ab7LoginRouteImport.update({
+    id: '/manage-portal-9f4c2ab7_/login',
+    path: '/manage-portal-9f4c2ab7/login',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ManagePortal9f4c2ab7SubmissionsRoute =
+  ManagePortal9f4c2ab7SubmissionsRouteImport.update({
+    id: '/submissions',
+    path: '/submissions',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7StationsRoute =
+  ManagePortal9f4c2ab7StationsRouteImport.update({
+    id: '/stations',
+    path: '/stations',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7NewsRoute =
+  ManagePortal9f4c2ab7NewsRouteImport.update({
+    id: '/news',
+    path: '/news',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7ChatsRoute =
+  ManagePortal9f4c2ab7ChatsRouteImport.update({
+    id: '/chats',
+    path: '/chats',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7CareersRoute =
+  ManagePortal9f4c2ab7CareersRouteImport.update({
+    id: '/careers',
+    path: '/careers',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7AuditRoute =
+  ManagePortal9f4c2ab7AuditRouteImport.update({
+    id: '/audit',
+    path: '/audit',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7AbuseRoute =
+  ManagePortal9f4c2ab7AbuseRouteImport.update({
+    id: '/abuse',
+    path: '/abuse',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ApiPublicHooksProcessExportsRoute =
   ApiPublicHooksProcessExportsRouteImport.update({
     id: '/api/public/hooks/process-exports',
@@ -142,23 +151,23 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/admin': typeof AdminRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
-  '/admin/abuse': typeof AdminAbuseRoute
-  '/admin/audit': typeof AdminAuditRoute
-  '/admin/careers': typeof AdminCareersRoute
-  '/admin/chats': typeof AdminChatsRoute
-  '/admin/news': typeof AdminNewsRoute
-  '/admin/stations': typeof AdminStationsRoute
-  '/admin/submissions': typeof AdminSubmissionsRoute
-  '/admin/login': typeof AdminLoginRoute
+  '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
+  '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
+  '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
+  '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
+  '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
+  '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
-  '/admin/': typeof AdminIndexRoute
+  '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesByTo {
@@ -171,16 +180,16 @@ export interface FileRoutesByTo {
   '/investors': typeof InvestorsRoute
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
-  '/admin/abuse': typeof AdminAbuseRoute
-  '/admin/audit': typeof AdminAuditRoute
-  '/admin/careers': typeof AdminCareersRoute
-  '/admin/chats': typeof AdminChatsRoute
-  '/admin/news': typeof AdminNewsRoute
-  '/admin/stations': typeof AdminStationsRoute
-  '/admin/submissions': typeof AdminSubmissionsRoute
-  '/admin/login': typeof AdminLoginRoute
+  '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
+  '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
+  '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
+  '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
+  '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
+  '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
-  '/admin': typeof AdminIndexRoute
+  '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7IndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesById {
@@ -188,23 +197,23 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/admin': typeof AdminRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
   '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
-  '/admin/abuse': typeof AdminAbuseRoute
-  '/admin/audit': typeof AdminAuditRoute
-  '/admin/careers': typeof AdminCareersRoute
-  '/admin/chats': typeof AdminChatsRoute
-  '/admin/news': typeof AdminNewsRoute
-  '/admin/stations': typeof AdminStationsRoute
-  '/admin/submissions': typeof AdminSubmissionsRoute
-  '/admin_/login': typeof AdminLoginRoute
+  '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
+  '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
+  '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
+  '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
+  '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
+  '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7_/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
-  '/admin/': typeof AdminIndexRoute
+  '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRouteTypes {
@@ -213,23 +222,23 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/acquisitions'
-    | '/admin'
     | '/careers'
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/manage-portal-9f4c2ab7'
     | '/media'
     | '/stations'
-    | '/admin/abuse'
-    | '/admin/audit'
-    | '/admin/careers'
-    | '/admin/chats'
-    | '/admin/news'
-    | '/admin/stations'
-    | '/admin/submissions'
-    | '/admin/login'
+    | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/audit'
+    | '/manage-portal-9f4c2ab7/careers'
+    | '/manage-portal-9f4c2ab7/chats'
+    | '/manage-portal-9f4c2ab7/news'
+    | '/manage-portal-9f4c2ab7/stations'
+    | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
-    | '/admin/'
+    | '/manage-portal-9f4c2ab7/'
     | '/api/public/hooks/process-exports'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -242,39 +251,39 @@ export interface FileRouteTypes {
     | '/investors'
     | '/media'
     | '/stations'
-    | '/admin/abuse'
-    | '/admin/audit'
-    | '/admin/careers'
-    | '/admin/chats'
-    | '/admin/news'
-    | '/admin/stations'
-    | '/admin/submissions'
-    | '/admin/login'
+    | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/audit'
+    | '/manage-portal-9f4c2ab7/careers'
+    | '/manage-portal-9f4c2ab7/chats'
+    | '/manage-portal-9f4c2ab7/news'
+    | '/manage-portal-9f4c2ab7/stations'
+    | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
-    | '/admin'
+    | '/manage-portal-9f4c2ab7'
     | '/api/public/hooks/process-exports'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/acquisitions'
-    | '/admin'
     | '/careers'
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/manage-portal-9f4c2ab7'
     | '/media'
     | '/stations'
-    | '/admin/abuse'
-    | '/admin/audit'
-    | '/admin/careers'
-    | '/admin/chats'
-    | '/admin/news'
-    | '/admin/stations'
-    | '/admin/submissions'
-    | '/admin_/login'
+    | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/audit'
+    | '/manage-portal-9f4c2ab7/careers'
+    | '/manage-portal-9f4c2ab7/chats'
+    | '/manage-portal-9f4c2ab7/news'
+    | '/manage-portal-9f4c2ab7/stations'
+    | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7_/login'
     | '/media/$slug'
-    | '/admin/'
+    | '/manage-portal-9f4c2ab7/'
     | '/api/public/hooks/process-exports'
   fileRoutesById: FileRoutesById
 }
@@ -282,14 +291,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AcquisitionsRoute: typeof AcquisitionsRoute
-  AdminRoute: typeof AdminRouteWithChildren
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
+  ManagePortal9f4c2ab7Route: typeof ManagePortal9f4c2ab7RouteWithChildren
   MediaRoute: typeof MediaRouteWithChildren
   StationsRoute: typeof StationsRoute
-  AdminLoginRoute: typeof AdminLoginRoute
+  ManagePortal9f4c2ab7LoginRoute: typeof ManagePortal9f4c2ab7LoginRoute
   ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
 }
 
@@ -307,6 +316,13 @@ declare module '@tanstack/react-router' {
       path: '/media'
       fullPath: '/media'
       preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manage-portal-9f4c2ab7': {
+      id: '/manage-portal-9f4c2ab7'
+      path: '/manage-portal-9f4c2ab7'
+      fullPath: '/manage-portal-9f4c2ab7'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/investors': {
@@ -337,13 +353,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/acquisitions': {
       id: '/acquisitions'
       path: '/acquisitions'
@@ -365,12 +374,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
+    '/manage-portal-9f4c2ab7/': {
+      id: '/manage-portal-9f4c2ab7/'
       path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7IndexRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
     '/media/$slug': {
       id: '/media/$slug'
@@ -379,61 +388,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaSlugRouteImport
       parentRoute: typeof MediaRoute
     }
-    '/admin_/login': {
-      id: '/admin_/login'
-      path: '/admin/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
+    '/manage-portal-9f4c2ab7_/login': {
+      id: '/manage-portal-9f4c2ab7_/login'
+      path: '/manage-portal-9f4c2ab7/login'
+      fullPath: '/manage-portal-9f4c2ab7/login'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/submissions': {
-      id: '/admin/submissions'
+    '/manage-portal-9f4c2ab7/submissions': {
+      id: '/manage-portal-9f4c2ab7/submissions'
       path: '/submissions'
-      fullPath: '/admin/submissions'
-      preLoaderRoute: typeof AdminSubmissionsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/submissions'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7SubmissionsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
-    '/admin/stations': {
-      id: '/admin/stations'
+    '/manage-portal-9f4c2ab7/stations': {
+      id: '/manage-portal-9f4c2ab7/stations'
       path: '/stations'
-      fullPath: '/admin/stations'
-      preLoaderRoute: typeof AdminStationsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/stations'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7StationsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
-    '/admin/news': {
-      id: '/admin/news'
+    '/manage-portal-9f4c2ab7/news': {
+      id: '/manage-portal-9f4c2ab7/news'
       path: '/news'
-      fullPath: '/admin/news'
-      preLoaderRoute: typeof AdminNewsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/news'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7NewsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
-    '/admin/chats': {
-      id: '/admin/chats'
+    '/manage-portal-9f4c2ab7/chats': {
+      id: '/manage-portal-9f4c2ab7/chats'
       path: '/chats'
-      fullPath: '/admin/chats'
-      preLoaderRoute: typeof AdminChatsRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/chats'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7ChatsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
-    '/admin/careers': {
-      id: '/admin/careers'
+    '/manage-portal-9f4c2ab7/careers': {
+      id: '/manage-portal-9f4c2ab7/careers'
       path: '/careers'
-      fullPath: '/admin/careers'
-      preLoaderRoute: typeof AdminCareersRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/careers'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7CareersRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
-    '/admin/audit': {
-      id: '/admin/audit'
+    '/manage-portal-9f4c2ab7/audit': {
+      id: '/manage-portal-9f4c2ab7/audit'
       path: '/audit'
-      fullPath: '/admin/audit'
-      preLoaderRoute: typeof AdminAuditRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/audit'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7AuditRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
-    '/admin/abuse': {
-      id: '/admin/abuse'
+    '/manage-portal-9f4c2ab7/abuse': {
+      id: '/manage-portal-9f4c2ab7/abuse'
       path: '/abuse'
-      fullPath: '/admin/abuse'
-      preLoaderRoute: typeof AdminAbuseRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/manage-portal-9f4c2ab7/abuse'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7AbuseRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
     '/api/public/hooks/process-exports': {
       id: '/api/public/hooks/process-exports'
@@ -445,29 +454,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AdminRouteChildren {
-  AdminAbuseRoute: typeof AdminAbuseRoute
-  AdminAuditRoute: typeof AdminAuditRoute
-  AdminCareersRoute: typeof AdminCareersRoute
-  AdminChatsRoute: typeof AdminChatsRoute
-  AdminNewsRoute: typeof AdminNewsRoute
-  AdminStationsRoute: typeof AdminStationsRoute
-  AdminSubmissionsRoute: typeof AdminSubmissionsRoute
-  AdminIndexRoute: typeof AdminIndexRoute
+interface ManagePortal9f4c2ab7RouteChildren {
+  ManagePortal9f4c2ab7AbuseRoute: typeof ManagePortal9f4c2ab7AbuseRoute
+  ManagePortal9f4c2ab7AuditRoute: typeof ManagePortal9f4c2ab7AuditRoute
+  ManagePortal9f4c2ab7CareersRoute: typeof ManagePortal9f4c2ab7CareersRoute
+  ManagePortal9f4c2ab7ChatsRoute: typeof ManagePortal9f4c2ab7ChatsRoute
+  ManagePortal9f4c2ab7NewsRoute: typeof ManagePortal9f4c2ab7NewsRoute
+  ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
+  ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
+  ManagePortal9f4c2ab7IndexRoute: typeof ManagePortal9f4c2ab7IndexRoute
 }
 
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminAbuseRoute: AdminAbuseRoute,
-  AdminAuditRoute: AdminAuditRoute,
-  AdminCareersRoute: AdminCareersRoute,
-  AdminChatsRoute: AdminChatsRoute,
-  AdminNewsRoute: AdminNewsRoute,
-  AdminStationsRoute: AdminStationsRoute,
-  AdminSubmissionsRoute: AdminSubmissionsRoute,
-  AdminIndexRoute: AdminIndexRoute,
+const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
+  ManagePortal9f4c2ab7AbuseRoute: ManagePortal9f4c2ab7AbuseRoute,
+  ManagePortal9f4c2ab7AuditRoute: ManagePortal9f4c2ab7AuditRoute,
+  ManagePortal9f4c2ab7CareersRoute: ManagePortal9f4c2ab7CareersRoute,
+  ManagePortal9f4c2ab7ChatsRoute: ManagePortal9f4c2ab7ChatsRoute,
+  ManagePortal9f4c2ab7NewsRoute: ManagePortal9f4c2ab7NewsRoute,
+  ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
+  ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
+  ManagePortal9f4c2ab7IndexRoute: ManagePortal9f4c2ab7IndexRoute,
 }
 
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+const ManagePortal9f4c2ab7RouteWithChildren =
+  ManagePortal9f4c2ab7Route._addFileChildren(ManagePortal9f4c2ab7RouteChildren)
 
 interface MediaRouteChildren {
   MediaSlugRoute: typeof MediaSlugRoute
@@ -483,14 +493,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AcquisitionsRoute: AcquisitionsRoute,
-  AdminRoute: AdminRouteWithChildren,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
+  ManagePortal9f4c2ab7Route: ManagePortal9f4c2ab7RouteWithChildren,
   MediaRoute: MediaRouteWithChildren,
   StationsRoute: StationsRoute,
-  AdminLoginRoute: AdminLoginRoute,
+  ManagePortal9f4c2ab7LoginRoute: ManagePortal9f4c2ab7LoginRoute,
   ApiPublicHooksProcessExportsRoute: ApiPublicHooksProcessExportsRoute,
 }
 export const routeTree = rootRouteImport

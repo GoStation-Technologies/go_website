@@ -77,7 +77,7 @@ afterAll(async () => {
 async function signInAndGetPage() {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(superAdmin!.email);
   await page.locator('input[name="password"]').fill(superAdmin!.password);
   await Promise.all([
@@ -86,7 +86,7 @@ async function signInAndGetPage() {
   ]);
   // Warm the router / server-fn manifest by touching the admin route so any
   // client-side bearer middleware initializes before the raw fetch calls.
-  await page.goto(BASE_URL + "/admin/chats", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats", { waitUntil: "networkidle" });
   return { context, page };
 }
 

@@ -60,7 +60,7 @@ beforeAll(async () => {
   ]);
   await grantRole(superAdmin!.id, "super_admin");
   // staffNoRole intentionally has NO user_roles row → not staff.
-  // (Any role currently grants /admin access, so a "no-role signed-in user"
+  // (Any role currently grants /manage-portal-9f4c2ab7 access, so a "no-role signed-in user"
   //  is the second blocked case beyond fully public.)
 }, 90_000);
 
@@ -73,7 +73,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -84,11 +84,11 @@ async function signIn(user: TestUser) {
 }
 
 maybe("Admin dashboard access control", () => {
-  it("blocks unauthenticated visitors — /admin redirects to /admin/login and leaks no admin content", async () => {
+  it("blocks unauthenticated visitors — /manage-portal-9f4c2ab7 redirects to /manage-portal-9f4c2ab7/login and leaks no admin content", async () => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto(BASE_URL + "/admin", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/admin/login");
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7", { waitUntil: "networkidle" });
+    expect(new URL(page.url()).pathname).toBe("/manage-portal-9f4c2ab7/login");
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain("chat logs");
     expect(body).not.toContain("submissions");
@@ -96,12 +96,12 @@ maybe("Admin dashboard access control", () => {
     await context.close();
   }, 45_000);
 
-  it("blocks signed-in users without any staff role — redirects off /admin and leaks no admin content", async () => {
+  it("blocks signed-in users without any staff role — redirects off /manage-portal-9f4c2ab7 and leaks no admin content", async () => {
     const { context, page } = await signIn(nonStaff!);
-    await page.goto(BASE_URL + "/admin", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7", { waitUntil: "networkidle" });
     const pathname = new URL(page.url()).pathname;
-    expect(pathname, `expected redirect away from /admin, got ${pathname}`).not.toBe("/admin");
-    expect(pathname).not.toMatch(/^\/admin(\/|$)/);
+    expect(pathname, `expected redirect away from /admin, got ${pathname}`).not.toBe("/manage-portal-9f4c2ab7");
+    expect(pathname).not.toMatch(/^\/manage-portal-9f4c2ab7(\/|$)/);
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain("chat logs");
     expect(body).not.toContain("gostation admin");
@@ -130,19 +130,19 @@ maybe("Admin dashboard access control", () => {
 
   it("blocks signed-in users with no user_roles row — same treatment as non-staff", async () => {
     const { context, page } = await signIn(staffNoRole!);
-    await page.goto(BASE_URL + "/admin", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7", { waitUntil: "networkidle" });
     const pathname = new URL(page.url()).pathname;
-    expect(pathname).not.toMatch(/^\/admin(\/|$)/);
+    expect(pathname).not.toMatch(/^\/manage-portal-9f4c2ab7(\/|$)/);
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain("chat logs");
     expect(body).not.toContain("gostation admin");
     await context.close();
   }, 45_000);
 
-  it("allows a super_admin — /admin renders the dashboard shell with role indicator", async () => {
+  it("allows a super_admin — /manage-portal-9f4c2ab7 renders the dashboard shell with role indicator", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(BASE_URL + "/admin", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/admin");
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7", { waitUntil: "networkidle" });
+    expect(new URL(page.url()).pathname).toBe("/manage-portal-9f4c2ab7");
 
     const body = await page.locator("body").innerText();
     expect(body).toContain("GoStation Admin");
@@ -152,8 +152,8 @@ maybe("Admin dashboard access control", () => {
     expect(body).toContain("super_admin");
 
     // Chat logs subroute reachable.
-    await page.goto(BASE_URL + "/admin/chats", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/admin/chats");
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats", { waitUntil: "networkidle" });
+    expect(new URL(page.url()).pathname).toBe("/manage-portal-9f4c2ab7/chats");
     const chatsBody = (await page.locator("body").innerText()).toLowerCase();
     expect(chatsBody).toMatch(/chat logs|no chatbot conversations/);
     await context.close();

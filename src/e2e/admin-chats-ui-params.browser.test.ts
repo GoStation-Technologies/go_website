@@ -77,7 +77,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -102,7 +102,7 @@ maybe("Admin chats UI — sends pagination params & renders normalized/errored r
     // Kick off navigation and grab the outbound request body in parallel.
     const [req] = await Promise.all([
       captureNextChatsRequest(page),
-      page.goto(BASE_URL + "/admin/chats?page=99999&pageSize=5&sort=newest", {
+      page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats?page=99999&pageSize=5&sort=newest", {
         waitUntil: "networkidle",
       }),
     ]);
@@ -153,7 +153,7 @@ maybe("Admin chats UI — sends pagination params & renders normalized/errored r
     // the UI must render the structured error banner.
     const [req] = await Promise.all([
       captureNextChatsRequest(page),
-      page.goto(BASE_URL + "/admin/chats?page=1&pageSize=999999&sort=newest", {
+      page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats?page=1&pageSize=999999&sort=newest", {
         waitUntil: "networkidle",
       }),
     ]);
@@ -191,7 +191,7 @@ maybe("Admin chats UI — sends pagination params & renders normalized/errored r
     const { context, page } = await signIn(superAdmin!);
 
     await page.goto(
-      BASE_URL + "/admin/chats?page=0&pageSize=999999&sort=bogus",
+      BASE_URL + "/manage-portal-9f4c2ab7/chats?page=0&pageSize=999999&sort=bogus",
       { waitUntil: "networkidle" },
     );
 

@@ -91,7 +91,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -134,7 +134,7 @@ maybe("Admin chat logs — pagination and sorting", () => {
   it("newest sort: owned sessions appear on page 1 in descending lastAt order, page size honored", async () => {
     const { context, page } = await signIn(superAdmin!);
     // pageSize large enough that all N seeded sessions land on page 1
-    await page.goto(BASE_URL + "/admin/chats?page=1&pageSize=50&sort=newest", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats?page=1&pageSize=50&sort=newest", { waitUntil: "networkidle" });
 
     const info = await readList(page);
     expect(info.sort).toBe("newest");
@@ -155,7 +155,7 @@ maybe("Admin chat logs — pagination and sorting", () => {
 
   it("oldest sort reverses order relative to newest for the owned sessions", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(BASE_URL + "/admin/chats?page=1&pageSize=50&sort=oldest", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats?page=1&pageSize=50&sort=oldest", { waitUntil: "networkidle" });
 
     const info = await readList(page);
     expect(info.sort).toBe("oldest");
@@ -170,7 +170,7 @@ maybe("Admin chat logs — pagination and sorting", () => {
 
   it("messages sort puts the biggest owned transcript before smaller ones", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(BASE_URL + "/admin/chats?page=1&pageSize=50&sort=messages", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats?page=1&pageSize=50&sort=messages", { waitUntil: "networkidle" });
 
     const info = await readList(page);
     expect(info.sort).toBe("messages");
@@ -191,7 +191,7 @@ maybe("Admin chat logs — pagination and sorting", () => {
 
   it("pagination: pageSize=5 renders at most 5 rows and Next/Prev walk correct pages without overlap", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(BASE_URL + "/admin/chats?page=1&pageSize=5&sort=newest", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats?page=1&pageSize=5&sort=newest", { waitUntil: "networkidle" });
 
     const p1 = await readList(page);
     expect(p1.pageSize).toBe(5);
@@ -225,7 +225,7 @@ maybe("Admin chat logs — pagination and sorting", () => {
 
   it("changing sort via the select updates the URL, resets to page 1, and reorders rows", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(BASE_URL + "/admin/chats?page=2&pageSize=5&sort=newest", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats?page=2&pageSize=5&sort=newest", { waitUntil: "networkidle" });
     await page.getByLabel("Sort chats").selectOption("oldest");
     await page.waitForURL(/[?&]sort=oldest(?:&|$)/, { timeout: 5_000 });
     await page.waitForURL(/[?&]page=1(?:&|$)/, { timeout: 5_000 });

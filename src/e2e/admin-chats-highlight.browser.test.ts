@@ -64,7 +64,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -79,7 +79,7 @@ maybe("Admin chats — keyword highlighting", () => {
     const { context, page } = await signIn(superAdmin!);
     // Query lowercase to prove case-insensitive matching against mixed-case source.
     const q = KEYWORD.toLowerCase();
-    await page.goto(`${BASE_URL}/admin/chats?q=${encodeURIComponent(q)}`, {
+    await page.goto(`${BASE_URL}/manage-portal-9f4c2ab7/chats?q=${encodeURIComponent(q)}`, {
       waitUntil: "networkidle",
     });
 
@@ -110,7 +110,7 @@ maybe("Admin chats — keyword highlighting", () => {
     // case-insensitive matching against the lowercased UUID prefix in the UI.
     const prefix = sessionId.slice(0, 4);
     const q = prefix.toUpperCase();
-    await page.goto(`${BASE_URL}/admin/chats?q=${encodeURIComponent(q)}`, {
+    await page.goto(`${BASE_URL}/manage-portal-9f4c2ab7/chats?q=${encodeURIComponent(q)}`, {
       waitUntil: "networkidle",
     });
 
@@ -130,7 +130,7 @@ maybe("Admin chats — keyword highlighting", () => {
 
   it("renders no <mark> elements when q is empty", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(`${BASE_URL}/admin/chats`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE_URL}/manage-portal-9f4c2ab7/chats`, { waitUntil: "networkidle" });
     const details = page.locator(`details[data-session-id="${sessionId}"]`);
     await details.waitFor({ state: "visible", timeout: 15_000 });
     expect(await page.locator('mark[data-testid="chats-highlight"]').count()).toBe(0);

@@ -83,7 +83,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -96,8 +96,8 @@ async function signIn(user: TestUser) {
 maybe("Admin chat logs — filter & access control", () => {
   it("super_admin sees both sessions, filter narrows to one, transcript matches", async () => {
     const { context, page } = await signIn(superAdmin!);
-    await page.goto(BASE_URL + "/admin/chats", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/admin/chats");
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats", { waitUntil: "networkidle" });
+    expect(new URL(page.url()).pathname).toBe("/manage-portal-9f4c2ab7/chats");
 
     const sessionAEl = page.locator(`details[data-session-id="${sessionA}"]`);
     const sessionBEl = page.locator(`details[data-session-id="${sessionB}"]`);
@@ -134,11 +134,11 @@ maybe("Admin chat logs — filter & access control", () => {
     await context.close();
   }, 90_000);
 
-  it("signed-in outsider cannot reach /admin/chats and no chat content leaks", async () => {
+  it("signed-in outsider cannot reach /manage-portal-9f4c2ab7/chats and no chat content leaks", async () => {
     const { context, page } = await signIn(outsider!);
-    await page.goto(BASE_URL + "/admin/chats", { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats", { waitUntil: "networkidle" });
     const pathname = new URL(page.url()).pathname;
-    expect(pathname).not.toMatch(/^\/admin(\/|$)/);
+    expect(pathname).not.toMatch(/^\/manage-portal-9f4c2ab7(\/|$)/);
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain(uniqA.toLowerCase());
     expect(body).not.toContain(uniqB.toLowerCase());
@@ -147,11 +147,11 @@ maybe("Admin chat logs — filter & access control", () => {
     await context.close();
   }, 60_000);
 
-  it("unauthenticated visitor is bounced to /admin/login with no chat content leaked", async () => {
+  it("unauthenticated visitor is bounced to /manage-portal-9f4c2ab7/login with no chat content leaked", async () => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto(BASE_URL + "/admin/chats", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/admin/login");
+    await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/chats", { waitUntil: "networkidle" });
+    expect(new URL(page.url()).pathname).toBe("/manage-portal-9f4c2ab7/login");
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain(uniqA.toLowerCase());
     expect(body).not.toContain(uniqB.toLowerCase());
