@@ -143,7 +143,7 @@ maybe("Admin submissions — status updates & access control", () => {
     // /manage-portal-9f4c2ab7/submissions must not render the admin page for a non-staff user
     await page.goto(BASE_URL + "/manage-portal-9f4c2ab7/submissions", { waitUntil: "networkidle" });
     const pathname = new URL(page.url()).pathname;
-    expect(pathname).not.toMatch(/^\/admin(\/|$)/);
+    expect(pathname).not.toMatch(/^\/manage-portal-9f4c2ab7(\/|$)/);
 
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain(seededEmail.toLowerCase());
@@ -162,7 +162,7 @@ maybe("Admin submissions — status updates & access control", () => {
     await context.close();
   }, 60_000);
 
-  it("unauthenticated visitor cannot reach /admin/submissions and cannot mutate", async () => {
+  it("unauthenticated visitor cannot reach /manage-portal-9f4c2ab7/submissions and cannot mutate", async () => {
     await admin!.from("contact_messages").update({ status: "new" }).eq("id", seededId!);
     const context = await browser.newContext();
     const page = await context.newPage();

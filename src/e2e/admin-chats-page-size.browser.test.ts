@@ -109,7 +109,7 @@ maybe("Admin chat logs — pageSize + last-page behavior", () => {
     const { context, page } = await signIn(superAdmin!);
 
     // Start at pageSize=5
-    await page.goto(BASE_URL + `/admin/chats?page=1&pageSize=5&sort=newest`, { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + `/manage-portal-9f4c2ab7/chats?page=1&pageSize=5&sort=newest`, { waitUntil: "networkidle" });
     const s5 = await readList(page);
     expect(s5.pageSize).toBe(5);
     expect(s5.pageCount).toBe(Math.max(1, Math.ceil(s5.total / 5)));
@@ -134,7 +134,7 @@ maybe("Admin chat logs — pageSize + last-page behavior", () => {
     expect(s10.pageCount).toBe(Math.max(1, Math.ceil(s10.total / 10)));
 
     await page.goto(
-      BASE_URL + `/admin/chats?page=${s10.pageCount}&pageSize=10&sort=newest`,
+      BASE_URL + `/manage-portal-9f4c2ab7/chats?page=${s10.pageCount}&pageSize=10&sort=newest`,
       { waitUntil: "networkidle" },
     );
     const last = await readList(page);

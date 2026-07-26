@@ -113,7 +113,7 @@ maybe("Admin chat logs — last-page behavior", () => {
   it("Next is disabled on the last page and pageCount matches total/pageSize math", async () => {
     const { context, page } = await signIn(superAdmin!);
     const pageSize = 5;
-    await page.goto(BASE_URL + `/admin/chats?page=1&pageSize=${pageSize}&sort=newest`, { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + `/manage-portal-9f4c2ab7/chats?page=1&pageSize=${pageSize}&sort=newest`, { waitUntil: "networkidle" });
 
     const first = await readList(page);
     expect(first.pageCount).toBe(Math.max(1, Math.ceil(first.total / pageSize)));
@@ -121,7 +121,7 @@ maybe("Admin chat logs — last-page behavior", () => {
 
     // Jump directly to the last page via URL
     await page.goto(
-      BASE_URL + `/admin/chats?page=${first.pageCount}&pageSize=${pageSize}&sort=newest`,
+      BASE_URL + `/manage-portal-9f4c2ab7/chats?page=${first.pageCount}&pageSize=${pageSize}&sort=newest`,
       { waitUntil: "networkidle" },
     );
     const last = await readList(page);
@@ -145,7 +145,7 @@ maybe("Admin chat logs — last-page behavior", () => {
   it("walking every page yields no duplicate ids and Prev/Next round-trip to the last page is stable", async () => {
     const { context, page } = await signIn(superAdmin!);
     const pageSize = 5;
-    await page.goto(BASE_URL + `/admin/chats?page=1&pageSize=${pageSize}&sort=newest`, { waitUntil: "networkidle" });
+    await page.goto(BASE_URL + `/manage-portal-9f4c2ab7/chats?page=1&pageSize=${pageSize}&sort=newest`, { waitUntil: "networkidle" });
 
     const first = await readList(page);
     const pageCount = first.pageCount;
