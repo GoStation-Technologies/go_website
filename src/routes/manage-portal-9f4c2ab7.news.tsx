@@ -80,7 +80,7 @@ function NewsPage() {
                   <option value="news">{t("admin.news.kinds.news")}</option><option value="event">{t("admin.news.kinds.event")}</option><option value="press">{t("admin.news.kinds.press")}</option>
                 </select>
               </Field>
-              <Field label={t("admin.news.f.titleEn")}><Input className={inputCls} value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.titleEn")}><Input className={inputCls} value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value, slug: form.id ? form.slug : slugify(e.target.value) })} /></Field>
               <Field label={t("admin.news.f.titleAr")} rtl><Input className={inputCls} dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
               <Field label={t("admin.news.f.excerptEn")}><Textarea className={inputCls} rows={2} value={form.excerpt_en ?? ""} onChange={(e) => setForm({ ...form, excerpt_en: e.target.value })} /></Field>
               <Field label={t("admin.news.f.excerptAr")} rtl><Textarea className={inputCls} dir="rtl" rows={2} value={form.excerpt_ar ?? ""} onChange={(e) => setForm({ ...form, excerpt_ar: e.target.value })} /></Field>
