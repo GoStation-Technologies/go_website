@@ -10,6 +10,7 @@ import {
   adminExportJobDownload,
 } from "@/lib/abuse.functions";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   ResponsiveContainer,
@@ -35,11 +36,11 @@ export const Route = createFileRoute("/admin/abuse")({
 });
 
 const WINDOWS = [
-  { v: 1, label: "Last hour" },
-  { v: 6, label: "Last 6 hours" },
-  { v: 24, label: "Last 24 hours" },
-  { v: 24 * 7, label: "Last 7 days" },
-  { v: 24 * 30, label: "Last 30 days" },
+  { v: 1, k: "h1" },
+  { v: 6, k: "h6" },
+  { v: 24, k: "h24" },
+  { v: 24 * 7, k: "d7" },
+  { v: 24 * 30, k: "d30" },
 ];
 
 const REASONS = [
@@ -55,6 +56,7 @@ const REASONS = [
 ];
 
 function AbuseDashboard() {
+  const { t } = useTranslation();
   const { windowHours, reason } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [exporting, setExporting] = useState(false);
@@ -151,7 +153,7 @@ function AbuseDashboard() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Abuse events</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("admin.abuse.title")}</h1>
         <div className="flex flex-wrap items-center gap-2">
           <Select
             value={String(windowHours)}
@@ -162,7 +164,7 @@ function AbuseDashboard() {
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
             <SelectContent>
               {WINDOWS.map((w) => (
-                <SelectItem key={w.v} value={String(w.v)}>{w.label}</SelectItem>
+                <SelectItem key={w.v} value={String(w.v)}>{t(`admin.abuse.ranges.${w.k}`)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -174,7 +176,7 @@ function AbuseDashboard() {
           >
             <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All reasons</SelectItem>
+              <SelectItem value="all">{t("admin.abuse.allReasons")}</SelectItem>
               {REASONS.map((r) => (
                 <SelectItem key={r} value={r}>{r}</SelectItem>
               ))}
@@ -184,14 +186,14 @@ function AbuseDashboard() {
             onClick={() => refetch()}
             className="rounded-md border px-3 py-1.5 text-sm hover:bg-accent/10"
           >
-            {isFetching ? "Refreshing…" : "Refresh"}
+            {isFetching ? t("admin.abuse.refreshing") : t("admin.abuse.refresh")}
           </button>
           <button
             onClick={handleExport}
             disabled={exporting}
             className="rounded-md border px-3 py-1.5 text-sm hover:bg-accent/10 disabled:opacity-50"
           >
-            {exporting ? "Exporting…" : "Export CSV"}
+            {exporting ? t("admin.abuse.exporting") : t("admin.abuse.exportCsv")}
           </button>
         </div>
       </div>
@@ -222,14 +224,14 @@ function AbuseDashboard() {
       ) : (
         <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Stat label="Total events" value={data.total} />
-            <Stat label="Unique sessions" value={data.uniqueSessions} />
-            <Stat label="Unique IPs" value={data.uniqueIps} />
-            <Stat label="Top reason" value={data.reasonBreakdown[0]?.reason ?? "—"} />
+            <Stat label={t("admin.abuse.totalEvents")} value={data.total} />
+            <Stat label={t("admin.abuse.uniqueSessions")} value={data.uniqueSessions} />
+            <Stat label={t("admin.abuse.uniqueIps")} value={data.uniqueIps} />
+            <Stat label={t("admin.abuse.topReason")} value={data.reasonBreakdown[0]?.reason ?? "—"} />
           </div>
 
           <section className="rounded-xl border bg-background p-4 shadow-sm">
-            <h2 className="mb-3 text-sm font-medium text-muted-foreground">Events over time</h2>
+            <h2 className="mb-3 text-sm font-medium text-muted-foreground">{t("admin.abuse.overTime")}</h2>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data.series}>
@@ -259,7 +261,7 @@ function AbuseDashboard() {
 
           <div className="grid gap-4 lg:grid-cols-2">
             <section className="rounded-xl border bg-background p-4 shadow-sm">
-              <h2 className="mb-3 text-sm font-medium text-muted-foreground">By reason</h2>
+              <h2 className="mb-3 text-sm font-medium text-muted-foreground">{t("admin.abuse.byReason")}</h2>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={data.reasonBreakdown} layout="vertical" margin={{ left: 20 }}>
@@ -274,7 +276,7 @@ function AbuseDashboard() {
             </section>
 
             <section className="rounded-xl border bg-background p-4 shadow-sm">
-              <h2 className="mb-3 text-sm font-medium text-muted-foreground">Top keys</h2>
+              <h2 className="mb-3 text-sm font-medium text-muted-foreground">{t("admin.abuse.topKeys")}</h2>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={data.topKeys.slice(0, 10)} layout="vertical" margin={{ left: 20 }}>
@@ -290,17 +292,17 @@ function AbuseDashboard() {
           </div>
 
           <section className="rounded-xl border bg-background shadow-sm">
-            <h2 className="border-b p-4 text-sm font-medium text-muted-foreground">Recent events</h2>
+            <h2 className="border-b p-4 text-sm font-medium text-muted-foreground">{t("admin.abuse.recent")}</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
                   <tr>
-                    <th className="p-3">Time</th>
-                    <th className="p-3">Reason</th>
-                    <th className="p-3">Key</th>
-                    <th className="p-3">Session</th>
+                    <th className="p-3">{t("admin.abuse.cols.time")}</th>
+                    <th className="p-3">{t("admin.abuse.cols.reason")}</th>
+                    <th className="p-3">{t("admin.abuse.cols.key")}</th>
+                    <th className="p-3">{t("admin.abuse.cols.session")}</th>
                     <th className="p-3">IP</th>
-                    <th className="p-3">Count</th>
+                    <th className="p-3">{t("admin.abuse.cols.count")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -367,6 +369,7 @@ function ExportJobsPanel({
   onRefresh: () => void;
   isFetching: boolean;
 }) {
+  const { t } = useTranslation();
   if (!jobs.length) return null;
   const badge = (s: string) => {
     const cls =
@@ -382,24 +385,24 @@ function ExportJobsPanel({
   return (
     <section className="rounded-xl border bg-background shadow-sm">
       <div className="flex items-center justify-between border-b p-4">
-        <h2 className="text-sm font-medium text-muted-foreground">Export jobs</h2>
+        <h2 className="text-sm font-medium text-muted-foreground">{t("admin.abuse.jobs")}</h2>
         <button
           onClick={onRefresh}
           className="rounded-md border px-2 py-1 text-xs hover:bg-accent/10"
         >
-          {isFetching ? "Refreshing…" : "Refresh"}
+          {isFetching ? t("admin.abuse.refreshing") : t("admin.abuse.refresh")}
         </button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
             <tr>
-              <th className="p-3">Created</th>
-              <th className="p-3">Filters</th>
-              <th className="p-3">Status</th>
-              <th className="p-3 min-w-[180px]">Progress</th>
-              <th className="p-3">Rows</th>
-              <th className="p-3">Action</th>
+              <th className="p-3">{t("admin.abuse.jobCols.created")}</th>
+              <th className="p-3">{t("admin.abuse.jobCols.filters")}</th>
+              <th className="p-3">{t("admin.abuse.jobCols.status")}</th>
+              <th className="p-3 min-w-[180px]">{t("admin.abuse.jobCols.progress")}</th>
+              <th className="p-3">{t("admin.abuse.jobCols.rows")}</th>
+              <th className="p-3">{t("admin.abuse.jobCols.action")}</th>
             </tr>
           </thead>
           <tbody>
@@ -446,7 +449,7 @@ function ExportJobsPanel({
                           {total > 0
                             ? `${processed.toLocaleString()} / ${total.toLocaleString()}`
                             : active
-                              ? "Preparing…"
+                              ? t("admin.abuse.preparing")
                               : "—"}
                           {(j.pages_processed ?? 0) > 0 && (
                             <> · {j.pages_processed} page{j.pages_processed === 1 ? "" : "s"}</>
