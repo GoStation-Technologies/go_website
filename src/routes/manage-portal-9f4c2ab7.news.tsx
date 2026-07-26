@@ -33,6 +33,17 @@ const empty: News = {
   cover_url: "", is_published: false, is_featured: false, published_at: null,
 };
 
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+
 function NewsPage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
