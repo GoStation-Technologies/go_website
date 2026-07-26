@@ -4,6 +4,7 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { adminListChats } from "@/lib/admin.functions";
+import { useTranslation } from "react-i18next";
 
 const SORTS = ["newest", "oldest", "messages"] as const;
 
@@ -128,6 +129,7 @@ function ChatsPage() {
 
   const visibleSessions = data?.sessions ?? [];
 
+  const { t } = useTranslation();
   const setSearch = (patch: Partial<{ page: number; pageSize: number; sort: string; q: string }>) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }) });
 
@@ -141,7 +143,7 @@ function ChatsPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight">Chat logs</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("admin.chats.title")}</h1>
           {sinceHours ? (
             <button
               type="button"
@@ -151,7 +153,7 @@ function ChatsPage() {
                 })
               }
               className="inline-flex items-center gap-1 rounded-full border bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary hover:bg-primary/15"
-              aria-label="Clear time filter"
+              aria-label={t("admin.chats.clearTime")}
             >
               Last {sinceHours}h ×
             </button>
@@ -160,33 +162,33 @@ function ChatsPage() {
         <div className="flex flex-wrap items-center gap-2">
           <input
             type="search"
-            aria-label="Search chats"
-            placeholder="Search by keyword or session ID…"
+            aria-label={t("admin.chats.searchLabel")}
+            placeholder={t("admin.chats.searchPlaceholder")}
             value={qInput}
             onChange={(e) => setQInput(e.target.value)}
             data-testid="chats-search"
             className="w-72 rounded-md border bg-background px-3 py-1.5 text-xs"
           />
           <label className="text-xs text-muted-foreground" htmlFor="chats-sort">
-            Sort
+            {t("admin.subs.sort")}
           </label>
           <select
             id="chats-sort"
-            aria-label="Sort chats"
+            aria-label={t("admin.chats.sortLabel")}
             value={selectSort}
             onChange={(e) => setSearch({ sort: e.target.value, page: 1 })}
             className="rounded-md border bg-background px-2 py-1.5 text-sm"
           >
-            <option value="newest">Newest activity</option>
-            <option value="oldest">Oldest first</option>
-            <option value="messages">Most messages</option>
+            <option value="newest">{t("admin.chats.sorts.newest")}</option>
+            <option value="oldest">{t("admin.chats.sorts.oldest")}</option>
+            <option value="messages">{t("admin.chats.sorts.messages")}</option>
           </select>
           <label className="text-xs text-muted-foreground" htmlFor="chats-page-size">
-            Per page
+            {t("admin.chats.rowsPerPage")}
           </label>
           <select
             id="chats-page-size"
-            aria-label="Rows per page"
+            aria-label={t("admin.chats.rowsPerPage")}
             value={selectPageSize}
             onChange={(e) => setSearch({ pageSize: Number(e.target.value), page: 1 })}
             className="rounded-md border bg-background px-2 py-1.5 text-sm"
@@ -224,10 +226,10 @@ function ChatsPage() {
           ) : null}
         </div>
       ) : isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <p className="text-sm text-muted-foreground">{t("admin.common.loading")}</p>
       ) : !visibleSessions.length ? (
         <p className="text-sm text-muted-foreground" data-testid="chats-empty">
-          {total ? "No sessions match this filter." : "No chatbot conversations yet."}
+          {total ? t("admin.chats.emptyFiltered") : t("admin.chats.empty")}
         </p>
       ) : (
         <div
@@ -289,21 +291,21 @@ function ChatsPage() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            aria-label="Previous page"
+            aria-label={t("admin.chats.prevPage")}
             onClick={() => setSearch({ page: Math.max(1, shownPage - 1) })}
             disabled={Boolean(chatsError) || shownPage <= 1}
             className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
           >
-            Prev
+            {t("admin.common.prev")}
           </button>
           <button
             type="button"
-            aria-label="Next page"
+            aria-label={t("admin.chats.nextPage")}
             onClick={() => setSearch({ page: Math.min(pageCount, shownPage + 1) })}
             disabled={Boolean(chatsError) || shownPage >= pageCount}
             className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
           >
-            Next
+            {t("admin.common.next")}
           </button>
         </div>
       </div>
