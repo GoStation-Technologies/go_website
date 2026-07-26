@@ -8,11 +8,12 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, useMemo, type ReactNode } from "react";
-import { I18nextProvider } from "react-i18next";
+import { I18nextProvider, useTranslation } from "react-i18next";
+import { DirectionProvider } from "@radix-ui/react-direction";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { createI18nInstance, type ContentLanguage } from "@/lib/i18n";
+import { createI18nInstance, isRtl, type ContentLanguage } from "@/lib/i18n";
 import { THEME_INIT_SCRIPT } from "@/components/theme-toggle";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -138,9 +139,23 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n} defaultNS="t">
-        <Outlet />
-        <Toaster />
+        <AppDirection>
+          <Outlet />
+          <Toaster />
+        </AppDirection>
       </I18nextProvider>
     </QueryClientProvider>
   );
+}
+
+/**
+ * Radix primitives default to `dir="ltr"` unless a DirectionProvider is present,
+ * which forced LTR bidi (misplaced Arabic punctuation) inside Tabs, Dialogs and
+ * other portalled subtrees even when <html dir="rtl">. This keeps every Radix
+ * subtree in sync with the active i18n language.
+ */
+function AppDirection({ children }: { children: ReactNode }) {
+  const { i18n } = useTranslation();
+  const dir = isRtl(i18n.resolvedLanguage ?? i18n.language) ? "rtl" : "ltr";
+  return <DirectionProvider dir={dir}>{children}</DirectionProvider>;
 }
