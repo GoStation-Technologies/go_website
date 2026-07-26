@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { adminListNews, adminUpsertNews, adminDeleteNews } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ const empty: News = {
 };
 
 function NewsPage() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<News>(empty);
@@ -40,12 +42,12 @@ function NewsPage() {
   const { data, isFetching } = useQuery({ queryKey: ["admin", "news"], queryFn: () => adminListNews() });
   const upsert = useMutation({
     mutationFn: (n: News) => adminUpsertNews({ data: n }),
-    onSuccess: () => { toast.success("Saved"); setOpen(false); qc.invalidateQueries({ queryKey: ["admin", "news"] }); },
+    onSuccess: () => { toast.success(t("admin.common.saved")); setOpen(false); qc.invalidateQueries({ queryKey: ["admin", "news"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
   const del = useMutation({
     mutationFn: (id: string) => adminDeleteNews({ data: { id } }),
-    onSuccess: () => { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin", "news"] }); },
+    onSuccess: () => { toast.success(t("admin.common.deleted")); qc.invalidateQueries({ queryKey: ["admin", "news"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -67,33 +69,33 @@ function NewsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">News & Media</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("admin.news.title")}</h1>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />New article</Button></DialogTrigger>
+          <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />{t("admin.news.new")}</Button></DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader><DialogTitle>{form.id ? "Edit article" : "New article"}</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>{form.id ? t("admin.news.editTitle") : t("admin.news.newTitle")}</DialogTitle></DialogHeader>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Slug"><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
-              <Field label="Kind">
+              <Field label={t("admin.common.slug")}><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
+              <Field label={t("admin.common.kind")}>
                 <select value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value as News["kind"] })} className="h-9 w-full rounded-md border bg-background px-2 text-sm">
-                  <option value="news">News</option><option value="event">Event</option><option value="press">Press</option>
+                  <option value="news">{t("admin.news.kinds.news")}</option><option value="event">{t("admin.news.kinds.event")}</option><option value="press">{t("admin.news.kinds.press")}</option>
                 </select>
               </Field>
-              <Field label="Title (EN)"><Input value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
-              <Field label="Title (AR)"><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
-              <Field label="Excerpt (EN)"><Textarea rows={2} value={form.excerpt_en ?? ""} onChange={(e) => setForm({ ...form, excerpt_en: e.target.value })} /></Field>
-              <Field label="Excerpt (AR)"><Textarea dir="rtl" rows={2} value={form.excerpt_ar ?? ""} onChange={(e) => setForm({ ...form, excerpt_ar: e.target.value })} /></Field>
-              <Field label="Body (EN)"><Textarea rows={5} value={form.body_en ?? ""} onChange={(e) => setForm({ ...form, body_en: e.target.value })} /></Field>
-              <Field label="Body (AR)"><Textarea dir="rtl" rows={5} value={form.body_ar ?? ""} onChange={(e) => setForm({ ...form, body_ar: e.target.value })} /></Field>
-              <Field label="Cover URL"><Input value={form.cover_url ?? ""} onChange={(e) => setForm({ ...form, cover_url: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.titleEn")}><Input value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.titleAr")}><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.excerptEn")}><Textarea rows={2} value={form.excerpt_en ?? ""} onChange={(e) => setForm({ ...form, excerpt_en: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.excerptAr")}><Textarea dir="rtl" rows={2} value={form.excerpt_ar ?? ""} onChange={(e) => setForm({ ...form, excerpt_ar: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.bodyEn")}><Textarea rows={5} value={form.body_en ?? ""} onChange={(e) => setForm({ ...form, body_en: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.bodyAr")}><Textarea dir="rtl" rows={5} value={form.body_ar ?? ""} onChange={(e) => setForm({ ...form, body_ar: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.coverUrl")}><Input value={form.cover_url ?? ""} onChange={(e) => setForm({ ...form, cover_url: e.target.value })} /></Field>
               <div className="flex items-center gap-6 pt-6">
-                <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_published} onCheckedChange={(v) => setForm({ ...form, is_published: v })} />Published</label>
-                <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_featured} onCheckedChange={(v) => setForm({ ...form, is_featured: v })} />Featured</label>
+                <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_published} onCheckedChange={(v) => setForm({ ...form, is_published: v })} />{t("admin.common.published")}</label>
+                <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_featured} onCheckedChange={(v) => setForm({ ...form, is_featured: v })} />{t("admin.common.featured")}</label>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-              <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>Save</Button>
+              <Button variant="ghost" onClick={() => setOpen(false)}>{t("admin.common.cancel")}</Button>
+              <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>{t("admin.common.save")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -103,32 +105,32 @@ function NewsPage() {
         q={view.q} onQ={view.setQ}
         sort={view.sort} onSort={view.setSort}
         sortOptions={[
-          { value: "newest", label: "Newest" },
-          { value: "title_en", label: "Title A→Z" },
-          { value: "kind", label: "Kind" },
-          { value: "published_first", label: "Published first" },
+          { value: "newest", label: t("admin.common.newest") },
+          { value: "title_en", label: t("admin.common.titleAz") },
+          { value: "kind", label: t("admin.common.kind") },
+          { value: "published_first", label: t("admin.common.publishedFirst") },
         ]}
         pageSize={view.pageSize} onPageSize={view.setPageSize}
         page={view.page} pageCount={view.pageCount} total={view.total} onPage={view.setPage}
-        searchPlaceholder="Search title, slug, kind…"
+        searchPlaceholder={t("admin.news.searchPlaceholder")}
       />
 
       <div className="overflow-x-auto rounded-lg border bg-background">
-        {isFetching && !rows.length ? <p className="p-6 text-sm text-muted-foreground">Loading…</p> :
-         view.pageRows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">No articles.</p> : (
+        {isFetching && !rows.length ? <p className="p-6 text-sm text-muted-foreground">{t("admin.common.loading")}</p> :
+         view.pageRows.length === 0 ? <p className="p-6 text-sm text-muted-foreground">{t("admin.news.empty")}</p> : (
           <table className="min-w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
-              <tr><th className="px-3 py-2 text-start">Title</th><th className="px-3 py-2 text-start">Kind</th><th className="px-3 py-2 text-start">Status</th><th className="px-3 py-2"></th></tr>
+              <tr><th className="px-3 py-2 text-start">{t("admin.common.title")}</th><th className="px-3 py-2 text-start">{t("admin.common.kind")}</th><th className="px-3 py-2 text-start">{t("admin.common.status")}</th><th className="px-3 py-2"></th></tr>
             </thead>
             <tbody>
               {view.pageRows.map((n) => (
                 <tr key={n.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{n.title_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{n.title_ar}</div><div className="font-mono text-xs text-muted-foreground">{n.slug}</div></td>
-                  <td className="px-3 py-2 text-xs">{n.kind}</td>
-                  <td className="px-3 py-2 text-xs">{n.is_published ? "Published" : "Draft"}{n.is_featured ? " · Featured" : ""}</td>
+                  <td className="px-3 py-2 text-xs">{t(`admin.news.kinds.${n.kind}`)}</td>
+                  <td className="px-3 py-2 text-xs">{n.is_published ? t("admin.common.published") : t("admin.common.draft")}{n.is_featured ? ` · ${t("admin.common.featured")}` : ""}</td>
                   <td className="px-3 py-2 text-end">
                     <Button size="sm" variant="ghost" onClick={() => edit(n)}><Pencil className="h-4 w-4" /></Button>
-                    <Button size="sm" variant="ghost" onClick={() => { if (confirm("Delete article?") && n.id) del.mutate(n.id); }}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    <Button size="sm" variant="ghost" onClick={() => { if (confirm(t("admin.news.confirmDelete")) && n.id) del.mutate(n.id); }}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                   </td>
                 </tr>
               ))}

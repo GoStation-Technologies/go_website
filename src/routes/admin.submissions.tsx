@@ -31,13 +31,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 type Kind = "franchise" | "acquisitions" | "contact";
-const TABS: { key: Kind; label: string }[] = [
-  { key: "franchise", label: "Franchise" },
-  { key: "acquisitions", label: "Acquisitions" },
-  { key: "contact", label: "Contact" },
-];
+const TAB_KEYS: Kind[] = ["franchise", "acquisitions", "contact"];
 const STATUSES = ["new", "reviewing", "approved", "closed"] as const;
 type Status = (typeof STATUSES)[number];
 const STATUS_DOT: Record<Status, string> = {
@@ -46,11 +43,7 @@ const STATUS_DOT: Record<Status, string> = {
   approved: "bg-emerald-500",
   closed: "bg-slate-400",
 };
-const SORTS = [
-  { v: "newest", label: "Newest" },
-  { v: "oldest", label: "Oldest" },
-  { v: "relevance", label: "Relevance" },
-] as const;
+const SORTS = [{ v: "newest" }, { v: "oldest" }, { v: "relevance" }] as const;
 type Sort = (typeof SORTS)[number]["v"];
 
 const searchSchema = z.object({
@@ -76,6 +69,7 @@ export const Route = createFileRoute("/admin/submissions")({
 });
 
 function SubmissionsPage() {
+  const { t } = useTranslation();
   const { kind, status, days, page, sort } = Route.useSearch();
   const navigate = useNavigate({ from: "/admin/submissions" });
   // Any filter/sort change resets page to 1 to avoid landing past the last page.
@@ -104,7 +98,7 @@ function SubmissionsPage() {
     mutationFn: (args: { id: string; status: Status }) =>
       adminUpdateStatus({ data: { kind, ...args } }),
     onSuccess: () => {
-      toast.success("Updated");
+      toast.success(t("admin.subs.updated"));
       qc.invalidateQueries({ queryKey: ["admin", "submissions", kind] });
       qc.invalidateQueries({ queryKey: ["admin", "overview"] });
     },
@@ -155,13 +149,13 @@ function SubmissionsPage() {
       }),
     onSuccess: (res, patch) => {
       const label = patch.status
-        ? `marked ${patch.status}`
+        ? t("admin.subs.bulk.marked", { status: t(`admin.subs.statuses.${patch.status}`) })
         : patch.assigned_to === null
-          ? "unassigned"
-          : "reassigned";
+          ? t("admin.subs.bulk.unassigned")
+          : t("admin.subs.bulk.reassigned");
       const kindAtCall = kind; // capture in case the user switches tabs
       const before = res.before ?? [];
-      const message = `${res.updated} submission${res.updated === 1 ? "" : "s"} ${label}`;
+      const message = t("admin.subs.bulk.done", { n: res.updated, label });
       if (before.length > 0) {
         // Push into the persistent undo store; the global UndoToastHost owns
         // rendering, countdown and the Undo action so it survives tab
@@ -190,7 +184,7 @@ function SubmissionsPage() {
       qc.invalidateQueries({ queryKey: ["admin", "submissions", kind] });
       qc.invalidateQueries({ queryKey: ["admin", "overview"] });
     },
-    onError: (e: Error) => toast.error(e.message || "Bulk update failed"),
+    onError: (e: Error) => toast.error(e.message || t("admin.subs.bulkFailed")),
   });
 
 
@@ -203,38 +197,38 @@ function SubmissionsPage() {
   const confirmCopy = (() => {
     if (!confirm) return null;
     const n = selected.size;
-    const plural = n === 1 ? "" : "s";
     if (confirm.kind === "status") {
       const verb =
         confirm.status === "approved"
-          ? "Approve"
+          ? t("admin.subs.confirm.approve")
           : confirm.status === "closed"
-            ? "Close"
+            ? t("admin.subs.confirm.closeCta")
             : confirm.status === "reviewing"
-              ? "Move to reviewing"
-              : "Reopen";
+              ? t("admin.subs.confirm.reviewing")
+              : t("admin.subs.confirm.reopen");
       return {
-        title: `${verb} ${n} submission${plural}?`,
-        desc: `Sets status to "${confirm.status}" on every selected row. This can't be undone in bulk.`,
+        title: t("admin.subs.confirm.statusTitle", { verb, n }),
+        desc: t("admin.subs.confirm.statusDesc", { status: t(`admin.subs.statuses.${confirm.status}`) }),
         cta: verb,
         destructive: confirm.status === "closed",
       };
     }
     if (confirm.kind === "assign") {
       return {
-        title: `Assign ${n} submission${plural} to ${confirm.name}?`,
-        desc: `Any existing assignee on the selected rows will be replaced.`,
-        cta: "Assign",
+        title: t("admin.subs.confirm.assignTitle", { n, name: confirm.name }),
+        desc: t("admin.subs.confirm.assignDesc"),
+        cta: t("admin.subs.assign"),
         destructive: false,
       };
     }
     return {
-      title: `Unassign ${n} submission${plural}?`,
-      desc: `The current assignee on every selected row will be cleared.`,
-      cta: "Unassign",
+      title: t("admin.subs.confirm.unassignTitle", { n }),
+      desc: t("admin.subs.confirm.unassignDesc"),
+      cta: t("admin.subs.unassign"),
       destructive: true,
     };
   })();
+
   const runConfirm = () => {
     if (!confirm) return;
     if (confirm.kind === "status") bulkMut.mutate({ status: confirm.status });
@@ -249,11 +243,11 @@ function SubmissionsPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Submissions</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("admin.subs.title")}</h1>
         <div className="flex items-center gap-2">
           <div
             role="tablist"
-            aria-label="Time range"
+            aria-label={t("admin.subs.timeRange")}
             className="inline-flex items-center rounded-md border bg-background p-0.5 text-xs"
           >
             <button
@@ -264,7 +258,7 @@ function SubmissionsPage() {
                 !days ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              All
+              {t("admin.subs.all")}
             </button>
             {DAY_RANGES.map((r) => (
               <button
@@ -282,7 +276,7 @@ function SubmissionsPage() {
           </div>
           <div
             role="tablist"
-            aria-label="Status"
+            aria-label={t("admin.common.status")}
             className="inline-flex items-center rounded-md border bg-background p-0.5 text-xs"
           >
             <button
@@ -293,7 +287,7 @@ function SubmissionsPage() {
                 !status ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              All
+              {t("admin.subs.all")}
             </button>
             {STATUSES.map((s) => {
               const active = status === s;
@@ -310,14 +304,14 @@ function SubmissionsPage() {
                   }`}
                 >
                   <span className={`h-1.5 w-1.5 rounded-full ${dot}`} aria-hidden />
-                  {s}
+                  {t(`admin.subs.statuses.${s}`)}
                 </button>
               );
             })}
           </div>
           <div
             role="tablist"
-            aria-label="Sort"
+            aria-label={t("admin.subs.sort")}
             className="inline-flex items-center rounded-md border bg-background p-0.5 text-xs"
           >
             {SORTS.map((s) => {
@@ -332,7 +326,7 @@ function SubmissionsPage() {
                     active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {s.label}
+                  {t(`admin.subs.sorts.${s.v}`)}
                 </button>
               );
             })}
@@ -343,21 +337,21 @@ function SubmissionsPage() {
 
       <div className="flex flex-wrap items-end justify-between gap-3 border-b">
         <div className="flex gap-1">
-          {TABS.map((t) => (
+          {TAB_KEYS.map((k) => (
             <button
-              key={t.key}
-              onClick={() => setKind(t.key)}
+              key={k}
+              onClick={() => setKind(k)}
               className={`border-b-2 px-3 py-2 text-sm font-medium transition ${
-                kind === t.key ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
+                kind === k ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              {t.label}
+              {t(`admin.subs.tabs.${k}`)}
             </button>
           ))}
         </div>
         {selected.size > 0 && (
           <div className="mb-1 flex flex-wrap items-center gap-2 rounded-md border bg-muted/40 px-2 py-1 text-xs">
-            <span className="font-medium">{selected.size} selected</span>
+            <span className="font-medium">{t("admin.subs.selected", { n: selected.size })}</span>
             <span className="text-muted-foreground">·</span>
             <Button
               size="sm"
@@ -365,7 +359,7 @@ function SubmissionsPage() {
               disabled={bulkMut.isPending}
               onClick={() => setConfirm({ kind: "status", status: "approved" })}
             >
-              Approve
+              {t("admin.subs.approve")}
             </Button>
             <Button
               size="sm"
@@ -373,22 +367,22 @@ function SubmissionsPage() {
               disabled={bulkMut.isPending}
               onClick={() => setConfirm({ kind: "status", status: "closed" })}
             >
-              Close
+              {t("admin.subs.close")}
             </Button>
             <DropdownMenu open={staffOpen} onOpenChange={setStaffOpen}>
               <DropdownMenuTrigger asChild>
                 <Button size="sm" variant="outline" disabled={bulkMut.isPending}>
-                  Assign
+                  {t("admin.subs.assign")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="max-h-72 w-56 overflow-y-auto">
-                <DropdownMenuLabel>Assign to</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("admin.subs.assignTo")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {staffLoading && (
-                  <div className="px-2 py-1.5 text-xs text-muted-foreground">Loading…</div>
+                  <div className="px-2 py-1.5 text-xs text-muted-foreground">{t("admin.common.loading")}</div>
                 )}
                 {!staffLoading && (staffData?.staff ?? []).length === 0 && (
-                  <div className="px-2 py-1.5 text-xs text-muted-foreground">No staff found</div>
+                  <div className="px-2 py-1.5 text-xs text-muted-foreground">{t("admin.subs.noStaff")}</div>
                 )}
                 {(staffData?.staff ?? []).map((s) => (
                   <DropdownMenuItem
@@ -403,7 +397,7 @@ function SubmissionsPage() {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => setConfirm({ kind: "unassign" })}>
-                  <span className="text-muted-foreground">Unassign</span>
+                  <span className="text-muted-foreground">{t("admin.subs.unassign")}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -413,7 +407,7 @@ function SubmissionsPage() {
               onClick={() => setSelected(new Set())}
               disabled={bulkMut.isPending}
             >
-              Clear
+              {t("admin.subs.clear")}
             </Button>
           </div>
         )}
@@ -421,9 +415,9 @@ function SubmissionsPage() {
 
       <div className="overflow-x-auto rounded-lg border bg-background">
         {isFetching && !rows.length ? (
-          <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="p-6 text-sm text-muted-foreground">{t("admin.common.loading")}</p>
         ) : rows.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">No submissions.</p>
+          <p className="p-6 text-sm text-muted-foreground">{t("admin.subs.empty")}</p>
         ) : (
           <table className="min-w-full text-sm">
             <thead className="bg-muted/50 text-xs uppercase tracking-wide text-muted-foreground">
@@ -431,7 +425,7 @@ function SubmissionsPage() {
                 <th className="w-8 px-3 py-2">
                   <input
                     type="checkbox"
-                    aria-label="Select all"
+                    aria-label={t("admin.subs.selectAll")}
                     checked={allSelected}
                     ref={(el) => {
                       if (el) el.indeterminate = someSelected;
@@ -440,12 +434,12 @@ function SubmissionsPage() {
                     className="h-4 w-4 rounded border-input"
                   />
                 </th>
-                <th className="px-3 py-2 text-start">Ref / ID</th>
-                <th className="px-3 py-2 text-start">Contact</th>
-                <th className="px-3 py-2 text-start">Details</th>
-                <th className="px-3 py-2 text-start">Received</th>
-                <th className="px-3 py-2 text-start">Assignee</th>
-                <th className="px-3 py-2 text-start">Status</th>
+                <th className="px-3 py-2 text-start">{t("admin.subs.cols.ref")}</th>
+                <th className="px-3 py-2 text-start">{t("admin.subs.cols.contact")}</th>
+                <th className="px-3 py-2 text-start">{t("admin.subs.cols.details")}</th>
+                <th className="px-3 py-2 text-start">{t("admin.subs.cols.received")}</th>
+                <th className="px-3 py-2 text-start">{t("admin.subs.cols.assignee")}</th>
+                <th className="px-3 py-2 text-start">{t("admin.common.status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -502,7 +496,7 @@ function SubmissionsPage() {
                           disabled={updateMut.isPending}
                         >
                           {STATUSES.map((s) => (
-                            <option key={s} value={s}>{s}</option>
+                            <option key={s} value={s}>{t(`admin.subs.statuses.${s}`)}</option>
                           ))}
                         </select>
                       </div>
@@ -517,7 +511,7 @@ function SubmissionsPage() {
 
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
         <div>
-          {total === 0 ? "0 results" : `Showing ${rangeStart}–${rangeEnd} of ${total}`}
+          {total === 0 ? t("admin.subs.results", { count: 0 }) : t("admin.subs.showing", { from: rangeStart, to: rangeEnd, total })}
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -526,10 +520,10 @@ function SubmissionsPage() {
             disabled={page <= 1 || isFetching}
             onClick={() => setPage(page - 1)}
           >
-            Previous
+            {t("admin.subs.previous")}
           </Button>
           <span className="tabular-nums">
-            Page {page} of {pageCount}
+            {t("admin.subs.pageOf", { page, count: pageCount })}
           </span>
           <Button
             variant="outline"
@@ -537,7 +531,7 @@ function SubmissionsPage() {
             disabled={page >= pageCount || isFetching}
             onClick={() => setPage(page + 1)}
           >
-            Next
+            {t("admin.subs.next")}
           </Button>
         </div>
       </div>
@@ -554,7 +548,7 @@ function SubmissionsPage() {
             <AlertDialogDescription>{confirmCopy?.desc}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={bulkMut.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={bulkMut.isPending}>{t("admin.common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               disabled={bulkMut.isPending}
               onClick={(e) => {
@@ -567,7 +561,7 @@ function SubmissionsPage() {
                   : undefined
               }
             >
-              {bulkMut.isPending ? "Applying…" : confirmCopy?.cta}
+              {bulkMut.isPending ? t("admin.subs.applying") : confirmCopy?.cta}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
