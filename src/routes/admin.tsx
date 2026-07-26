@@ -17,7 +17,7 @@ export const Route = createFileRoute("/admin")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
-    if (!data.session) throw redirect({ to: "/auth" });
+    if (!data.session) throw redirect({ to: "/admin/login" });
   },
   loader: async () => {
     const res = await getMyStaffRoles();
@@ -42,7 +42,7 @@ function AdminLayout() {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    router.navigate({ to: "/" });
+    router.navigate({ to: "/admin/login" });
   };
 
   const defaultOpen =

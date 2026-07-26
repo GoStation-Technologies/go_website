@@ -83,7 +83,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/auth", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -151,7 +151,7 @@ maybe("Admin chat logs — filter & access control", () => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(BASE_URL + "/admin/chats", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/auth");
+    expect(new URL(page.url()).pathname).toBe("/admin/login");
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain(uniqA.toLowerCase());
     expect(body).not.toContain(uniqB.toLowerCase());
