@@ -91,15 +91,6 @@ function CareersPage() {
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
             <DialogHeader><DialogTitle>{form.id ? t("admin.careers.editTitle") : t("admin.careers.newTitle")}</DialogTitle></DialogHeader>
             <div dir="ltr" className="grid grid-cols-2 gap-6">
-              <Field label={t("admin.common.slug")}>
-                <Input
-                  dir="ltr"
-                  disabled
-                  readOnly
-                  value={form.slug}
-                  className={inputCls + " cursor-not-allowed bg-muted text-muted-foreground disabled:opacity-100"}
-                />
-              </Field>
               <Field label={t("admin.careers.f.employmentType")} rtl>
                 <select value={form.employment_type} onChange={(e) => setForm({ ...form, employment_type: e.target.value })} className={"h-10 w-full px-2 text-sm " + inputCls}>
                   <option value="full_time">{t("admin.careers.types.full_time")}</option><option value="part_time">{t("admin.careers.types.part_time")}</option>
