@@ -39,7 +39,7 @@ BEGIN
   SELECT count(*) INTO n
   FROM pg_proc p
   JOIN pg_namespace ns ON ns.oid = p.pronamespace
-  WHERE ns.nspname = 'public'
+  WHERE ns.nspname IN ('public','private')
     AND p.prokind IN ('f','p')
     AND NOT EXISTS (
       SELECT 1 FROM unnest(coalesce(p.proconfig, ARRAY[]::text[])) c
@@ -69,19 +69,51 @@ BEGIN
   END IF;
 
   ----------------------------------------------------------------------------
-  -- ASSERT: chatbot_messages_public_insert_spoofing
-  -- INSERT policy on public.chatbot_messages must constrain role and session_id.
+  -- ASSERT: chatbot_messages_session_spoofing
+  -- Visitors must not be able to insert chatbot messages directly; only the
+  -- server (service_role) writes them, so no anon/authenticated INSERT grant
+  -- and no client-facing INSERT policy may exist.
   ----------------------------------------------------------------------------
   SELECT count(*) INTO n
-  FROM pg_policies
-  WHERE schemaname = 'public'
-    AND tablename  = 'chatbot_messages'
-    AND cmd        = 'INSERT'
-    AND with_check ILIKE '%role%'
-    AND with_check ILIKE '%session_id%';
-  IF n = 0 THEN
+  FROM information_schema.role_table_grants
+  WHERE table_schema = 'public'
+    AND table_name   = 'chatbot_messages'
+    AND privilege_type = 'INSERT'
+    AND grantee IN ('anon','authenticated','PUBLIC');
+  IF n > 0 THEN
     regressions := regressions ||
-      'REGRESSION chatbot_messages_public_insert_spoofing: INSERT policy missing role/session_id checks';
+      'REGRESSION chatbot_messages_session_spoofing: client roles can INSERT into chatbot_messages';
+  END IF;
+
+  ----------------------------------------------------------------------------
+  -- ASSERT: report_downloads_arbitrary_report_id
+  -- Download logs must be written server-side only.
+  ----------------------------------------------------------------------------
+  SELECT count(*) INTO n
+  FROM information_schema.role_table_grants
+  WHERE table_schema = 'public'
+    AND table_name   = 'report_downloads'
+    AND privilege_type = 'INSERT'
+    AND grantee IN ('anon','authenticated','PUBLIC');
+  IF n > 0 THEN
+    regressions := regressions ||
+      'REGRESSION report_downloads_arbitrary_report_id: client roles can INSERT into report_downloads';
+  END IF;
+
+  ----------------------------------------------------------------------------
+  -- ASSERT: SUPA_authenticated_security_definer_function_executable
+  -- No SECURITY DEFINER function in the API-exposed `public` schema may be
+  -- callable by authenticated users (role helpers live in `private`).
+  ----------------------------------------------------------------------------
+  SELECT count(*) INTO n
+  FROM pg_proc p
+  JOIN pg_namespace ns ON ns.oid = p.pronamespace
+  WHERE ns.nspname = 'public'
+    AND p.prosecdef
+    AND has_function_privilege('authenticated', p.oid, 'EXECUTE');
+  IF n > 0 THEN
+    regressions := regressions || format(
+      'REGRESSION SUPA_authenticated_security_definer_function_executable: %s SECURITY DEFINER function(s) in public executable by authenticated', n);
   END IF;
 
   ----------------------------------------------------------------------------
@@ -106,7 +138,7 @@ BEGIN
   SELECT count(*) INTO n
   FROM pg_proc p
   JOIN pg_namespace ns ON ns.oid = p.pronamespace
-  WHERE ns.nspname = 'public'
+  WHERE ns.nspname IN ('public','private')
     AND p.proname  = 'is_staff'
     AND (pg_get_functiondef(p.oid) ILIKE '%role%=%'
          OR pg_get_functiondef(p.oid) ILIKE '%role = ANY%');
