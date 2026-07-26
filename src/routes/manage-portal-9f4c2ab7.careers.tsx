@@ -91,7 +91,7 @@ function CareersPage() {
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
             <DialogHeader><DialogTitle>{form.id ? t("admin.careers.editTitle") : t("admin.careers.newTitle")}</DialogTitle></DialogHeader>
             <FormGrid>
-              <Field label={t("admin.careers.f.employmentType")}>
+              <Field label={t("admin.careers.f.employmentType")} className="sm:col-span-2 sm:max-w-xs">
                 <select value={form.employment_type} onChange={(e) => setForm({ ...form, employment_type: e.target.value })} className={selectCls}>
                   <option value="full_time">{t("admin.careers.types.full_time")}</option><option value="part_time">{t("admin.careers.types.part_time")}</option>
                   <option value="contract">{t("admin.careers.types.contract")}</option><option value="internship">{t("admin.careers.types.internship")}</option>

@@ -86,7 +86,7 @@ function NewsPage() {
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
             <DialogHeader><DialogTitle>{form.id ? t("admin.news.editTitle") : t("admin.news.newTitle")}</DialogTitle></DialogHeader>
             <FormGrid>
-              <Field label={t("admin.common.kind")}>
+              <Field label={t("admin.common.kind")} className="sm:col-span-2 sm:max-w-xs">
                 <select value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value as News["kind"] })} className={selectCls}>
                   <option value="news">{t("admin.news.kinds.news")}</option><option value="event">{t("admin.news.kinds.event")}</option><option value="press">{t("admin.news.kinds.press")}</option>
                 </select>
