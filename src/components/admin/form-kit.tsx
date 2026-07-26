@@ -38,18 +38,28 @@ export function FormGrid({
   );
 }
 
-/** Full-width row inside FormGrid (toggles, action separators). */
+/** Full-width row inside FormGrid (toggles, action separators). Follows the UI language. */
 export function FormRow({ children, className }: { children: React.ReactNode; className?: string }) {
+  const uiDir = useUiDir();
   return (
-    <div className={cn("mt-6 flex flex-wrap items-center gap-6 border-t pt-6 sm:col-span-2", className)}>
+    <div
+      dir={uiDir}
+      className={cn("mt-6 flex flex-wrap items-center gap-6 border-t pt-6 sm:col-span-2", className)}
+    >
       {children}
     </div>
   );
 }
 
+function useUiDir() {
+  const { i18n } = useTranslation();
+  return i18n.language?.startsWith("ar") ? "rtl" : "ltr";
+}
+
 /**
- * Labeled field. `lang` drives direction and text alignment of the control:
- * "ar" → rtl / text-right, "en" → ltr / text-left, default follows the grid (rtl).
+ * Labeled field. `lang` pins direction and text alignment of the control:
+ * "ar" → rtl / text-right, "en" → ltr / text-left. Without `lang` the field
+ * follows the active admin language.
  */
 export function Field({
   label,
@@ -64,15 +74,16 @@ export function Field({
   lang?: "ar" | "en";
   className?: string;
 }) {
-  const dir = lang === "en" ? "ltr" : "rtl";
-  const align = lang === "en" ? "text-left" : "text-right";
+  const uiDir = useUiDir();
+  const dir = lang ? (lang === "en" ? "ltr" : "rtl") : uiDir;
+  const align = dir === "ltr" ? "text-left" : "text-right";
   return (
     <div dir={dir} className={cn("min-w-0", align, className)}>
       <Label className="mb-1.5 block text-sm font-semibold text-foreground">{label}</Label>
       <div
         className={cn(
           "[&_input]:w-full [&_textarea]:w-full",
-          lang === "en"
+          dir === "ltr"
             ? "[&_input]:text-left [&_textarea]:text-left [&_select]:text-left"
             : "[&_input]:text-right [&_textarea]:text-right [&_select]:text-right",
         )}
