@@ -170,6 +170,13 @@ function CareersPage() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="space-y-1"><Label className="text-xs">{label}</Label>{children}</div>;
+function Field({ label, children, hint, rtl }: { label: string; children: React.ReactNode; hint?: string; rtl?: boolean }) {
+  return (
+    <div dir={rtl ? "rtl" : "ltr"} className="space-y-1">
+      <Label className="text-xs">{label}</Label>
+      {children}
+      {hint ? <p className="text-[11px] text-muted-foreground">{hint}</p> : null}
+    </div>
+  );
 }
+
