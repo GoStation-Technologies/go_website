@@ -46,19 +46,19 @@ export function SiteFooter() {
             <img src={logoAsset.url} alt="GoStation" className="h-11 w-11" />
             <div className="flex flex-col leading-none">
               <span className="font-display text-lg font-bold">{t("brand.name")}</span>
-              <span className="mt-1 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+              <span className="mt-1 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/75">
                 {t("brand.tagline")}
               </span>
             </div>
           </div>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-foreground/70">
+          <p className="mt-5 max-w-sm text-sm leading-relaxed text-foreground/85">
             {t("footer.tagline")}
           </p>
-          <div className="mt-5 flex items-start gap-2 text-sm text-foreground/80">
+          <div className="mt-5 flex items-start gap-2 text-sm text-foreground/90">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ember-glow" />
             <span>{t("contact.address")}</span>
           </div>
-          <div className="mt-2 flex items-center gap-2 text-sm text-foreground/80">
+          <div className="mt-2 flex items-center gap-2 text-sm text-foreground/90">
             <Mail className="h-4 w-4 shrink-0 text-ember-glow" />
             <a href="mailto:info@gostation.net" className="hover:text-ember-glow">info@gostation.net</a>
           </div>
@@ -68,7 +68,7 @@ export function SiteFooter() {
                 key={i}
                 href="#"
                 aria-label="social"
-                className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-foreground/80 transition hover:border-ember hover:bg-ember/10 hover:text-ember"
+                className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-foreground/90 transition hover:border-ember-glow hover:bg-ember/20 hover:text-ember-glow"
               >
                 <Icon className="h-4 w-4" />
               </a>
@@ -89,14 +89,14 @@ export function SiteFooter() {
           <FooterLink to="/contact">{t("nav.contact")}</FooterLink>
         </FooterColumn>
         <FooterColumn title={t("footer.legal")}>
-          <li className="text-foreground/70">{t("footer.privacy")}</li>
-          <li className="text-foreground/70">{t("footer.terms")}</li>
-          <li className="text-foreground/70">{t("contact.hours")}</li>
+          <li className="text-foreground/80">{t("footer.privacy")}</li>
+          <li className="text-foreground/80">{t("footer.terms")}</li>
+          <li className="text-foreground/80">{t("contact.hours")}</li>
         </FooterColumn>
       </div>
 
       <div className="relative border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-foreground/60 sm:flex-row sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-foreground/75 sm:flex-row sm:px-6">
           <div>© {new Date().getFullYear()} {t("brand.name")} — {t("footer.rights")}</div>
           <div className="tracking-[0.18em]">{t("footer.microcopy")}</div>
         </div>
@@ -108,7 +108,7 @@ export function SiteFooter() {
 function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/50">
+      <div className="mb-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
         {title}
       </div>
       <ul className="space-y-2.5 text-sm">{children}</ul>
@@ -121,7 +121,7 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
     <li>
       <Link
         to={to as never}
-        className="inline-flex items-center gap-1 text-foreground/80 transition hover:text-ember"
+        className="inline-flex items-center gap-1 text-foreground/85 transition hover:text-ember-glow hover:underline underline-offset-4"
       >
         {children}
       </Link>
