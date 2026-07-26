@@ -58,7 +58,7 @@ type Kpi = {
 function Overview() {
   const { t, i18n } = useTranslation();
   const rtl = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("ar");
-  const locale = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("ar") ? "ar-SA" : "en-US";
+  const locale = digitLocale(i18n.resolvedLanguage ?? i18n.language);
   const { days } = Route.useSearch();
   const navigate = useNavigate({ from: "/manage-portal-9f4c2ab7/" });
   const { data } = useSuspenseQuery({
