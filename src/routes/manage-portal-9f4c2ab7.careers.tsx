@@ -149,8 +149,9 @@ function CareersPage() {
               {view.pageRows.map((j) => (
                 <tr key={j.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{j.title_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{j.title_ar}</div></td>
-                  <td className="px-3 py-2 text-xs">{j.department}</td>
-                  <td className="px-3 py-2 text-xs">{j.city}</td>
+                  <td className="px-3 py-2 text-xs"><div>{j.department_en}</div><div className="text-muted-foreground" dir="rtl">{j.department_ar}</div></td>
+                  <td className="px-3 py-2 text-xs"><div>{j.city_en}</div><div className="text-muted-foreground" dir="rtl">{j.city_ar}</div></td>
+
                   <td className="px-3 py-2 text-xs">{t(`admin.careers.types.${j.employment_type}`, { defaultValue: j.employment_type })}</td>
                   <td className="px-3 py-2 text-xs">{j.is_active ? t("admin.common.active") : t("admin.common.closed")}</td>
                   <td className="px-3 py-2 text-end">
