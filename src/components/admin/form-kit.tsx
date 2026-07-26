@@ -1,0 +1,84 @@
+import * as React from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+
+/** Shared crisp input styling for every admin form control. */
+export const inputCls =
+  "rounded-md border border-input bg-background shadow-sm transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring";
+
+/** Native <select> styling that matches Input. */
+export const selectCls = cn("h-10 w-full px-2 text-sm", inputCls);
+
+/** Disabled identifier / slug / code styling. */
+export const disabledCls =
+  "cursor-not-allowed bg-muted text-muted-foreground disabled:opacity-100";
+
+/**
+ * Admin form grid. Always RTL: the first cell lands on the right,
+ * so English fields (declared first) sit right and Arabic fields sit left.
+ */
+export function FormGrid({
+  children,
+  className,
+  cols = 2,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  cols?: 1 | 2;
+}) {
+  return (
+    <div
+      dir="rtl"
+      className={cn("grid gap-6", cols === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1", className)}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Full-width row inside FormGrid (toggles, action separators). */
+export function FormRow({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={cn("mt-6 flex flex-wrap items-center gap-6 border-t pt-6 sm:col-span-2", className)}>
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Labeled field. `lang` drives direction and text alignment of the control:
+ * "ar" → rtl / text-right, "en" → ltr / text-left, default follows the grid (rtl).
+ */
+export function Field({
+  label,
+  children,
+  hint,
+  lang,
+  className,
+}: {
+  label: string;
+  children: React.ReactNode;
+  hint?: string;
+  lang?: "ar" | "en";
+  className?: string;
+}) {
+  const dir = lang === "en" ? "ltr" : "rtl";
+  const align = lang === "en" ? "text-left" : "text-right";
+  return (
+    <div dir={dir} className={cn("min-w-0", align, className)}>
+      <Label className="mb-1.5 block text-sm font-semibold text-foreground">{label}</Label>
+      <div className={cn("[&_input]:w-full [&_textarea]:w-full", align, `[&_input]:${align}`)}>{children}</div>
+      {hint ? <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p> : null}
+    </div>
+  );
+}
+
+/** Read-only identifier / slug / code field. */
+export function IdField({ label, value, hint }: { label: string; value: string; hint?: string }) {
+  return (
+    <Field label={label} lang="en" hint={hint}>
+      <Input dir="ltr" disabled readOnly value={value} className={cn(inputCls, disabledCls, "text-left")} />
+    </Field>
+  );
+}
