@@ -462,7 +462,7 @@ function ExportJobsPanel({
                       <span className="text-xs text-muted-foreground">—</span>
                     )}
                   </td>
-                  <td className="p-3">{fmtNumber(j.row_count ?? 0) ?? "—"}</td>
+                  <td className="p-3">{j.row_count != null ? fmtNumber(j.row_count) : "—"}</td>
                   <td className="p-3">
                     {j.status === "ready" && !expired ? (
                       <button
