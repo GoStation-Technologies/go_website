@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -76,13 +77,14 @@ export function ListToolbar(props: {
   page: number; pageCount: number; total: number; onPage: (n: number) => void;
   searchPlaceholder?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex flex-1 flex-wrap items-center gap-2">
         <Input
           value={props.q}
           onChange={(e) => props.onQ(e.target.value)}
-          placeholder={props.searchPlaceholder ?? "Search…"}
+          placeholder={props.searchPlaceholder ?? t("admin.common.search")}
           className="max-w-xs"
         />
         <select
@@ -100,17 +102,17 @@ export function ListToolbar(props: {
           className="h-9 rounded-md border bg-background px-2 text-sm"
         >
           {[10, 25, 50, 100].map((n) => (
-            <option key={n} value={n}>{n} / page</option>
+            <option key={n} value={n}>{t("admin.common.perPage", { n })}</option>
           ))}
         </select>
       </div>
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <span>
-          {props.total === 0 ? "0" : `${(props.page - 1) * props.pageSize + 1}–${Math.min(props.page * props.pageSize, props.total)}`} of {props.total}
+          {props.total === 0 ? "0" : `${(props.page - 1) * props.pageSize + 1}–${Math.min(props.page * props.pageSize, props.total)}`} {" "}{t("admin.common.of")} {props.total}
         </span>
-        <Button size="sm" variant="outline" disabled={props.page <= 1} onClick={() => props.onPage(props.page - 1)}>Prev</Button>
+        <Button size="sm" variant="outline" disabled={props.page <= 1} onClick={() => props.onPage(props.page - 1)}>{t("admin.common.prev")}</Button>
         <span className="tabular-nums">{props.page} / {props.pageCount}</span>
-        <Button size="sm" variant="outline" disabled={props.page >= props.pageCount} onClick={() => props.onPage(props.page + 1)}>Next</Button>
+        <Button size="sm" variant="outline" disabled={props.page >= props.pageCount} onClick={() => props.onPage(props.page + 1)}>{t("admin.common.next")}</Button>
       </div>
     </div>
   );
