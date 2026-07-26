@@ -13,16 +13,43 @@ import { UndoToastHost } from "@/components/admin/undo-toast-host";
 import { LangBoot } from "@/components/site/lang-boot";
 import { getContentLanguage } from "@/lib/i18n";
 
+async function waitForSession() {
+  const { data } = await supabase.auth.getSession();
+  if (data.session) return data.session;
+  // Give the client one tick to finish restoring from storage / an OAuth hash.
+  return await new Promise<typeof data.session>((resolve) => {
+    const timer = setTimeout(() => {
+      sub.data.subscription.unsubscribe();
+      resolve(null);
+    }, 1200);
+    const sub = supabase.auth.onAuthStateChange((_event, s) => {
+      if (s) {
+        clearTimeout(timer);
+        sub.data.subscription.unsubscribe();
+        resolve(s);
+      }
+    });
+  });
+}
+
 export const Route = createFileRoute("/manage-portal-9f4c2ab7")({
   ssr: false,
-  beforeLoad: async () => {
-    const { data } = await supabase.auth.getSession();
-    // Unauthenticated visitors are bounced to the public home page — the hidden
-    // portal never reveals a login screen on deeper routes.
-    if (!data.session) throw redirect({ to: "/" });
+  beforeLoad: async ({ location }) => {
+    // Wait for the Supabase client to rehydrate its persisted session before
+    // deciding — a cold load resolves storage asynchronously.
+    const session = await waitForSession();
+    if (!session) {
+      // Only protected portal routes bounce; the login page lives outside this
+      // layout (`manage-portal-9f4c2ab7_/login`) and is never guarded.
+      throw redirect({
+        to: "/manage-portal-9f4c2ab7/login",
+        search: { redirect: location.href },
+      });
+    }
   },
   loader: async () => {
     const res = await getMyStaffRoles();
+    // Authenticated but not staff: no portal, no hints.
     if (!res.roles.length) throw redirect({ to: "/" });
     return { roles: res.roles };
   },

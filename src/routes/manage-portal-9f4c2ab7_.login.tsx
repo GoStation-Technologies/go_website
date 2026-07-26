@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +11,9 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/manage-portal-9f4c2ab7_/login")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  }),
   component: AdminLoginPage,
   head: () => ({
     meta: [
@@ -22,7 +25,32 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7_/login")({
 
 function AdminLoginPage() {
   const navigate = useNavigate();
+  const { redirect: redirectTo } = Route.useSearch();
   const [busy, setBusy] = useState(false);
+
+  const goToPortal = () => {
+    if (redirectTo && redirectTo.startsWith("/manage-portal-9f4c2ab7")) {
+      window.location.replace(redirectTo);
+      return;
+    }
+    navigate({ to: "/manage-portal-9f4c2ab7" });
+  };
+
+  // Already signed in (or returning from the Google redirect): skip the form.
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (active && data.session) goToPortal();
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      if (session) goToPortal();
+    });
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,7 +63,7 @@ function AdminLoginPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
-    navigate({ to: "/manage-portal-9f4c2ab7" });
+    goToPortal();
   };
 
   const google = async () => {
