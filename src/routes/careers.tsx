@@ -51,8 +51,9 @@ function CareersPage() {
                   <div>
                     <h3 className="text-lg font-semibold">{lng === "ar" ? j.title_ar : j.title_en}</h3>
                     <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                      <span className="inline-flex items-center gap-1"><Briefcase className="h-3 w-3" />{j.department}</span>
-                      <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{j.city}</span>
+                      <span className="inline-flex items-center gap-1"><Briefcase className="h-3 w-3" />{(lng === "ar" ? j.department_ar : j.department_en) || j.department}</span>
+                      <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{(lng === "ar" ? j.city_ar : j.city_en) || j.city}</span>
+
                       <Badge variant="outline">{j.employment_type}</Badge>
                     </div>
                   </div>
