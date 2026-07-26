@@ -20,21 +20,36 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7/careers")({
 
 type Job = {
   id?: string; slug: string; title_ar: string; title_en: string;
-  department: string; city: string; employment_type: string;
+  department_en: string; department_ar: string; city_en: string; city_ar: string;
+  employment_type: string;
   description_ar?: string | null; description_en?: string | null; is_active: boolean;
 };
 
 const empty: Job = {
   slug: "", title_ar: "", title_en: "",
-  department: "", city: "", employment_type: "full_time",
+  department_en: "", department_ar: "", city_en: "", city_ar: "",
+  employment_type: "full_time",
   description_ar: "", description_en: "", is_active: true,
 };
+
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 
 function CareersPage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Job>(empty);
+  const [slugTouched, setSlugTouched] = useState(false);
+
 
   const { data, isFetching } = useQuery({ queryKey: ["admin", "jobs"], queryFn: () => adminListJobs() });
   const upsert = useMutation({
@@ -51,18 +66,21 @@ function CareersPage() {
   const rows = (data?.rows ?? []) as Job[];
   const view = useListView<Job>({
     rows,
-    search: (j) => `${j.title_en} ${j.title_ar} ${j.slug} ${j.department} ${j.city} ${j.employment_type}`,
+    search: (j) => `${j.title_en} ${j.title_ar} ${j.slug} ${j.department_en} ${j.department_ar} ${j.city_en} ${j.city_ar} ${j.employment_type}`,
     sort: {
       newest: () => 0,
       title_en: (a, b) => a.title_en.localeCompare(b.title_en),
-      department: (a, b) => a.department.localeCompare(b.department),
-      city: (a, b) => a.city.localeCompare(b.city),
+      department: (a, b) => (a.department_en ?? "").localeCompare(b.department_en ?? ""),
+      city: (a, b) => (a.city_en ?? "").localeCompare(b.city_en ?? ""),
       active_first: (a, b) => Number(b.is_active) - Number(a.is_active),
     },
     defaultSort: "newest",
   });
-  const edit = (j: Job) => { setForm({ ...empty, ...j }); setOpen(true); };
-  const create = () => { setForm(empty); setOpen(true); };
+  const edit = (j: Job) => { setForm({ ...empty, ...j }); setSlugTouched(true); setOpen(true); };
+  const create = () => { setForm(empty); setSlugTouched(false); setOpen(true); };
+
+  const onTitleEn = (v: string) =>
+    setForm((f) => ({ ...f, title_en: v, slug: slugTouched ? f.slug : slugify(v) }));
 
   return (
     <div className="space-y-4">
@@ -72,24 +90,33 @@ function CareersPage() {
           <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />{t("admin.careers.new")}</Button></DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{form.id ? t("admin.careers.editTitle") : t("admin.careers.newTitle")}</DialogTitle></DialogHeader>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label={t("admin.common.slug")}><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.employmentType")}>
+            <div dir="ltr" className="grid grid-cols-2 gap-3">
+              <Field label={t("admin.common.slug")} hint={t("admin.careers.f.slugHint")}>
+                <Input
+                  dir="ltr"
+                  value={form.slug}
+                  onChange={(e) => { setSlugTouched(true); setForm({ ...form, slug: slugify(e.target.value) }); }}
+                />
+              </Field>
+              <Field label={t("admin.careers.f.employmentType")} rtl>
                 <select value={form.employment_type} onChange={(e) => setForm({ ...form, employment_type: e.target.value })} className="h-9 w-full rounded-md border bg-background px-2 text-sm">
                   <option value="full_time">{t("admin.careers.types.full_time")}</option><option value="part_time">{t("admin.careers.types.part_time")}</option>
                   <option value="contract">{t("admin.careers.types.contract")}</option><option value="internship">{t("admin.careers.types.internship")}</option>
                 </select>
               </Field>
-              <Field label={t("admin.careers.f.titleEn")}><Input value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.titleAr")}><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
-              <Field label={t("admin.common.department")}><Input value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} /></Field>
-              <Field label={t("admin.common.city")}><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.titleEn")}><Input value={form.title_en} onChange={(e) => onTitleEn(e.target.value)} /></Field>
+              <Field label={t("admin.careers.f.titleAr")} rtl><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.departmentEn")}><Input value={form.department_en} onChange={(e) => setForm({ ...form, department_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.departmentAr")} rtl><Input dir="rtl" value={form.department_ar} onChange={(e) => setForm({ ...form, department_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.cityEn")}><Input value={form.city_en} onChange={(e) => setForm({ ...form, city_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.cityAr")} rtl><Input dir="rtl" value={form.city_ar} onChange={(e) => setForm({ ...form, city_ar: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.descriptionEn")}><Textarea rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.descriptionAr")}><Textarea dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.descriptionAr")} rtl><Textarea dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
               <div className="col-span-2 pt-2">
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />{t("admin.careers.f.activeHint")}</label>
               </div>
             </div>
+
             <DialogFooter>
               <Button variant="ghost" onClick={() => setOpen(false)}>{t("admin.common.cancel")}</Button>
               <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>{t("admin.common.save")}</Button>
@@ -124,8 +151,9 @@ function CareersPage() {
               {view.pageRows.map((j) => (
                 <tr key={j.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{j.title_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{j.title_ar}</div></td>
-                  <td className="px-3 py-2 text-xs">{j.department}</td>
-                  <td className="px-3 py-2 text-xs">{j.city}</td>
+                  <td className="px-3 py-2 text-xs"><div>{j.department_en}</div><div className="text-muted-foreground" dir="rtl">{j.department_ar}</div></td>
+                  <td className="px-3 py-2 text-xs"><div>{j.city_en}</div><div className="text-muted-foreground" dir="rtl">{j.city_ar}</div></td>
+
                   <td className="px-3 py-2 text-xs">{t(`admin.careers.types.${j.employment_type}`, { defaultValue: j.employment_type })}</td>
                   <td className="px-3 py-2 text-xs">{j.is_active ? t("admin.common.active") : t("admin.common.closed")}</td>
                   <td className="px-3 py-2 text-end">
@@ -142,6 +170,13 @@ function CareersPage() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="space-y-1"><Label className="text-xs">{label}</Label>{children}</div>;
+function Field({ label, children, hint, rtl }: { label: string; children: React.ReactNode; hint?: string; rtl?: boolean }) {
+  return (
+    <div dir={rtl ? "rtl" : "ltr"} className="space-y-1">
+      <Label className="text-xs">{label}</Label>
+      {children}
+      {hint ? <p className="text-[11px] text-muted-foreground">{hint}</p> : null}
+    </div>
+  );
 }
+

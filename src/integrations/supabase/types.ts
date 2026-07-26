@@ -594,8 +594,12 @@ export type Database = {
       job_openings: {
         Row: {
           city: string
+          city_ar: string | null
+          city_en: string | null
           created_at: string
           department: string
+          department_ar: string | null
+          department_en: string | null
           description_ar: string | null
           description_en: string | null
           employment_type: string
@@ -609,8 +613,12 @@ export type Database = {
         }
         Insert: {
           city: string
+          city_ar?: string | null
+          city_en?: string | null
           created_at?: string
           department: string
+          department_ar?: string | null
+          department_en?: string | null
           description_ar?: string | null
           description_en?: string | null
           employment_type: string
@@ -624,8 +632,12 @@ export type Database = {
         }
         Update: {
           city?: string
+          city_ar?: string | null
+          city_en?: string | null
           created_at?: string
           department?: string
+          department_ar?: string | null
+          department_en?: string | null
           description_ar?: string | null
           description_en?: string | null
           employment_type?: string

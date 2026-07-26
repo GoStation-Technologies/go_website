@@ -519,13 +519,16 @@ const JobInput = z.object({
   slug: z.string().min(1),
   title_ar: z.string().min(1),
   title_en: z.string().min(1),
-  department: z.string().min(1),
-  city: z.string().min(1),
+  department_en: z.string().min(1),
+  department_ar: z.string().min(1),
+  city_en: z.string().min(1),
+  city_ar: z.string().min(1),
   employment_type: z.string().min(1),
   description_ar: z.string().optional().nullable(),
   description_en: z.string().optional().nullable(),
   is_active: z.boolean().default(true),
 });
+
 
 export const adminListJobs = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -540,7 +543,12 @@ export const adminUpsertJob = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => JobInput.parse(raw))
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase.from("job_openings").upsert(data);
+    const { error } = await context.supabase.from("job_openings").upsert({
+      ...data,
+      department: data.department_en,
+      city: data.city_en,
+    });
+
     if (error) throw new Error(error.message);
     await writeAudit(context.supabase, auditActor(context), {
       action: "upsert",

@@ -282,6 +282,9 @@ export const en = {
       f: {
         employmentType: "Employment type",
         titleEn: "Title (EN)", titleAr: "Title (AR)",
+        departmentEn: "Department (EN)", departmentAr: "Department (AR)",
+        cityEn: "City (EN)", cityAr: "City (AR)",
+        slugHint: "Enter a unique URL slug (e.g. job-title-year) or leave blank to auto-generate.",
         descriptionEn: "Description (EN)", descriptionAr: "Description (AR)",
         activeHint: "Active (visible on the careers page)",
       },
