@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
+import { fmtNumber, fmtDateTime } from "@/lib/format";
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -101,10 +102,10 @@ function AbuseDashboard() {
       const res = await adminAbuseExportSubmit({ data: { windowHours, reason } });
       if (res.mode === "inline") {
         downloadInline(res.rows as Array<Record<string, unknown>>);
-        setExportMsg(`Downloaded ${res.total.toLocaleString()} rows.`);
+        setExportMsg(`Downloaded ${fmtNumber(res.total)} rows.`);
       } else {
         setExportMsg(
-          `Large export queued (${res.total.toLocaleString()} rows). It will appear in Export jobs below when ready.`,
+          `Large export queued (${fmtNumber(res.total)} rows). It will appear in Export jobs below when ready.`,
         );
         jobsQuery.refetch();
       }
@@ -144,7 +145,7 @@ function AbuseDashboard() {
   const timeFmt = (iso: string) => {
     const d = new Date(iso);
     return data && data.bucketMs >= 86_400_000
-      ? d.toLocaleDateString(undefined, { month: "short", day: "numeric" })
+      ? d.toLocaleDateString("en-US", { month: "short", day: "numeric" })
       : d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
   };
 
@@ -238,7 +239,7 @@ function AbuseDashboard() {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="t" tickFormatter={timeFmt} tick={{ fontSize: 11 }} />
                   <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
-                  <Tooltip labelFormatter={(v) => new Date(v as string).toLocaleString()} />
+                  <Tooltip labelFormatter={(v) => fmtDateTime(v as string)} />
                   <Legend />
                   {reason ? (
                     <Line type="monotone" dataKey={reason} stroke={palette[0]} strokeWidth={2} dot={false} />
@@ -313,7 +314,7 @@ function AbuseDashboard() {
                   ) : (
                     data.recent.map((r) => (
                       <tr key={String(r.id)} className="border-t">
-                        <td className="p-3 whitespace-nowrap">{new Date(r.created_at as string).toLocaleString()}</td>
+                        <td className="p-3 whitespace-nowrap">{fmtDateTime(r.created_at as string)}</td>
                         <td className="p-3"><span className="rounded bg-destructive/10 px-2 py-0.5 text-xs text-destructive">{r.reason as string}</span></td>
                         <td className="p-3 font-mono text-xs">{(r.key as string) ?? "—"}</td>
                         <td className="p-3 font-mono text-xs">{((r.session_id as string) ?? "").slice(0, 8) || "—"}</td>
@@ -422,7 +423,7 @@ function ExportJobsPanel({
                       : 0;
               return (
                 <tr key={j.id} className="border-t">
-                  <td className="p-3 whitespace-nowrap">{new Date(j.created_at).toLocaleString()}</td>
+                  <td className="p-3 whitespace-nowrap">{fmtDateTime(j.created_at)}</td>
                   <td className="p-3 font-mono text-xs">
                     {String(f.windowHours ?? "?")}h{f.reason ? ` · ${String(f.reason)}` : ""}
                   </td>
@@ -447,7 +448,7 @@ function ExportJobsPanel({
                         </div>
                         <div className="text-[11px] tabular-nums text-muted-foreground">
                           {total > 0
-                            ? `${processed.toLocaleString()} / ${total.toLocaleString()}`
+                            ? `${fmtNumber(processed)} / ${fmtNumber(total)}`
                             : active
                               ? t("admin.abuse.preparing")
                               : "—"}
@@ -461,7 +462,7 @@ function ExportJobsPanel({
                       <span className="text-xs text-muted-foreground">—</span>
                     )}
                   </td>
-                  <td className="p-3">{j.row_count?.toLocaleString() ?? "—"}</td>
+                  <td className="p-3">{fmtNumber(j.row_count ?? 0) ?? "—"}</td>
                   <td className="p-3">
                     {j.status === "ready" && !expired ? (
                       <button

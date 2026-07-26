@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { fmtNumber, fmtDateTime } from "@/lib/format";
 
 
 const ENTITIES = [
@@ -119,7 +120,7 @@ function AuditPage() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      toast.success(`Exported ${count.toLocaleString()} row${count === 1 ? "" : "s"}${count >= 10000 ? " (capped at 10,000)" : ""}.`);
+      toast.success(`Exported ${fmtNumber(count)} row${count === 1 ? "" : "s"}${count >= 10000 ? " (capped at 10,000)" : ""}.`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("admin.audit.exportFailed"));
     } finally {
@@ -201,7 +202,7 @@ function AuditPage() {
             {(q.data?.rows ?? []).map((r) => (
               <tr key={r.id} className="border-t align-top">
                 <td className="px-3 py-2 whitespace-nowrap text-muted-foreground">
-                  {new Date(r.created_at).toLocaleString()}
+                  {fmtDateTime(r.created_at)}
                 </td>
                 <td className="px-3 py-2">{r.actor_email ?? r.actor_id ?? "—"}</td>
                 <td className="px-3 py-2">

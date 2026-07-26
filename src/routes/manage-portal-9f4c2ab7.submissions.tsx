@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { fmtDateTime } from "@/lib/format";
 
 type Kind = "franchise" | "acquisitions" | "contact";
 const TAB_KEYS: Kind[] = ["franchise", "acquisitions", "contact"];
@@ -476,7 +477,7 @@ function SubmissionsPage() {
                       {String(r.message ?? r.city ?? r.subject ?? "").slice(0, 200)}
                     </td>
                     <td className="px-3 py-2 text-xs text-muted-foreground">
-                      {new Date(String(r.created_at)).toLocaleString()}
+                      {fmtDateTime(String(r.created_at))}
                     </td>
                     <td className="px-3 py-2 text-xs text-muted-foreground">
                       {assignedName ?? (assignedId ? assignedId.slice(0, 8) : "—")}

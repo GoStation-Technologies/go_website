@@ -66,6 +66,7 @@ async function coerceError(e: unknown): Promise<ChatsError> {
 }
 
 import { splitHighlight } from "@/lib/highlight";
+import { fmtDateTime } from "@/lib/format";
 
 function highlight(text: string, query: string) {
   const segs = splitHighlight(text, query);
@@ -255,7 +256,7 @@ function ChatsPage() {
                   {highlight(s.sessionId.slice(0, 8), q)}
                 </span>
                 <span className="ms-3 text-xs text-muted-foreground">
-                  {s.lastAt ? new Date(s.lastAt).toLocaleString() : ""}
+                  {s.lastAt ? fmtDateTime(s.lastAt) : ""}
                 </span>
                 <span className="ms-3 text-xs">{s.messageCount} msg</span>
               </summary>

@@ -29,6 +29,7 @@ import {
   Mail,
 } from "lucide-react";
 import type { ComponentType } from "react";
+import { digitLocale } from "@/lib/format";
 
 const RANGE_OPTIONS = [
   { days: 7, label: "7d" },
