@@ -72,28 +72,28 @@ function NewsPage() {
         <h1 className="text-2xl font-semibold tracking-tight">{t("admin.news.title")}</h1>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />{t("admin.news.new")}</Button></DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
             <DialogHeader><DialogTitle>{form.id ? t("admin.news.editTitle") : t("admin.news.newTitle")}</DialogTitle></DialogHeader>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label={t("admin.common.slug")}><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
-              <Field label={t("admin.common.kind")}>
-                <select value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value as News["kind"] })} className="h-9 w-full rounded-md border bg-background px-2 text-sm">
+            <div dir="ltr" className="grid grid-cols-2 gap-6">
+              <Field label={t("admin.common.slug")}><Input dir="ltr" className={inputCls} value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
+              <Field label={t("admin.common.kind")} rtl>
+                <select value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value as News["kind"] })} className={"h-10 w-full px-2 text-sm " + inputCls}>
                   <option value="news">{t("admin.news.kinds.news")}</option><option value="event">{t("admin.news.kinds.event")}</option><option value="press">{t("admin.news.kinds.press")}</option>
                 </select>
               </Field>
-              <Field label={t("admin.news.f.titleEn")}><Input value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
-              <Field label={t("admin.news.f.titleAr")}><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
-              <Field label={t("admin.news.f.excerptEn")}><Textarea rows={2} value={form.excerpt_en ?? ""} onChange={(e) => setForm({ ...form, excerpt_en: e.target.value })} /></Field>
-              <Field label={t("admin.news.f.excerptAr")}><Textarea dir="rtl" rows={2} value={form.excerpt_ar ?? ""} onChange={(e) => setForm({ ...form, excerpt_ar: e.target.value })} /></Field>
-              <Field label={t("admin.news.f.bodyEn")}><Textarea rows={5} value={form.body_en ?? ""} onChange={(e) => setForm({ ...form, body_en: e.target.value })} /></Field>
-              <Field label={t("admin.news.f.bodyAr")}><Textarea dir="rtl" rows={5} value={form.body_ar ?? ""} onChange={(e) => setForm({ ...form, body_ar: e.target.value })} /></Field>
-              <Field label={t("admin.news.f.coverUrl")}><Input value={form.cover_url ?? ""} onChange={(e) => setForm({ ...form, cover_url: e.target.value })} /></Field>
-              <div className="flex items-center gap-6 pt-6">
+              <Field label={t("admin.news.f.titleEn")}><Input className={inputCls} value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.titleAr")} rtl><Input className={inputCls} dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.excerptEn")}><Textarea className={inputCls} rows={2} value={form.excerpt_en ?? ""} onChange={(e) => setForm({ ...form, excerpt_en: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.excerptAr")} rtl><Textarea className={inputCls} dir="rtl" rows={2} value={form.excerpt_ar ?? ""} onChange={(e) => setForm({ ...form, excerpt_ar: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.bodyEn")}><Textarea className={inputCls} rows={5} value={form.body_en ?? ""} onChange={(e) => setForm({ ...form, body_en: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.bodyAr")} rtl><Textarea className={inputCls} dir="rtl" rows={5} value={form.body_ar ?? ""} onChange={(e) => setForm({ ...form, body_ar: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.coverUrl")}><Input dir="ltr" className={inputCls} value={form.cover_url ?? ""} onChange={(e) => setForm({ ...form, cover_url: e.target.value })} /></Field>
+              <div className="col-span-2 mt-6 flex items-center gap-6 border-t pt-6">
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_published} onCheckedChange={(v) => setForm({ ...form, is_published: v })} />{t("admin.common.published")}</label>
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_featured} onCheckedChange={(v) => setForm({ ...form, is_featured: v })} />{t("admin.common.featured")}</label>
               </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="mt-2">
               <Button variant="ghost" onClick={() => setOpen(false)}>{t("admin.common.cancel")}</Button>
               <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>{t("admin.common.save")}</Button>
             </DialogFooter>
@@ -142,6 +142,14 @@ function NewsPage() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="space-y-1"><Label className="text-xs">{label}</Label>{children}</div>;
+const inputCls =
+  "rounded-md border border-input bg-background shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring";
+
+function Field({ label, children, rtl }: { label: string; children: React.ReactNode; rtl?: boolean }) {
+  return (
+    <div dir={rtl ? "rtl" : "ltr"}>
+      <Label className="mb-1.5 block text-sm font-semibold text-foreground">{label}</Label>
+      {children}
+    </div>
+  );
 }
