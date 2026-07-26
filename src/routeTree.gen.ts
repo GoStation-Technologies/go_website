@@ -15,7 +15,6 @@ import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
 import { Route as AboutRouteImport } from './routes/about'
@@ -60,11 +59,6 @@ const ContactRoute = ContactRouteImport.update({
 const CareersRoute = CareersRouteImport.update({
   id: '/careers',
   path: '/careers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -149,7 +143,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
   '/admin': typeof AdminRouteWithChildren
-  '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
@@ -172,7 +165,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
@@ -197,7 +189,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
   '/admin': typeof AdminRouteWithChildren
-  '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
@@ -223,7 +214,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/acquisitions'
     | '/admin'
-    | '/auth'
     | '/careers'
     | '/contact'
     | '/franchise'
@@ -246,7 +236,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/acquisitions'
-    | '/auth'
     | '/careers'
     | '/contact'
     | '/franchise'
@@ -270,7 +259,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/acquisitions'
     | '/admin'
-    | '/auth'
     | '/careers'
     | '/contact'
     | '/franchise'
@@ -295,7 +283,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AcquisitionsRoute: typeof AcquisitionsRoute
   AdminRoute: typeof AdminRouteWithChildren
-  AuthRoute: typeof AuthRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   FranchiseRoute: typeof FranchiseRoute
@@ -348,13 +335,6 @@ declare module '@tanstack/react-router' {
       path: '/careers'
       fullPath: '/careers'
       preLoaderRoute: typeof CareersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -504,7 +484,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AcquisitionsRoute: AcquisitionsRoute,
   AdminRoute: AdminRouteWithChildren,
-  AuthRoute: AuthRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   FranchiseRoute: FranchiseRoute,

@@ -84,7 +84,7 @@ async function signIn(user: TestUser) {
 }
 
 maybe("Admin dashboard access control", () => {
-  it("blocks unauthenticated visitors — /admin redirects to /auth and leaks no admin content", async () => {
+  it("blocks unauthenticated visitors — /admin redirects to /admin/login and leaks no admin content", async () => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(BASE_URL + "/admin", { waitUntil: "networkidle" });

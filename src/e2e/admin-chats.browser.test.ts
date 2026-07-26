@@ -147,7 +147,7 @@ maybe("Admin chat logs — filter & access control", () => {
     await context.close();
   }, 60_000);
 
-  it("unauthenticated visitor is bounced to /auth with no chat content leaked", async () => {
+  it("unauthenticated visitor is bounced to /admin/login with no chat content leaked", async () => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(BASE_URL + "/admin/chats", { waitUntil: "networkidle" });
