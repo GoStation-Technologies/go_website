@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -15,8 +16,9 @@ export const disabledCls =
   "cursor-not-allowed bg-muted text-muted-foreground disabled:opacity-100";
 
 /**
- * Admin form grid. Always RTL: the first cell lands on the right,
- * so English fields (declared first) sit right and Arabic fields sit left.
+ * Admin form grid. Column order is pinned with an explicit LTR container so it
+ * never mirrors with the UI language: the first declared cell is always the
+ * left column (English) and the second is always the right column (Arabic).
  */
 export function FormGrid({
   children,
@@ -29,7 +31,7 @@ export function FormGrid({
 }) {
   return (
     <div
-      dir="rtl"
+      dir="ltr"
       className={cn("grid gap-6", cols === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1", className)}
     >
       {children}
@@ -37,18 +39,28 @@ export function FormGrid({
   );
 }
 
-/** Full-width row inside FormGrid (toggles, action separators). */
+/** Full-width row inside FormGrid (toggles, action separators). Follows the UI language. */
 export function FormRow({ children, className }: { children: React.ReactNode; className?: string }) {
+  const uiDir = useUiDir();
   return (
-    <div className={cn("mt-6 flex flex-wrap items-center gap-6 border-t pt-6 sm:col-span-2", className)}>
+    <div
+      dir={uiDir}
+      className={cn("mt-6 flex flex-wrap items-center gap-6 border-t pt-6 sm:col-span-2", className)}
+    >
       {children}
     </div>
   );
 }
 
+function useUiDir() {
+  const { i18n } = useTranslation();
+  return i18n.language?.startsWith("ar") ? "rtl" : "ltr";
+}
+
 /**
- * Labeled field. `lang` drives direction and text alignment of the control:
- * "ar" → rtl / text-right, "en" → ltr / text-left, default follows the grid (rtl).
+ * Labeled field. `lang` pins direction and text alignment of the control:
+ * "ar" → rtl / text-right, "en" → ltr / text-left. Without `lang` the field
+ * follows the active admin language.
  */
 export function Field({
   label,
@@ -63,15 +75,16 @@ export function Field({
   lang?: "ar" | "en";
   className?: string;
 }) {
-  const dir = lang === "en" ? "ltr" : "rtl";
-  const align = lang === "en" ? "text-left" : "text-right";
+  const uiDir = useUiDir();
+  const dir = lang ? (lang === "en" ? "ltr" : "rtl") : uiDir;
+  const align = dir === "ltr" ? "text-left" : "text-right";
   return (
     <div dir={dir} className={cn("min-w-0", align, className)}>
       <Label className="mb-1.5 block text-sm font-semibold text-foreground">{label}</Label>
       <div
         className={cn(
           "[&_input]:w-full [&_textarea]:w-full",
-          lang === "en"
+          dir === "ltr"
             ? "[&_input]:text-left [&_textarea]:text-left [&_select]:text-left"
             : "[&_input]:text-right [&_textarea]:text-right [&_select]:text-right",
         )}
