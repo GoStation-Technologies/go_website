@@ -17,7 +17,9 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
-    if (!data.session) throw redirect({ to: "/manage-portal-9f4c2ab7/login" });
+    // Unauthenticated visitors are bounced to the public home page — the hidden
+    // portal never reveals a login screen on deeper routes.
+    if (!data.session) throw redirect({ to: "/" });
   },
   loader: async () => {
     const res = await getMyStaffRoles();
