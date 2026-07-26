@@ -73,7 +73,7 @@ afterAll(async () => {
 async function signIn(user: TestUser) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/auth", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(user.email);
   await page.locator('input[name="password"]').fill(user.password);
   await Promise.all([
@@ -84,11 +84,11 @@ async function signIn(user: TestUser) {
 }
 
 maybe("Admin dashboard access control", () => {
-  it("blocks unauthenticated visitors — /admin redirects to /auth and leaks no admin content", async () => {
+  it("blocks unauthenticated visitors — /admin redirects to /admin/login and leaks no admin content", async () => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(BASE_URL + "/admin", { waitUntil: "networkidle" });
-    expect(new URL(page.url()).pathname).toBe("/auth");
+    expect(new URL(page.url()).pathname).toBe("/admin/login");
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body).not.toContain("chat logs");
     expect(body).not.toContain("submissions");

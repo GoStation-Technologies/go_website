@@ -77,7 +77,7 @@ afterAll(async () => {
 async function signInAndGetPage() {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(BASE_URL + "/auth", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/admin/login", { waitUntil: "networkidle" });
   await page.locator('input[name="email"]').fill(superAdmin!.email);
   await page.locator('input[name="password"]').fill(superAdmin!.password);
   await Promise.all([

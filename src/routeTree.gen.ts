@@ -15,13 +15,13 @@ import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
+import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
 import { Route as AdminStationsRouteImport } from './routes/admin.stations'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
@@ -61,11 +61,6 @@ const CareersRoute = CareersRouteImport.update({
   path: '/careers',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -95,6 +90,11 @@ const MediaSlugRoute = MediaSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => MediaRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin_/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSubmissionsRoute = AdminSubmissionsRouteImport.update({
   id: '/submissions',
@@ -143,7 +143,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
   '/admin': typeof AdminRouteWithChildren
-  '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
@@ -157,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/admin/news': typeof AdminNewsRoute
   '/admin/stations': typeof AdminStationsRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
@@ -165,7 +165,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
@@ -179,6 +178,7 @@ export interface FileRoutesByTo {
   '/admin/news': typeof AdminNewsRoute
   '/admin/stations': typeof AdminStationsRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
@@ -189,7 +189,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
   '/admin': typeof AdminRouteWithChildren
-  '/auth': typeof AuthRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
@@ -203,6 +202,7 @@ export interface FileRoutesById {
   '/admin/news': typeof AdminNewsRoute
   '/admin/stations': typeof AdminStationsRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin_/login': typeof AdminLoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
@@ -214,7 +214,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/acquisitions'
     | '/admin'
-    | '/auth'
     | '/careers'
     | '/contact'
     | '/franchise'
@@ -228,6 +227,7 @@ export interface FileRouteTypes {
     | '/admin/news'
     | '/admin/stations'
     | '/admin/submissions'
+    | '/admin/login'
     | '/media/$slug'
     | '/admin/'
     | '/api/public/hooks/process-exports'
@@ -236,7 +236,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/acquisitions'
-    | '/auth'
     | '/careers'
     | '/contact'
     | '/franchise'
@@ -250,6 +249,7 @@ export interface FileRouteTypes {
     | '/admin/news'
     | '/admin/stations'
     | '/admin/submissions'
+    | '/admin/login'
     | '/media/$slug'
     | '/admin'
     | '/api/public/hooks/process-exports'
@@ -259,7 +259,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/acquisitions'
     | '/admin'
-    | '/auth'
     | '/careers'
     | '/contact'
     | '/franchise'
@@ -273,6 +272,7 @@ export interface FileRouteTypes {
     | '/admin/news'
     | '/admin/stations'
     | '/admin/submissions'
+    | '/admin_/login'
     | '/media/$slug'
     | '/admin/'
     | '/api/public/hooks/process-exports'
@@ -283,13 +283,13 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AcquisitionsRoute: typeof AcquisitionsRoute
   AdminRoute: typeof AdminRouteWithChildren
-  AuthRoute: typeof AuthRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
   MediaRoute: typeof MediaRouteWithChildren
   StationsRoute: typeof StationsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
 }
 
@@ -337,13 +337,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -385,6 +378,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/media/$slug'
       preLoaderRoute: typeof MediaSlugRouteImport
       parentRoute: typeof MediaRoute
+    }
+    '/admin_/login': {
+      id: '/admin_/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/submissions': {
       id: '/admin/submissions'
@@ -484,13 +484,13 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AcquisitionsRoute: AcquisitionsRoute,
   AdminRoute: AdminRouteWithChildren,
-  AuthRoute: AuthRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
   MediaRoute: MediaRouteWithChildren,
   StationsRoute: StationsRoute,
+  AdminLoginRoute: AdminLoginRoute,
   ApiPublicHooksProcessExportsRoute: ApiPublicHooksProcessExportsRoute,
 }
 export const routeTree = rootRouteImport
