@@ -543,7 +543,12 @@ export const adminUpsertJob = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => JobInput.parse(raw))
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase.from("job_openings").upsert(data);
+    const { error } = await context.supabase.from("job_openings").upsert({
+      ...data,
+      department: data.department_en,
+      city: data.city_en,
+    });
+
     if (error) throw new Error(error.message);
     await writeAudit(context.supabase, auditActor(context), {
       action: "upsert",
