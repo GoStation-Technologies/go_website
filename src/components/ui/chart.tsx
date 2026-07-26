@@ -223,7 +223,7 @@ const ChartTooltipContent = React.forwardRef<
                         </div>
                         {item.value && (
                           <span className="font-mono font-medium tabular-nums text-foreground">
-                            {fmtNumber(item.value)}
+                            {typeof item.value === "number" ? fmtNumber(item.value) : String(item.value)}
                           </span>
                         )}
                       </div>
