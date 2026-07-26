@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 
 const ENTITIES = [
@@ -25,11 +26,11 @@ const ENTITIES = [
 const ACTIONS = ["bulk_update", "bulk_restore", "update_status", "upsert", "delete", "export_start"] as const;
 
 const WINDOWS = [
-  { v: 24, label: "Last 24 hours" },
-  { v: 24 * 7, label: "Last 7 days" },
-  { v: 24 * 30, label: "Last 30 days" },
-  { v: 24 * 90, label: "Last 90 days" },
-  { v: 24 * 365, label: "Last year" },
+  { v: 24, k: "h24" },
+  { v: 24 * 7, k: "d7" },
+  { v: 24 * 30, k: "d30" },
+  { v: 24 * 90, k: "d90" },
+  { v: 24 * 365, k: "y1" },
 ];
 
 const searchSchema = z.object({
@@ -73,6 +74,7 @@ const ACTION_VARIANT: Record<string, "default" | "secondary" | "destructive" | "
 };
 
 function AuditPage() {
+  const { t } = useTranslation();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const pageSize = 50;
@@ -119,7 +121,7 @@ function AuditPage() {
       URL.revokeObjectURL(url);
       toast.success(`Exported ${count.toLocaleString()} row${count === 1 ? "" : "s"}${count >= 10000 ? " (capped at 10,000)" : ""}.`);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Export failed");
+      toast.error(err instanceof Error ? err.message : t("admin.audit.exportFailed"));
     } finally {
       setExporting(false);
     }
@@ -129,55 +131,55 @@ function AuditPage() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">Audit log</h1>
-        <p className="text-sm text-muted-foreground">Every staff action, in reverse chronological order.</p>
+        <h1 className="text-2xl font-semibold">{t("admin.audit.title")}</h1>
+        <p className="text-sm text-muted-foreground">{t("admin.audit.subtitle")}</p>
       </div>
 
       <div className="flex flex-wrap gap-3 items-end">
         <div className="w-48">
-          <label className="text-xs text-muted-foreground">Time range</label>
+          <label className="text-xs text-muted-foreground">{t("admin.audit.timeRange")}</label>
           <Select
             value={String(search.sinceHours)}
             onValueChange={(v) => navigate({ search: (p: typeof search) => ({ ...p, sinceHours: Number(v), page: 1 }) })}
           >
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
-              {WINDOWS.map((w) => <SelectItem key={w.v} value={String(w.v)}>{w.label}</SelectItem>)}
+              {WINDOWS.map((w) => <SelectItem key={w.v} value={String(w.v)}>{t(`admin.audit.ranges.${w.k}`)}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
         <div className="w-56">
-          <label className="text-xs text-muted-foreground">Entity</label>
+          <label className="text-xs text-muted-foreground">{t("admin.audit.entity")}</label>
           <Select
             value={search.entity ?? "all"}
             onValueChange={(v) => navigate({ search: (p: typeof search) => ({ ...p, entity: v === "all" ? undefined : (v as (typeof ENTITIES)[number]), page: 1 }) })}
           >
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All entities</SelectItem>
-              {ENTITIES.map((e) => <SelectItem key={e} value={e}>{ENTITY_LABEL[e] ?? e}</SelectItem>)}
+              <SelectItem value="all">{t("admin.audit.allEntities")}</SelectItem>
+              {ENTITIES.map((e) => <SelectItem key={e} value={e}>{t(`admin.audit.entities.${e}`, { defaultValue: ENTITY_LABEL[e] ?? e })}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
         <div className="w-48">
-          <label className="text-xs text-muted-foreground">Action</label>
+          <label className="text-xs text-muted-foreground">{t("admin.audit.action")}</label>
           <Select
             value={search.action ?? "all"}
             onValueChange={(v) => navigate({ search: (p: typeof search) => ({ ...p, action: v === "all" ? undefined : (v as (typeof ACTIONS)[number]), page: 1 }) })}
           >
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All actions</SelectItem>
-              {ACTIONS.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}
+              <SelectItem value="all">{t("admin.audit.allActions")}</SelectItem>
+              {ACTIONS.map((a) => <SelectItem key={a} value={a}>{t(`admin.audit.actions.${a}`, { defaultValue: a })}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
-        <div className="ml-auto flex items-center gap-3 self-center">
+        <div className="ms-auto flex items-center gap-3 self-center">
           <span className="text-sm text-muted-foreground">
-            {q.isFetching ? "Loading…" : `${total.toLocaleString()} events`}
+            {q.isFetching ? t("admin.common.loading") : t("admin.audit.events", { count: total })}
           </span>
           <Button size="sm" variant="outline" onClick={handleExport} disabled={exporting || total === 0}>
-            <Download className="h-4 w-4 mr-1" /> {exporting ? "Exporting…" : "Export CSV"}
+            <Download className="h-4 w-4 mr-1" /> {exporting ? t("admin.audit.exporting") : t("admin.audit.exportCsv")}
           </Button>
         </div>
       </div>
@@ -187,12 +189,12 @@ function AuditPage() {
         <table className="w-full text-sm">
           <thead className="bg-muted/40 text-xs uppercase text-muted-foreground">
             <tr>
-              <th className="text-left px-3 py-2">When</th>
-              <th className="text-left px-3 py-2">Actor</th>
-              <th className="text-left px-3 py-2">Action</th>
-              <th className="text-left px-3 py-2">Entity</th>
-              <th className="text-left px-3 py-2">IDs</th>
-              <th className="text-left px-3 py-2">Details</th>
+              <th className="text-start px-3 py-2">{t("admin.audit.cols.when")}</th>
+              <th className="text-start px-3 py-2">{t("admin.audit.cols.actor")}</th>
+              <th className="text-start px-3 py-2">{t("admin.audit.cols.action")}</th>
+              <th className="text-start px-3 py-2">{t("admin.audit.cols.entity")}</th>
+              <th className="text-start px-3 py-2">{t("admin.audit.ids")}</th>
+              <th className="text-start px-3 py-2">{t("admin.audit.cols.details")}</th>
             </tr>
           </thead>
           <tbody>
@@ -203,16 +205,16 @@ function AuditPage() {
                 </td>
                 <td className="px-3 py-2">{r.actor_email ?? r.actor_id ?? "—"}</td>
                 <td className="px-3 py-2">
-                  <Badge variant={ACTION_VARIANT[r.action] ?? "outline"}>{r.action}</Badge>
+                  <Badge variant={ACTION_VARIANT[r.action] ?? "outline"}>{t(`admin.audit.actions.${r.action}`, { defaultValue: r.action })}</Badge>
                 </td>
-                <td className="px-3 py-2">{ENTITY_LABEL[r.entity] ?? r.entity}</td>
+                <td className="px-3 py-2">{t(`admin.audit.entities.${r.entity}`, { defaultValue: ENTITY_LABEL[r.entity] ?? r.entity })}</td>
                 <td className="px-3 py-2 text-xs text-muted-foreground max-w-[16rem] truncate">
                   {(r.entity_ids ?? []).slice(0, 3).join(", ")}
                   {(r.entity_ids?.length ?? 0) > 3 ? ` +${(r.entity_ids?.length ?? 0) - 3}` : ""}
                 </td>
                 <td className="px-3 py-2">
                   <details>
-                    <summary className="cursor-pointer text-xs text-primary">view</summary>
+                    <summary className="cursor-pointer text-xs text-primary">{t("admin.audit.view")}</summary>
                     <pre className="mt-2 max-w-[32rem] overflow-auto rounded bg-muted p-2 text-[11px]">
 {JSON.stringify({ diff: r.diff, meta: r.meta }, null, 2)}
                     </pre>
@@ -221,23 +223,23 @@ function AuditPage() {
               </tr>
             ))}
             {!q.isLoading && (q.data?.rows ?? []).length === 0 && (
-              <tr><td colSpan={6} className="px-3 py-8 text-center text-muted-foreground">No audit events match these filters.</td></tr>
+              <tr><td colSpan={6} className="px-3 py-8 text-center text-muted-foreground">{t("admin.audit.empty")}</td></tr>
             )}
           </tbody>
         </table>
       </div>
 
       <div className="flex items-center justify-between text-sm">
-        <div className="text-muted-foreground">Page {search.page} of {pages}</div>
+        <div className="text-muted-foreground">{t("admin.subs.pageOf", { page: search.page, count: pages })}</div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm" disabled={search.page <= 1}>
             <Link to="/admin/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.max(1, search.page - 1) })}>
-              <ChevronLeft className="h-4 w-4 rtl:rotate-180" /> Prev
+              <ChevronLeft className="h-4 w-4 rtl:rotate-180" /> {t("admin.common.prev")}
             </Link>
           </Button>
           <Button asChild variant="outline" size="sm" disabled={search.page >= pages}>
             <Link to="/admin/audit" search={(p: Record<string, unknown>) => ({ ...p, page: Math.min(pages, search.page + 1) })}>
-              Next <ChevronRight className="h-4 w-4 rtl:rotate-180" />
+              {t("admin.common.next")} <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Link>
           </Button>
         </div>

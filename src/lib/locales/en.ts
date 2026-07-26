@@ -363,6 +363,14 @@ export const en = {
     },
     audit: {
       title: "Audit log",
+      subtitle: "Every staff action, in reverse chronological order.",
+      empty: "No audit events match these filters.",
+      view: "view",
+      ids: "IDs",
+      actions: {
+        bulk_update: "Bulk update", bulk_restore: "Bulk restore", update_status: "Status update",
+        upsert: "Create / edit", delete: "Delete", export_start: "Export started",
+      },
       ranges: { h24: "Last 24 hours", d7: "Last 7 days", d30: "Last 30 days", d90: "Last 90 days", y1: "Last year" },
       timeRange: "Time range",
       entity: "Entity",
