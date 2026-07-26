@@ -64,18 +64,21 @@ function CareersPage() {
   const rows = (data?.rows ?? []) as Job[];
   const view = useListView<Job>({
     rows,
-    search: (j) => `${j.title_en} ${j.title_ar} ${j.slug} ${j.department} ${j.city} ${j.employment_type}`,
+    search: (j) => `${j.title_en} ${j.title_ar} ${j.slug} ${j.department_en} ${j.department_ar} ${j.city_en} ${j.city_ar} ${j.employment_type}`,
     sort: {
       newest: () => 0,
       title_en: (a, b) => a.title_en.localeCompare(b.title_en),
-      department: (a, b) => a.department.localeCompare(b.department),
-      city: (a, b) => a.city.localeCompare(b.city),
+      department: (a, b) => (a.department_en ?? "").localeCompare(b.department_en ?? ""),
+      city: (a, b) => (a.city_en ?? "").localeCompare(b.city_en ?? ""),
       active_first: (a, b) => Number(b.is_active) - Number(a.is_active),
     },
     defaultSort: "newest",
   });
-  const edit = (j: Job) => { setForm({ ...empty, ...j }); setOpen(true); };
-  const create = () => { setForm(empty); setOpen(true); };
+  const edit = (j: Job) => { setForm({ ...empty, ...j }); setSlugTouched(true); setOpen(true); };
+  const create = () => { setForm(empty); setSlugTouched(false); setOpen(true); };
+
+  const onTitleEn = (v: string) =>
+    setForm((f) => ({ ...f, title_en: v, slug: slugTouched ? f.slug : slugify(v) }));
 
   return (
     <div className="space-y-4">
@@ -85,24 +88,33 @@ function CareersPage() {
           <DialogTrigger asChild><Button onClick={create}><Plus className="me-1 h-4 w-4" />{t("admin.careers.new")}</Button></DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{form.id ? t("admin.careers.editTitle") : t("admin.careers.newTitle")}</DialogTitle></DialogHeader>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label={t("admin.common.slug")}><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.employmentType")}>
+            <div dir="ltr" className="grid grid-cols-2 gap-3">
+              <Field label={t("admin.common.slug")} hint={t("admin.careers.f.slugHint")}>
+                <Input
+                  dir="ltr"
+                  value={form.slug}
+                  onChange={(e) => { setSlugTouched(true); setForm({ ...form, slug: slugify(e.target.value) }); }}
+                />
+              </Field>
+              <Field label={t("admin.careers.f.employmentType")} rtl>
                 <select value={form.employment_type} onChange={(e) => setForm({ ...form, employment_type: e.target.value })} className="h-9 w-full rounded-md border bg-background px-2 text-sm">
                   <option value="full_time">{t("admin.careers.types.full_time")}</option><option value="part_time">{t("admin.careers.types.part_time")}</option>
                   <option value="contract">{t("admin.careers.types.contract")}</option><option value="internship">{t("admin.careers.types.internship")}</option>
                 </select>
               </Field>
-              <Field label={t("admin.careers.f.titleEn")}><Input value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.titleAr")}><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
-              <Field label={t("admin.common.department")}><Input value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} /></Field>
-              <Field label={t("admin.common.city")}><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.titleEn")}><Input value={form.title_en} onChange={(e) => onTitleEn(e.target.value)} /></Field>
+              <Field label={t("admin.careers.f.titleAr")} rtl><Input dir="rtl" value={form.title_ar} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.departmentEn")}><Input value={form.department_en} onChange={(e) => setForm({ ...form, department_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.departmentAr")} rtl><Input dir="rtl" value={form.department_ar} onChange={(e) => setForm({ ...form, department_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.cityEn")}><Input value={form.city_en} onChange={(e) => setForm({ ...form, city_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.cityAr")} rtl><Input dir="rtl" value={form.city_ar} onChange={(e) => setForm({ ...form, city_ar: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.descriptionEn")}><Textarea rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
-              <Field label={t("admin.careers.f.descriptionAr")}><Textarea dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.descriptionAr")} rtl><Textarea dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
               <div className="col-span-2 pt-2">
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />{t("admin.careers.f.activeHint")}</label>
               </div>
             </div>
+
             <DialogFooter>
               <Button variant="ghost" onClick={() => setOpen(false)}>{t("admin.common.cancel")}</Button>
               <Button onClick={() => upsert.mutate(form)} disabled={upsert.isPending}>{t("admin.common.save")}</Button>
