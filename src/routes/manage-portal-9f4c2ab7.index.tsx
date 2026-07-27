@@ -29,6 +29,7 @@ import {
   Mail,
 } from "lucide-react";
 import type { ComponentType } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { digitLocale } from "@/lib/format";
 
 const RANGE_OPTIONS = [
@@ -58,6 +59,7 @@ type Kpi = {
 
 function Overview() {
   const { t, i18n } = useTranslation();
+  const isMobile = useIsMobile();
   const rtl = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("ar");
   const locale = digitLocale(i18n.resolvedLanguage ?? i18n.language);
   const { days } = Route.useSearch();
@@ -87,18 +89,18 @@ function Overview() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-extrabold tracking-tight">{t("admin.overview.title")}</h1>
-          <p className="text-sm font-medium text-muted-foreground">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0 space-y-1">
+          <h1 className="truncate text-2xl font-extrabold tracking-tight sm:text-3xl">{t("admin.overview.title")}</h1>
+          <p className="text-xs font-medium text-muted-foreground sm:text-sm">
             {t("admin.overview.subtitle", { days })}
           </p>
         </div>
         <div
           role="tablist"
           aria-label={t("admin.overview.timeRange")}
-          className="admin-card inline-flex items-center gap-0.5 p-1.5"
+          className="admin-card -mx-1 flex items-center gap-0.5 overflow-x-auto p-1.5 sm:mx-0 sm:inline-flex sm:overflow-visible"
         >
           {RANGE_OPTIONS.map((opt) => {
             const active = opt.days === days;
@@ -110,7 +112,7 @@ function Overview() {
                 onClick={() =>
                   navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, days: opt.days }) })
                 }
-                className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition ${
+                className={`shrink-0 rounded-lg px-3 py-1.5 sm:px-3.5 text-xs font-semibold tracking-wide transition ${
                   active
                     ? "bg-ember text-white shadow-glow"
                     : "text-muted-foreground hover:bg-accent/10 hover:text-accent"
@@ -124,16 +126,16 @@ function Overview() {
       </div>
 
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
         {kpis.map((k) => (
           <KpiCard key={k.label} kpi={k} locale={locale} />
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
 
         <ChartCard title={t("admin.charts.chats")} subtitle={t("admin.charts.chatsSub", { days })}>
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={isMobile ? 190 : 240}>
             <AreaChart data={data.chatsSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="gChats" x1="0" y1="0" x2="0" y2="1">
@@ -151,7 +153,7 @@ function Overview() {
         </ChartCard>
 
         <ChartCard title={t("admin.charts.franchise")} subtitle={t("admin.charts.franchiseSub")}>
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={isMobile ? 190 : 240}>
             <BarChart data={data.franchiseSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
@@ -163,7 +165,7 @@ function Overview() {
         </ChartCard>
 
         <ChartCard title={t("admin.charts.abuse")} subtitle={t("admin.charts.abuseSub")} className="lg:col-span-2">
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={isMobile ? 180 : 220}>
             <LineChart data={data.abuseSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
@@ -206,18 +208,18 @@ function KpiCard({ kpi, locale }: { kpi: Kpi; locale: string }) {
     <Link
       to={kpi.to as never}
       search={kpi.search as never}
-      className="admin-card group relative overflow-hidden p-6 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-elegant"
+      className="admin-card group relative overflow-hidden p-4 sm:p-6 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-elegant"
     >
       <span className="bg-ember absolute inset-x-0 top-0 h-0.5 opacity-0 transition group-hover:opacity-100" />
-      <div className="flex items-start justify-between gap-3">
-        <p className="text-[11px] font-semibold uppercase leading-4 tracking-[0.14em] text-muted-foreground">
+      <div className="flex items-start justify-between gap-2 sm:gap-3">
+        <p className="min-w-0 text-[10px] sm:text-[11px] font-semibold uppercase leading-4 tracking-[0.14em] text-muted-foreground">
           {kpi.label}
         </p>
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-accent/15 bg-accent/10 transition group-hover:bg-accent/15">
+        <span className="hidden h-10 w-10 shrink-0 items-center sm:flex justify-center rounded-xl border border-accent/15 bg-accent/10 transition group-hover:bg-accent/15">
           <Icon className={`h-4.5 w-4.5 ${accent}`} />
         </span>
       </div>
-      <p className={`admin-metric mt-4 text-4xl ${accent}`}>{kpi.value.toLocaleString(locale)}</p>
+      <p className={`admin-metric mt-3 text-3xl sm:mt-4 sm:text-4xl ${accent}`}>{kpi.value.toLocaleString(locale)}</p>
     </Link>
   );
 }
@@ -236,7 +238,7 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`admin-card p-6 sm:p-7 ${className ?? ""}`}>
+    <div className={`admin-card p-4 sm:p-7 ${className ?? ""}`}>
       <div className="mb-5">
         <h2 className="text-base font-semibold tracking-tight">{title}</h2>
         {subtitle && <p className="mt-0.5 text-xs font-medium text-muted-foreground">{subtitle}</p>}
