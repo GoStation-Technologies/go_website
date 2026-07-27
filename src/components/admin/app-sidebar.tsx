@@ -31,6 +31,7 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "stations", url: "/manage-portal-9f4c2ab7/stations", icon: MapPin },
   { key: "news", url: "/manage-portal-9f4c2ab7/news", icon: Newspaper },
   { key: "careers", url: "/manage-portal-9f4c2ab7/careers", icon: Briefcase },
+  { key: "applications", url: "/manage-portal-9f4c2ab7/applications", icon: Users },
   { key: "submissions", url: "/manage-portal-9f4c2ab7/submissions", icon: Inbox },
   { key: "chats", url: "/manage-portal-9f4c2ab7/chats", icon: MessageSquare },
   { key: "abuse", url: "/manage-portal-9f4c2ab7/abuse", icon: ShieldAlert },
