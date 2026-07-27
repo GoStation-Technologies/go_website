@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { submitContactMessage } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -34,21 +34,26 @@ function ContactPage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     setBusy(true);
-    const { data, error } = await (supabase.rpc as any)("submit_contact_message", {
-      payload: {
-        full_name: String(fd.get("name") ?? ""),
-        email: String(fd.get("email") ?? ""),
-        phone: String(fd.get("phone") ?? ""),
-        category: String(fd.get("category") ?? ""),
-        subject: String(fd.get("subject") ?? ""),
-        message: String(fd.get("message") ?? ""),
-      },
-    });
-    setBusy(false);
-    if (error || !data) return toast.error(t("common.error"));
-    setRef(data as string);
-    toast.success(t("common.thanks"));
-    (e.target as HTMLFormElement).reset();
+    const form = e.currentTarget;
+    try {
+      const res = await submitContactMessage({
+        data: {
+          full_name: String(fd.get("name") ?? ""),
+          email: String(fd.get("email") ?? ""),
+          phone: String(fd.get("phone") ?? ""),
+          category: String(fd.get("category") ?? ""),
+          subject: String(fd.get("subject") ?? ""),
+          message: String(fd.get("message") ?? ""),
+        },
+      });
+      setRef(res.reference);
+      toast.success(t("common.thanks"));
+      form.reset();
+    } catch {
+      toast.error(t("common.error"));
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
