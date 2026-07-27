@@ -86,14 +86,14 @@ function AdminLayout() {
       <div className="admin-shell admin-scope flex min-h-screen w-full">
         <AdminSidebar />
         <SidebarInset className="min-w-0 flex-1 bg-transparent">
-          <header className="glass sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/70 px-5">
+          <header className="glass sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/70 px-3 sm:h-16 sm:gap-3 sm:px-5">
             <SidebarTrigger aria-label={t("admin.toggleSidebar")} />
-            <Separator orientation="vertical" className="h-6" />
+            <Separator orientation="vertical" className="hidden h-6 sm:block" />
             <div className="min-w-0 flex-1 overflow-hidden text-sm font-medium">
               <AdminBreadcrumbs />
             </div>
-            <div className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
-              <span className="hidden rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-accent sm:inline">
+            <div className="flex shrink-0 items-center gap-0.5 text-xs sm:gap-1.5 text-muted-foreground">
+              <span className="hidden rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-accent lg:inline">
                 {roles.map((r: string) => t(`admin.roles.${r}`, { defaultValue: r.replace(/_/g, " ") })).join(" · ")}
               </span>
               <Button
@@ -117,7 +117,7 @@ function AdminLayout() {
               </Button>
             </div>
           </header>
-          <main className="min-w-0 flex-1 p-6 sm:p-7 lg:p-8 xl:p-10">
+          <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8 xl:p-10">
             <Outlet />
           </main>
 
