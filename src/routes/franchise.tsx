@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { submitFranchiseApplication } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
+import { CitySelect } from "@/components/site/city-select";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
