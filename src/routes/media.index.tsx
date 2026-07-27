@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin } from "lucide-react";
 
-export const Route = createFileRoute("/media")({
+export const Route = createFileRoute("/media/")({
   component: MediaPage,
   head: () =>
     pageHead({
