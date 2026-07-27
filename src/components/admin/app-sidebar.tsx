@@ -44,8 +44,9 @@ export function AdminSidebar() {
     exact ? currentPath === url : currentPath === url || currentPath.startsWith(`${url}/`);
 
   return (
-    <Sidebar collapsible="icon" side={rtl ? "right" : "left"} className="border-0">
-      <SidebarHeader className="border-b border-sidebar-border p-3">
+    <Sidebar collapsible="icon" side={rtl ? "right" : "left"} className="border-0 [&>[data-sidebar=sidebar]]:border-e [&>[data-sidebar=sidebar]]:border-sidebar-border">
+      <SidebarHeader className="border-b border-sidebar-border p-4">
+
         <Link
           to="/manage-portal-9f4c2ab7"
           className="flex h-11 items-center gap-3 overflow-hidden rounded-lg px-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
