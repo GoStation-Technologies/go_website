@@ -9,6 +9,8 @@ import {
   Briefcase,
   ShieldAlert,
   ScrollText,
+  MailCog,
+
 } from "lucide-react";
 
 import { isRtl } from "@/lib/i18n";
