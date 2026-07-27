@@ -94,33 +94,34 @@ function FranchisePage() {
             {step === 0 && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <F label={t("common.fullName")}><Input value={form.full_name ?? ""} onChange={(e) => upd("full_name", e.target.value)} /></F>
-                <F label="National ID"><Input value={form.national_id ?? ""} onChange={(e) => upd("national_id", e.target.value)} /></F>
+                <F label={t("franchise.f.nationalId")}><Input value={form.national_id ?? ""} onChange={(e) => upd("national_id", e.target.value)} /></F>
                 <F label={t("common.phone")}><Input value={form.phone ?? ""} onChange={(e) => upd("phone", e.target.value)} /></F>
                 <F label={t("common.email")}><Input type="email" value={form.email ?? ""} onChange={(e) => upd("email", e.target.value)} /></F>
-                <F label={t("common.city")}><Input value={form.city ?? ""} onChange={(e) => upd("city", e.target.value)} /></F>
-                <F label="CR number (optional)"><Input value={form.cr_number ?? ""} onChange={(e) => upd("cr_number", e.target.value)} /></F>
+                <F label={t("common.city")}><CitySelect value={form.city} onChange={(v) => upd("city", v)} /></F>
+                <F label={t("franchise.f.crNumber")}><Input value={form.cr_number ?? ""} onChange={(e) => upd("cr_number", e.target.value)} /></F>
               </div>
             )}
             {step === 1 && (
               <div className="grid gap-4 sm:grid-cols-2">
-                <F label="Proposed city"><Input value={form.proposed_city ?? ""} onChange={(e) => upd("proposed_city", e.target.value)} /></F>
-                <F label="Proposed district"><Input value={form.proposed_district ?? ""} onChange={(e) => upd("proposed_district", e.target.value)} /></F>
-                <F label="Land area (sqm)"><Input type="number" value={form.land_area_sqm ?? ""} onChange={(e) => upd("land_area_sqm", e.target.value)} /></F>
-                <F label="Ownership status"><Input placeholder="Owned / Leased" value={form.ownership_status ?? ""} onChange={(e) => upd("ownership_status", e.target.value)} /></F>
+                <F label={t("franchise.f.proposedCity")}><CitySelect value={form.proposed_city} onChange={(v) => upd("proposed_city", v)} /></F>
+                <F label={t("franchise.f.proposedDistrict")}><Input value={form.proposed_district ?? ""} onChange={(e) => upd("proposed_district", e.target.value)} /></F>
+                <F label={t("franchise.f.landArea")}><Input type="number" value={form.land_area_sqm ?? ""} onChange={(e) => upd("land_area_sqm", e.target.value)} /></F>
+                <F label={t("franchise.f.ownership")}><Input placeholder={t("franchise.f.ownershipPlaceholder")} value={form.ownership_status ?? ""} onChange={(e) => upd("ownership_status", e.target.value)} /></F>
               </div>
             )}
             {step === 2 && (
               <div className="grid gap-4">
-                <F label="Investment capital (SAR)"><Input type="number" value={form.investment_capital_sar ?? ""} onChange={(e) => upd("investment_capital_sar", e.target.value)} /></F>
+                <F label={t("franchise.f.capital")}><Input type="number" value={form.investment_capital_sar ?? ""} onChange={(e) => upd("investment_capital_sar", e.target.value)} /></F>
                 <F label={t("common.message")}><Textarea rows={5} value={form.notes ?? ""} onChange={(e) => upd("notes", e.target.value)} /></F>
               </div>
             )}
 
             <div className="mt-8 flex items-center justify-between">
-              <Button variant="ghost" disabled={step === 0} onClick={() => setStep((s) => (s - 1) as 0 | 1 | 2)}>Back</Button>
+              <Button variant="ghost" disabled={step === 0} onClick={() => setStep((s) => (s - 1) as 0 | 1 | 2)}>{t("common.back")}</Button>
               {step < 2 ? (
-                <Button onClick={() => setStep((s) => (s + 1) as 0 | 1 | 2)} className="bg-accent text-accent-foreground hover:bg-accent/90">Next</Button>
+                <Button onClick={() => setStep((s) => (s + 1) as 0 | 1 | 2)} className="bg-accent text-accent-foreground hover:bg-accent/90">{t("common.next")}</Button>
               ) : (
+
                 <Button onClick={submit} disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
                   {busy ? t("common.submitting") : t("franchise.submit")}
                 </Button>
