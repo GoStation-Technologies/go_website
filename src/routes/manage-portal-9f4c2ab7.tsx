@@ -94,7 +94,7 @@ function AdminLayout() {
             </div>
             <div className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
               <span className="hidden rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-semibold uppercase tracking-wider text-accent sm:inline">
-                {roles.join(" · ")}
+                {roles.map((r: string) => t(`admin.roles.${r}`, { defaultValue: r.replace(/_/g, " ") })).join(" · ")}
               </span>
               <Button
                 variant="ghost"

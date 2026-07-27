@@ -33,6 +33,7 @@ import {
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { fmtDateTime } from "@/lib/format";
+import { cityLabel } from "@/lib/cities";
 
 type Kind = "franchise" | "acquisitions" | "contact";
 const TAB_KEYS: Kind[] = ["franchise", "acquisitions", "contact"];
@@ -70,7 +71,7 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7/submissions")({
 });
 
 function SubmissionsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { kind, status, days, page, sort } = Route.useSearch();
   const navigate = useNavigate({ from: "/manage-portal-9f4c2ab7/submissions" });
   // Any filter/sort change resets page to 1 to avoid landing past the last page.
@@ -474,7 +475,7 @@ function SubmissionsPage() {
                       <div className="text-xs text-muted-foreground">{String(r.phone ?? "")}</div>
                     </td>
                     <td className="max-w-md px-3 py-2 text-xs text-muted-foreground">
-                      {String(r.message ?? r.city ?? r.subject ?? "").slice(0, 200)}
+                      {String(r.message ?? cityLabel(r.city, i18n.language) ?? r.subject ?? "").slice(0, 200)}
                     </td>
                     <td className="px-3 py-2 text-xs text-muted-foreground">
                       {fmtDateTime(String(r.created_at))}

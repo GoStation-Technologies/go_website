@@ -32,7 +32,11 @@ export const ar = {
     message: "الرسالة",
     subject: "الموضوع",
     category: "الفئة",
+    selectCity: "اختر المدينة",
+    back: "السابق",
+    next: "التالي",
     lang: "English",
+
   },
   home: {
     heroBadge: "المملكة العربية السعودية • الوقود والتنقل",
@@ -149,11 +153,29 @@ export const ar = {
     intro: "انضم إلى شبكة سريعة النمو. عبّئ النموذج وسيتواصل معك فريق تطوير الأعمال.",
     steps: { personal: "بيانات شخصية", location: "الموقع", financial: "المالية" },
     submit: "إرسال الطلب",
+    f: {
+      nationalId: "رقم الهوية",
+      crNumber: "رقم السجل التجاري (اختياري)",
+      proposedCity: "المدينة المقترحة",
+      proposedDistrict: "الحي المقترح",
+      landArea: "مساحة الأرض (م²)",
+      ownership: "حالة الملكية",
+      ownershipPlaceholder: "ملك / إيجار",
+      capital: "رأس المال الاستثماري (ريال)",
+    },
   },
   acq: {
     title: "بع محطتك",
     intro: "لديك محطة قائمة؟ أرسل التفاصيل وسنقيّم إمكانية الاستحواذ.",
+    f: {
+      stationName: "اسم المحطة",
+      district: "الحي",
+      landArea: "مساحة الأرض (م²)",
+      pumps: "عدد المضخات",
+      avgSales: "متوسط المبيعات اليومية (ريال)",
+    },
   },
+
   careers: {
     title: "الوظائف في قوستيشن",
     intro: "انضم إلى فريق يبني مستقبل الطاقة والتنقل في المملكة.",
@@ -200,6 +222,8 @@ export const ar = {
   admin: {
     brand: "لوحة تحكم قوستيشن",
     workspace: "مساحة العمل",
+    roles: { super_admin: "مدير عام", admin: "مدير", editor: "محرر", viewer: "مشاهد", staff: "موظف" },
+
     signout: "تسجيل الخروج",
     toggleSidebar: "إظهار/إخفاء القائمة",
     common: {
