@@ -71,7 +71,7 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7/submissions")({
 });
 
 function SubmissionsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { kind, status, days, page, sort } = Route.useSearch();
   const navigate = useNavigate({ from: "/manage-portal-9f4c2ab7/submissions" });
   // Any filter/sort change resets page to 1 to avoid landing past the last page.
