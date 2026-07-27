@@ -73,24 +73,32 @@ export function AdminSidebar() {
             <SidebarMenu>
               {items.map((item) => {
                 const label = t(`admin.nav.${item.key}`);
+                const active = isActive(item.url, item.exact);
                 return (
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton
                       asChild
-                      isActive={isActive(item.url, item.exact)}
+                      isActive={active}
                       tooltip={label}
+                      className="h-9 rounded-lg text-sidebar-foreground/75 transition hover:bg-white/5 hover:text-sidebar-foreground data-[active=true]:bg-accent/15 data-[active=true]:font-semibold data-[active=true]:text-sidebar-foreground"
                     >
                       <Link
                         to={item.url as never}
-                        className="flex w-full min-w-0 items-center gap-2 text-start"
+                        className="relative flex w-full min-w-0 items-center gap-2.5 text-start"
                       >
-                        <item.icon className="h-4 w-4 shrink-0" />
+                        {active && (
+                          <span className="bg-ember absolute inset-y-1 -start-2 w-1 rounded-full group-data-[collapsible=icon]:hidden" />
+                        )}
+                        <item.icon
+                          className={`h-4 w-4 shrink-0 ${active ? "text-accent" : "text-sidebar-foreground/60"}`}
+                        />
                         <span className="min-w-0 flex-1 truncate">{label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
               })}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
