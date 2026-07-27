@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.tg_log_application_status() FROM PUBLIC, anon, authenticated;
