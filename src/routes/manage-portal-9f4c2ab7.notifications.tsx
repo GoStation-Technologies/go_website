@@ -11,7 +11,7 @@ import {
   adminNotificationTestSend,
   NOTIFY_CATEGORIES,
 } from "@/lib/notifications.functions";
-import { Field, FormGrid, inputCls } from "@/components/admin/form-kit";
+import { inputCls } from "@/components/admin/form-kit";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -44,7 +44,9 @@ const blank = (category: string): Row => ({
 });
 
 function NotificationsSettingsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dir = i18n.language?.startsWith("ar") ? "rtl" : "ltr";
+  const align = dir === "rtl" ? ("text-right" as const) : ("text-left" as const);
   const qc = useQueryClient();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["admin", "notification-settings"],
@@ -110,7 +112,7 @@ function NotificationsSettingsPage() {
     return <div className="p-6 text-sm text-destructive">{(error as Error).message}</div>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={dir}>
       <div>
         <h1 className="font-display text-2xl font-bold tracking-tight">
           {t("admin.notifications.title")}
@@ -122,23 +124,25 @@ function NotificationsSettingsPage() {
         {NOTIFY_CATEGORIES.map((c) => {
           const row = draft[c] ?? blank(c);
           return (
-            <div key={c} className="admin-card p-6">
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b pb-4">
-                <div className="flex items-center gap-3">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 text-accent">
+            <div key={c} dir={dir} className="admin-card overflow-hidden p-6">
+              <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b pb-4">
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
                     <Mail className="h-4 w-4" />
                   </span>
-                  <div>
-                    <div className="font-semibold">{t(`admin.notifications.cats.${c}`)}</div>
-                    <div className="text-xs text-muted-foreground">
+                  <div className="min-w-0">
+                    <div className="truncate font-semibold">
+                      {t(`admin.notifications.cats.${c}`)}
+                    </div>
+                    <div className="truncate text-xs text-muted-foreground" dir="ltr">
                       {row.recipients.length
                         ? row.recipients.join(", ")
                         : t("admin.notifications.noRecipients")}
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Label className="text-xs font-semibold text-muted-foreground">
+                <div className="flex shrink-0 items-center gap-2">
+                  <Label className="whitespace-nowrap text-xs font-semibold text-muted-foreground">
                     {t("admin.notifications.enabled")}
                   </Label>
                   <Switch
@@ -148,67 +152,54 @@ function NotificationsSettingsPage() {
                 </div>
               </div>
 
-              <FormGrid>
-                <Field label={t("admin.notifications.recipients")} lang="en" hint={t("admin.notifications.listHint")}>
-                  <Input
-                    className={inputCls}
-                    value={row.recipients.join(", ")}
-                    onChange={(e) =>
-                      update(c, { recipients: splitEmails(e.target.value) })
-                    }
-                    placeholder="ops@gostation.sa, bd@gostation.sa"
-                  />
-                </Field>
-                <Field label={t("admin.notifications.cc")} lang="en" hint={t("admin.notifications.listHint")}>
-                  <Input
-                    className={inputCls}
-                    value={row.cc_recipients.join(", ")}
-                    onChange={(e) => update(c, { cc_recipients: splitEmails(e.target.value) })}
-                    placeholder="manager@gostation.sa"
-                  />
-                </Field>
-                <Field label={t("admin.notifications.fromName")} lang="en">
-                  <Input
-                    className={inputCls}
-                    value={row.from_name}
-                    onChange={(e) => update(c, { from_name: e.target.value })}
-                  />
-                </Field>
-                <Field label={t("admin.notifications.fromEmail")} lang="en" hint={t("admin.notifications.fromHint")}>
-                  <Input
-                    className={inputCls}
-                    value={row.from_email ?? ""}
-                    onChange={(e) => update(c, { from_email: e.target.value })}
-                    placeholder="notify@gostation.sa"
-                  />
-                </Field>
-                <Field label={t("admin.notifications.replyTo")} lang="en">
-                  <Input
-                    className={inputCls}
-                    value={row.reply_to ?? ""}
-                    onChange={(e) => update(c, { reply_to: e.target.value })}
-                    placeholder="franchise@gostation.sa"
-                  />
-                </Field>
-                <Field label={t("admin.notifications.subjectPrefix")} lang="en">
-                  <Input
-                    className={inputCls}
-                    value={row.subject_prefix ?? ""}
-                    onChange={(e) => update(c, { subject_prefix: e.target.value })}
-                    placeholder="[Franchise]"
-                  />
-                </Field>
-              </FormGrid>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <EmailField
+                  align={align}
+                  label={t("admin.notifications.recipients")}
+                  hint={t("admin.notifications.listHint")}
+                  value={row.recipients.join(", ")}
+                  onChange={(v) => update(c, { recipients: splitEmails(v) })}
+                  placeholder="ops@gostation.sa, bd@gostation.sa"
+                />
+                <EmailField
+                  align={align}
+                  label={t("admin.notifications.cc")}
+                  hint={t("admin.notifications.listHint")}
+                  value={row.cc_recipients.join(", ")}
+                  onChange={(v) => update(c, { cc_recipients: splitEmails(v) })}
+                  placeholder="manager@gostation.sa"
+                />
+                <EmailField
+                  align={align}
+                  label={t("admin.notifications.fromName")}
+                  value={row.from_name}
+                  onChange={(v) => update(c, { from_name: v })}
+                />
+                <EmailField
+                  align={align}
+                  label={t("admin.notifications.fromEmail")}
+                  hint={t("admin.notifications.fromHint")}
+                  value={row.from_email ?? ""}
+                  onChange={(v) => update(c, { from_email: v })}
+                  placeholder="notify@gostation.sa"
+                />
+                <EmailField
+                  align={align}
+                  label={t("admin.notifications.replyTo")}
+                  value={row.reply_to ?? ""}
+                  onChange={(v) => update(c, { reply_to: v })}
+                  placeholder="franchise@gostation.sa"
+                />
+                <EmailField
+                  align={align}
+                  label={t("admin.notifications.subjectPrefix")}
+                  value={row.subject_prefix ?? ""}
+                  onChange={(v) => update(c, { subject_prefix: v })}
+                  placeholder="[Franchise]"
+                />
+              </div>
 
-              <div className="mt-6 flex flex-wrap items-center gap-3 border-t pt-4">
-                <Button
-                  onClick={() => save.mutate(row)}
-                  disabled={save.isPending}
-                  className="bg-accent text-accent-foreground hover:bg-accent/90"
-                >
-                  {save.isPending ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : null}
-                  {t("admin.notifications.save")}
-                </Button>
+              <div className="mt-6 flex flex-wrap items-center justify-end gap-3 border-t pt-4">
                 <Button
                   variant="outline"
                   onClick={() => testSend.mutate(c)}
@@ -217,11 +208,54 @@ function NotificationsSettingsPage() {
                   <Send className="me-2 h-4 w-4" />
                   {t("admin.notifications.test")}
                 </Button>
+                <Button
+                  onClick={() => save.mutate(row)}
+                  disabled={save.isPending}
+                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                >
+                  {save.isPending ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : null}
+                  {t("admin.notifications.save")}
+                </Button>
               </div>
             </div>
           );
         })}
       </div>
+    </div>
+  );
+}
+
+/** Label follows the UI language; the value is always a technical LTR string. */
+function EmailField({
+  label,
+  hint,
+  value,
+  onChange,
+  placeholder,
+  align,
+}: {
+  label: string;
+  hint?: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  align: "text-left" | "text-right";
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <Label className={`block text-sm font-semibold leading-tight text-foreground ${align}`}>
+        {label}
+      </Label>
+      <Input
+        dir="ltr"
+        className={`${inputCls} w-full text-left`}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {hint ? (
+        <p className={`text-[11px] leading-snug text-muted-foreground ${align}`}>{hint}</p>
+      ) : null}
     </div>
   );
 }
