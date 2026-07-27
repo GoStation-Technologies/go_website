@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{
             "The fastest-growing fuel station network in Saudi Arabia — fuel, retail, fleet services and franchise opportunities.",
           areaServed: "SA",
           contactPoint: [
-            { "@type": "ContactPoint", contactType: "customer service", email: "contact@gostation.sa", telephone: "+966920000000" },
+            { "@type": "ContactPoint", contactType: "customer service", email: "contact@gostation.net", telephone: "+966920000000" },
           ],
         }),
       },
