@@ -767,6 +767,7 @@ export type Database = {
           category: string
           cc_recipients: string[]
           created_at: string
+          from_email: string | null
           from_name: string
           id: string
           is_enabled: boolean
@@ -779,6 +780,7 @@ export type Database = {
           category: string
           cc_recipients?: string[]
           created_at?: string
+          from_email?: string | null
           from_name?: string
           id?: string
           is_enabled?: boolean
@@ -791,6 +793,7 @@ export type Database = {
           category?: string
           cc_recipients?: string[]
           created_at?: string
+          from_email?: string | null
           from_name?: string
           id?: string
           is_enabled?: boolean
