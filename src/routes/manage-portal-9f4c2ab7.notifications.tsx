@@ -159,7 +159,7 @@ function NotificationsSettingsPage() {
                   hint={t("admin.notifications.listHint")}
                   value={row.recipients.join(", ")}
                   onChange={(v) => update(c, { recipients: splitEmails(v) })}
-                  placeholder="ops@gostation.sa, bd@gostation.sa"
+                  placeholder="ops@gostation.net, bd@gostation.net"
                 />
                 <EmailField
                   align={align}
@@ -167,7 +167,7 @@ function NotificationsSettingsPage() {
                   hint={t("admin.notifications.listHint")}
                   value={row.cc_recipients.join(", ")}
                   onChange={(v) => update(c, { cc_recipients: splitEmails(v) })}
-                  placeholder="manager@gostation.sa"
+                  placeholder="manager@gostation.net"
                 />
                 <EmailField
                   align={align}
@@ -181,14 +181,14 @@ function NotificationsSettingsPage() {
                   hint={t("admin.notifications.fromHint")}
                   value={row.from_email ?? ""}
                   onChange={(v) => update(c, { from_email: v })}
-                  placeholder="notify@gostation.sa"
+                  placeholder="notify@gostation.net"
                 />
                 <EmailField
                   align={align}
                   label={t("admin.notifications.replyTo")}
                   value={row.reply_to ?? ""}
                   onChange={(v) => update(c, { reply_to: v })}
-                  placeholder="franchise@gostation.sa"
+                  placeholder="franchise@gostation.net"
                 />
                 <EmailField
                   align={align}

@@ -100,7 +100,7 @@ function ContactPage() {
         <div className="space-y-4">
           <InfoRow icon={MapPin} title="Address" text={t("contact.address")} />
           <InfoRow icon={Clock} title="Hours" text={t("contact.hours")} />
-          <InfoRow icon={Mail} title="Email" text="contact@gostation.sa" />
+          <InfoRow icon={Mail} title="Email" text="contact@gostation.net" />
           <InfoRow icon={Phone} title="Phone" text="+966 92000 0000" />
         </div>
       </section>
