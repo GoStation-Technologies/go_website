@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
   Inbox,
+  Users,
   MessageSquare,
   MapPin,
   Newspaper,
