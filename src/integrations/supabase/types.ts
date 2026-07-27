@@ -537,8 +537,10 @@ export type Database = {
       }
       job_applications: {
         Row: {
+          assigned_to: string | null
           cover_letter: string | null
           created_at: string
+          cv_path: string | null
           cv_url: string | null
           email: string
           full_name: string
@@ -547,13 +549,16 @@ export type Database = {
           linkedin_url: string | null
           notes: string | null
           phone: string
+          rating: number | null
           reference: string
           status: string
           updated_at: string
         }
         Insert: {
+          assigned_to?: string | null
           cover_letter?: string | null
           created_at?: string
+          cv_path?: string | null
           cv_url?: string | null
           email: string
           full_name: string
@@ -562,13 +567,16 @@ export type Database = {
           linkedin_url?: string | null
           notes?: string | null
           phone: string
+          rating?: number | null
           reference?: string
           status?: string
           updated_at?: string
         }
         Update: {
+          assigned_to?: string | null
           cover_letter?: string | null
           created_at?: string
+          cv_path?: string | null
           cv_url?: string | null
           email?: string
           full_name?: string
@@ -577,6 +585,7 @@ export type Database = {
           linkedin_url?: string | null
           notes?: string | null
           phone?: string
+          rating?: number | null
           reference?: string
           status?: string
           updated_at?: string

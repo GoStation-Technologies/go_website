@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StationsRouteImport } from './routes/stations'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
 import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
@@ -29,12 +30,18 @@ import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-po
 import { Route as ManagePortal9f4c2ab7ChatsRouteImport } from './routes/manage-portal-9f4c2ab7.chats'
 import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage-portal-9f4c2ab7.careers'
 import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
+import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
 import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
   path: '/stations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
@@ -141,6 +148,12 @@ const ManagePortal9f4c2ab7AuditRoute =
     path: '/audit',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const ManagePortal9f4c2ab7ApplicationsRoute =
+  ManagePortal9f4c2ab7ApplicationsRouteImport.update({
+    id: '/applications',
+    path: '/applications',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ManagePortal9f4c2ab7AbuseRoute =
   ManagePortal9f4c2ab7AbuseRouteImport.update({
     id: '/abuse',
@@ -163,8 +176,10 @@ export interface FileRoutesByFullPath {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
@@ -186,8 +201,10 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
@@ -211,8 +228,10 @@ export interface FileRoutesById {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
@@ -237,8 +256,10 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
+    | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
@@ -260,8 +281,10 @@ export interface FileRouteTypes {
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
@@ -284,8 +307,10 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
+    | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
@@ -309,6 +334,7 @@ export interface RootRouteChildren {
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
   ManagePortal9f4c2ab7Route: typeof ManagePortal9f4c2ab7RouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StationsRoute: typeof StationsRoute
   ManagePortal9f4c2ab7LoginRoute: typeof ManagePortal9f4c2ab7LoginRoute
   MediaSlugRoute: typeof MediaSlugRoute
@@ -323,6 +349,13 @@ declare module '@tanstack/react-router' {
       path: '/stations'
       fullPath: '/stations'
       preLoaderRoute: typeof StationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage-portal-9f4c2ab7': {
@@ -458,6 +491,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7AuditRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/applications': {
+      id: '/manage-portal-9f4c2ab7/applications'
+      path: '/applications'
+      fullPath: '/manage-portal-9f4c2ab7/applications'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7ApplicationsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/abuse': {
       id: '/manage-portal-9f4c2ab7/abuse'
       path: '/abuse'
@@ -477,6 +517,7 @@ declare module '@tanstack/react-router' {
 
 interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7AbuseRoute: typeof ManagePortal9f4c2ab7AbuseRoute
+  ManagePortal9f4c2ab7ApplicationsRoute: typeof ManagePortal9f4c2ab7ApplicationsRoute
   ManagePortal9f4c2ab7AuditRoute: typeof ManagePortal9f4c2ab7AuditRoute
   ManagePortal9f4c2ab7CareersRoute: typeof ManagePortal9f4c2ab7CareersRoute
   ManagePortal9f4c2ab7ChatsRoute: typeof ManagePortal9f4c2ab7ChatsRoute
@@ -489,6 +530,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
 
 const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7AbuseRoute: ManagePortal9f4c2ab7AbuseRoute,
+  ManagePortal9f4c2ab7ApplicationsRoute: ManagePortal9f4c2ab7ApplicationsRoute,
   ManagePortal9f4c2ab7AuditRoute: ManagePortal9f4c2ab7AuditRoute,
   ManagePortal9f4c2ab7CareersRoute: ManagePortal9f4c2ab7CareersRoute,
   ManagePortal9f4c2ab7ChatsRoute: ManagePortal9f4c2ab7ChatsRoute,
@@ -512,6 +554,7 @@ const rootRouteChildren: RootRouteChildren = {
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
   ManagePortal9f4c2ab7Route: ManagePortal9f4c2ab7RouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StationsRoute: StationsRoute,
   ManagePortal9f4c2ab7LoginRoute: ManagePortal9f4c2ab7LoginRoute,
   MediaSlugRoute: MediaSlugRoute,
