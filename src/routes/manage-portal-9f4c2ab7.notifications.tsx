@@ -44,7 +44,9 @@ const blank = (category: string): Row => ({
 });
 
 function NotificationsSettingsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dir = i18n.language?.startsWith("ar") ? "rtl" : "ltr";
+  const align = dir === "rtl" ? ("text-right" as const) : ("text-left" as const);
   const qc = useQueryClient();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["admin", "notification-settings"],
