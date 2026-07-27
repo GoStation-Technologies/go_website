@@ -96,7 +96,7 @@ function Overview() {
         <div
           role="tablist"
           aria-label={t("admin.overview.timeRange")}
-          className="inline-flex items-center rounded-lg border bg-background p-1 shadow-sm"
+          className="admin-card inline-flex items-center p-1"
         >
           {RANGE_OPTIONS.map((opt) => {
             const active = opt.days === days;
@@ -110,7 +110,7 @@ function Overview() {
                 }
                 className={`rounded-md px-3 py-1 text-xs font-medium transition ${
                   active
-                    ? "bg-primary text-primary-foreground shadow"
+                    ? "bg-ember text-white shadow-glow"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -203,7 +203,7 @@ function KpiCard({ kpi, locale }: { kpi: Kpi; locale: string }) {
     <Link
       to={kpi.to as never}
       search={kpi.search as never}
-      className="group rounded-xl border bg-background p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
+      className="admin-card group relative overflow-hidden p-5 transition duration-200 hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-elegant"
     >
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">{kpi.label}</p>
@@ -226,7 +226,7 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`rounded-xl border bg-background p-5 shadow-sm ${className ?? ""}`}>
+    <div className={`admin-card p-5 sm:p-6 ${className ?? ""}`}>
       <div className="mb-3">
         <h2 className="text-base font-semibold">{title}</h2>
         {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
