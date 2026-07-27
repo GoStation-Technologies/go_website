@@ -71,7 +71,7 @@ export function AdminSidebar() {
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1">
               {items.map((item) => {
                 const label = t(`admin.nav.${item.key}`);
                 const active = isActive(item.url, item.exact);
@@ -81,17 +81,17 @@ export function AdminSidebar() {
                       asChild
                       isActive={active}
                       tooltip={label}
-                      className="h-9 rounded-lg text-sidebar-foreground/75 transition hover:bg-white/5 hover:text-sidebar-foreground data-[active=true]:bg-accent/15 data-[active=true]:font-semibold data-[active=true]:text-sidebar-foreground"
+                      className="h-10 rounded-xl text-[13px] font-medium text-sidebar-foreground/75 transition hover:bg-accent/10 hover:text-accent data-[active=true]:bg-accent/12 data-[active=true]:font-semibold data-[active=true]:text-sidebar-foreground"
                     >
                       <Link
                         to={item.url as never}
-                        className="relative flex w-full min-w-0 items-center gap-2.5 text-start"
+                        className="relative flex w-full min-w-0 items-center gap-3 text-start"
                       >
                         {active && (
-                          <span className="bg-ember absolute inset-y-1.5 start-0 w-1 rounded-full group-data-[collapsible=icon]:hidden" />
+                          <span className="bg-ember absolute inset-y-2 start-0 w-1 rounded-full group-data-[collapsible=icon]:hidden" />
                         )}
                         <item.icon
-                          className={`h-4 w-4 shrink-0 ${active ? "text-accent" : "text-sidebar-foreground/60"}`}
+                          className={`h-4.5 w-4.5 shrink-0 ${active ? "text-accent" : "text-sidebar-foreground/55"}`}
                         />
                         <span className="min-w-0 flex-1 truncate">{label}</span>
                       </Link>
@@ -99,6 +99,7 @@ export function AdminSidebar() {
                   </SidebarMenuItem>
                 );
               })}
+
 
             </SidebarMenu>
           </SidebarGroupContent>
