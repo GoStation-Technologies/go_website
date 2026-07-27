@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -18,7 +19,13 @@ const StationsMap = lazy(() =>
 
 export const Route = createFileRoute("/stations")({
   component: StationsPage,
-  head: () => ({ meta: [{ title: "Stations — GoStation" }] }),
+  head: () =>
+    pageHead({
+      path: "/stations",
+      title: "Find a GoStation — Station Locator & Live Fuel Prices",
+      description:
+        "Search 180+ GoStation fuel stations across 13 Saudi regions. Filter by city, services and amenities, and view live fuel prices on the map.",
+    }),
 });
 
 function StationsPage() {

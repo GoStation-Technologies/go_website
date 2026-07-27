@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +12,13 @@ import { Calendar, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/media")({
   component: MediaPage,
-  head: () => ({ meta: [{ title: "Media Center — GoStation" }, { name: "description", content: "Latest news and events from GoStation." }] }),
+  head: () =>
+    pageHead({
+      path: "/media",
+      title: "Media Center — GoStation News & Press Releases",
+      description:
+        "Latest GoStation news, press releases, network expansion announcements and events across Saudi Arabia, plus media contacts for journalists.",
+    }),
 });
 
 function MediaPage() {

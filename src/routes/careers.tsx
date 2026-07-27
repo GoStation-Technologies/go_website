@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +18,13 @@ import { Briefcase, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/careers")({
   component: CareersPage,
-  head: () => ({ meta: [{ title: "Careers — GoStation" }] }),
+  head: () =>
+    pageHead({
+      path: "/careers",
+      title: "Careers at GoStation — Jobs Across Saudi Arabia",
+      description:
+        "Build your career with GoStation. Browse open roles in operations, retail, engineering and corporate functions across Saudi Arabia and apply online.",
+    }),
 });
 
 function CareersPage() {

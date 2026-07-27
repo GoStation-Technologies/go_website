@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +14,13 @@ import { CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/acquisitions")({
   component: AcqPage,
-  head: () => ({ meta: [{ title: "Sell your station — GoStation" }] }),
+  head: () =>
+    pageHead({
+      path: "/acquisitions",
+      title: "Sell Your Fuel Station to GoStation",
+      description:
+        "GoStation acquires existing fuel stations across Saudi Arabia. Share your station details and our acquisitions team will evaluate and respond.",
+    }),
 });
 
 function AcqPage() {

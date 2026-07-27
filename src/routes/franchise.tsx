@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +14,13 @@ import { CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/franchise")({
   component: FranchisePage,
-  head: () => ({ meta: [{ title: "Franchise — GoStation" }] }),
+  head: () =>
+    pageHead({
+      path: "/franchise",
+      title: "Own a GoStation Franchise — Apply Online",
+      description:
+        "Partner with GoStation and operate your own fuel station in Saudi Arabia. Review the requirements and submit your franchise application in three steps.",
+    }),
 });
 
 function FranchisePage() {

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +11,13 @@ import { Award, Eye, Target, Sparkles, Leaf, Users } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
-  head: () => ({ meta: [{ title: "About — GoStation" }, { name: "description", content: "Our story, vision, mission, values, leadership and ESG commitments." }] }),
+  head: () =>
+    pageHead({
+      path: "/about",
+      title: "About GoStation — Our Story, Vision & ESG",
+      description:
+        "Meet GoStation: our story, vision and mission, leadership team, values and ESG commitments behind Saudi Arabia's fastest-growing fuel network.",
+    }),
 });
 
 function AboutPage() {

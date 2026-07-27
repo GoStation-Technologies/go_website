@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,7 +15,13 @@ import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
-  head: () => ({ meta: [{ title: "Contact — GoStation" }] }),
+  head: () =>
+    pageHead({
+      path: "/contact",
+      title: "Contact GoStation — Support, Media & Partnerships",
+      description:
+        "Get in touch with GoStation. Send a support request, complaint, media or partnership enquiry and our team will reply with a reference number.",
+    }),
 });
 
 function ContactPage() {

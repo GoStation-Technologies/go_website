@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +18,13 @@ import { FileText, Download, TrendingUp } from "lucide-react";
 
 export const Route = createFileRoute("/investors")({
   component: IRPage,
-  head: () => ({ meta: [{ title: "Investor Relations — GoStation" }] }),
+  head: () =>
+    pageHead({
+      path: "/investors",
+      title: "Investor Relations — GoStation Reports & Governance",
+      description:
+        "GoStation investor relations: financial reports, growth highlights, governance documents and contacts for shareholders and prospective investors.",
+    }),
 });
 
 function IRPage() {
