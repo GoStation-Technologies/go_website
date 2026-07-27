@@ -134,15 +134,15 @@ function Overview() {
             <AreaChart data={data.chatsSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="gChats" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
               <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
-              <Area type="monotone" dataKey="count" stroke="hsl(var(--primary))" fill="url(#gChats)" strokeWidth={2} />
+              <Area type="monotone" dataKey="count" stroke="var(--accent)" fill="url(#gChats)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -154,7 +154,7 @@ function Overview() {
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
               <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
-              <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="count" fill="var(--accent)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -166,7 +166,7 @@ function Overview() {
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
               <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
-              <Line type="monotone" dataKey="count" stroke="hsl(var(--destructive))" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="count" stroke="var(--destructive)" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -176,8 +176,8 @@ function Overview() {
 }
 
 const tooltipStyle = {
-  background: "hsl(var(--popover))",
-  border: "1px solid hsl(var(--border))",
+  background: "var(--popover)",
+  border: "1px solid var(--border)",
   borderRadius: 8,
   fontSize: 12,
 };

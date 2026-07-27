@@ -87,7 +87,7 @@ export function AdminSidebar() {
                         className="relative flex w-full min-w-0 items-center gap-2.5 text-start"
                       >
                         {active && (
-                          <span className="bg-ember absolute inset-y-1 -start-2 w-1 rounded-full group-data-[collapsible=icon]:hidden" />
+                          <span className="bg-ember absolute inset-y-1.5 start-0 w-1 rounded-full group-data-[collapsible=icon]:hidden" />
                         )}
                         <item.icon
                           className={`h-4 w-4 shrink-0 ${active ? "text-accent" : "text-sidebar-foreground/60"}`}
