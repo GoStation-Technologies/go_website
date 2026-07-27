@@ -83,33 +83,41 @@ function AdminLayout() {
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <LangBoot />
-      <div className="flex min-h-screen w-full bg-muted/30">
+      <div className="admin-shell admin-scope flex min-h-screen w-full">
         <AdminSidebar />
-        <SidebarInset className="min-w-0 flex-1">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background px-4">
+        <SidebarInset className="min-w-0 flex-1 bg-transparent">
+          <header className="glass sticky top-0 z-30 flex h-16 items-center gap-3 border-b px-4">
             <SidebarTrigger aria-label={t("admin.toggleSidebar")} />
             <Separator orientation="vertical" className="h-6" />
             <div className="min-w-0 flex-1 overflow-hidden">
               <AdminBreadcrumbs />
             </div>
             <div className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
-              <span className="hidden sm:inline">{roles.join(" · ")}</span>
+              <span className="hidden rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-semibold uppercase tracking-wider text-accent sm:inline">
+                {roles.join(" · ")}
+              </span>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={toggleLang}
-                className="h-8 gap-1.5 rounded-full text-xs font-semibold"
+                className="h-8 gap-1.5 rounded-full text-xs font-semibold hover:bg-accent/10 hover:text-accent"
               >
                 <Globe className="h-3.5 w-3.5" />
                 <span>{t("common.lang")}</span>
               </Button>
               <ThemeToggle />
-              <Button size="sm" variant="ghost" onClick={signOut} aria-label={t("admin.signout")}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={signOut}
+                aria-label={t("admin.signout")}
+                className="hover:bg-destructive/10 hover:text-destructive"
+              >
                 <LogOut className="h-4 w-4" />
               </Button>
             </div>
           </header>
-          <main className="min-w-0 flex-1 p-4 sm:p-6">
+          <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
             <Outlet />
           </main>
         </SidebarInset>

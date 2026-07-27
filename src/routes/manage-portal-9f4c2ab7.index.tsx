@@ -96,7 +96,7 @@ function Overview() {
         <div
           role="tablist"
           aria-label={t("admin.overview.timeRange")}
-          className="inline-flex items-center rounded-lg border bg-background p-1 shadow-sm"
+          className="admin-card inline-flex items-center p-1"
         >
           {RANGE_OPTIONS.map((opt) => {
             const active = opt.days === days;
@@ -110,7 +110,7 @@ function Overview() {
                 }
                 className={`rounded-md px-3 py-1 text-xs font-medium transition ${
                   active
-                    ? "bg-primary text-primary-foreground shadow"
+                    ? "bg-ember text-white shadow-glow"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -134,15 +134,15 @@ function Overview() {
             <AreaChart data={data.chatsSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="gChats" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
               <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
-              <Area type="monotone" dataKey="count" stroke="hsl(var(--primary))" fill="url(#gChats)" strokeWidth={2} />
+              <Area type="monotone" dataKey="count" stroke="var(--accent)" fill="url(#gChats)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -154,7 +154,7 @@ function Overview() {
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
               <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
-              <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="count" fill="var(--accent)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -166,7 +166,7 @@ function Overview() {
               <XAxis dataKey="date" reversed={rtl} tickFormatter={(v: string) => fmtDay(v, locale)} fontSize={11} />
               <YAxis allowDecimals={false} orientation={rtl ? "right" : "left"} fontSize={11} />
               <Tooltip contentStyle={tooltipStyle} labelFormatter={(v: string) => fmtDate(v, locale)} />
-              <Line type="monotone" dataKey="count" stroke="hsl(var(--destructive))" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="count" stroke="var(--destructive)" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -176,8 +176,8 @@ function Overview() {
 }
 
 const tooltipStyle = {
-  background: "hsl(var(--popover))",
-  border: "1px solid hsl(var(--border))",
+  background: "var(--popover)",
+  border: "1px solid var(--border)",
   borderRadius: 8,
   fontSize: 12,
 };
@@ -197,22 +197,30 @@ function KpiCard({ kpi, locale }: { kpi: Kpi; locale: string }) {
       ? "text-destructive"
       : kpi.accent === "warn"
         ? "text-amber-600 dark:text-amber-400"
-        : "text-primary";
+        : "text-accent";
   const Icon = kpi.icon;
   return (
     <Link
       to={kpi.to as never}
       search={kpi.search as never}
-      className="group rounded-xl border bg-background p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
+      className="admin-card group relative overflow-hidden p-5 transition duration-200 hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-elegant"
     >
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">{kpi.label}</p>
-        <Icon className={`h-4 w-4 ${accent}`} />
+      <span className="bg-ember absolute inset-x-0 top-0 h-0.5 opacity-0 transition group-hover:opacity-100" />
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          {kpi.label}
+        </p>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10">
+          <Icon className={`h-4 w-4 ${accent}`} />
+        </span>
       </div>
-      <p className={`mt-2 text-3xl font-bold ${accent}`}>{kpi.value.toLocaleString(locale)}</p>
+      <p className={`mt-3 font-display text-3xl font-extrabold tracking-tight ${accent}`}>
+        {kpi.value.toLocaleString(locale)}
+      </p>
     </Link>
   );
 }
+
 
 function ChartCard({
   title,
@@ -226,7 +234,7 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`rounded-xl border bg-background p-5 shadow-sm ${className ?? ""}`}>
+    <div className={`admin-card p-5 sm:p-6 ${className ?? ""}`}>
       <div className="mb-3">
         <h2 className="text-base font-semibold">{title}</h2>
         {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
