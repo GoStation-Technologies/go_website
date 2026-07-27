@@ -27,25 +27,28 @@ function FranchisePage() {
 
   const submit = async () => {
     setBusy(true);
-    const { data, error } = await supabase.from("franchise_applications").insert({
-      full_name: form.full_name ?? "",
-      national_id: form.national_id ?? "",
-      phone: form.phone ?? "",
-      email: form.email ?? "",
-      city: form.city ?? "",
-      cr_number: form.cr_number || null,
-      proposed_city: form.proposed_city || null,
-      proposed_district: form.proposed_district || null,
-      land_area_sqm: form.land_area_sqm ? Number(form.land_area_sqm) : null,
-      ownership_status: form.ownership_status || null,
-      investment_capital_sar: form.investment_capital_sar ? Number(form.investment_capital_sar) : null,
-      notes: form.notes || null,
-    }).select("reference").single();
+    const { data, error } = await (supabase.rpc as any)("submit_franchise_application", {
+      payload: {
+        full_name: form.full_name ?? "",
+        national_id: form.national_id ?? "",
+        phone: form.phone ?? "",
+        email: form.email ?? "",
+        city: form.city ?? "",
+        cr_number: form.cr_number ?? "",
+        proposed_city: form.proposed_city ?? "",
+        proposed_district: form.proposed_district ?? "",
+        land_area_sqm: form.land_area_sqm ?? "",
+        ownership_status: form.ownership_status ?? "",
+        investment_capital_sar: form.investment_capital_sar ?? "",
+        notes: form.notes ?? "",
+      },
+    });
     setBusy(false);
-    if (error) return toast.error(t("common.error"));
-    setRef(data.reference);
+    if (error || !data) return toast.error(t("common.error"));
+    setRef(data as string);
     toast.success(t("common.thanks"));
   };
+
 
   const steps = [t("franchise.steps.personal"), t("franchise.steps.location"), t("franchise.steps.financial")];
 

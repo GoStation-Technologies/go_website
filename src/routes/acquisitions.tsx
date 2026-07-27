@@ -25,21 +25,23 @@ function AcqPage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     setBusy(true);
-    const { data, error } = await supabase.from("acquisition_requests").insert({
-      full_name: String(fd.get("name")),
-      phone: String(fd.get("phone")),
-      email: String(fd.get("email")),
-      station_name: String(fd.get("station") ?? "") || null,
-      city: String(fd.get("city") ?? "") || null,
-      district: String(fd.get("district") ?? "") || null,
-      land_area_sqm: fd.get("area") ? Number(fd.get("area")) : null,
-      fuel_pumps_count: fd.get("pumps") ? Number(fd.get("pumps")) : null,
-      avg_daily_sales_sar: fd.get("sales") ? Number(fd.get("sales")) : null,
-      notes: String(fd.get("notes") ?? "") || null,
-    }).select("reference").single();
+    const { data, error } = await (supabase.rpc as any)("submit_acquisition_request", {
+      payload: {
+        full_name: String(fd.get("name") ?? ""),
+        phone: String(fd.get("phone") ?? ""),
+        email: String(fd.get("email") ?? ""),
+        station_name: String(fd.get("station") ?? ""),
+        city: String(fd.get("city") ?? ""),
+        district: String(fd.get("district") ?? ""),
+        land_area_sqm: String(fd.get("area") ?? ""),
+        fuel_pumps_count: String(fd.get("pumps") ?? ""),
+        avg_daily_sales_sar: String(fd.get("sales") ?? ""),
+        notes: String(fd.get("notes") ?? ""),
+      },
+    });
     setBusy(false);
-    if (error) return toast.error(t("common.error"));
-    setRef(data.reference);
+    if (error || !data) return toast.error(t("common.error"));
+    setRef(data as string);
     toast.success(t("common.thanks"));
   };
 
