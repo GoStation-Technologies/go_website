@@ -76,11 +76,12 @@ export const adminNotificationSettingsSave = createServerFn({ method: "POST" })
       context.supabase as any,
       { id: context.userId, email: (context.claims as any)?.email ?? null },
       {
-        action: "update",
+        action: "upsert",
         entity: "notification_settings" as any,
-        entityIds: [data.category],
+        entity_ids: [data.category],
         diff: payload as any,
       },
+
     );
     return { ok: true };
   });
