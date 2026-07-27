@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
+import { submitFranchiseApplication } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -34,26 +34,30 @@ function FranchisePage() {
 
   const submit = async () => {
     setBusy(true);
-    const { data, error } = await (supabase.rpc as any)("submit_franchise_application", {
-      payload: {
-        full_name: form.full_name ?? "",
-        national_id: form.national_id ?? "",
-        phone: form.phone ?? "",
-        email: form.email ?? "",
-        city: form.city ?? "",
-        cr_number: form.cr_number ?? "",
-        proposed_city: form.proposed_city ?? "",
-        proposed_district: form.proposed_district ?? "",
-        land_area_sqm: form.land_area_sqm ?? "",
-        ownership_status: form.ownership_status ?? "",
-        investment_capital_sar: form.investment_capital_sar ?? "",
-        notes: form.notes ?? "",
-      },
-    });
-    setBusy(false);
-    if (error || !data) return toast.error(t("common.error"));
-    setRef(data as string);
-    toast.success(t("common.thanks"));
+    try {
+      const res = await submitFranchiseApplication({
+        data: {
+          full_name: form.full_name ?? "",
+          national_id: form.national_id ?? "",
+          phone: form.phone ?? "",
+          email: form.email ?? "",
+          city: form.city ?? "",
+          cr_number: form.cr_number ?? "",
+          proposed_city: form.proposed_city ?? "",
+          proposed_district: form.proposed_district ?? "",
+          land_area_sqm: form.land_area_sqm ?? "",
+          ownership_status: form.ownership_status ?? "",
+          investment_capital_sar: form.investment_capital_sar ?? "",
+          notes: form.notes ?? "",
+        },
+      });
+      setRef(res.reference);
+      toast.success(t("common.thanks"));
+    } catch {
+      toast.error(t("common.error"));
+    } finally {
+      setBusy(false);
+    }
   };
 
 
