@@ -87,16 +87,18 @@ function Overview() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{t("admin.overview.title")}</h1>
-          <p className="text-sm text-muted-foreground">{t("admin.overview.subtitle", { days })}</p>
+    <div className="space-y-8">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-extrabold tracking-tight">{t("admin.overview.title")}</h1>
+          <p className="text-sm font-medium text-muted-foreground">
+            {t("admin.overview.subtitle", { days })}
+          </p>
         </div>
         <div
           role="tablist"
           aria-label={t("admin.overview.timeRange")}
-          className="admin-card inline-flex items-center p-1"
+          className="admin-card inline-flex items-center gap-0.5 p-1.5"
         >
           {RANGE_OPTIONS.map((opt) => {
             const active = opt.days === days;
@@ -108,10 +110,10 @@ function Overview() {
                 onClick={() =>
                   navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, days: opt.days }) })
                 }
-                className={`rounded-md px-3 py-1 text-xs font-medium transition ${
+                className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold tracking-wide transition ${
                   active
                     ? "bg-ember text-white shadow-glow"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:bg-accent/10 hover:text-accent"
                 }`}
               >
                 {opt.label}
@@ -122,13 +124,14 @@ function Overview() {
       </div>
 
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {kpis.map((k) => (
           <KpiCard key={k.label} kpi={k} locale={locale} />
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
+
         <ChartCard title={t("admin.charts.chats")} subtitle={t("admin.charts.chatsSub", { days })}>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={data.chatsSeries} margin={rtl ? { top: 8, right: -20, bottom: 0, left: 8 } : { top: 8, right: 8, bottom: 0, left: -20 }}>
