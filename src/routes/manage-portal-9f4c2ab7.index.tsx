@@ -206,23 +206,22 @@ function KpiCard({ kpi, locale }: { kpi: Kpi; locale: string }) {
     <Link
       to={kpi.to as never}
       search={kpi.search as never}
-      className="admin-card group relative overflow-hidden p-5 transition duration-200 hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-elegant"
+      className="admin-card group relative overflow-hidden p-6 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-elegant"
     >
       <span className="bg-ember absolute inset-x-0 top-0 h-0.5 opacity-0 transition group-hover:opacity-100" />
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[11px] font-semibold uppercase leading-4 tracking-[0.14em] text-muted-foreground">
           {kpi.label}
         </p>
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-          <Icon className={`h-4 w-4 ${accent}`} />
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-accent/15 bg-accent/10 transition group-hover:bg-accent/15">
+          <Icon className={`h-4.5 w-4.5 ${accent}`} />
         </span>
       </div>
-      <p className={`mt-3 font-display text-3xl font-extrabold tracking-tight ${accent}`}>
-        {kpi.value.toLocaleString(locale)}
-      </p>
+      <p className={`admin-metric mt-4 text-4xl ${accent}`}>{kpi.value.toLocaleString(locale)}</p>
     </Link>
   );
 }
+
 
 
 function ChartCard({
