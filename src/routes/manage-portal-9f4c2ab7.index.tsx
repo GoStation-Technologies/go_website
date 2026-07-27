@@ -197,7 +197,7 @@ function KpiCard({ kpi, locale }: { kpi: Kpi; locale: string }) {
       ? "text-destructive"
       : kpi.accent === "warn"
         ? "text-amber-600 dark:text-amber-400"
-        : "text-primary";
+        : "text-accent";
   const Icon = kpi.icon;
   return (
     <Link
@@ -205,14 +205,22 @@ function KpiCard({ kpi, locale }: { kpi: Kpi; locale: string }) {
       search={kpi.search as never}
       className="admin-card group relative overflow-hidden p-5 transition duration-200 hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-elegant"
     >
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">{kpi.label}</p>
-        <Icon className={`h-4 w-4 ${accent}`} />
+      <span className="bg-ember absolute inset-x-0 top-0 h-0.5 opacity-0 transition group-hover:opacity-100" />
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          {kpi.label}
+        </p>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10">
+          <Icon className={`h-4 w-4 ${accent}`} />
+        </span>
       </div>
-      <p className={`mt-2 text-3xl font-bold ${accent}`}>{kpi.value.toLocaleString(locale)}</p>
+      <p className={`mt-3 font-display text-3xl font-extrabold tracking-tight ${accent}`}>
+        {kpi.value.toLocaleString(locale)}
+      </p>
     </Link>
   );
 }
+
 
 function ChartCard({
   title,
