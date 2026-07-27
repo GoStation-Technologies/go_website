@@ -762,6 +762,48 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_settings: {
+        Row: {
+          category: string
+          cc_recipients: string[]
+          created_at: string
+          from_email: string | null
+          from_name: string
+          id: string
+          is_enabled: boolean
+          recipients: string[]
+          reply_to: string | null
+          subject_prefix: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          cc_recipients?: string[]
+          created_at?: string
+          from_email?: string | null
+          from_name?: string
+          id?: string
+          is_enabled?: boolean
+          recipients?: string[]
+          reply_to?: string | null
+          subject_prefix?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          cc_recipients?: string[]
+          created_at?: string
+          from_email?: string | null
+          from_name?: string
+          id?: string
+          is_enabled?: boolean
+          recipients?: string[]
+          reply_to?: string | null
+          subject_prefix?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       page_views: {
         Row: {
           created_at: string

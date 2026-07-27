@@ -44,24 +44,52 @@ const FranchiseInput = z.object({
   notes: str(4000).optional().default(""),
 });
 
-async function callSubmit(fn: string, payload: Record<string, string>) {
+async function callSubmit(
+  fn: string,
+  payload: Record<string, string>,
+  notify: { category: "franchise" | "acquisition" | "contact"; title: string },
+) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await (supabaseAdmin.rpc as any)(fn, { payload });
   if (error) {
     console.error(`[submissions] ${fn} failed`, error);
     throw new Error("submission_failed");
   }
-  return { reference: data as string };
+  const reference = data as string;
+
+  // Route the notification using the per-category settings in the admin panel.
+  const { notifySubmission } = await import("./notify.server");
+  await notifySubmission({
+    category: notify.category,
+    title: notify.title,
+    reference,
+    fields: payload,
+  });
+
+  return { reference };
 }
 
 export const submitContactMessage = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => ContactInput.parse(raw))
-  .handler(async ({ data }) => callSubmit("submit_contact_message", data));
+  .handler(async ({ data }) =>
+    callSubmit("submit_contact_message", data, { category: "contact", title: "New contact message" }),
+  );
 
 export const submitAcquisitionRequest = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => AcquisitionInput.parse(raw))
-  .handler(async ({ data }) => callSubmit("submit_acquisition_request", data));
+  .handler(async ({ data }) =>
+    callSubmit("submit_acquisition_request", data, {
+      category: "acquisition",
+      title: "New acquisition request",
+    }),
+  );
 
 export const submitFranchiseApplication = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => FranchiseInput.parse(raw))
-  .handler(async ({ data }) => callSubmit("submit_franchise_application", data));
+  .handler(async ({ data }) =>
+    callSubmit("submit_franchise_application", data, {
+      category: "franchise",
+      title: "New franchise application",
+    }),
+  );
+

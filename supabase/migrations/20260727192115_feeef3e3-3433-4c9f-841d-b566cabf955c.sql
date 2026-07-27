@@ -1,0 +1,1 @@
+ALTER TABLE public.notification_settings ADD COLUMN from_email text;
