@@ -32,7 +32,11 @@ export const en = {
     message: "Message",
     subject: "Subject",
     category: "Category",
+    selectCity: "Select a city",
+    back: "Back",
+    next: "Next",
     lang: "العربية",
+
   },
   home: {
     heroBadge: "Saudi Arabia • Fuel & mobility",
