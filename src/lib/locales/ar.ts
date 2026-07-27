@@ -33,6 +33,8 @@ export const ar = {
     subject: "الموضوع",
     category: "الفئة",
     selectCity: "اختر المدينة",
+    searchCity: "ابحث عن مدينة…",
+    noCityFound: "لا توجد مدينة مطابقة.",
     back: "السابق",
     next: "التالي",
     lang: "English",
