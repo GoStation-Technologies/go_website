@@ -33,6 +33,8 @@ export const en = {
     subject: "Subject",
     category: "Category",
     selectCity: "Select a city",
+    searchCity: "Search cities…",
+    noCityFound: "No city found.",
     back: "Back",
     next: "Next",
     lang: "العربية",
