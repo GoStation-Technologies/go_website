@@ -27,17 +27,19 @@ function ContactPage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     setBusy(true);
-    const { data, error } = await supabase.from("contact_messages").insert({
-      full_name: String(fd.get("name")),
-      email: String(fd.get("email")),
-      phone: String(fd.get("phone") ?? ""),
-      category: String(fd.get("category")),
-      subject: String(fd.get("subject")),
-      message: String(fd.get("message")),
-    }).select("reference").single();
+    const { data, error } = await (supabase.rpc as any)("submit_contact_message", {
+      payload: {
+        full_name: String(fd.get("name") ?? ""),
+        email: String(fd.get("email") ?? ""),
+        phone: String(fd.get("phone") ?? ""),
+        category: String(fd.get("category") ?? ""),
+        subject: String(fd.get("subject") ?? ""),
+        message: String(fd.get("message") ?? ""),
+      },
+    });
     setBusy(false);
-    if (error) return toast.error(t("common.error"));
-    setRef(data.reference);
+    if (error || !data) return toast.error(t("common.error"));
+    setRef(data as string);
     toast.success(t("common.thanks"));
     (e.target as HTMLFormElement).reset();
   };

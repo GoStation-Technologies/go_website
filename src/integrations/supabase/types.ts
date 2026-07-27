@@ -1119,6 +1119,9 @@ export type Database = {
         Args: { _older_than_seconds?: number }
         Returns: number
       }
+      submit_acquisition_request: { Args: { payload: Json }; Returns: string }
+      submit_contact_message: { Args: { payload: Json }; Returns: string }
+      submit_franchise_application: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
       app_role: "super_admin" | "bd" | "hr" | "media" | "ir" | "ops" | "support"
