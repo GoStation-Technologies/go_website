@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StationsRouteImport } from './routes/stations'
-import { Route as MediaRouteImport } from './routes/media'
 import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
 import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
@@ -19,6 +18,7 @@ import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MediaIndexRouteImport } from './routes/media.index'
 import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-portal-9f4c2ab7.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
 import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
@@ -34,11 +34,6 @@ import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/p
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
   path: '/stations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MediaRoute = MediaRouteImport.update({
-  id: '/media',
-  path: '/media',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
@@ -81,6 +76,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaIndexRoute = MediaIndexRouteImport.update({
+  id: '/media/',
+  path: '/media/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ManagePortal9f4c2ab7IndexRoute =
   ManagePortal9f4c2ab7IndexRouteImport.update({
     id: '/',
@@ -88,9 +88,9 @@ const ManagePortal9f4c2ab7IndexRoute =
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
 const MediaSlugRoute = MediaSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => MediaRoute,
+  id: '/media/$slug',
+  path: '/media/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ManagePortal9f4c2ab7LoginRoute =
   ManagePortal9f4c2ab7LoginRouteImport.update({
@@ -156,7 +156,6 @@ export interface FileRoutesByFullPath {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
-  '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -168,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
+  '/media/': typeof MediaIndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesByTo {
@@ -178,7 +178,6 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
-  '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -190,6 +189,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7IndexRoute
+  '/media': typeof MediaIndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesById {
@@ -202,7 +202,6 @@ export interface FileRoutesById {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
-  '/media': typeof MediaRouteWithChildren
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -214,6 +213,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7_/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
+  '/media/': typeof MediaIndexRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRouteTypes {
@@ -227,7 +227,6 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
-    | '/media'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/audit'
@@ -239,6 +238,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
     | '/manage-portal-9f4c2ab7/'
+    | '/media/'
     | '/api/public/hooks/process-exports'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -249,7 +249,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/franchise'
     | '/investors'
-    | '/media'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/audit'
@@ -261,6 +260,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
     | '/manage-portal-9f4c2ab7'
+    | '/media'
     | '/api/public/hooks/process-exports'
   id:
     | '__root__'
@@ -272,7 +272,6 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
-    | '/media'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/audit'
@@ -284,6 +283,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7_/login'
     | '/media/$slug'
     | '/manage-portal-9f4c2ab7/'
+    | '/media/'
     | '/api/public/hooks/process-exports'
   fileRoutesById: FileRoutesById
 }
@@ -296,9 +296,10 @@ export interface RootRouteChildren {
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
   ManagePortal9f4c2ab7Route: typeof ManagePortal9f4c2ab7RouteWithChildren
-  MediaRoute: typeof MediaRouteWithChildren
   StationsRoute: typeof StationsRoute
   ManagePortal9f4c2ab7LoginRoute: typeof ManagePortal9f4c2ab7LoginRoute
+  MediaSlugRoute: typeof MediaSlugRoute
+  MediaIndexRoute: typeof MediaIndexRoute
   ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
 }
 
@@ -309,13 +310,6 @@ declare module '@tanstack/react-router' {
       path: '/stations'
       fullPath: '/stations'
       preLoaderRoute: typeof StationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/media': {
-      id: '/media'
-      path: '/media'
-      fullPath: '/media'
-      preLoaderRoute: typeof MediaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage-portal-9f4c2ab7': {
@@ -374,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/media/': {
+      id: '/media/'
+      path: '/media'
+      fullPath: '/media/'
+      preLoaderRoute: typeof MediaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/manage-portal-9f4c2ab7/': {
       id: '/manage-portal-9f4c2ab7/'
       path: '/'
@@ -383,10 +384,10 @@ declare module '@tanstack/react-router' {
     }
     '/media/$slug': {
       id: '/media/$slug'
-      path: '/$slug'
+      path: '/media/$slug'
       fullPath: '/media/$slug'
       preLoaderRoute: typeof MediaSlugRouteImport
-      parentRoute: typeof MediaRoute
+      parentRoute: typeof rootRouteImport
     }
     '/manage-portal-9f4c2ab7_/login': {
       id: '/manage-portal-9f4c2ab7_/login'
@@ -479,16 +480,6 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
 const ManagePortal9f4c2ab7RouteWithChildren =
   ManagePortal9f4c2ab7Route._addFileChildren(ManagePortal9f4c2ab7RouteChildren)
 
-interface MediaRouteChildren {
-  MediaSlugRoute: typeof MediaSlugRoute
-}
-
-const MediaRouteChildren: MediaRouteChildren = {
-  MediaSlugRoute: MediaSlugRoute,
-}
-
-const MediaRouteWithChildren = MediaRoute._addFileChildren(MediaRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -498,9 +489,10 @@ const rootRouteChildren: RootRouteChildren = {
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
   ManagePortal9f4c2ab7Route: ManagePortal9f4c2ab7RouteWithChildren,
-  MediaRoute: MediaRouteWithChildren,
   StationsRoute: StationsRoute,
   ManagePortal9f4c2ab7LoginRoute: ManagePortal9f4c2ab7LoginRoute,
+  MediaSlugRoute: MediaSlugRoute,
+  MediaIndexRoute: MediaIndexRoute,
   ApiPublicHooksProcessExportsRoute: ApiPublicHooksProcessExportsRoute,
 }
 export const routeTree = rootRouteImport
