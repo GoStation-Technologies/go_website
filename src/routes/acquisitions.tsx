@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
+import { submitAcquisitionRequest } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -32,24 +32,28 @@ function AcqPage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     setBusy(true);
-    const { data, error } = await (supabase.rpc as any)("submit_acquisition_request", {
-      payload: {
-        full_name: String(fd.get("name") ?? ""),
-        phone: String(fd.get("phone") ?? ""),
-        email: String(fd.get("email") ?? ""),
-        station_name: String(fd.get("station") ?? ""),
-        city: String(fd.get("city") ?? ""),
-        district: String(fd.get("district") ?? ""),
-        land_area_sqm: String(fd.get("area") ?? ""),
-        fuel_pumps_count: String(fd.get("pumps") ?? ""),
-        avg_daily_sales_sar: String(fd.get("sales") ?? ""),
-        notes: String(fd.get("notes") ?? ""),
-      },
-    });
-    setBusy(false);
-    if (error || !data) return toast.error(t("common.error"));
-    setRef(data as string);
-    toast.success(t("common.thanks"));
+    try {
+      const res = await submitAcquisitionRequest({
+        data: {
+          full_name: String(fd.get("name") ?? ""),
+          phone: String(fd.get("phone") ?? ""),
+          email: String(fd.get("email") ?? ""),
+          station_name: String(fd.get("station") ?? ""),
+          city: String(fd.get("city") ?? ""),
+          district: String(fd.get("district") ?? ""),
+          land_area_sqm: String(fd.get("area") ?? ""),
+          fuel_pumps_count: String(fd.get("pumps") ?? ""),
+          avg_daily_sales_sar: String(fd.get("sales") ?? ""),
+          notes: String(fd.get("notes") ?? ""),
+        },
+      });
+      setRef(res.reference);
+      toast.success(t("common.thanks"));
+    } catch {
+      toast.error(t("common.error"));
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
