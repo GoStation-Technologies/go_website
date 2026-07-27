@@ -75,6 +75,20 @@ function CareersPage() {
   );
 }
 
+const MAX_CV_BYTES = 4 * 1024 * 1024;
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("read_failed"));
+    reader.onload = () => {
+      const result = String(reader.result ?? "");
+      resolve(result.slice(result.indexOf(",") + 1));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
@@ -82,19 +96,32 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    const file = fd.get("cv") as File | null;
+    if (file && file.size > MAX_CV_BYTES) return toast.error(t("careers.cvTooLarge"));
     setBusy(true);
-    const { data, error } = await supabase.from("job_applications").insert({
-      job_id: jobId,
-      full_name: String(fd.get("name")),
-      email: String(fd.get("email")),
-      phone: String(fd.get("phone")),
-      linkedin_url: String(fd.get("linkedin") ?? "") || null,
-      cover_letter: String(fd.get("cover") ?? "") || null,
-    }).select("reference").single();
-    setBusy(false);
-    if (error) return toast.error(t("common.error"));
-    setRef(data.reference);
-    toast.success(t("common.thanks"));
+    try {
+      const cv =
+        file && file.size > 0
+          ? { name: file.name, type: file.type || "application/pdf", data: await fileToBase64(file) }
+          : null;
+      const res = await submitJobApplication({
+        data: {
+          job_id: jobId,
+          full_name: String(fd.get("name")),
+          email: String(fd.get("email")),
+          phone: String(fd.get("phone")),
+          linkedin_url: String(fd.get("linkedin") ?? ""),
+          cover_letter: String(fd.get("cover") ?? ""),
+          cv,
+        },
+      });
+      setRef(res.reference);
+      toast.success(t("common.thanks"));
+    } catch {
+      toast.error(t("common.error"));
+    } finally {
+      setBusy(false);
+    }
   };
   return (
     <Dialog>
@@ -114,7 +141,10 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
             <F label={t("common.email")}><Input type="email" name="email" required /></F>
             <F label={t("common.phone")}><Input name="phone" required /></F>
             <F label="LinkedIn URL"><Input name="linkedin" /></F>
-            <F label="Cover letter"><Textarea rows={4} name="cover" /></F>
+            <F label={t("careers.cv")}>
+              <Input type="file" name="cv" accept=".pdf,.doc,.docx" />
+            </F>
+            <F label={t("careers.coverLetter")}><Textarea rows={4} name="cover" /></F>
             <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
               {busy ? t("common.submitting") : t("common.submit")}
             </Button>
