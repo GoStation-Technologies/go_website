@@ -5,9 +5,43 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { ArrowLeft } from "lucide-react";
+import { pageHead, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/media/$slug")({
   component: ArticlePage,
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("news_articles")
+      .select("title_en, excerpt_en, published_at")
+      .eq("slug", params.slug)
+      .eq("is_published", true)
+      .maybeSingle();
+    return { article: data };
+  },
+  head: ({ params, loaderData }) => {
+    const a = loaderData?.article;
+    const title = a?.title_en ? `${a.title_en} — GoStation` : "Article — GoStation";
+    const description =
+      a?.excerpt_en ?? "Read the latest news, press releases and updates from the GoStation network in Saudi Arabia.";
+    const base = pageHead({ path: `/media/${params.slug}`, title, description, ogType: "article" });
+    return {
+      ...base,
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            headline: a?.title_en ?? title,
+            description,
+            datePublished: a?.published_at ?? undefined,
+            mainEntityOfPage: `${SITE_URL}/media/${params.slug}`,
+            publisher: { "@type": "Organization", name: "GoStation" },
+          }),
+        },
+      ],
+    };
+  },
 });
 
 function ArticlePage() {
