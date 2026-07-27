@@ -24,6 +24,7 @@ import { Route as MediaSlugRouteImport } from './routes/media.$slug'
 import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
 import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
 import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
+import { Route as ManagePortal9f4c2ab7NotificationsRouteImport } from './routes/manage-portal-9f4c2ab7.notifications'
 import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-portal-9f4c2ab7.news'
 import { Route as ManagePortal9f4c2ab7ChatsRouteImport } from './routes/manage-portal-9f4c2ab7.chats'
 import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage-portal-9f4c2ab7.careers'
@@ -110,6 +111,12 @@ const ManagePortal9f4c2ab7StationsRoute =
     path: '/stations',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const ManagePortal9f4c2ab7NotificationsRoute =
+  ManagePortal9f4c2ab7NotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ManagePortal9f4c2ab7NewsRoute =
   ManagePortal9f4c2ab7NewsRouteImport.update({
     id: '/news',
@@ -162,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
+  '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
@@ -184,6 +192,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
+  '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
@@ -208,6 +217,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
+  '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
   '/manage-portal-9f4c2ab7_/login': typeof ManagePortal9f4c2ab7LoginRoute
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
     | '/manage-portal-9f4c2ab7/news'
+    | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
     | '/manage-portal-9f4c2ab7/login'
@@ -255,6 +266,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
     | '/manage-portal-9f4c2ab7/news'
+    | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
     | '/manage-portal-9f4c2ab7/login'
@@ -278,6 +290,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
     | '/manage-portal-9f4c2ab7/news'
+    | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
     | '/manage-portal-9f4c2ab7_/login'
@@ -410,6 +423,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7StationsRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/notifications': {
+      id: '/manage-portal-9f4c2ab7/notifications'
+      path: '/notifications'
+      fullPath: '/manage-portal-9f4c2ab7/notifications'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7NotificationsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/news': {
       id: '/manage-portal-9f4c2ab7/news'
       path: '/news'
@@ -461,6 +481,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7CareersRoute: typeof ManagePortal9f4c2ab7CareersRoute
   ManagePortal9f4c2ab7ChatsRoute: typeof ManagePortal9f4c2ab7ChatsRoute
   ManagePortal9f4c2ab7NewsRoute: typeof ManagePortal9f4c2ab7NewsRoute
+  ManagePortal9f4c2ab7NotificationsRoute: typeof ManagePortal9f4c2ab7NotificationsRoute
   ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
   ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
   ManagePortal9f4c2ab7IndexRoute: typeof ManagePortal9f4c2ab7IndexRoute
@@ -472,6 +493,8 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7CareersRoute: ManagePortal9f4c2ab7CareersRoute,
   ManagePortal9f4c2ab7ChatsRoute: ManagePortal9f4c2ab7ChatsRoute,
   ManagePortal9f4c2ab7NewsRoute: ManagePortal9f4c2ab7NewsRoute,
+  ManagePortal9f4c2ab7NotificationsRoute:
+    ManagePortal9f4c2ab7NotificationsRoute,
   ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
   ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
   ManagePortal9f4c2ab7IndexRoute: ManagePortal9f4c2ab7IndexRoute,
