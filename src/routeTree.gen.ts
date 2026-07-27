@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StationsRouteImport } from './routes/stations'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
 import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
@@ -35,6 +36,11 @@ import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/p
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
   path: '/stations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
@@ -163,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -211,6 +219,7 @@ export interface FileRoutesById {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -237,6 +246,7 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
+    | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/audit'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/audit'
@@ -284,6 +295,7 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
+    | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/audit'
@@ -309,6 +321,7 @@ export interface RootRouteChildren {
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
   ManagePortal9f4c2ab7Route: typeof ManagePortal9f4c2ab7RouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StationsRoute: typeof StationsRoute
   ManagePortal9f4c2ab7LoginRoute: typeof ManagePortal9f4c2ab7LoginRoute
   MediaSlugRoute: typeof MediaSlugRoute
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       path: '/stations'
       fullPath: '/stations'
       preLoaderRoute: typeof StationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage-portal-9f4c2ab7': {
@@ -512,6 +532,7 @@ const rootRouteChildren: RootRouteChildren = {
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
   ManagePortal9f4c2ab7Route: ManagePortal9f4c2ab7RouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StationsRoute: StationsRoute,
   ManagePortal9f4c2ab7LoginRoute: ManagePortal9f4c2ab7LoginRoute,
   MediaSlugRoute: MediaSlugRoute,
@@ -521,3 +542,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
