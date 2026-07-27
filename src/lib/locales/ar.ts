@@ -222,6 +222,8 @@ export const ar = {
   admin: {
     brand: "لوحة تحكم قوستيشن",
     workspace: "مساحة العمل",
+    roles: { super_admin: "مدير عام", admin: "مدير", editor: "محرر", viewer: "مشاهد", staff: "موظف" },
+
     signout: "تسجيل الخروج",
     toggleSidebar: "إظهار/إخفاء القائمة",
     common: {
