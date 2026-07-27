@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { submitJobApplication } from "@/lib/careers.functions";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
