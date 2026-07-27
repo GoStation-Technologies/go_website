@@ -30,6 +30,7 @@ import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-po
 import { Route as ManagePortal9f4c2ab7ChatsRouteImport } from './routes/manage-portal-9f4c2ab7.chats'
 import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage-portal-9f4c2ab7.careers'
 import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
+import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
 import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 
@@ -147,6 +148,12 @@ const ManagePortal9f4c2ab7AuditRoute =
     path: '/audit',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const ManagePortal9f4c2ab7ApplicationsRoute =
+  ManagePortal9f4c2ab7ApplicationsRouteImport.update({
+    id: '/applications',
+    path: '/applications',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ManagePortal9f4c2ab7AbuseRoute =
   ManagePortal9f4c2ab7AbuseRouteImport.update({
     id: '/abuse',
@@ -172,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
@@ -196,6 +204,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
@@ -222,6 +231,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/careers': typeof ManagePortal9f4c2ab7CareersRoute
   '/manage-portal-9f4c2ab7/chats': typeof ManagePortal9f4c2ab7ChatsRoute
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
@@ -298,6 +310,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stations'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/careers'
     | '/manage-portal-9f4c2ab7/chats'
@@ -478,6 +491,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7AuditRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/applications': {
+      id: '/manage-portal-9f4c2ab7/applications'
+      path: '/applications'
+      fullPath: '/manage-portal-9f4c2ab7/applications'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7ApplicationsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/abuse': {
       id: '/manage-portal-9f4c2ab7/abuse'
       path: '/abuse'
@@ -497,6 +517,7 @@ declare module '@tanstack/react-router' {
 
 interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7AbuseRoute: typeof ManagePortal9f4c2ab7AbuseRoute
+  ManagePortal9f4c2ab7ApplicationsRoute: typeof ManagePortal9f4c2ab7ApplicationsRoute
   ManagePortal9f4c2ab7AuditRoute: typeof ManagePortal9f4c2ab7AuditRoute
   ManagePortal9f4c2ab7CareersRoute: typeof ManagePortal9f4c2ab7CareersRoute
   ManagePortal9f4c2ab7ChatsRoute: typeof ManagePortal9f4c2ab7ChatsRoute
@@ -509,6 +530,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
 
 const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7AbuseRoute: ManagePortal9f4c2ab7AbuseRoute,
+  ManagePortal9f4c2ab7ApplicationsRoute: ManagePortal9f4c2ab7ApplicationsRoute,
   ManagePortal9f4c2ab7AuditRoute: ManagePortal9f4c2ab7AuditRoute,
   ManagePortal9f4c2ab7CareersRoute: ManagePortal9f4c2ab7CareersRoute,
   ManagePortal9f4c2ab7ChatsRoute: ManagePortal9f4c2ab7ChatsRoute,
