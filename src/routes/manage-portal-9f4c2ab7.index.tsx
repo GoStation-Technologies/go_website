@@ -236,10 +236,10 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`admin-card p-5 sm:p-6 ${className ?? ""}`}>
-      <div className="mb-3">
-        <h2 className="text-base font-semibold">{title}</h2>
-        {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+    <div className={`admin-card p-6 sm:p-7 ${className ?? ""}`}>
+      <div className="mb-5">
+        <h2 className="text-base font-semibold tracking-tight">{title}</h2>
+        {subtitle && <p className="mt-0.5 text-xs font-medium text-muted-foreground">{subtitle}</p>}
       </div>
       {children}
     </div>
