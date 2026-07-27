@@ -150,11 +150,29 @@ export const en = {
     intro: "Join a growing network. Fill in the form and our BD team will contact you.",
     steps: { personal: "Personal", location: "Location", financial: "Financial" },
     submit: "Submit application",
+    f: {
+      nationalId: "National ID",
+      crNumber: "CR number (optional)",
+      proposedCity: "Proposed city",
+      proposedDistrict: "Proposed district",
+      landArea: "Land area (sqm)",
+      ownership: "Ownership status",
+      ownershipPlaceholder: "Owned / Leased",
+      capital: "Investment capital (SAR)",
+    },
   },
   acq: {
     title: "Sell your station",
     intro: "Have an existing station? Submit the details and we'll evaluate a potential acquisition.",
+    f: {
+      stationName: "Station name",
+      district: "District",
+      landArea: "Land area (sqm)",
+      pumps: "Fuel pumps",
+      avgSales: "Avg daily sales (SAR)",
+    },
   },
+
   careers: {
     title: "Careers at GoStation",
     intro: "Join a team building the future of energy and mobility in Saudi Arabia.",
