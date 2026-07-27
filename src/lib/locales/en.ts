@@ -219,6 +219,8 @@ export const en = {
   admin: {
     brand: "GoStation Admin",
     workspace: "Workspace",
+    roles: { super_admin: "Super admin", admin: "Admin", editor: "Editor", viewer: "Viewer", staff: "Staff" },
+
     signout: "Sign out",
     toggleSidebar: "Toggle sidebar",
     common: {
