@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { submitAcquisitionRequest } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
+import { CitySelect } from "@/components/site/city-select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,6 +28,7 @@ function AcqPage() {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
+  const [city, setCity] = useState("");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ function AcqPage() {
           phone: String(fd.get("phone") ?? ""),
           email: String(fd.get("email") ?? ""),
           station_name: String(fd.get("station") ?? ""),
-          city: String(fd.get("city") ?? ""),
+          city,
           district: String(fd.get("district") ?? ""),
           land_area_sqm: String(fd.get("area") ?? ""),
           fuel_pumps_count: String(fd.get("pumps") ?? ""),
@@ -77,12 +79,12 @@ function AcqPage() {
               <F label={t("common.fullName")}><Input name="name" required /></F>
               <F label={t("common.phone")}><Input name="phone" required /></F>
               <F label={t("common.email")} className="sm:col-span-2"><Input type="email" name="email" required /></F>
-              <F label="Station name"><Input name="station" /></F>
-              <F label={t("common.city")}><Input name="city" /></F>
-              <F label="District"><Input name="district" /></F>
-              <F label="Land area (sqm)"><Input type="number" name="area" /></F>
-              <F label="Fuel pumps"><Input type="number" name="pumps" /></F>
-              <F label="Avg daily sales (SAR)"><Input type="number" name="sales" /></F>
+              <F label={t("acq.f.stationName")}><Input name="station" /></F>
+              <F label={t("common.city")}><CitySelect value={city} onChange={setCity} /></F>
+              <F label={t("acq.f.district")}><Input name="district" /></F>
+              <F label={t("acq.f.landArea")}><Input type="number" name="area" /></F>
+              <F label={t("acq.f.pumps")}><Input type="number" name="pumps" /></F>
+              <F label={t("acq.f.avgSales")}><Input type="number" name="sales" /></F>
               <F label={t("common.message")} className="sm:col-span-2"><Textarea rows={5} name="notes" /></F>
               <div className="sm:col-span-2">
                 <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
