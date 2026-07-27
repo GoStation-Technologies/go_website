@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { fmtInt } from "@/lib/format";
+import { fmtNumber } from "@/lib/format";
 
 export const Route = createFileRoute("/manage-portal-9f4c2ab7/applications")({
   component: ApplicationsPage,
@@ -207,7 +207,7 @@ function ApplicationsPage() {
       {data && data.pageCount > 1 ? (
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs text-muted-foreground">
-            {fmtInt(data.total, i18n.language)}
+            {fmtNumber(data.total, i18n.language)}
           </span>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
