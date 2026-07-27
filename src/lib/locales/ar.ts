@@ -32,7 +32,11 @@ export const ar = {
     message: "الرسالة",
     subject: "الموضوع",
     category: "الفئة",
+    selectCity: "اختر المدينة",
+    back: "السابق",
+    next: "التالي",
     lang: "English",
+
   },
   home: {
     heroBadge: "المملكة العربية السعودية • الوقود والتنقل",
