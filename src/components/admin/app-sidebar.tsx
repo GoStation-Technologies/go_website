@@ -9,7 +9,7 @@ import {
   Briefcase,
   ShieldAlert,
   ScrollText,
-  MailCog,
+  BellRing,
 
 } from "lucide-react";
 
@@ -35,7 +35,7 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "chats", url: "/manage-portal-9f4c2ab7/chats", icon: MessageSquare },
   { key: "abuse", url: "/manage-portal-9f4c2ab7/abuse", icon: ShieldAlert },
   { key: "audit", url: "/manage-portal-9f4c2ab7/audit", icon: ScrollText },
-  { key: "notifications", url: "/manage-portal-9f4c2ab7/notifications", icon: MailCog },
+  { key: "notifications", url: "/manage-portal-9f4c2ab7/notifications", icon: BellRing },
 ];
 
 
