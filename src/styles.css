@@ -327,9 +327,28 @@ html[dir="rtl"] .marquee-track { animation: marquee-rtl 45s linear infinite; }
 
 @utility admin-card {
   border-radius: var(--radius-xl);
-  border: 1px solid var(--border);
-  background: var(--card);
+  border: 1px solid color-mix(in oklab, var(--border) 85%, transparent);
+  background:
+    linear-gradient(160deg, color-mix(in oklab, var(--ember) 4%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, color-mix(in oklab, white 60%, var(--card)) 0%, var(--card) 62%);
   box-shadow: var(--shadow-card);
+  transition:
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease;
+}
+.dark .admin-card {
+  background:
+    linear-gradient(160deg, color-mix(in oklab, var(--ember) 8%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, color-mix(in oklab, white 4%, var(--card)) 0%, var(--card) 62%);
+}
+
+@utility admin-metric {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
 }
 
 @utility admin-shell {
@@ -341,8 +360,15 @@ html[dir="rtl"] .marquee-track { animation: marquee-rtl 45s linear infinite; }
 /* Scoped polish for admin surfaces: tables, headings, panels */
 .admin-scope h1 {
   font-family: var(--font-display);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
+  font-weight: 800;
 }
+.admin-scope h2,
+.admin-scope h3 {
+  letter-spacing: -0.015em;
+  font-weight: 650;
+}
+
 .admin-scope table thead {
   background: color-mix(in oklab, var(--ink) 5%, transparent);
   letter-spacing: 0.08em;
