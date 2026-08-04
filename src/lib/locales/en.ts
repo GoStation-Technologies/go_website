@@ -98,6 +98,8 @@ export const en = {
       "180+ stations spanning 13 regions — with strategic new sites launching every quarter as part of Vision 2030.",
     valuesEyebrow: "What we stand for",
     valuesTitle: "Four values. One promise.",
+    valuesSub:
+      "At GoStation our values are not slogans — they are a daily commitment lived out at every station and with every customer.\nFrom fuel quality to service speed, every experience is meant to reflect exactly what we stand for.",
     values: {
       excellence: { title: "Excellence", body: "The highest standards in every drop of fuel and every service." },
       integrity: { title: "Integrity", body: "Transparency and honesty are the foundation of everything we do." },
