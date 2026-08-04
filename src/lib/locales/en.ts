@@ -306,7 +306,7 @@ export const en = {
       empty: "No articles.",
       searchPlaceholder: "Search title, slug, kind…",
       confirmDelete: "Delete article?",
-      kinds: { news: "News", event: "Event", press: "Press" },
+      kinds: { news: "News", event: "Event", press: "Press", video: "Video" },
       f: {
         titleEn: "Title (EN)", titleAr: "Title (AR)",
         excerptEn: "Excerpt (EN)", excerptAr: "Excerpt (AR)",

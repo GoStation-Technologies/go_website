@@ -309,7 +309,7 @@ export const ar = {
       empty: "لا توجد مقالات.",
       searchPlaceholder: "ابحث بالعنوان أو المعرّف أو النوع…",
       confirmDelete: "حذف المقال؟",
-      kinds: { news: "خبر", event: "فعالية", press: "بيان صحفي" },
+      kinds: { news: "خبر", event: "فعالية", press: "بيان صحفي", video: "فيديو" },
       f: {
         titleEn: "العنوان (إنجليزي)", titleAr: "العنوان (عربي)",
         excerptEn: "المقتطف (إنجليزي)", excerptAr: "المقتطف (عربي)",
