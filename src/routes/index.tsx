@@ -178,18 +178,26 @@ function HomePage() {
 
         {/* ============ TRUST STRIP — inside hero, over the backdrop ============ */}
         <div className="relative z-10">
-          <StatCards
-            stats={stats.map((s, i) => ({
-              key: s.key,
-              val: s.val,
-              label: t(`home.${s.key}`),
-              icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
-            }))}
+          {/* soft white band behind the cards */}
+          <span
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 top-24 bg-background/95 backdrop-blur-sm"
           />
-          <div className="mt-10">
-            <FuelTicker />
+          <div className="relative">
+            <StatCards
+              stats={stats.map((s, i) => ({
+                key: s.key,
+                val: s.val,
+                label: t(`home.${s.key}`),
+                icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
+              }))}
+            />
+            <div className="mt-10">
+              <FuelTicker />
+            </div>
           </div>
         </div>
+
       </section>
 
 
