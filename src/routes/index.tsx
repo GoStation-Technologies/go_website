@@ -32,6 +32,7 @@ import logoAsset from "@/assets/gostation-logo.png.asset.json";
 import appPoints from "@/assets/go-app-points.jpg.asset.json";
 import appReports from "@/assets/go-app-reports.jpg.asset.json";
 import goQr from "@/assets/gostation-qr.png.asset.json";
+import partnerLogo from "@/assets/gostation-logo.png.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";
@@ -616,31 +617,32 @@ function HomePage() {
 
           <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {[
-              { name: "Aramco", mark: "ARC" },
-              { name: "Saudia", mark: "SV" },
-              { name: "Panda", mark: "PD" },
-              { name: "Almarai", mark: "AM" },
-              { name: "SABIC", mark: "SB" },
-              { name: "Tamimi Markets", mark: "TM" },
-              { name: "Bidaya", mark: "BD" },
-              { name: "Nesto", mark: "NS" },
-            ].map((p) => (
+              "Aramco",
+              "Saudia",
+              "Panda",
+              "Almarai",
+              "SABIC",
+              "Tamimi Markets",
+              "Bidaya",
+              "Nesto",
+            ].map((name) => (
               <div
-                key={p.name}
+                key={name}
                 className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
               >
-                <span
-                  aria-hidden
-                  className="grid h-11 w-11 place-items-center rounded-xl border border-border/60 bg-secondary/60 font-display text-[0.7rem] font-bold tracking-[0.12em] text-muted-foreground/80 transition duration-300 group-hover:border-accent/40 group-hover:bg-accent/10 group-hover:text-accent"
-                >
-                  {p.mark}
-                </span>
+                <img
+                  src={partnerLogo.url}
+                  alt={name}
+                  loading="lazy"
+                  className="h-10 w-10 opacity-60 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                />
                 <span className="font-display text-sm font-semibold tracking-tight text-muted-foreground transition duration-300 group-hover:text-foreground md:text-base">
-                  {p.name}
+                  {name}
                 </span>
               </div>
             ))}
           </div>
+
 
 
           <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
