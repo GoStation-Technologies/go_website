@@ -59,14 +59,17 @@ function HomePage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("news_articles")
-        .select("id, slug, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at")
+        .select(
+          "id, slug, kind, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at, event_date, event_location_ar, event_location_en",
+        )
         .eq("is_published", true)
-        .eq("kind", "news")
+        .in("kind", ["news", "event", "video"])
         .order("published_at", { ascending: false })
-        .limit(3);
+        .limit(12);
       return data ?? [];
     },
   });
+
 
   const reviews = useQuery({
     queryKey: ["home-reviews"],
