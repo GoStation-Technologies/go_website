@@ -1,12 +1,29 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { ArrowUpRight } from "lucide-react";
+import stationAsset from "@/assets/station-canopy.jpg.asset.json";
 
 export function JoinCta() {
   const { t } = useTranslation();
   return (
     <section className="relative overflow-hidden bg-hero-ink text-foreground">
-      <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
+      <img
+        src={stationAsset.url}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover opacity-35"
+      />
+      <div className="absolute inset-0 bg-ink/80 mix-blend-multiply" aria-hidden />
+      <div
+        className="absolute inset-0"
+        aria-hidden
+        style={{
+          background:
+            "linear-gradient(90deg, color-mix(in oklab, var(--ink) 92%, transparent) 0%, color-mix(in oklab, var(--ink) 70%, transparent) 55%, color-mix(in oklab, var(--ink) 45%, transparent) 100%)",
+        }}
+      />
+      <div className="absolute inset-0 bg-grid-ink opacity-25" aria-hidden />
       <div
         className="pointer-events-none absolute -top-40 end-0 h-96 w-96 rounded-full bg-ember opacity-20 blur-3xl animate-pulse-glow"
         aria-hidden
