@@ -547,28 +547,38 @@ function ServiceCard({
           loading="lazy"
           className="absolute inset-0 h-full w-full scale-105 object-cover object-[50%_38%] transition-transform duration-[1400ms] ease-out group-hover:scale-110"
         />
+        {/* GoStation brand scrim — translucent block between image and text */}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-hero-ink via-hero-ink/80 to-hero-ink/35"
+          className="absolute inset-0 bg-hero-ink/55 backdrop-blur-[2px]"
           aria-hidden
         />
-        <div className="absolute inset-0 bg-grid-ink opacity-25" aria-hidden />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-hero-ink via-hero-ink/85 to-hero-ink/45"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-primary/45 via-transparent to-accent/30 mix-blend-multiply"
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-grid-ink opacity-20" aria-hidden />
         <div
           className="pointer-events-none absolute -end-20 -bottom-20 h-72 w-72 rounded-full bg-ember opacity-30 blur-3xl transition-all duration-700 group-hover:scale-110 group-hover:opacity-45"
           aria-hidden
         />
-        <div className="relative flex h-full flex-col justify-between gap-10">
+        <div className="relative z-10 flex h-full flex-col justify-between gap-10">
 
           <div>
             <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-ember text-accent-foreground shadow-glow">
               <Icon className="h-6 w-6" />
             </div>
-            <h3 className="mt-8 max-w-md font-display text-4xl font-bold leading-tight md:text-5xl">
+            <h3 className="mt-8 max-w-md font-display text-4xl font-bold leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.55)] md:text-5xl">
               {title}
             </h3>
-            <p className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-primary-foreground/75">
+            <p className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-primary-foreground/90 [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
               {body}
             </p>
           </div>
+
           <div className="inline-flex items-center gap-2 text-sm font-semibold text-ember-glow">
             {cta}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
