@@ -293,21 +293,19 @@ function HomePage() {
             </div>
 
             {/* price pylon — blended into the backdrop */}
-            <div aria-hidden className="relative hidden h-[30rem] justify-self-center lg:block">
-              <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-accent/15 blur-[130px]" />
+            <div aria-hidden className="relative hidden h-[26rem] w-full justify-self-center md:block lg:h-[30rem]">
+              <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-accent/25 blur-[120px]" />
               <img
                 src={pylonAsset.url}
                 alt=""
-                loading="lazy"
-                className="pointer-events-none absolute inset-0 mx-auto h-full w-auto object-contain opacity-[0.55] mix-blend-screen saturate-[0.85] contrast-[1.05]"
+                className="pointer-events-none absolute inset-0 mx-auto h-full w-auto object-contain opacity-90 drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
                 style={{
                   maskImage:
-                    "radial-gradient(65% 55% at 50% 45%, black 35%, rgba(0,0,0,0.35) 70%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 14%, black 76%, transparent 100%)",
-                  maskComposite: "intersect",
-                  filter: "brightness(1.05)",
+                    "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 12%, #000 30%, #000 72%, rgba(0,0,0,0.5) 90%, transparent 100%)",
                 }}
               />
             </div>
+
 
           </div>
 
