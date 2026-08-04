@@ -574,23 +574,48 @@ function HomePage() {
           className="relative overflow-hidden rounded-[2rem] px-8 py-16 md:px-16 md:py-20"
           style={{
             backgroundImage: [
-              "radial-gradient(120% 140% at 85% 15%, color-mix(in oklab, color-mix(in oklab, var(--accent) 82%, var(--ink, var(--foreground))) 78%, transparent) 0%, transparent 62%)",
-              "radial-gradient(110% 130% at 10% 90%, color-mix(in oklab, var(--ink, var(--foreground)) 42%, transparent) 0%, transparent 65%)",
-              "linear-gradient(115deg, color-mix(in oklab, color-mix(in oklab, var(--accent) 85%, var(--ink, var(--foreground))) 46%, white) 0%, color-mix(in oklab, var(--accent) 18%, white) 48%, white 100%)",
+              "radial-gradient(120% 140% at 88% 12%, color-mix(in oklab, var(--accent) 62%, black) 0%, transparent 58%)",
+              "radial-gradient(120% 130% at 8% 95%, color-mix(in oklab, var(--primary) 55%, black) 0%, transparent 62%)",
+              "linear-gradient(115deg, color-mix(in oklab, var(--ink, var(--foreground)) 88%, black) 0%, color-mix(in oklab, var(--accent) 42%, color-mix(in oklab, var(--ink, var(--foreground)) 80%, black)) 55%, color-mix(in oklab, var(--ink, var(--foreground)) 92%, black) 100%)",
             ].join(", "),
           }}
         >
-          <div className="pointer-events-none absolute -end-24 -bottom-24 h-72 w-72 rounded-full bg-accent/40 blur-3xl" aria-hidden />
-          <div className="pointer-events-none absolute -start-20 -top-24 h-64 w-64 rounded-full bg-primary/20 blur-3xl" aria-hidden />
+          {/* wavy line field */}
+          <svg
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.5]"
+            viewBox="0 0 1200 400"
+            preserveAspectRatio="none"
+            aria-hidden
+          >
+            <defs>
+              <linearGradient id="ctaWave" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="color-mix(in oklab, var(--accent) 90%, white)" stopOpacity="0.05" />
+                <stop offset="45%" stopColor="var(--accent)" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="color-mix(in oklab, var(--accent) 60%, black)" stopOpacity="0.1" />
+              </linearGradient>
+            </defs>
+            {Array.from({ length: 14 }).map((_, i) => (
+              <path
+                key={i}
+                d={`M-50 ${120 + i * 18} C 180 ${40 + i * 18}, 380 ${230 + i * 16}, 640 ${150 + i * 17} S 1020 ${60 + i * 18}, 1250 ${140 + i * 17}`}
+                fill="none"
+                stroke="url(#ctaWave)"
+                strokeWidth={1.6}
+              />
+            ))}
+          </svg>
+
+          <div className="pointer-events-none absolute -end-24 -bottom-24 h-72 w-72 rounded-full bg-accent/30 blur-3xl" aria-hidden />
+          <div className="pointer-events-none absolute -start-20 -top-24 h-64 w-64 rounded-full bg-primary/25 blur-3xl" aria-hidden />
 
           <div className="relative grid gap-10 md:grid-cols-[1.4fr_auto] md:items-center">
 
             <div>
-              <div className="eyebrow">{t("home.ctaBannerEyebrow")}</div>
-              <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-foreground md:text-5xl">
+              <div className="eyebrow text-accent">{t("home.ctaBannerEyebrow")}</div>
+              <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-5xl">
                 {t("home.ctaBanner")}
               </h2>
-              <p className="mt-4 max-w-xl text-lg text-foreground/70">
+              <p className="mt-4 max-w-xl text-lg text-white/75">
                 {t("home.ctaBannerText")}
               </p>
             </div>
@@ -598,7 +623,7 @@ function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-lg bg-foreground px-7 text-sm font-semibold text-background transition hover:bg-accent hover:text-accent-foreground"
+                className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
               >
                 <Link to="/franchise">{t("nav.franchise")}</Link>
               </Button>
@@ -606,12 +631,14 @@ function HomePage() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-12 rounded-lg border-2 border-foreground/80 bg-transparent px-7 text-sm font-semibold text-foreground hover:bg-foreground hover:text-background"
+                className="h-12 rounded-lg border-2 border-white/60 bg-transparent px-7 text-sm font-semibold text-white hover:bg-white hover:text-ink"
               >
                 <Link to="/acquisitions">
                   <MapPin className="me-2 h-4 w-4" /> {t("nav.acquisitions")}
                 </Link>
               </Button>
+            </div>
+
             </div>
           </div>
         </div>
