@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
+import { StatCards } from "@/components/site/stat-cards";
 
 
 export const Route = createFileRoute("/")({
