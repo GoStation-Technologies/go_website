@@ -21,6 +21,8 @@ import {
   Zap,
 } from "lucide-react";
 import heroStation from "@/assets/hero-station.jpg";
+import { HeroBackdrop } from "@/components/site/hero-backdrop";
+
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -107,20 +109,9 @@ function HomePage() {
     <SiteLayout>
       {/* ============ HERO — full-bleed cinematic ============ */}
       <section className="relative isolate min-h-[92vh] overflow-hidden border-b border-border/60">
-        {/* Background image with slow ken-burns zoom */}
-        <div className="absolute inset-0 -z-10">
-          <img
-            src={heroStation}
-            alt="GoStation flagship canopy in Saudi Arabia"
-            width={1600}
-            height={1600}
-            className="animate-ken-burns h-full w-full object-cover"
-          />
-          {/* Brand identity wash: petroleum ink + ember glow */}
-          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/25" />
-          <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_var(--hx,80%)_10%,color-mix(in_oklab,var(--ember)_26%,transparent),transparent_65%)]" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
-        </div>
+        {/* Interactive background: ken-burns zoom + pointer & scroll parallax */}
+        <HeroBackdrop src={heroStation} alt="GoStation flagship canopy in Saudi Arabia" />
+
 
         <div className="mx-auto flex min-h-[92vh] max-w-[1440px] flex-col justify-center px-6 py-24 md:px-14 lg:px-20">
           <div className="max-w-2xl space-y-8 animate-rise-in">
