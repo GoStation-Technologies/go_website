@@ -20,7 +20,7 @@ import {
   Handshake,
   Zap,
 } from "lucide-react";
-import heroStation from "@/assets/hero-station.jpg";
+import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 
 
@@ -110,7 +110,7 @@ function HomePage() {
       {/* ============ HERO — full-bleed cinematic ============ */}
       <section className="relative isolate min-h-[92vh] overflow-hidden border-b border-border/60">
         {/* Interactive background: ken-burns zoom + pointer & scroll parallax */}
-        <HeroBackdrop src={heroStation} alt="GoStation flagship canopy in Saudi Arabia" />
+        <HeroBackdrop src={heroAsset.url} alt="GoStation flagship canopy in Saudi Arabia" />
 
 
         <div className="mx-auto flex min-h-[92vh] max-w-[1440px] flex-col justify-center px-6 py-24 md:px-14 lg:px-20">
