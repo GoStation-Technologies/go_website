@@ -277,7 +277,7 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="mx-auto h-20 w-20 overflow-hidden rounded-full border border-accent/30 bg-background p-3 shadow-card">
+          <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border border-accent/30 bg-background p-4 shadow-card md:h-32 md:w-32">
             <img
               src={logoAsset.url}
               alt={t("home.quoteAuthor")}
