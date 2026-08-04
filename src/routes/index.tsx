@@ -21,6 +21,7 @@ import {
   Zap,
 } from "lucide-react";
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
+import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 
@@ -539,12 +540,24 @@ function ServiceCard({
         to={href as never}
         className={`group relative overflow-hidden rounded-3xl bg-hero-ink p-10 text-primary-foreground shadow-elegant transition hover:-translate-y-1 ${className}`}
       >
-        <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
+        <img
+          src={stationCanopy.url}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          className="absolute inset-0 h-full w-full scale-105 object-cover object-[50%_38%] transition-transform duration-[1400ms] ease-out group-hover:scale-110"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-hero-ink via-hero-ink/80 to-hero-ink/35"
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-grid-ink opacity-25" aria-hidden />
         <div
           className="pointer-events-none absolute -end-20 -bottom-20 h-72 w-72 rounded-full bg-ember opacity-30 blur-3xl transition-all duration-700 group-hover:scale-110 group-hover:opacity-45"
           aria-hidden
         />
         <div className="relative flex h-full flex-col justify-between gap-10">
+
           <div>
             <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-ember text-accent-foreground shadow-glow">
               <Icon className="h-6 w-6" />
