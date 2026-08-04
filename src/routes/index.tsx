@@ -547,17 +547,17 @@ function ServiceCard({
           loading="lazy"
           className="absolute inset-0 h-full w-full scale-105 object-cover object-[50%_38%] transition-transform duration-[1400ms] ease-out group-hover:scale-110"
         />
-        {/* GoStation brand scrim — deep navy night + ember */}
+        {/* GoStation brand scrim — deep navy night + ember (keeps photo visible) */}
         <div
-          className="absolute inset-0 bg-ink/85 backdrop-blur-[2px]"
+          className="absolute inset-0 bg-ink/45"
           aria-hidden
         />
         <div
-          className="absolute inset-0 bg-gradient-to-t from-ink via-ink/90 to-ink/70"
+          className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/20"
           aria-hidden
         />
         <div
-          className="absolute inset-0 bg-gradient-to-br from-ink/70 via-transparent to-ember/35 mix-blend-multiply"
+          className="absolute inset-0 bg-gradient-to-br from-ink/35 via-transparent to-ember/30"
           aria-hidden
         />
         <div className="absolute inset-0 bg-grid-ink opacity-20" aria-hidden />
