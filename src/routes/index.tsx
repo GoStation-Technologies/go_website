@@ -21,6 +21,7 @@ import {
   Zap,
 } from "lucide-react";
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
+import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 
