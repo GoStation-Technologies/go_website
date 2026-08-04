@@ -211,7 +211,48 @@ function HomePage() {
 
       </section>
 
-
+      {/* ============ VALUES ============ */}
+      <section className="relative isolate overflow-hidden border-b border-white/10 bg-ink py-20 text-white md:py-24">
+        {/* subtle grid lines from brand identity */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.14]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(255,255,255,.55) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.55) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
+            maskImage: "radial-gradient(ellipse at 50% 0%, black 40%, transparent 85%)",
+            WebkitMaskImage: "radial-gradient(ellipse at 50% 0%, black 40%, transparent 85%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 start-1/4 -z-10 h-72 w-72 rounded-full bg-accent/20 blur-3xl"
+        />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="max-w-3xl">
+            <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
+            <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] text-white md:text-5xl">
+              {t("home.valuesTitle")}
+            </h2>
+          </div>
+          <div className="mt-12 grid gap-px overflow-hidden rounded-3xl bg-white/10 md:grid-cols-4">
+            {values.map(({ icon: Icon, k }) => (
+              <div key={k} className="group relative bg-ink p-8 transition hover:bg-white/[0.06]">
+                <div className="mb-6 grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-accent transition group-hover:bg-accent group-hover:text-accent-foreground">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-display text-lg font-bold text-white">
+                  {t(`home.values.${k}.title`)}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">
+                  {t(`home.values.${k}.body`)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
 
       {/* ============ SERVICES BENTO ============ */}
