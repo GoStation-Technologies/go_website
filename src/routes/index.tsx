@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,12 +20,14 @@ import {
   Leaf,
   Handshake,
   Zap,
+  Play,
 } from "lucide-react";
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
+import { MediaCarousel } from "@/components/site/media-carousel";
 
 
 export const Route = createFileRoute("/")({
@@ -70,6 +73,9 @@ function HomePage() {
     },
   });
 
+
+  const [mediaTab, setMediaTab] = useState<"all" | "news" | "event" | "video">("all");
+  const homeMedia = (news.data ?? []).filter((n) => mediaTab === "all" || n.kind === mediaTab);
 
   const reviews = useQuery({
     queryKey: ["home-reviews"],
