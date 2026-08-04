@@ -258,47 +258,72 @@ function HomePage() {
 
 
       {/* ============ VALUES ============ */}
-      <section className="relative isolate overflow-hidden border-b border-white/10 bg-ink py-20 text-white md:py-24">
-        {/* subtle grid lines from brand identity */}
+      <section className="relative isolate overflow-hidden border-b border-white/10 bg-ink py-24 text-white md:py-32">
+        {/* brand grid + ambient light */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.14]"
+          className="pointer-events-none absolute inset-0 opacity-[0.10]"
           style={{
             backgroundImage:
-              "linear-gradient(to right, rgba(255,255,255,.55) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.55) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            maskImage: "radial-gradient(ellipse at 50% 0%, black 40%, transparent 85%)",
-            WebkitMaskImage: "radial-gradient(ellipse at 50% 0%, black 40%, transparent 85%)",
+              "linear-gradient(to right, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "72px 72px",
+            maskImage: "radial-gradient(ellipse at 50% 10%, black 35%, transparent 80%)",
+            WebkitMaskImage: "radial-gradient(ellipse at 50% 10%, black 35%, transparent 80%)",
           }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-24 start-1/4 -z-10 h-72 w-72 rounded-full bg-accent/20 blur-3xl"
+          className="pointer-events-none absolute -top-40 start-1/3 -z-10 h-[26rem] w-[26rem] rounded-full bg-accent/25 blur-[120px]"
         />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-48 end-0 -z-10 h-[24rem] w-[24rem] rounded-full bg-primary/25 blur-[130px]"
+        />
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="max-w-3xl">
             <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
-            <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] text-white md:text-5xl">
+            <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
               {t("home.valuesTitle")}
             </h2>
+            <div className="mt-8 h-px w-40 bg-gradient-to-r from-accent via-accent/40 to-transparent" />
           </div>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-3xl bg-white/10 md:grid-cols-4">
-            {values.map(({ icon: Icon, k }) => (
-              <div key={k} className="group relative bg-ink p-8 transition hover:bg-white/[0.06]">
-                <div className="mb-6 grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-accent transition group-hover:bg-accent group-hover:text-accent-foreground">
+
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {values.map(({ icon: Icon, k }, i) => (
+              <article
+                key={k}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/40 hover:bg-white/[0.07] hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--accent)_60%,transparent)]"
+              >
+                {/* index numeral */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -top-4 end-2 font-display text-[5.5rem] font-bold leading-none text-white/[0.05] transition-colors duration-500 group-hover:text-accent/15"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                <div className="relative mb-7 grid h-12 w-12 place-items-center rounded-xl border border-white/15 bg-white/[0.06] text-accent transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 group-hover:bg-accent group-hover:text-accent-foreground">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-display text-lg font-bold text-white">
+
+                <h3 className="relative font-display text-xl font-bold tracking-tight text-white">
                   {t(`home.values.${k}.title`)}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/70">
+                <p className="relative mt-3 text-sm leading-relaxed text-white/65">
                   {t(`home.values.${k}.body`)}
                 </p>
-              </div>
+
+                <div
+                  aria-hidden
+                  className="mt-7 h-px w-10 bg-accent/60 transition-all duration-500 group-hover:w-full group-hover:bg-gradient-to-r group-hover:from-accent group-hover:to-transparent"
+                />
+              </article>
             ))}
           </div>
         </div>
       </section>
+
 
 
       {/* ============ SERVICES BENTO ============ */}
