@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Instagram, Twitter, Linkedin, ArrowUpRight, MapPin, Mail } from "lucide-react";
-import logoAsset from "@/assets/gostation-logo.png.asset.json";
+import logoAsset from "@/assets/gostation-logo-white.png.asset.json";
 
 export function SiteFooter() {
   const { t } = useTranslation();
