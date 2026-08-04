@@ -110,7 +110,7 @@ export function SiteHeader() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 rounded-full xl:hidden"
+                className="h-9 w-9 rounded-full lg:hidden"
                 aria-label="Menu"
               >
                 <Menu className="h-5 w-5" />
