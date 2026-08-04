@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
+import { StatCards } from "@/components/site/stat-cards";
 
 
 export const Route = createFileRoute("/")({
@@ -190,26 +191,20 @@ function HomePage() {
       </section>
 
 
+      {/* ============ AWARDS / TRUST STRIP ============ */}
+      <section className="relative z-10 border-b bg-sand/60 pb-14">
+        <StatCards
+          stats={stats.map((s, i) => ({
+            key: s.key,
+            val: s.val,
+            label: t(`home.${s.key}`),
+            icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
+          }))}
+        />
+      </section>
+
       <FuelTicker />
 
-      {/* ============ AWARDS / TRUST STRIP ============ */}
-      <section className="border-b bg-sand/60">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 md:grid-cols-4">
-          {stats.map((s, i) => (
-            <div
-              key={s.key}
-              className={`flex flex-col ${i > 0 ? "md:border-s md:border-border/60 md:ps-6" : ""}`}
-            >
-              <div dir="ltr" className="font-display text-4xl font-black tracking-tight text-primary rtl:text-end md:text-5xl">
-                {s.val}
-              </div>
-              <div className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                {t(`home.${s.key}`)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ============ SERVICES BENTO ============ */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32">
