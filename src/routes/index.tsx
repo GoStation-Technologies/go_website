@@ -21,6 +21,8 @@ import {
   Zap,
 } from "lucide-react";
 import heroStation from "@/assets/hero-station.jpg";
+import { HeroBackdrop } from "@/components/site/hero-backdrop";
+
 
 export const Route = createFileRoute("/")({
   component: HomePage,
