@@ -105,95 +105,99 @@ function HomePage() {
 
   return (
     <SiteLayout>
-      {/* ============ HERO — airy editorial split ============ */}
-      <section className="relative border-b border-border/60 bg-background">
-        <div className="mx-auto grid max-w-[1440px] items-stretch md:grid-cols-2">
-          {/* Left — copy */}
-          <div className="flex flex-col justify-center px-6 py-20 md:px-14 md:py-28 lg:px-20 lg:py-32">
-            <div className="max-w-xl space-y-8 animate-rise-in">
-              <div className="inline-flex items-center gap-3">
-                <span className="h-px w-8 bg-accent" />
-                <span className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
-                  {t("home.awardBadge")}
-                </span>
-              </div>
+      {/* ============ HERO — full-bleed cinematic ============ */}
+      <section className="relative isolate min-h-[92vh] overflow-hidden border-b border-border/60">
+        {/* Background image with slow ken-burns zoom */}
+        <div className="absolute inset-0 -z-10">
+          <img
+            src={heroStation}
+            alt="GoStation flagship canopy in Saudi Arabia"
+            width={1600}
+            height={1600}
+            className="animate-ken-burns h-full w-full object-cover"
+          />
+          {/* Brand identity wash: petroleum ink + ember glow */}
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/25" />
+          <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_var(--hx,80%)_10%,color-mix(in_oklab,var(--ember)_26%,transparent),transparent_65%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
+        </div>
 
-              <h1 className="text-balance font-display text-[clamp(2.75rem,5.6vw,5rem)] font-extrabold leading-[1.02] tracking-tight text-foreground">
-                <span className="block">{t("home.heroLine1")}</span>
-                <span className="block text-accent">{t("home.heroLine2")}</span>
-              </h1>
+        <div className="mx-auto flex min-h-[92vh] max-w-[1440px] flex-col justify-center px-6 py-24 md:px-14 lg:px-20">
+          <div className="max-w-2xl space-y-8 animate-rise-in">
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              <span className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-white/90">
+                {t("home.awardBadge")}
+              </span>
+            </div>
 
-              <p className="max-w-lg text-pretty text-lg leading-relaxed text-foreground/70">
-                {t("home.heroSub")}
-              </p>
+            <h1 className="text-balance font-display text-[clamp(2.75rem,6vw,5.5rem)] font-extrabold leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.35)]">
+              <span className="block">{t("home.heroLine1")}</span>
+              <span className="block text-accent">{t("home.heroLine2")}</span>
+            </h1>
 
-              <div className="flex flex-wrap gap-3 pt-2">
-                <Button
-                  asChild
-                  size="lg"
-                  className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
-                >
-                  <Link to="/franchise">
-                    {t("home.ctaFranchise")}
-                    <ArrowUpRight className="ms-1 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="h-12 rounded-lg border-2 border-foreground bg-transparent px-7 text-sm font-semibold text-foreground hover:bg-foreground hover:text-background"
-                >
-                  <Link to="/stations">
-                    <MapPin className="me-2 h-4 w-4" />
-                    {t("home.ctaStations")}
-                  </Link>
-                </Button>
-              </div>
+            <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/80">
+              {t("home.heroSub")}
+            </p>
 
-              <div className="mt-6 flex flex-wrap items-center gap-8 border-t border-border pt-8">
-                {stats.slice(0, 3).map((s) => (
-                  <div key={s.key} className="flex flex-col">
-                    <span className="font-display text-3xl font-extrabold tracking-tight text-foreground">
-                      {s.val}
-                    </span>
-                    <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                      {t(`home.${s.key}`)}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <Button
+                asChild
+                size="lg"
+                className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
+              >
+                <Link to="/franchise">
+                  {t("home.ctaFranchise")}
+                  <ArrowUpRight className="ms-1 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-12 rounded-lg border-2 border-white/70 bg-white/5 px-7 text-sm font-semibold text-white backdrop-blur hover:bg-white hover:text-ink"
+              >
+                <Link to="/stations">
+                  <MapPin className="me-2 h-4 w-4" />
+                  {t("home.ctaStations")}
+                </Link>
+              </Button>
+            </div>
+
+            <div className="mt-6 grid max-w-lg grid-cols-3 gap-6 border-t border-white/20 pt-8">
+              {stats.slice(0, 3).map((s) => (
+                <div key={s.key} className="flex flex-col">
+                  <span
+                    dir="ltr"
+                    className="font-display text-3xl font-extrabold tracking-tight text-white rtl:text-end md:text-4xl"
+                  >
+                    {s.val}
+                  </span>
+                  <span className="mt-1 text-[10px] font-bold uppercase leading-tight tracking-[0.18em] text-white/60">
+                    {t(`home.${s.key}`)}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Right — visual */}
-          <div className="relative min-h-[420px] overflow-hidden bg-secondary md:min-h-[720px]">
-            <img
-              src={heroStation}
-              alt="GoStation flagship canopy in Saudi Arabia"
-              width={1600}
-              height={1600}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-tr from-foreground/10 via-transparent to-transparent" />
-
-            {/* Floating KPI card */}
-            <div className="absolute bottom-8 start-8 max-w-[280px] rounded-2xl border border-white/40 bg-white/95 p-5 shadow-elegant backdrop-blur">
-              <div className="flex items-center gap-4">
-                <div className="grid h-11 w-11 place-items-center rounded-full bg-accent text-accent-foreground">
-                  <Zap className="h-5 w-5" />
+          {/* Floating KPI card */}
+          <div className="mt-12 max-w-[320px] rounded-2xl border border-white/25 bg-white/12 p-5 shadow-elegant backdrop-blur-md">
+            <div className="flex items-center gap-4">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
+                <Zap className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <div className="font-display text-base font-bold text-white">
+                  {t("home.alwaysReady")}
                 </div>
-                <div>
-                  <div className="font-display text-base font-bold text-ink">
-                    {t("home.alwaysReady")}
-                  </div>
-                  <div className="text-xs text-ink/60">{t("home.alwaysReadySub")}</div>
-                </div>
+                <div className="text-xs text-white/70">{t("home.alwaysReadySub")}</div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
 
       <FuelTicker />
 
@@ -205,7 +209,7 @@ function HomePage() {
               key={s.key}
               className={`flex flex-col ${i > 0 ? "md:border-s md:border-border/60 md:ps-6" : ""}`}
             >
-              <div className="font-display text-4xl font-black tracking-tight text-primary md:text-5xl">
+              <div dir="ltr" className="font-display text-4xl font-black tracking-tight text-primary rtl:text-end md:text-5xl">
                 {s.val}
               </div>
               <div className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
