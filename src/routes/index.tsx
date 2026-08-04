@@ -178,7 +178,7 @@ function HomePage() {
 
 
       {/* ============ AWARDS / TRUST STRIP ============ */}
-      <section className="relative z-10 border-b bg-sand/60 pb-14">
+      <section className="relative z-10 border-b bg-sand/60 pb-8">
         <StatCards
           stats={stats.map((s, i) => ({
             key: s.key,
@@ -187,9 +187,11 @@ function HomePage() {
             icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
           }))}
         />
+        <div className="mt-8">
+          <FuelTicker />
+        </div>
       </section>
 
-      <FuelTicker />
 
 
       {/* ============ SERVICES BENTO ============ */}
