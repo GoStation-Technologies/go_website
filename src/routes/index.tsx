@@ -264,7 +264,7 @@ function HomePage() {
         {/* soft wavy line grid backdrop */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.14]"
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
               "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'><path d='M0 30 Q 15 10 30 30 T 60 30 T 90 30 T 120 30' fill='none' stroke='%23123b34' stroke-width='1.1'/><path d='M0 58 Q 15 38 30 58 T 60 58 T 90 58 T 120 58' fill='none' stroke='%23123b34' stroke-width='1.1'/></svg>\")",
@@ -277,7 +277,7 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="mx-auto h-20 w-20 overflow-hidden rounded-full border border-accent/30 bg-background p-3 shadow-card">
+          <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border border-accent/30 bg-background p-4 shadow-card md:h-32 md:w-32">
             <img
               src={logoAsset.url}
               alt={t("home.quoteAuthor")}
