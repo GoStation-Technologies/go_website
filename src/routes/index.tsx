@@ -638,10 +638,9 @@ function HomePage() {
                 </Link>
               </Button>
             </div>
-
-            </div>
           </div>
         </div>
+
       </section>
 
       {/* ============ PARTNERS / TRUSTED BY ============ */}
