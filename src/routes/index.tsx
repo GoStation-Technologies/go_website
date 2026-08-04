@@ -191,8 +191,6 @@ function HomePage() {
       </section>
 
 
-      <FuelTicker />
-
       {/* ============ AWARDS / TRUST STRIP ============ */}
       <section className="relative z-10 border-b bg-sand/60 pb-14">
         <StatCards
@@ -204,6 +202,8 @@ function HomePage() {
           }))}
         />
       </section>
+
+      <FuelTicker />
 
 
       {/* ============ SERVICES BENTO ============ */}
