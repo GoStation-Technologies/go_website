@@ -56,7 +56,7 @@ export function SiteHeader() {
           <img
             src={logoAsset.url}
             alt="GoStation"
-            className="h-9 w-9 transition-transform duration-500 group-hover:rotate-[8deg]"
+            className="h-9 w-9 object-contain transition-transform duration-500 group-hover:rotate-[8deg]"
           />
           <div className="flex flex-col leading-none">
             <span className="font-display text-[1.05rem] font-bold tracking-tight text-primary">
@@ -119,7 +119,7 @@ export function SiteHeader() {
             <SheetContent side="right" className="w-80 border-l">
               <SheetHeader className="text-start">
                 <SheetTitle className="flex items-center gap-2">
-                  <img src={logoAsset.url} alt="" className="h-7 w-7" />
+                  <img src={logoAsset.url} alt="" className="h-7 w-7 object-contain" />
                   {t("brand.name")}
                 </SheetTitle>
               </SheetHeader>
