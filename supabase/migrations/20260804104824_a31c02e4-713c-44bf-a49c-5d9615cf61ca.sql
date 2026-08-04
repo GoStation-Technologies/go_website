@@ -1,0 +1,27 @@
+INSERT INTO public.news_articles (slug, kind, title_ar, title_en, excerpt_ar, excerpt_en, body_ar, body_en, is_published, is_featured, published_at)
+VALUES
+('biban-25-three-partnerships','news',
+ 'قوستيشن توقّع ثلاث شراكات استراتيجية في بيبان 25',
+ 'GoStation signs three strategic partnerships at Biban 25',
+ 'وقّعت شركة قوستيشن ثلاث اتفاقيات شراكة استراتيجية على هامش معرض بيبان 2025، لتعزيز توسع محطات قوستيشن وزيادة نطاق عملها في المملكة.',
+ 'GoStation signed three strategic partnership agreements on the sidelines of Biban 2025 to accelerate station expansion and widen its footprint across the Kingdom.',
+ E'وقّعت شركة قوستيشن ثلاث اتفاقيات شراكة استراتيجية على هامش معرض بيبان 2025، أحد أكبر ملتقيات ريادة الأعمال في المنطقة.\n\nوتهدف الاتفاقيات إلى تعزيز توسع شبكة محطات قوستيشن، وزيادة نطاق عملها التشغيلي في عدد من مناطق المملكة، إضافةً إلى تطوير حلول الخدمات المصاحبة للمحطات ورفع جودة تجربة العميل.',
+ E'GoStation signed three strategic partnership agreements on the sidelines of Biban 2025, one of the region''s largest entrepreneurship forums.\n\nThe agreements aim to accelerate the expansion of the GoStation network, widen operational coverage across several regions of the Kingdom, and develop station-adjacent service solutions that raise the quality of the customer experience.',
+ true, true, '2025-11-12T09:00:00+00'),
+('alinma-capital-partnership','news',
+ 'شراكة استراتيجية مع الإنماء المالية',
+ 'Strategic partnership with Alinma Capital',
+ 'تُعلن شركة هلا السعودية للخدمات البترولية، المالكة للعلامة التجارية Gostation، عن شراكة استراتيجية مع شركة الإنماء المالية لدعم خططها الاستراتيجية والتوسعية.',
+ 'Hala Saudi Petroleum Services, owner of the Gostation brand, announces a strategic partnership with Alinma Capital to support its strategic and expansion plans.',
+ E'تُعلن شركة هلا السعودية للخدمات البترولية، المالكة للعلامة التجارية Gostation، عن توقيع شراكة استراتيجية مع شركة الإنماء المالية.\n\nوتأتي الشراكة لدعم خطط الشركة الاستراتيجية والتوسعية، وتمكين نموّ شبكة المحطات وفق أعلى معايير الحوكمة والاستدامة المالية.',
+ E'Hala Saudi Petroleum Services, owner of the Gostation brand, has signed a strategic partnership with Alinma Capital.\n\nThe partnership supports the company''s strategic and expansion plans, enabling growth of the station network under high standards of governance and financial sustainability.',
+ true, true, '2026-01-14T09:00:00+00'),
+('ifm-fastest-growing-2026','news',
+ 'قوستيشن تُحلّق عالميًا وتحصد جائزة الشركة الأسرع نموًا في المملكة',
+ 'GoStation goes global, winning Fastest Growing Company in the Kingdom',
+ 'تعزيزًا لمكانتها الريادية واستراتيجياتها الطموحة نحو العالمية، حققت قوستيشن إنجازًا بارزًا بفوزها بجائزة الشركة الأسرع نموًا في المملكة بقطاع الطاقة لعام 2025.',
+ 'Reinforcing its leadership and global ambitions, GoStation won Fastest Growing Company in the Kingdom''s energy sector for 2025.',
+ E'تعزيزًا لمكانتها الريادية واستراتيجياتها الطموحة نحو العالمية، حققت قوستيشن إنجازًا بارزًا بفوزها بجائزة الشركة الأسرع نموًا في المملكة بقطاع الطاقة لعام 2025.\n\nجاء ذلك ضمن جوائز التمويل الدولية التي تنظمها مجلة إنترناشيونال فاينانس العالمية (IFM)، تقديرًا لنموّ الشبكة وأداء الشركة التشغيلي والمالي.',
+ E'Reinforcing its leadership and its ambitions on the global stage, GoStation achieved a major milestone by winning Fastest Growing Company in the Kingdom''s energy sector for 2025.\n\nThe award was granted within the International Finance Awards organised by International Finance Magazine (IFM), recognising network growth and strong operational and financial performance.',
+ true, true, '2026-01-28T09:00:00+00')
+ON CONFLICT (slug) DO NOTHING;
