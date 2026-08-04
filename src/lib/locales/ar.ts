@@ -534,6 +534,8 @@ export const ar = {
       wallet: { title: "محفظة ذكية", body: "اشحن رصيدك وادفع بدون كاش أو بطاقات في أي محطة." },
       pay: { title: "امسح وانطلق", body: "امسح رمز المضخة وأكمل طريقك — بلا طوابير ولا أوراق." },
     },
+    storeGoogleTop: "احصل عليه من",
+    storeAppleTop: "تنزيل من",
     downloadTitle: "حمّل التطبيق الآن",
     downloadSub: "امسح الرمز لتحميل تطبيق قو على iOS وAndroid.",
     qrAlt: "رمز تحميل تطبيق قو",

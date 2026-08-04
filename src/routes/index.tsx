@@ -658,78 +658,116 @@ function HomePage() {
 
       {/* ============ GO APP ============ */}
       <section className="relative overflow-hidden bg-ink py-20 text-white md:py-28">
+        {/* soft aurora glows */}
+        <div className="pointer-events-none absolute -start-40 top-1/2 h-[34rem] w-[34rem] -translate-y-1/2 rounded-full bg-[var(--ember)]/20 blur-[120px]" aria-hidden />
+        <div className="pointer-events-none absolute -end-40 -top-24 h-[30rem] w-[30rem] rounded-full bg-primary/25 blur-[130px]" aria-hidden />
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          className="pointer-events-none absolute inset-0 opacity-[0.05]"
           aria-hidden
           style={{
             backgroundImage:
               "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
+            backgroundSize: "64px 64px",
           }}
         />
-        <div className="pointer-events-none absolute -start-24 top-10 h-80 w-80 rounded-full bg-[var(--ember)]/25 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute -end-32 bottom-0 h-96 w-96 rounded-full bg-[var(--ember)]/15 blur-3xl" aria-hidden />
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr]">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/80">
-              <Sparkles className="h-3.5 w-3.5" /> {t("goapp.eyebrow")}
+        <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-[1fr_1fr] lg:gap-8">
+          {/* tilted phone showcase */}
+          <div className="relative mx-auto flex w-full max-w-md items-center justify-center lg:max-w-none">
+            <div className="relative [perspective:1400px]">
+              {/* back phone */}
+              <div className="absolute -start-16 top-10 hidden w-48 rotate-[-10deg] rounded-[2rem] border border-white/12 bg-white/[0.04] p-1.5 shadow-elegant backdrop-blur-sm sm:block">
+                <img
+                  src={appReports.url}
+                  alt={t("goapp.imgReportsAlt")}
+                  loading="lazy"
+                  className="aspect-[9/18] w-full rounded-[1.6rem] object-cover opacity-80"
+                />
+              </div>
+              {/* front phone */}
+              <div className="relative w-60 rounded-[2.4rem] border border-white/20 bg-gradient-to-b from-white/15 to-white/5 p-2 shadow-elegant ring-1 ring-white/10 [transform:rotateY(-14deg)_rotateX(4deg)_rotate(3deg)] sm:w-72">
+                <div className="absolute start-1/2 top-3 z-10 h-1.5 w-16 -translate-x-1/2 rounded-full bg-black/40" aria-hidden />
+                <img
+                  src={appPoints.url}
+                  alt={t("goapp.imgPointsAlt")}
+                  loading="lazy"
+                  className="aspect-[9/18] w-full rounded-[1.9rem] object-cover"
+                />
+              </div>
             </div>
-            <h2 className="mt-6 text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-5xl">
+          </div>
+
+          {/* copy + stores */}
+          <div className="text-center lg:text-start">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/80">
+              <Sparkles className="h-3.5 w-3.5 text-[var(--ember)]" /> {t("goapp.eyebrow")}
+            </div>
+            <h2 className="mt-6 text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-5xl lg:text-[3.4rem]">
               {t("goapp.title")}
             </h2>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/70">
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/70 lg:mx-0">
               {t("goapp.sub")}
             </p>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            {/* store badges */}
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+              <a
+                href="#"
+                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <PlayIcon className="h-7 w-7" />
+                <span className="text-start leading-tight">
+                  <span className="block text-[0.65rem] font-medium opacity-70">{t("goapp.storeGoogleTop")}</span>
+                  <span className="block font-display text-lg font-bold">Google Play</span>
+                </span>
+              </a>
+              <a
+                href="#"
+                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <AppleIcon className="h-7 w-7" />
+                <span className="text-start leading-tight">
+                  <span className="block text-[0.65rem] font-medium opacity-70">{t("goapp.storeAppleTop")}</span>
+                  <span className="block font-display text-lg font-bold">App Store</span>
+                </span>
+              </a>
+            </div>
+
+            {/* feature chips */}
+            <div className="mt-9 flex flex-wrap justify-center gap-2.5 lg:justify-start">
               {[
                 { icon: Gift, k: "points" },
                 { icon: BarChart3, k: "reports" },
                 { icon: Wallet, k: "wallet" },
                 { icon: QrCode, k: "pay" },
               ].map(({ icon: Icon, k }) => (
-                <div
+                <span
                   key={k}
-                  className="rounded-2xl border border-white/12 bg-white/[0.06] p-5 backdrop-blur-sm transition hover:border-[var(--ember)]/50 hover:bg-white/[0.1]"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-4 py-2 text-sm text-white/80 backdrop-blur-sm transition hover:border-[var(--ember)]/50 hover:text-white"
                 >
-                  <Icon className="h-6 w-6 text-[var(--ember)]" />
-                  <div className="mt-3 font-display text-base font-bold">{t(`goapp.f.${k}.title`)}</div>
-                  <p className="mt-1 text-sm leading-relaxed text-white/65">{t(`goapp.f.${k}.body`)}</p>
-                </div>
+                  <Icon className="h-4 w-4 text-[var(--ember)]" />
+                  {t(`goapp.f.${k}.title`)}
+                </span>
               ))}
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-4">
+            {/* QR */}
+            <div className="mt-9 inline-flex items-center gap-4 rounded-2xl border border-white/12 bg-white/[0.05] p-3 text-start backdrop-blur-sm">
               <img
                 src={appDownload.url}
                 alt={t("goapp.qrAlt")}
                 loading="lazy"
-                className="h-24 w-24 rounded-xl object-cover object-top shadow-elegant ring-1 ring-white/20"
+                className="h-16 w-16 rounded-xl object-cover object-top ring-1 ring-white/20"
               />
               <div className="text-sm text-white/70">
-                <div className="font-display text-base font-bold text-white">{t("goapp.downloadTitle")}</div>
-                <p className="mt-1 max-w-xs">{t("goapp.downloadSub")}</p>
+                <div className="font-display text-sm font-bold text-white">{t("goapp.downloadTitle")}</div>
+                <p className="mt-0.5 max-w-[16rem] text-xs">{t("goapp.downloadSub")}</p>
               </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-4 sm:gap-6">
-            <img
-              src={appPoints.url}
-              alt={t("goapp.imgPointsAlt")}
-              loading="lazy"
-              className="aspect-[3/4] w-full rounded-3xl object-cover shadow-elegant ring-1 ring-white/12 transition duration-500 hover:-translate-y-2"
-            />
-            <img
-              src={appReports.url}
-              alt={t("goapp.imgReportsAlt")}
-              loading="lazy"
-              className="mt-8 aspect-[3/4] w-full rounded-3xl object-cover shadow-elegant ring-1 ring-white/12 transition duration-500 hover:-translate-y-2"
-            />
-          </div>
         </div>
       </section>
+
 
     </SiteLayout>
   );
@@ -830,5 +868,24 @@ function ServiceCard({
         <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       </div>
     </Link>
+  );
+}
+
+function PlayIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 512 512" className={className} aria-hidden focusable="false">
+      <path fill="#00D2FF" d="M47 24 316 256 47 488c-9-6-15-17-15-30V54c0-13 6-24 15-30z" />
+      <path fill="#00F076" d="M47 24c8-5 18-5 28 1l282 158-41 73L47 24z" />
+      <path fill="#FFCE00" d="M357 183l70 39c22 12 22 44 0 56l-70 39-41-61 41-73z" />
+      <path fill="#FF3A44" d="M75 487c-10 6-20 6-28 1l269-232 41 73-282 158z" />
+    </svg>
+  );
+}
+
+function AppleIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 384 512" className={className} fill="currentColor" aria-hidden focusable="false">
+      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
+    </svg>
   );
 }
