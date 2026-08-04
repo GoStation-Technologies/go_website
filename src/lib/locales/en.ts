@@ -531,6 +531,8 @@ export const en = {
       wallet: { title: "Smart wallet", body: "Top up your balance and pay without cash or cards at any station." },
       pay: { title: "Scan & go", body: "Scan the pump QR and drive off — no queues, no paperwork." },
     },
+    storeGoogleTop: "GET IT ON",
+    storeAppleTop: "Download on the",
     downloadTitle: "Download the app now",
     downloadSub: "Scan the code to get Go App on iOS and Android.",
     qrAlt: "Go App download QR code",
