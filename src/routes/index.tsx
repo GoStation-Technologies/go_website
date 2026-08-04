@@ -574,14 +574,15 @@ function HomePage() {
           className="relative overflow-hidden rounded-[2rem] px-8 py-16 md:px-16 md:py-20"
           style={{
             backgroundImage: [
-              "radial-gradient(120% 140% at 85% 15%, color-mix(in oklab, var(--accent) 55%, transparent) 0%, transparent 60%)",
-              "radial-gradient(110% 130% at 10% 90%, color-mix(in oklab, var(--ink, var(--foreground)) 32%, transparent) 0%, transparent 65%)",
-              "linear-gradient(115deg, color-mix(in oklab, var(--accent) 26%, white) 0%, color-mix(in oklab, var(--accent) 10%, white) 45%, white 100%)",
+              "radial-gradient(120% 140% at 85% 15%, color-mix(in oklab, color-mix(in oklab, var(--accent) 82%, var(--ink, var(--foreground))) 78%, transparent) 0%, transparent 62%)",
+              "radial-gradient(110% 130% at 10% 90%, color-mix(in oklab, var(--ink, var(--foreground)) 42%, transparent) 0%, transparent 65%)",
+              "linear-gradient(115deg, color-mix(in oklab, color-mix(in oklab, var(--accent) 85%, var(--ink, var(--foreground))) 46%, white) 0%, color-mix(in oklab, var(--accent) 18%, white) 48%, white 100%)",
             ].join(", "),
           }}
         >
-          <div className="pointer-events-none absolute -end-24 -bottom-24 h-72 w-72 rounded-full bg-accent/25 blur-3xl" aria-hidden />
-          <div className="pointer-events-none absolute -start-20 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl" aria-hidden />
+          <div className="pointer-events-none absolute -end-24 -bottom-24 h-72 w-72 rounded-full bg-accent/40 blur-3xl" aria-hidden />
+          <div className="pointer-events-none absolute -start-20 -top-24 h-64 w-64 rounded-full bg-primary/20 blur-3xl" aria-hidden />
+
           <div className="relative grid gap-10 md:grid-cols-[1.4fr_auto] md:items-center">
 
             <div>
