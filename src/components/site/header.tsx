@@ -68,12 +68,12 @@ export function SiteHeader() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-0.5 xl:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-0.5 lg:flex">
           {NAV.map((n) => (
             <Link
               key={n.key}
               to={n.to}
-              className="relative rounded-full px-3.5 py-2 text-[13px] font-medium text-foreground/70 transition hover:text-foreground"
+              className="relative whitespace-nowrap rounded-full px-2 py-2 text-[12px] font-medium text-foreground/70 transition hover:text-foreground xl:px-3 xl:text-[13px]"
               activeProps={{
                 className: "text-primary bg-primary/5",
               }}
@@ -82,6 +82,7 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
+
 
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
