@@ -521,6 +521,22 @@ export const en = {
       abuseSub: "Blocked or flagged requests",
     },
   },
+  goapp: {
+    eyebrow: "Go App",
+    title: "Your station, in your pocket.",
+    sub: "Fuel up, earn points, track every riyal you spend and pay in seconds — the Go App puts the whole GoStation network in one place.",
+    f: {
+      points: { title: "Points on every fill-up", body: "Earn loyalty points with every liter and redeem them straight into your wallet." },
+      reports: { title: "Spend reports", body: "Clear reports for every vehicle and every fill-up, right inside the app." },
+      wallet: { title: "Smart wallet", body: "Top up your balance and pay without cash or cards at any station." },
+      pay: { title: "Scan & go", body: "Scan the pump QR and drive off — no queues, no paperwork." },
+    },
+    downloadTitle: "Download the app now",
+    downloadSub: "Scan the code to get Go App on iOS and Android.",
+    qrAlt: "Go App download QR code",
+    imgPointsAlt: "Go App loyalty points screen",
+    imgReportsAlt: "Go App expense reports screen",
+  },
   chat: {
     open: "Open chat",
     close: "Close chat",
