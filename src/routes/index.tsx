@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,12 +20,14 @@ import {
   Leaf,
   Handshake,
   Zap,
+  Play,
 } from "lucide-react";
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
+import { MediaCarousel } from "@/components/site/media-carousel";
 
 
 export const Route = createFileRoute("/")({
@@ -59,14 +62,20 @@ function HomePage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("news_articles")
-        .select("id, slug, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at")
+        .select(
+          "id, slug, kind, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at, event_date, event_location_ar, event_location_en",
+        )
         .eq("is_published", true)
-        .eq("kind", "news")
+        .in("kind", ["news", "event", "video"])
         .order("published_at", { ascending: false })
-        .limit(3);
+        .limit(12);
       return data ?? [];
     },
   });
+
+
+  const [mediaTab, setMediaTab] = useState<"all" | "news" | "event" | "video">("all");
+  const homeMedia = (news.data ?? []).filter((n) => mediaTab === "all" || n.kind === mediaTab);
 
   const reviews = useQuery({
     queryKey: ["home-reviews"],
@@ -401,65 +410,104 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ============ NEWS ============ */}
+      {/* ============ MEDIA CENTER ============ */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32">
-        <div className="flex items-end justify-between">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="eyebrow">{t("home.newsEyebrow")}</div>
             <h2 className="mt-4 text-4xl font-bold md:text-5xl">{t("home.newsTitle")}</h2>
           </div>
           <Link
             to="/media"
-            className="hidden items-center gap-1.5 text-sm font-semibold text-accent hover:underline sm:inline-flex"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
           >
-            {t("common.viewAll")} <ArrowUpRight className="h-4 w-4" />
+            {t("common.viewAll")} <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" />
           </Link>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {(news.data ?? []).map((n) => (
-            <Link key={n.id} to="/media/$slug" params={{ slug: n.slug }} className="group block">
-              <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
-                {n.cover_url ? (
-                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
-                    <img src={n.cover_url} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-                  </div>
-                ) : (
-                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
-                    <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
-                  </div>
-                )}
-                <div className="pointer-events-none absolute end-3 top-3 z-10">
-                  <span className="rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
-                    {t("media.news")}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                    {n.published_at
-                      ? new Date(n.published_at).toLocaleDateString(lng === "ar" ? "ar-SA" : "en-US", {
-                          year: "numeric",
-                          month: "long",
-                        })
-                      : ""}
-                  </div>
-                  <h3 className="mt-3 line-clamp-2 font-display text-lg font-bold leading-tight transition group-hover:text-accent">
-                    {lng === "ar" ? n.title_ar : n.title_en}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-                    {lng === "ar" ? n.excerpt_ar : n.excerpt_en}
-                  </p>
-                </div>
-              </article>
-            </Link>
-          ))}
-          {(!news.data || news.data.length === 0) && (
-            <div className="col-span-3 rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+        <div className="mt-8 flex flex-wrap gap-2">
+          {(["all", "news", "event", "video"] as const).map((k) => {
+            const label =
+              k === "all" ? t("media.all") : k === "news" ? t("media.news") : k === "event" ? t("media.events") : t("media.videos");
+            const active = mediaTab === k;
+            return (
+              <button
+                key={k}
+                type="button"
+                onClick={() => setMediaTab(k)}
+                className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
+                  active
+                    ? "bg-accent text-accent-foreground shadow-glow"
+                    : "border border-border bg-background text-foreground/70 hover:border-accent hover:text-accent"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-10">
+          {homeMedia.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
               {t("media.empty")}
             </div>
+          ) : (
+            <MediaCarousel>
+              {homeMedia.map((n) => (
+                <Link
+                  key={n.id}
+                  to="/media/$slug"
+                  params={{ slug: n.slug }}
+                  className="group w-[300px] shrink-0 snap-start sm:w-[360px]"
+                >
+                  <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+                      {n.cover_url ? (
+                        <img
+                          src={n.cover_url}
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted" />
+                      )}
+                      {n.kind === "video" && (
+                        <span className="absolute inset-0 grid place-items-center">
+                          <span className="grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition group-hover:scale-110">
+                            <Play className="h-5 w-5 translate-x-[1px] rtl:-scale-x-100" />
+                          </span>
+                        </span>
+                      )}
+                      <span className="absolute end-3 top-3 rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
+                        {n.kind === "event" ? t("media.events") : n.kind === "video" ? t("media.videos") : t("media.news")}
+                      </span>
+                    </div>
+                    <div className="p-6">
+                      <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        {(n.kind === "event" ? n.event_date : n.published_at)
+                          ? new Date((n.kind === "event" ? n.event_date : n.published_at) as string).toLocaleDateString(
+                              lng === "ar" ? "ar-EG-u-nu-latn" : "en-US",
+                              { year: "numeric", month: "long", day: "numeric" },
+                            )
+                          : ""}
+                      </div>
+                      <h3 className="mt-3 line-clamp-2 font-display text-lg font-bold leading-tight transition group-hover:text-accent">
+                        {lng === "ar" ? n.title_ar : n.title_en}
+                      </h3>
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                        {lng === "ar" ? n.excerpt_ar : n.excerpt_en}
+                      </p>
+                    </div>
+                  </article>
+                </Link>
+              ))}
+            </MediaCarousel>
           )}
         </div>
       </section>
+
 
       {/* ============ REVIEWS ============ */}
       {(reviews.data?.length ?? 0) > 0 && (
