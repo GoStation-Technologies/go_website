@@ -572,10 +572,10 @@ function ServiceCard({
             <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-ember text-accent-foreground shadow-glow">
               <Icon className="h-6 w-6" />
             </div>
-            <h3 className="mt-8 max-w-md font-display text-4xl font-bold leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.55)] md:text-5xl">
+            <h3 className="mt-8 max-w-md font-display text-4xl font-bold leading-tight text-white [text-shadow:0_2px_24px_rgba(4,10,22,0.85)] md:text-5xl">
               {title}
             </h3>
-            <p className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-primary-foreground [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
+            <p className="mt-4 max-w-lg text-pretty text-base font-medium leading-relaxed text-white [text-shadow:0_2px_16px_rgba(4,10,22,0.9)]">
               {body}
             </p>
           </div>
