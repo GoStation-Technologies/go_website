@@ -436,6 +436,8 @@ function HomePage() {
       </section>
 
 
+      <JoinCta />
+
       {/* ============ MEDIA CENTER ============ */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32">
         <div className="flex flex-wrap items-end justify-between gap-6">
@@ -535,7 +537,6 @@ function HomePage() {
       </section>
 
 
-      <JoinCta />
 
       {/* ============ FINAL CTA — airy band ============ */}
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
