@@ -656,6 +656,81 @@ function HomePage() {
         </div>
       </section>
 
+      {/* ============ GO APP ============ */}
+      <section className="relative overflow-hidden bg-ink py-20 text-white md:py-28">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          aria-hidden
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+          }}
+        />
+        <div className="pointer-events-none absolute -start-24 top-10 h-80 w-80 rounded-full bg-[var(--ember)]/25 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -end-32 bottom-0 h-96 w-96 rounded-full bg-[var(--ember)]/15 blur-3xl" aria-hidden />
+
+        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr]">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/80">
+              <Sparkles className="h-3.5 w-3.5" /> {t("goapp.eyebrow")}
+            </div>
+            <h2 className="mt-6 text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-5xl">
+              {t("goapp.title")}
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/70">
+              {t("goapp.sub")}
+            </p>
+
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              {[
+                { icon: Gift, k: "points" },
+                { icon: BarChart3, k: "reports" },
+                { icon: Wallet, k: "wallet" },
+                { icon: QrCode, k: "pay" },
+              ].map(({ icon: Icon, k }) => (
+                <div
+                  key={k}
+                  className="rounded-2xl border border-white/12 bg-white/[0.06] p-5 backdrop-blur-sm transition hover:border-[var(--ember)]/50 hover:bg-white/[0.1]"
+                >
+                  <Icon className="h-6 w-6 text-[var(--ember)]" />
+                  <div className="mt-3 font-display text-base font-bold">{t(`goapp.f.${k}.title`)}</div>
+                  <p className="mt-1 text-sm leading-relaxed text-white/65">{t(`goapp.f.${k}.body`)}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <img
+                src={appDownload.url}
+                alt={t("goapp.qrAlt")}
+                loading="lazy"
+                className="h-24 w-24 rounded-xl object-cover object-top shadow-elegant ring-1 ring-white/20"
+              />
+              <div className="text-sm text-white/70">
+                <div className="font-display text-base font-bold text-white">{t("goapp.downloadTitle")}</div>
+                <p className="mt-1 max-w-xs">{t("goapp.downloadSub")}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            <img
+              src={appPoints.url}
+              alt={t("goapp.imgPointsAlt")}
+              loading="lazy"
+              className="aspect-[3/4] w-full rounded-3xl object-cover shadow-elegant ring-1 ring-white/12 transition duration-500 hover:-translate-y-2"
+            />
+            <img
+              src={appReports.url}
+              alt={t("goapp.imgReportsAlt")}
+              loading="lazy"
+              className="mt-8 aspect-[3/4] w-full rounded-3xl object-cover shadow-elegant ring-1 ring-white/12 transition duration-500 hover:-translate-y-2"
+            />
+          </div>
+        </div>
+      </section>
+
     </SiteLayout>
   );
 }
