@@ -280,7 +280,9 @@ function HomePage() {
 
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <div className="max-w-3xl">
+            <div>
+
             <div className="max-w-3xl">
               <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
               <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
