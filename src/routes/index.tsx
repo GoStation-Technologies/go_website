@@ -259,26 +259,24 @@ function HomePage() {
 
       {/* ============ VALUES ============ */}
       <section className="relative isolate overflow-hidden border-b border-white/10 bg-ink py-24 text-white md:py-32">
-        {/* brand grid + ambient light */}
+        {/* ambient brand gradients */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.10]"
+          className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "linear-gradient(to right, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.5) 1px, transparent 1px)",
-            backgroundSize: "72px 72px",
-            maskImage: "radial-gradient(ellipse at 50% 10%, black 35%, transparent 80%)",
-            WebkitMaskImage: "radial-gradient(ellipse at 50% 10%, black 35%, transparent 80%)",
+              "radial-gradient(120% 80% at 15% 0%, color-mix(in oklab, var(--accent) 22%, transparent) 0%, transparent 55%), radial-gradient(100% 70% at 90% 100%, color-mix(in oklab, var(--primary) 28%, transparent) 0%, transparent 60%), linear-gradient(160deg, transparent 40%, rgba(255,255,255,0.04) 100%)",
           }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-40 start-1/3 -z-10 h-[26rem] w-[26rem] rounded-full bg-accent/25 blur-[120px]"
+          className="pointer-events-none absolute -top-40 start-1/3 h-[26rem] w-[26rem] rounded-full bg-accent/20 blur-[130px]"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-48 end-0 -z-10 h-[24rem] w-[24rem] rounded-full bg-primary/25 blur-[130px]"
+          className="pointer-events-none absolute -bottom-48 end-0 h-[24rem] w-[24rem] rounded-full bg-primary/25 blur-[140px]"
         />
+
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="max-w-3xl">
