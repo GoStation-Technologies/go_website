@@ -169,7 +169,7 @@ function HomePage() {
                 <div key={s.key} className="flex flex-col">
                   <span
                     dir="ltr"
-                    className="font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl"
+                    className="font-display text-3xl font-extrabold tracking-tight text-white rtl:text-end md:text-4xl"
                   >
                     {s.val}
                   </span>
