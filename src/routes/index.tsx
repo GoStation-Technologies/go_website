@@ -288,18 +288,12 @@ function HomePage() {
           </div>
 
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map(({ icon: Icon, k }, i) => (
+            {values.map(({ icon: Icon, k }) => (
               <article
                 key={k}
                 className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/40 hover:bg-white/[0.07] hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--accent)_60%,transparent)]"
               >
-                {/* index numeral */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -top-4 end-2 font-display text-[5.5rem] font-bold leading-none text-white/[0.05] transition-colors duration-500 group-hover:text-accent/15"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+
 
                 <div className="relative mb-7 grid h-12 w-12 place-items-center rounded-xl border border-white/15 bg-white/[0.06] text-accent transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 group-hover:bg-accent group-hover:text-accent-foreground">
                   <Icon className="h-5 w-5" />
