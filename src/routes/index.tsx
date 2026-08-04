@@ -658,18 +658,35 @@ function HomePage() {
 
       {/* ============ GO APP ============ */}
       <section className="relative overflow-hidden bg-ink py-20 text-white md:py-28">
-        {/* soft aurora glows */}
-        <div className="pointer-events-none absolute -start-40 top-1/2 h-[34rem] w-[34rem] -translate-y-1/2 rounded-full bg-[var(--ember)]/20 blur-[120px]" aria-hidden />
-        <div className="pointer-events-none absolute -end-40 -top-24 h-[30rem] w-[30rem] rounded-full bg-primary/25 blur-[130px]" aria-hidden />
+        {/* base brand gradient: navy → deep blue with an ember warmth */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.05]"
+          className="pointer-events-none absolute inset-0"
+          aria-hidden
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, color-mix(in oklab, var(--ember) 16%, transparent) 0%, transparent 42%), linear-gradient(215deg, color-mix(in oklab, var(--primary) 34%, transparent) 0%, transparent 55%), radial-gradient(120% 90% at 50% 120%, color-mix(in oklab, var(--ember) 12%, transparent) 0%, transparent 60%)",
+          }}
+        />
+        {/* soft aurora glows */}
+        <div className="pointer-events-none absolute -start-40 top-1/3 h-[38rem] w-[38rem] -translate-y-1/3 rounded-full bg-[var(--ember)]/18 blur-[150px]" aria-hidden />
+        <div className="pointer-events-none absolute -end-48 -top-32 h-[34rem] w-[34rem] rounded-full bg-primary/25 blur-[160px]" aria-hidden />
+        <div className="pointer-events-none absolute bottom-[-14rem] start-1/3 h-[28rem] w-[28rem] rounded-full bg-[var(--ember)]/10 blur-[140px]" aria-hidden />
+        {/* faint grid, fading out at the edges */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.045]"
           aria-hidden
           style={{
             backgroundImage:
               "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
             backgroundSize: "64px 64px",
+            maskImage: "radial-gradient(120% 80% at 50% 40%, black 30%, transparent 85%)",
+            WebkitMaskImage: "radial-gradient(120% 80% at 50% 40%, black 30%, transparent 85%)",
           }}
         />
+        {/* smooth blend into the neighbouring sections */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-ink to-transparent" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-ink to-transparent" aria-hidden />
+
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-[1fr_1fr] lg:gap-8">
           {/* tilted phone showcase */}
