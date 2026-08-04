@@ -36,6 +36,7 @@ import partnerLogo from "@/assets/gostation-logo.png.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";
+import { JoinCta } from "@/components/site/join-cta";
 
 
 export const Route = createFileRoute("/")({
@@ -533,6 +534,8 @@ function HomePage() {
         </div>
       </section>
 
+
+      <JoinCta />
 
       {/* ============ FINAL CTA — airy band ============ */}
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
