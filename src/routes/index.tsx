@@ -211,6 +211,43 @@ function HomePage() {
 
       </section>
 
+      {/* ============ PULL QUOTE ============ */}
+      <section className="relative overflow-hidden border-y border-border/60 bg-secondary/40 py-24 md:py-32">
+        {/* soft wavy line grid backdrop */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'><path d='M0 30 Q 15 10 30 30 T 60 30 T 90 30 T 120 30' fill='none' stroke='%23123b34' stroke-width='1.1'/><path d='M0 58 Q 15 38 30 58 T 60 58 T 90 58 T 120 58' fill='none' stroke='%23123b34' stroke-width='1.1'/></svg>\")",
+            backgroundSize: "120px 60px",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-secondary/60 via-transparent to-secondary/60"
+        />
+
+        <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
+          <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border border-accent/30 bg-background p-4 shadow-card md:h-32 md:w-32">
+            <img
+              src={logoAsset.url}
+              alt={t("home.quoteAuthor")}
+              className="h-full w-full object-contain"
+            />
+          </div>
+          <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
+            {t("home.quote")}
+          </blockquote>
+          <div className="mt-8 text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
+            {t("home.quoteAuthor")}
+          </div>
+          <div className="mt-1 text-xs text-muted-foreground">{t("home.quoteRole")}</div>
+        </div>
+      </section>
+
+
+
       {/* ============ VALUES ============ */}
       <section className="relative isolate overflow-hidden border-b border-white/10 bg-ink py-20 text-white md:py-24">
         {/* subtle grid lines from brand identity */}
@@ -309,40 +346,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ============ PULL QUOTE ============ */}
-      <section className="relative overflow-hidden border-y border-border/60 bg-secondary/40 py-24 md:py-32">
-        {/* soft wavy line grid backdrop */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'><path d='M0 30 Q 15 10 30 30 T 60 30 T 90 30 T 120 30' fill='none' stroke='%23123b34' stroke-width='1.1'/><path d='M0 58 Q 15 38 30 58 T 60 58 T 90 58 T 120 58' fill='none' stroke='%23123b34' stroke-width='1.1'/></svg>\")",
-            backgroundSize: "120px 60px",
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-secondary/60 via-transparent to-secondary/60"
-        />
-
-        <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border border-accent/30 bg-background p-4 shadow-card md:h-32 md:w-32">
-            <img
-              src={logoAsset.url}
-              alt={t("home.quoteAuthor")}
-              className="h-full w-full object-contain"
-            />
-          </div>
-          <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            {t("home.quote")}
-          </blockquote>
-          <div className="mt-8 text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
-            {t("home.quoteAuthor")}
-          </div>
-          <div className="mt-1 text-xs text-muted-foreground">{t("home.quoteRole")}</div>
-        </div>
-      </section>
 
 
       {/* ============ COVERAGE ============ */}
