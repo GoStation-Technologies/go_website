@@ -821,7 +821,7 @@ function HomePage() {
               variant="outline"
               className="h-11 rounded-full border-2 border-accent/40 bg-transparent px-6 text-sm font-semibold text-accent hover:bg-accent hover:text-accent-foreground"
             >
-              <Link to="/news">{t("home.partnersStories")}</Link>
+              <Link to="/media">{t("home.partnersStories")}</Link>
             </Button>
             <Button
               asChild
