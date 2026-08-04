@@ -156,25 +156,10 @@ function HomePage() {
               </Button>
             </div>
 
-            <div className="mt-6 grid max-w-lg grid-cols-3 gap-6 border-t border-white/20 pt-8">
-              {stats.slice(0, 3).map((s) => (
-                <div key={s.key} className="flex flex-col">
-                  <span
-                    dir="ltr"
-                    className="font-display text-3xl font-extrabold tracking-tight text-white rtl:text-end md:text-4xl"
-                  >
-                    {s.val}
-                  </span>
-                  <span className="mt-1 text-[10px] font-bold uppercase leading-tight tracking-[0.18em] text-white/60">
-                    {t(`home.${s.key}`)}
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Floating KPI card */}
-          <div className="mt-12 max-w-[320px] rounded-2xl border border-white/25 bg-white/12 p-5 shadow-elegant backdrop-blur-md">
+          <div className="mt-8 max-w-[320px] rounded-2xl border border-white/25 bg-white/12 p-5 shadow-elegant backdrop-blur-md">
             <div className="flex items-center gap-4">
               <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
                 <Zap className="h-5 w-5" />
@@ -187,6 +172,7 @@ function HomePage() {
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
