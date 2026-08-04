@@ -291,23 +291,8 @@ function HomePage() {
               </p>
               <div className="mt-8 h-px w-40 bg-gradient-to-r from-accent via-accent/40 to-transparent" />
             </div>
-
-            {/* price pylon — blended into the backdrop */}
-            <div aria-hidden className="relative hidden h-[26rem] w-full justify-self-center md:block lg:h-[30rem]">
-              <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-accent/25 blur-[120px]" />
-              <img
-                src={pylonAsset.url}
-                alt=""
-                className="pointer-events-none absolute inset-0 mx-auto h-full w-auto object-contain opacity-90 drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
-                style={{
-                  maskImage:
-                    "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 12%, #000 30%, #000 72%, rgba(0,0,0,0.5) 90%, transparent 100%)",
-                }}
-              />
-            </div>
-
-
           </div>
+
 
 
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
