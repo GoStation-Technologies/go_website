@@ -21,6 +21,10 @@ import {
   Handshake,
   Zap,
   Play,
+  Gift,
+  BarChart3,
+  QrCode,
+  Wallet,
 } from "lucide-react";
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
