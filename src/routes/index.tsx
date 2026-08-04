@@ -643,65 +643,6 @@ function HomePage() {
 
       </section>
 
-      {/* ============ PARTNERS / TRUSTED BY ============ */}
-      <section className="border-t border-border/60 bg-secondary/30 py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
-          <h2 className="text-balance font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            {t("home.partnersTitle")}
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
-            {t("home.partnersSub")}
-          </p>
-
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {[
-              "Aramco",
-              "Saudia",
-              "Panda",
-              "Almarai",
-              "SABIC",
-              "Tamimi Markets",
-              "Bidaya",
-              "Nesto",
-            ].map((name) => (
-              <div
-                key={name}
-                className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
-              >
-                <img
-                  src={partnerLogo.url}
-                  alt={name}
-                  loading="lazy"
-                  className="h-10 w-10 opacity-60 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
-                />
-                <span className="font-display text-sm font-semibold tracking-tight text-muted-foreground transition duration-300 group-hover:text-foreground md:text-base">
-                  {name}
-                </span>
-              </div>
-            ))}
-          </div>
-
-
-
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="h-11 rounded-full border-2 border-accent/40 bg-transparent px-6 text-sm font-semibold text-accent hover:bg-accent hover:text-accent-foreground"
-            >
-              <Link to="/news">{t("home.partnersStories")}</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              className="h-11 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground hover:opacity-90"
-            >
-              <Link to="/contact">{t("home.partnersCta")}</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
 
       {/* ============ GO APP ============ */}
       <section className="relative overflow-hidden bg-ink py-20 text-white md:py-28">
@@ -829,6 +770,66 @@ function HomePage() {
                 <p className="mt-0.5 max-w-[16rem] text-xs">{t("goapp.downloadSub")}</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ PARTNERS / TRUSTED BY ============ */}
+      <section className="border-t border-border/60 bg-secondary/30 py-20 md:py-24">
+        <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
+          <h2 className="text-balance font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+            {t("home.partnersTitle")}
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
+            {t("home.partnersSub")}
+          </p>
+
+          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {[
+              "Aramco",
+              "Saudia",
+              "Panda",
+              "Almarai",
+              "SABIC",
+              "Tamimi Markets",
+              "Bidaya",
+              "Nesto",
+            ].map((name) => (
+              <div
+                key={name}
+                className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
+              >
+                <img
+                  src={partnerLogo.url}
+                  alt={name}
+                  loading="lazy"
+                  className="h-10 w-10 opacity-60 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                />
+                <span className="font-display text-sm font-semibold tracking-tight text-muted-foreground transition duration-300 group-hover:text-foreground md:text-base">
+                  {name}
+                </span>
+              </div>
+            ))}
+          </div>
+
+
+
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="h-11 rounded-full border-2 border-accent/40 bg-transparent px-6 text-sm font-semibold text-accent hover:bg-accent hover:text-accent-foreground"
+            >
+              <Link to="/news">{t("home.partnersStories")}</Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              className="h-11 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground hover:opacity-90"
+            >
+              <Link to="/contact">{t("home.partnersCta")}</Link>
+            </Button>
           </div>
         </div>
       </section>
