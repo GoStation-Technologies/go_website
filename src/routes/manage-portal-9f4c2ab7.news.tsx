@@ -19,7 +19,7 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7/news")({
 });
 
 type News = {
-  id?: string; slug: string; kind: "news" | "event" | "press";
+  id?: string; slug: string; kind: "news" | "event" | "press" | "video";
   title_ar: string; title_en: string;
   excerpt_ar?: string | null; excerpt_en?: string | null;
   body_ar?: string | null; body_en?: string | null;
@@ -88,7 +88,7 @@ function NewsPage() {
             <FormGrid>
               <Field label={t("admin.common.kind")} className="sm:col-span-2 sm:max-w-xs">
                 <select value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value as News["kind"] })} className={selectCls}>
-                  <option value="news">{t("admin.news.kinds.news")}</option><option value="event">{t("admin.news.kinds.event")}</option><option value="press">{t("admin.news.kinds.press")}</option>
+                  <option value="news">{t("admin.news.kinds.news")}</option><option value="event">{t("admin.news.kinds.event")}</option><option value="press">{t("admin.news.kinds.press")}</option><option value="video">{t("admin.news.kinds.video")}</option>
                 </select>
               </Field>
               <Field label={t("admin.news.f.titleEn")} lang="en"><Input className={inputCls} value={form.title_en} onChange={(e) => setForm({ ...form, title_en: e.target.value, slug: form.id ? form.slug : slugify(e.target.value) })} /></Field>
