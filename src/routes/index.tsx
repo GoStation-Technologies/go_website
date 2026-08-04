@@ -175,23 +175,23 @@ function HomePage() {
           </div>
 
         </div>
-      </section>
 
-
-      {/* ============ AWARDS / TRUST STRIP ============ */}
-      <section className="relative z-10 border-b bg-sand/60 pb-8">
-        <StatCards
-          stats={stats.map((s, i) => ({
-            key: s.key,
-            val: s.val,
-            label: t(`home.${s.key}`),
-            icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
-          }))}
-        />
-        <div className="mt-8">
-          <FuelTicker />
+        {/* ============ TRUST STRIP — inside hero, over the backdrop ============ */}
+        <div className="relative z-10">
+          <StatCards
+            stats={stats.map((s, i) => ({
+              key: s.key,
+              val: s.val,
+              label: t(`home.${s.key}`),
+              icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
+            }))}
+          />
+          <div className="mt-10">
+            <FuelTicker />
+          </div>
         </div>
       </section>
+
 
 
 
