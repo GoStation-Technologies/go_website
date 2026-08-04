@@ -209,7 +209,7 @@ function HomePage() {
               key={s.key}
               className={`flex flex-col ${i > 0 ? "md:border-s md:border-border/60 md:ps-6" : ""}`}
             >
-              <div className="font-display text-4xl font-black tracking-tight text-primary md:text-5xl">
+              <div dir="ltr" className="font-display text-4xl font-black tracking-tight text-primary rtl:text-end md:text-5xl">
                 {s.val}
               </div>
               <div className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
