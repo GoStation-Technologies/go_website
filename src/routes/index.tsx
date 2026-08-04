@@ -109,12 +109,13 @@ function HomePage() {
   return (
     <SiteLayout>
       {/* ============ HERO — full-bleed cinematic ============ */}
-      <section className="relative isolate min-h-[92vh] overflow-hidden border-b border-border/60">
+      <section className="relative isolate flex min-h-[100vh] flex-col overflow-hidden border-b border-border/60">
         {/* Interactive background: ken-burns zoom + pointer & scroll parallax */}
         <HeroBackdrop src={heroAsset.url} alt="GoStation flagship canopy in Saudi Arabia" />
 
 
-        <div className="mx-auto flex min-h-[92vh] max-w-[1440px] flex-col justify-center px-6 py-24 md:px-14 lg:px-20">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-6 pb-16 pt-24 md:px-14 lg:px-20">
+
           <div className="max-w-2xl space-y-8 animate-rise-in">
             <div className="inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -174,23 +175,23 @@ function HomePage() {
           </div>
 
         </div>
-      </section>
 
-
-      {/* ============ AWARDS / TRUST STRIP ============ */}
-      <section className="relative z-10 border-b bg-sand/60 pb-8">
-        <StatCards
-          stats={stats.map((s, i) => ({
-            key: s.key,
-            val: s.val,
-            label: t(`home.${s.key}`),
-            icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
-          }))}
-        />
-        <div className="mt-8">
-          <FuelTicker />
+        {/* ============ TRUST STRIP — inside hero, over the backdrop ============ */}
+        <div className="relative z-10">
+          <StatCards
+            stats={stats.map((s, i) => ({
+              key: s.key,
+              val: s.val,
+              label: t(`home.${s.key}`),
+              icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
+            }))}
+          />
+          <div className="mt-10">
+            <FuelTicker />
+          </div>
         </div>
       </section>
+
 
 
 

@@ -70,7 +70,7 @@ function CountUp({ value }: { value: string }) {
 /** Professional stat cards that float over the section edge above them. */
 export function StatCards({ stats }: { stats: readonly Stat[] }) {
   return (
-    <div className="mx-auto -mt-16 grid max-w-7xl grid-cols-2 gap-4 px-4 sm:px-6 lg:grid-cols-4 lg:gap-6">
+    <div className="mx-auto mt-10 grid max-w-7xl grid-cols-2 gap-4 px-4 sm:px-6 lg:grid-cols-4 lg:gap-6">
       {stats.map((s, i) => (
         <div
           key={s.key}

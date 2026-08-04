@@ -93,7 +93,7 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
           className="animate-ken-burns h-full w-full object-cover"
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/25" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/65 to-ink/30" />
       <div
         className="absolute inset-0 transition-[background] duration-500"
         style={{
@@ -109,7 +109,6 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
             "radial-gradient(420px 420px at var(--hx, 50%) var(--hy, 12%), rgba(255,255,255,0.35), transparent 70%)",
         }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
     </div>
   );
 }
