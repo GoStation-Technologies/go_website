@@ -31,7 +31,7 @@ import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
 import appPoints from "@/assets/go-app-points.jpg.asset.json";
 import appReports from "@/assets/go-app-reports.jpg.asset.json";
-import appDownload from "@/assets/go-app-download.jpg.asset.json";
+import goQr from "@/assets/gostation-qr.png.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";
@@ -771,11 +771,12 @@ function HomePage() {
             {/* QR */}
             <div className="mt-9 inline-flex items-center gap-4 rounded-2xl border border-white/12 bg-white/[0.05] p-3 text-start backdrop-blur-sm">
               <img
-                src={appDownload.url}
+                src={goQr.url}
                 alt={t("goapp.qrAlt")}
                 loading="lazy"
-                className="h-16 w-16 rounded-xl object-cover object-top ring-1 ring-white/20"
+                className="h-16 w-16 rounded-xl bg-white p-1 object-contain ring-1 ring-white/20"
               />
+
               <div className="text-sm text-white/70">
                 <div className="font-display text-sm font-bold text-white">{t("goapp.downloadTitle")}</div>
                 <p className="mt-0.5 max-w-[16rem] text-xs">{t("goapp.downloadSub")}</p>
