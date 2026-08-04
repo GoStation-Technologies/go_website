@@ -575,7 +575,7 @@ function ServiceCard({
             <h3 className="mt-8 max-w-md font-display text-4xl font-bold leading-tight [text-shadow:0_2px_18px_rgba(0,0,0,0.55)] md:text-5xl">
               {title}
             </h3>
-            <p className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-primary-foreground/90 [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
+            <p className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-primary-foreground [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
               {body}
             </p>
           </div>
