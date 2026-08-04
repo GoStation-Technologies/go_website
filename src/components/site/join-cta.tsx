@@ -24,10 +24,6 @@ export function JoinCta() {
         }}
       />
       <div className="absolute inset-0 bg-grid-ink opacity-25" aria-hidden />
-      <div
-        className="pointer-events-none absolute -top-40 end-0 h-96 w-96 rounded-full bg-ember opacity-20 blur-3xl animate-pulse-glow"
-        aria-hidden
-      />
       <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <div className="grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-end">
           <div>
