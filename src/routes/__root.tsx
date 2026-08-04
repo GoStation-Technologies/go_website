@@ -99,8 +99,8 @@ export const Route = createRootRouteWithContext<{
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/__l5e/assets-v1/c948d93a-9508-4a9d-9086-bfa84b77e6d2/gostation-logo.png" },
-      { rel: "apple-touch-icon", href: "/__l5e/assets-v1/c948d93a-9508-4a9d-9086-bfa84b77e6d2/gostation-logo.png" },
+      { rel: "icon", type: "image/png", href: "/__l5e/assets-v1/e22eb28f-a690-4eea-b030-32305f54d4eb/gostation-logo.png" },
+      { rel: "apple-touch-icon", href: "/__l5e/assets-v1/e22eb28f-a690-4eea-b030-32305f54d4eb/gostation-logo.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" },

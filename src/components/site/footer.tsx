@@ -19,7 +19,7 @@ export function SiteFooter() {
       <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-2.5">
-            <img src={logoAsset.url} alt="GoStation" className="h-11 w-11" />
+            <img src={logoAsset.url} alt="GoStation" className="h-11 w-11 object-contain" />
             <div className="flex flex-col leading-none">
               <span className="font-display text-lg font-bold">{t("brand.name")}</span>
               <span className="mt-1 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/75">
