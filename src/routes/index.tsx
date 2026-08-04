@@ -549,15 +549,15 @@ function ServiceCard({
         />
         {/* GoStation brand scrim — deep navy night + ember (keeps photo visible) */}
         <div
-          className="absolute inset-0 bg-ink/45"
+          className="absolute inset-0 bg-ink/60"
           aria-hidden
         />
         <div
-          className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/20"
+          className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/65 to-ink/40"
           aria-hidden
         />
         <div
-          className="absolute inset-0 bg-gradient-to-br from-ink/35 via-transparent to-ember/30"
+          className="absolute inset-0 bg-gradient-to-br from-ink/55 via-transparent to-ember/25"
           aria-hidden
         />
         <div className="absolute inset-0 bg-grid-ink opacity-20" aria-hidden />
