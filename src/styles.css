@@ -200,6 +200,15 @@ html[dir="rtl"] .marquee-track { animation: marquee-rtl 45s linear infinite; }
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes ken-burns {
+  0%   { transform: scale(1.04) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.16) translate3d(0, -1.2%, 0); }
+  100% { transform: scale(1.04) translate3d(0, 0, 0); }
+}
+.animate-ken-burns { animation: ken-burns 26s ease-in-out infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns { animation: none; }
+}
 .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
 .animate-rise-in { animation: rise-in .7s cubic-bezier(.2,.7,.2,1) both; }
