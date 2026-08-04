@@ -382,33 +382,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ============ VALUES ============ */}
-      <section className="border-y bg-sand/50 py-24 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="max-w-3xl">
-            <div className="eyebrow">{t("home.valuesEyebrow")}</div>
-            <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
-              {t("home.valuesTitle")}
-            </h2>
-          </div>
-          <div className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-border md:grid-cols-4">
-            {values.map(({ icon: Icon, k }) => (
-              <div
-                key={k}
-                className="group relative bg-background p-8 transition hover:bg-background"
-              >
-                <div className="mb-6 grid h-11 w-11 place-items-center rounded-xl bg-primary/5 text-primary transition group-hover:bg-accent group-hover:text-accent-foreground">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="font-display text-lg font-bold">{t(`home.values.${k}.title`)}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {t(`home.values.${k}.body`)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ============ MEDIA CENTER ============ */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-32">
