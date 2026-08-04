@@ -29,6 +29,7 @@ import {
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
+import pylonAsset from "@/assets/gostation-pylon.jpg.asset.json";
 import appPoints from "@/assets/go-app-points.jpg.asset.json";
 import appReports from "@/assets/go-app-reports.jpg.asset.json";
 import goQr from "@/assets/gostation-qr.png.asset.json";
@@ -279,16 +280,36 @@ function HomePage() {
 
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="max-w-3xl">
-            <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
-            <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
-              {t("home.valuesTitle")}
-            </h2>
-            <p className="mt-6 max-w-2xl whitespace-pre-line text-base leading-relaxed text-white/70 md:text-lg">
-              {t("home.valuesSub")}
-            </p>
-            <div className="mt-8 h-px w-40 bg-gradient-to-r from-accent via-accent/40 to-transparent" />
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
+            <div className="max-w-3xl">
+              <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
+              <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
+                {t("home.valuesTitle")}
+              </h2>
+              <p className="mt-6 max-w-2xl whitespace-pre-line text-base leading-relaxed text-white/70 md:text-lg">
+                {t("home.valuesSub")}
+              </p>
+              <div className="mt-8 h-px w-40 bg-gradient-to-r from-accent via-accent/40 to-transparent" />
+            </div>
+
+            {/* price pylon */}
+            <div aria-hidden className="relative hidden justify-self-center lg:block">
+              <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-accent/20 blur-[110px]" />
+              <img
+                src={pylonAsset.url}
+                alt=""
+                loading="lazy"
+                className="mx-auto h-[30rem] w-auto object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.55)]"
+                style={{
+                  maskImage:
+                    "linear-gradient(to bottom, transparent 0%, black 9%, black 82%, transparent 100%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, transparent 0%, black 9%, black 82%, transparent 100%)",
+                }}
+              />
+            </div>
           </div>
+
 
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {values.map(({ icon: Icon, k }) => (
