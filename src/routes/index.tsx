@@ -531,6 +531,59 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ============ PARTNERS / TRUSTED BY ============ */}
+      <section className="border-t border-border/60 bg-secondary/30 py-20 md:py-24">
+        <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
+          <h2 className="text-balance font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+            {t("home.partnersTitle")}
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
+            {t("home.partnersSub")}
+          </p>
+
+          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {[
+              "Aramco",
+              "Saudia",
+              "Panda",
+              "Almarai",
+              "SABIC",
+              "Tamimi Markets",
+              "Bidaya",
+              "Nesto",
+            ].map((p) => (
+              <div
+                key={p}
+                className="flex h-24 items-center justify-center rounded-2xl border border-border/70 bg-background px-4 shadow-card transition hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
+              >
+                <span className="font-display text-lg font-bold tracking-tight text-muted-foreground transition group-hover:text-foreground">
+                  {p}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="h-11 rounded-full border-2 border-accent/40 bg-transparent px-6 text-sm font-semibold text-accent hover:bg-accent hover:text-accent-foreground"
+            >
+              <Link to="/news">{t("home.partnersStories")}</Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              className="h-11 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground hover:opacity-90"
+            >
+              <Link to="/contact">{t("home.partnersCta")}</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
     </SiteLayout>
   );
 }
