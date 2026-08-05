@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StationsRouteImport } from './routes/stations'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
 import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
@@ -32,6 +33,10 @@ import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage
 import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
 import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
 import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 
 const StationsRoute = StationsRouteImport.update({
@@ -42,6 +47,11 @@ const StationsRoute = StationsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
@@ -160,6 +170,29 @@ const ManagePortal9f4c2ab7AbuseRoute =
     path: '/abuse',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksProcessExportsRoute =
   ApiPublicHooksProcessExportsRouteImport.update({
     id: '/api/public/hooks/process-exports',
@@ -176,8 +209,11 @@ export interface FileRoutesByFullPath {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -191,6 +227,8 @@ export interface FileRoutesByFullPath {
   '/media/$slug': typeof MediaSlugRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/media/': typeof MediaIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesByTo {
@@ -201,8 +239,11 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -216,6 +257,8 @@ export interface FileRoutesByTo {
   '/media/$slug': typeof MediaSlugRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7IndexRoute
   '/media': typeof MediaIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRoutesById {
@@ -228,8 +271,11 @@ export interface FileRoutesById {
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
+  '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -243,6 +289,8 @@ export interface FileRoutesById {
   '/media/$slug': typeof MediaSlugRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/media/': typeof MediaIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
 }
 export interface FileRouteTypes {
@@ -256,8 +304,11 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
+    | '/mcp'
     | '/sitemap.xml'
     | '/stations'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -271,6 +322,8 @@ export interface FileRouteTypes {
     | '/media/$slug'
     | '/manage-portal-9f4c2ab7/'
     | '/media/'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/process-exports'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -281,8 +334,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/mcp'
     | '/sitemap.xml'
     | '/stations'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -296,6 +352,8 @@ export interface FileRouteTypes {
     | '/media/$slug'
     | '/manage-portal-9f4c2ab7'
     | '/media'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/process-exports'
   id:
     | '__root__'
@@ -307,8 +365,11 @@ export interface FileRouteTypes {
     | '/franchise'
     | '/investors'
     | '/manage-portal-9f4c2ab7'
+    | '/mcp'
     | '/sitemap.xml'
     | '/stations'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -322,6 +383,8 @@ export interface FileRouteTypes {
     | '/media/$slug'
     | '/manage-portal-9f4c2ab7/'
     | '/media/'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/process-exports'
   fileRoutesById: FileRoutesById
 }
@@ -334,11 +397,16 @@ export interface RootRouteChildren {
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
   ManagePortal9f4c2ab7Route: typeof ManagePortal9f4c2ab7RouteWithChildren
+  McpRoute: typeof McpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StationsRoute: typeof StationsRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ManagePortal9f4c2ab7LoginRoute: typeof ManagePortal9f4c2ab7LoginRoute
   MediaSlugRoute: typeof MediaSlugRoute
   MediaIndexRoute: typeof MediaIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
 }
 
@@ -356,6 +424,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage-portal-9f4c2ab7': {
@@ -505,6 +580,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7AbuseRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/process-exports': {
       id: '/api/public/hooks/process-exports'
       path: '/api/public/hooks/process-exports'
@@ -554,11 +657,17 @@ const rootRouteChildren: RootRouteChildren = {
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
   ManagePortal9f4c2ab7Route: ManagePortal9f4c2ab7RouteWithChildren,
+  McpRoute: McpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StationsRoute: StationsRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ManagePortal9f4c2ab7LoginRoute: ManagePortal9f4c2ab7LoginRoute,
   MediaSlugRoute: MediaSlugRoute,
   MediaIndexRoute: MediaIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksProcessExportsRoute: ApiPublicHooksProcessExportsRoute,
 }
 export const routeTree = rootRouteImport
