@@ -12,7 +12,7 @@ export function JoinCta() {
         alt=""
         aria-hidden
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover opacity-60"
+        className="absolute inset-0 h-full w-full scale-[1.65] object-cover object-[70%_38%] opacity-60"
       />
       <div className="absolute inset-0 bg-ink/55 mix-blend-multiply" aria-hidden />
       <div
