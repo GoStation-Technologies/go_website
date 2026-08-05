@@ -12,18 +12,27 @@ export function JoinCta() {
         alt=""
         aria-hidden
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover opacity-35"
+        className="absolute inset-0 h-full w-full object-cover opacity-60"
       />
-      <div className="absolute inset-0 bg-ink/80 mix-blend-multiply" aria-hidden />
+      <div className="absolute inset-0 bg-ink/55 mix-blend-multiply" aria-hidden />
       <div
         className="absolute inset-0"
         aria-hidden
         style={{
           background:
-            "linear-gradient(90deg, color-mix(in oklab, var(--ink) 92%, transparent) 0%, color-mix(in oklab, var(--ink) 70%, transparent) 55%, color-mix(in oklab, var(--ink) 45%, transparent) 100%)",
+            "linear-gradient(100deg, color-mix(in oklab, var(--ink) 94%, transparent) 0%, color-mix(in oklab, var(--ink) 82%, transparent) 38%, color-mix(in oklab, var(--ink) 45%, transparent) 62%, color-mix(in oklab, var(--ink) 12%, transparent) 100%)",
         }}
       />
-      <div className="absolute inset-0 bg-grid-ink opacity-25" aria-hidden />
+      <div
+        className="absolute inset-x-0 bottom-0 h-1/2"
+        aria-hidden
+        style={{
+          background:
+            "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--ink) 70%, transparent) 100%)",
+        }}
+      />
+      <div className="absolute inset-0 bg-grid-ink opacity-15" aria-hidden />
+
       <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <div className="grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-end">
           <div>
