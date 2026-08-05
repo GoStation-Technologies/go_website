@@ -125,3 +125,31 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
     </li>
   );
 }
+
+function IsoSeal({ std, year }: { std: string; year: string }) {
+  return (
+    <div
+      dir="ltr"
+      className="relative grid h-24 w-24 place-items-center transition-transform duration-300 group-hover:-translate-y-1"
+    >
+      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden>
+        <circle cx="50" cy="50" r="47" className="fill-white/[0.04] stroke-ember-glow/50" strokeWidth="1.5" />
+        <circle cx="50" cy="50" r="40" className="fill-none stroke-ember-glow/25" strokeWidth="1" />
+        <circle
+          cx="50"
+          cy="50"
+          r="43.5"
+          className="fill-none stroke-ember-glow/40"
+          strokeWidth="2"
+          strokeDasharray="1 5"
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="relative flex flex-col items-center leading-none">
+        <span className="font-display text-[1.15rem] font-black tracking-[0.12em] text-ember-glow">ISO</span>
+        <span className="mt-1 font-display text-[0.95rem] font-bold tracking-tight text-foreground">{std}</span>
+        <span className="mt-1 text-[10px] font-medium tracking-[0.14em] text-foreground/60">{year}</span>
+      </div>
+    </div>
+  );
+}
