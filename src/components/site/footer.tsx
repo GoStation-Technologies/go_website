@@ -72,23 +72,32 @@ export function SiteFooter() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 pb-14 sm:px-6">
-        <div className="grid gap-8 sm:grid-cols-4">
+        <div className="flex flex-wrap items-start justify-center gap-x-10 gap-y-8 md:justify-end">
           {[
-            { std: "9001", year: "2015", label: t("footer.cert9001") },
-            { std: "10002", year: "2018", label: t("footer.cert10002") },
-            { std: "14001", year: "2015", label: t("footer.cert14001") },
-            { std: "45001", year: "2018", label: t("footer.cert45001") },
+            { code: "9001:2015", label: t("footer.cert9001") },
+            { code: "10002:2018", label: t("footer.cert10002") },
+            { code: "14001:2015", label: t("footer.cert14001") },
+            { code: "45001:2018", label: t("footer.cert45001") },
           ].map((c) => (
-            <div key={c.std} className="group flex flex-col items-center text-center">
-              <IsoSeal std={c.std} year={c.year} />
-              <div className="mt-3 text-sm font-semibold text-foreground">{c.label}</div>
-              <div className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-foreground/55">
-                {t("footer.certsNote")}
+            <div key={c.code} className="group flex w-28 flex-col items-center text-center">
+              <img
+                src={isoLogo.url}
+                alt={`ISO ${c.code} — ${c.label}`}
+                loading="lazy"
+                className="h-12 w-auto opacity-70 brightness-0 invert transition duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
+              />
+              <div
+                dir="ltr"
+                className="mt-3 font-display text-sm font-bold tracking-tight text-foreground"
+              >
+                {c.code}
               </div>
+              <div className="mt-1 text-[11px] leading-snug text-foreground/60">{c.label}</div>
             </div>
           ))}
         </div>
       </div>
+
 
 
       <div className="relative border-t border-white/10">
