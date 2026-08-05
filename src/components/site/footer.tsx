@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Instagram, Twitter, Linkedin, ArrowUpRight, MapPin, Mail } from "lucide-react";
+import { Instagram, Twitter, Linkedin, ArrowUpRight, MapPin, Mail, BadgeCheck } from "lucide-react";
 import logoAsset from "@/assets/gostation-logo-white.png.asset.json";
 
 export function SiteFooter() {
@@ -71,7 +71,42 @@ export function SiteFooter() {
         </FooterColumn>
       </div>
 
+      <div className="relative mx-auto max-w-7xl px-4 pb-14 sm:px-6">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
+              {t("footer.certsTitle")}
+            </div>
+            <div className="text-xs text-foreground/60">{t("footer.certsNote")}</div>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { code: "9001:2015", label: t("footer.cert9001") },
+              { code: "10002:2018", label: t("footer.cert10002") },
+              { code: "14001:2015", label: t("footer.cert14001") },
+              { code: "45001:2018", label: t("footer.cert45001") },
+            ].map((c) => (
+              <div
+                key={c.code}
+                className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3.5 transition hover:border-ember-glow/50 hover:bg-ember/10"
+              >
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-ember-glow/40 bg-ember/10 text-ember-glow transition group-hover:border-ember-glow">
+                  <BadgeCheck className="h-5 w-5" />
+                </div>
+                <div className="min-w-0 leading-tight">
+                  <div className="font-display text-[0.95rem] font-bold tracking-tight text-foreground" dir="ltr">
+                    <span className="text-ember-glow">ISO</span> {c.code}
+                  </div>
+                  <div className="mt-0.5 truncate text-xs text-foreground/70">{c.label}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="relative border-t border-white/10">
+
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-foreground/75 sm:flex-row sm:px-6">
           <div>© {new Date().getFullYear()} {t("brand.name")} — {t("footer.rights")}</div>
           <div className="tracking-[0.18em]">{t("footer.microcopy")}</div>
