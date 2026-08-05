@@ -110,6 +110,8 @@ export const en = {
     newsTitle: "The latest from GoStation",
     reviewsEyebrow: "Voices",
     reviewsTitle: "What customers say",
+    reviewsSub:
+      "At GoStation we listen closely to every customer's opinion, and we turn it into a professional service that lives up to their expectations — every visit, at every station.",
     pricesTitle: "Today's fuel prices (Aramco)",
     ctaBannerEyebrow: "Partner with us",
     ctaBanner: "Ready to be part of GoStation?",
