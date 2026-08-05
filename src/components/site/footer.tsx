@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Instagram, Twitter, Linkedin, ArrowUpRight, MapPin, Mail } from "lucide-react";
 import logoAsset from "@/assets/gostation-logo-white.png.asset.json";
+import isoLogo from "@/assets/iso-logo.png.asset.json";
 
 export function SiteFooter() {
   const { t } = useTranslation();
@@ -72,23 +73,32 @@ export function SiteFooter() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 pb-14 sm:px-6">
-        <div className="grid gap-8 sm:grid-cols-4">
+        <div className="flex flex-wrap items-start justify-center gap-x-10 gap-y-8 md:justify-end">
           {[
-            { std: "9001", year: "2015", label: t("footer.cert9001") },
-            { std: "10002", year: "2018", label: t("footer.cert10002") },
-            { std: "14001", year: "2015", label: t("footer.cert14001") },
-            { std: "45001", year: "2018", label: t("footer.cert45001") },
+            { code: "9001:2015", label: t("footer.cert9001") },
+            { code: "10002:2018", label: t("footer.cert10002") },
+            { code: "14001:2015", label: t("footer.cert14001") },
+            { code: "45001:2018", label: t("footer.cert45001") },
           ].map((c) => (
-            <div key={c.std} className="group flex flex-col items-center text-center">
-              <IsoSeal std={c.std} year={c.year} />
-              <div className="mt-3 text-sm font-semibold text-foreground">{c.label}</div>
-              <div className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-foreground/55">
-                {t("footer.certsNote")}
+            <div key={c.code} className="group flex w-28 flex-col items-center text-center">
+              <img
+                src={isoLogo.url}
+                alt={`ISO ${c.code} — ${c.label}`}
+                loading="lazy"
+                className="h-12 w-auto opacity-70 brightness-0 invert transition duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
+              />
+              <div
+                dir="ltr"
+                className="mt-3 font-display text-sm font-bold tracking-tight text-foreground"
+              >
+                {c.code}
               </div>
+              <div className="mt-1 text-[11px] leading-snug text-foreground/60">{c.label}</div>
             </div>
           ))}
         </div>
       </div>
+
 
 
       <div className="relative border-t border-white/10">
@@ -123,33 +133,5 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
         {children}
       </Link>
     </li>
-  );
-}
-
-function IsoSeal({ std, year }: { std: string; year: string }) {
-  return (
-    <div
-      dir="ltr"
-      className="relative grid h-24 w-24 place-items-center transition-transform duration-300 group-hover:-translate-y-1"
-    >
-      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden>
-        <circle cx="50" cy="50" r="47" className="fill-white/[0.04] stroke-ember-glow/50" strokeWidth="1.5" />
-        <circle cx="50" cy="50" r="40" className="fill-none stroke-ember-glow/25" strokeWidth="1" />
-        <circle
-          cx="50"
-          cy="50"
-          r="43.5"
-          className="fill-none stroke-ember-glow/40"
-          strokeWidth="2"
-          strokeDasharray="1 5"
-          strokeLinecap="round"
-        />
-      </svg>
-      <div className="relative flex flex-col items-center leading-none">
-        <span className="font-display text-[1.15rem] font-black tracking-[0.12em] text-ember-glow">ISO</span>
-        <span className="mt-1 font-display text-[0.95rem] font-bold tracking-tight text-foreground">{std}</span>
-        <span className="mt-1 text-[10px] font-medium tracking-[0.14em] text-foreground/60">{year}</span>
-      </div>
-    </div>
   );
 }
