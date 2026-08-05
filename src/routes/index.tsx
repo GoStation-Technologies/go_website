@@ -643,6 +643,9 @@ function HomePage() {
           <div className="max-w-2xl">
             <div className="eyebrow">{t("home.reviewsEyebrow")}</div>
             <h2 className="mt-4 text-4xl font-bold md:text-5xl">{t("home.reviewsTitle")}</h2>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              {t("home.reviewsSub")}
+            </p>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {(reviews.data ?? []).slice(0, 3).map((r, i) => (
