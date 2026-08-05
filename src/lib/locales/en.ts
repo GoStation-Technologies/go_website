@@ -239,6 +239,12 @@ export const en = {
     terms: "Terms",
     rights: "All rights reserved.",
     microcopy: "MADE IN KSA • 2026",
+    certsTitle: "Certifications",
+    certsNote: "Certified management systems",
+    cert9001: "Quality management",
+    cert10002: "Customer satisfaction",
+    cert14001: "Environmental management",
+    cert45001: "Occupational health & safety",
   },
   admin: {
     brand: "GoStation Admin",
