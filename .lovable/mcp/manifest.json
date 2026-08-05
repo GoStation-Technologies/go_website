@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://pfjrwogubzcyydrsozdy.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "org-website-builder",
+      "version": "0.1.0",
+      "title": "Org Website Builder"
+    },
+    "tools": [
+      {
+        "name": "list_stations",
+        "title": "List stations",
+        "description": "List GoStation fuel stations, optionally filtered by city or name.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Free text matched against station and city names."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max rows to return (default 20, max 100)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_news",
+        "title": "List news and events",
+        "description": "List GoStation news articles and events (bilingual titles and excerpts).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "news",
+                "event"
+              ],
+              "description": "Filter by content kind."
+            },
+            "published_only": {
+              "type": "boolean",
+              "description": "Only published items (default true)."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max rows to return (default 20, max 100)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_job_openings",
+        "title": "List job openings",
+        "description": "List GoStation career openings, optionally filtered by department or city.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "department": {
+              "type": "string",
+              "description": "Department filter (partial match)."
+            },
+            "city": {
+              "type": "string",
+              "description": "City filter (partial match)."
+            },
+            "active_only": {
+              "type": "boolean",
+              "description": "Only active postings (default true)."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max rows to return (default 20, max 100)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_submissions",
+        "title": "List submissions",
+        "description": "List franchise applications, acquisition requests, or contact messages. Requires staff access.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "franchise",
+                "acquisition",
+                "contact"
+              ],
+              "description": "Which submission inbox to read."
+            },
+            "status": {
+              "type": "string",
+              "description": "Filter by workflow status, e.g. new, reviewing, closed."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Max rows to return (default 20, max 100)."
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_submission_status",
+        "title": "Update submission status",
+        "description": "Change the workflow status of one franchise, acquisition, or contact submission. Requires staff access.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "franchise",
+                "acquisition",
+                "contact"
+              ],
+              "description": "Which submission inbox."
+            },
+            "id": {
+              "type": "string",
+              "description": "Submission UUID."
+            },
+            "status": {
+              "type": "string",
+              "description": "New workflow status, e.g. new, reviewing, approved, closed."
+            }
+          },
+          "required": [
+            "type",
+            "id",
+            "status"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "portal_overview",
+        "title": "Portal overview",
+        "description": "Row counts across stations, news, careers, and submission inboxes, scoped to what the caller may read.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

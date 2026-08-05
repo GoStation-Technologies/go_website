@@ -72,7 +72,7 @@ function AdminLayout() {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    router.navigate({ to: "/manage-portal-9f4c2ab7/login" });
+    router.navigate({ to: "/manage-portal-9f4c2ab7/login", search: { redirect: undefined } });
   };
 
   const defaultOpen =
