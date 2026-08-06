@@ -5,11 +5,18 @@ import { CookieBanner } from "./cookie-banner";
 import { LangBoot } from "./lang-boot";
 import { ChatWidget } from "./chat-widget";
 
-export function SiteLayout({ children }: { children: ReactNode }) {
+export function SiteLayout({
+  children,
+  overlayHeader = false,
+}: {
+  children: ReactNode;
+  /** Render the header floating on top of the first section (no bar). */
+  overlayHeader?: boolean;
+}) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <LangBoot />
-      <SiteHeader />
+      <SiteHeader overlay={overlayHeader} />
       <main>{children}</main>
       <SiteFooter />
       <CookieBanner />
