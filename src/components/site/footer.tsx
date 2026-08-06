@@ -72,32 +72,33 @@ export function SiteFooter() {
         </FooterColumn>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 pb-14 sm:px-6">
-        <div className="flex flex-wrap items-start justify-center gap-x-10 gap-y-8 md:justify-end">
+      <div className="relative mx-auto max-w-7xl px-4 pb-10 sm:px-6 md:-mt-32 lg:-mt-36">
+        <div className="flex flex-wrap items-start justify-center gap-x-8 gap-y-6 md:justify-end">
           {[
             { code: "9001:2015", label: t("footer.cert9001") },
             { code: "10002:2018", label: t("footer.cert10002") },
             { code: "14001:2015", label: t("footer.cert14001") },
             { code: "45001:2018", label: t("footer.cert45001") },
           ].map((c) => (
-            <div key={c.code} className="group flex w-28 flex-col items-center text-center">
+            <div key={c.code} className="group flex w-24 flex-col items-center text-center">
               <img
                 src={isoLogo.url}
                 alt={`ISO ${c.code} — ${c.label}`}
                 loading="lazy"
-                className="h-12 w-auto opacity-70 brightness-0 invert transition duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
+                className="h-9 w-auto opacity-70 brightness-0 invert transition duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
               />
               <div
                 dir="ltr"
-                className="mt-3 font-display text-sm font-bold tracking-tight text-foreground"
+                className="mt-2 font-display text-xs font-bold tracking-tight text-foreground"
               >
                 {c.code}
               </div>
-              <div className="mt-1 text-[11px] leading-snug text-foreground/60">{c.label}</div>
+              <div className="mt-0.5 text-[10px] leading-snug text-foreground/60">{c.label}</div>
             </div>
           ))}
         </div>
       </div>
+
 
 
 
