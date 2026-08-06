@@ -128,7 +128,7 @@ function HomePage() {
   ];
 
   return (
-    <SiteLayout>
+    <SiteLayout overlayHeader>
       {/* ============ HERO — full-bleed cinematic ============ */}
       <section className="relative isolate flex min-h-[100vh] flex-col overflow-hidden border-b border-border/60">
         {/* Interactive background: ken-burns zoom + pointer & scroll parallax */}
