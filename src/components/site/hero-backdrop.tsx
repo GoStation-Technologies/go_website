@@ -93,7 +93,12 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
           className="animate-ken-burns h-full w-full object-cover"
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/65 to-ink/30" />
+      {/* soft navy veil across the whole image */}
+      <div className="absolute inset-0 bg-ink/25" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/25" />
+      {/* extra shade under the floating navigation */}
+      <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-ink/60 via-ink/25 to-transparent" />
+
       <div
         className="absolute inset-0 transition-[background] duration-500"
         style={{
