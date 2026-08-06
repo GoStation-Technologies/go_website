@@ -91,13 +91,35 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
           width={1600}
           height={1600}
           className="animate-ken-burns h-full w-full object-cover"
+          style={{
+            filter:
+              "saturate(1.25) contrast(1.08) brightness(1.04) blur(1.2px)",
+          }}
         />
       </div>
       {/* soft navy veil across the whole image */}
-      <div className="absolute inset-0 bg-ink/25" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/25" />
+      <div className="absolute inset-0 bg-ink/35" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/35" />
+      {/* glassy water-like sheen */}
+      <div
+        className="pointer-events-none absolute inset-0 mix-blend-screen opacity-70"
+        aria-hidden
+        style={{
+          background:
+            "linear-gradient(115deg, transparent 0%, color-mix(in oklab, white 16%, transparent) 32%, transparent 46%, color-mix(in oklab, white 10%, transparent) 66%, transparent 100%)",
+        }}
+      />
+      {/* liquid gloss reflection along the bottom */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 mix-blend-soft-light"
+        aria-hidden
+        style={{
+          background:
+            "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.28) 55%, rgba(255,255,255,0.12) 100%)",
+        }}
+      />
       {/* extra shade under the floating navigation */}
-      <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-ink/60 via-ink/25 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-ink/70 via-ink/30 to-transparent" />
 
       <div
         className="absolute inset-0 transition-[background] duration-500"
