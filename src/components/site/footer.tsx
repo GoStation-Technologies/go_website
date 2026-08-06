@@ -1,8 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Instagram, Twitter, Linkedin, ArrowUpRight, MapPin, Mail } from "lucide-react";
+import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail } from "lucide-react";
 import logoAsset from "@/assets/gostation-logo-white.png.asset.json";
 import isoLogo from "@/assets/iso-logo.png.asset.json";
+
+function XIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
+      <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-1.79-2.46V9.79a5.77 5.77 0 1 0 4.88 5.71V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.24-1.48z" />
+    </svg>
+  );
+}
+
 
 export function SiteFooter() {
   const { t } = useTranslation();
@@ -39,18 +56,26 @@ export function SiteFooter() {
             <Mail className="h-4 w-4 shrink-0 text-ember-glow" />
             <a href="mailto:info@gostation.net" className="hover:text-ember-glow">info@gostation.net</a>
           </div>
-          <div className="mt-6 flex gap-2">
-            {[Twitter, Instagram, Linkedin].map((Icon, i) => (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {[
+              { Icon: XIcon, label: "X" },
+              { Icon: Instagram, label: "Instagram" },
+              { Icon: Linkedin, label: "LinkedIn" },
+              { Icon: Youtube, label: "YouTube" },
+              { Icon: TikTokIcon, label: "TikTok" },
+              { Icon: Facebook, label: "Facebook" },
+            ].map(({ Icon, label }) => (
               <a
-                key={i}
+                key={label}
                 href="#"
-                aria-label="social"
+                aria-label={label}
                 className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-foreground/90 transition hover:border-ember-glow hover:bg-ember/20 hover:text-ember-glow"
               >
                 <Icon className="h-4 w-4" />
               </a>
             ))}
           </div>
+
         </div>
 
         <FooterColumn title={t("footer.company")}>
