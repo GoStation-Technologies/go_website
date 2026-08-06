@@ -25,7 +25,7 @@ const NAV = [
   { to: "/contact", key: "contact" },
 ] as const;
 
-export function SiteHeader() {
+export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -43,18 +43,24 @@ export function SiteHeader() {
     i18n.changeLanguage(next);
   };
 
+  const overlayTop = overlay && !scrolled;
+
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border/60 glass shadow-[0_1px_0_0_rgba(0,0,0,0.02)]"
-          : "border-b border-transparent bg-background/40 backdrop-blur-sm"
+      className={`z-40 w-full transition-all duration-300 ${
+        overlay ? "fixed top-0 start-0" : "sticky top-0"
+      } ${
+        overlayTop
+          ? "header-overlay border-b border-transparent bg-transparent"
+          : scrolled
+            ? `border-b ${overlay ? "header-overlay border-white/10 glass-ink" : "border-border/60 glass"} shadow-[0_1px_0_0_rgba(0,0,0,0.02)]`
+            : "border-b border-transparent bg-background/40 backdrop-blur-sm"
       }`}
     >
       <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link to="/" className="group flex items-center gap-2.5">
           <img
-            src={logoAsset.url}
+            src={overlay ? logoWhiteAsset.url : logoAsset.url}
             alt="GoStation"
             className="h-9 w-9 object-contain transition-transform duration-500 group-hover:rotate-[8deg]"
           />
@@ -67,6 +73,7 @@ export function SiteHeader() {
             </span>
           </div>
         </Link>
+
 
         <nav className="hidden flex-1 items-center justify-center gap-0.5 lg:flex">
           {NAV.map((n) => (
