@@ -133,7 +133,9 @@
    muted copy, borders) inherit the correct contrast without ad-hoc classes. */
 .bg-hero-ink,
 .bg-brand-radial,
+.header-overlay,
 .glass-ink {
+
   --background: var(--ink);
   --foreground: oklch(0.98 0.005 250);
   --card: color-mix(in oklab, var(--ink) 78%, white 4%);
