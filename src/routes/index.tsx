@@ -29,7 +29,7 @@ import {
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
-import chairmanAsset from "@/assets/chairman.jpg.asset.json";
+import chairmanCutoutAsset from "@/assets/chairman-cutout.png.asset.json";
 
 import appPoints from "@/assets/go-app-points.jpg.asset.json";
 import appReports from "@/assets/go-app-reports.jpg.asset.json";
