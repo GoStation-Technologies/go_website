@@ -29,6 +29,7 @@ import {
 import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoAsset from "@/assets/gostation-logo.png.asset.json";
+import chairmanAsset from "@/assets/chairman.jpg.asset.json";
 
 import appPoints from "@/assets/go-app-points.jpg.asset.json";
 import appReports from "@/assets/go-app-reports.jpg.asset.json";
@@ -239,11 +240,11 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border border-accent/30 bg-background p-4 shadow-card md:h-32 md:w-32">
+          <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border border-accent/30 bg-background shadow-card md:h-32 md:w-32">
             <img
-              src={logoAsset.url}
+              src={chairmanAsset.url}
               alt={t("home.quoteAuthor")}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-cover"
             />
           </div>
           <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
