@@ -240,11 +240,18 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="mx-auto h-28 w-28 overflow-hidden rounded-full border border-accent/30 bg-background shadow-card md:h-32 md:w-32">
+          <div className="relative mx-auto h-28 w-28 md:h-32 md:w-32">
+            <div className="absolute inset-0 rounded-full border border-accent/30 bg-background shadow-card" />
             <img
-              src={chairmanAsset.url}
+              src={chairmanCutoutAsset.url}
               alt={t("home.quoteAuthor")}
-              className="h-full w-full object-cover"
+              className="absolute bottom-0 left-1/2 h-[132%] w-auto -translate-x-1/2 object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+              style={{
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, black 88%, transparent 100%)",
+                maskImage:
+                  "linear-gradient(to bottom, black 88%, transparent 100%)",
+              }}
             />
           </div>
           <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
