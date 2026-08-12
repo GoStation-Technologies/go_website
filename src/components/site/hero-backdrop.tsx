@@ -115,15 +115,15 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
         className="absolute inset-0 transition-[background] duration-500"
         style={{
           background:
-            "radial-gradient(900px 520px at var(--hx, 50%) var(--hy, 12%), color-mix(in oklab, var(--ember) 30%, transparent), transparent 65%)",
+            "radial-gradient(900px 520px at var(--hx, 50%) var(--hy, 12%), color-mix(in oklab, var(--ember) 18%, transparent), transparent 65%)",
         }}
       />
       {/* cursor-following light sheen */}
       <div
-        className="pointer-events-none absolute inset-0 mix-blend-soft-light"
+        className="pointer-events-none absolute inset-0 mix-blend-soft-light opacity-50"
         style={{
           background:
-            "radial-gradient(420px 420px at var(--hx, 50%) var(--hy, 12%), rgba(255,255,255,0.35), transparent 70%)",
+            "radial-gradient(420px 420px at var(--hx, 50%) var(--hy, 12%), rgba(255,255,255,0.16), transparent 70%)",
         }}
       />
     </div>
