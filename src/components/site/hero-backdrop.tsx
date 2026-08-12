@@ -92,30 +92,20 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
           height={1600}
           className="animate-ken-burns h-full w-full object-cover"
           style={{
-            filter:
-              "saturate(1.25) contrast(1.08) brightness(1.04) blur(1.2px)",
+            filter: "saturate(1.12) contrast(1.04) brightness(1.02)",
           }}
         />
       </div>
       {/* soft navy veil across the whole image */}
-      <div className="absolute inset-0 bg-ink/35" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/35" />
-      {/* glassy water-like sheen */}
+      <div className="absolute inset-0 bg-ink/28" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/20" />
+      {/* subtle gloss along the bottom */}
       <div
-        className="pointer-events-none absolute inset-0 mix-blend-screen opacity-70"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 mix-blend-soft-light opacity-40"
         aria-hidden
         style={{
           background:
-            "linear-gradient(115deg, transparent 0%, color-mix(in oklab, white 16%, transparent) 32%, transparent 46%, color-mix(in oklab, white 10%, transparent) 66%, transparent 100%)",
-        }}
-      />
-      {/* liquid gloss reflection along the bottom */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 mix-blend-soft-light"
-        aria-hidden
-        style={{
-          background:
-            "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.28) 55%, rgba(255,255,255,0.12) 100%)",
+            "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.14) 70%, rgba(255,255,255,0.06) 100%)",
         }}
       />
       {/* extra shade under the floating navigation */}
@@ -125,15 +115,15 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
         className="absolute inset-0 transition-[background] duration-500"
         style={{
           background:
-            "radial-gradient(900px 520px at var(--hx, 50%) var(--hy, 12%), color-mix(in oklab, var(--ember) 30%, transparent), transparent 65%)",
+            "radial-gradient(900px 520px at var(--hx, 50%) var(--hy, 12%), color-mix(in oklab, var(--ember) 18%, transparent), transparent 65%)",
         }}
       />
       {/* cursor-following light sheen */}
       <div
-        className="pointer-events-none absolute inset-0 mix-blend-soft-light"
+        className="pointer-events-none absolute inset-0 mix-blend-soft-light opacity-50"
         style={{
           background:
-            "radial-gradient(420px 420px at var(--hx, 50%) var(--hy, 12%), rgba(255,255,255,0.35), transparent 70%)",
+            "radial-gradient(420px 420px at var(--hx, 50%) var(--hy, 12%), rgba(255,255,255,0.16), transparent 70%)",
         }}
       />
     </div>
