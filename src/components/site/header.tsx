@@ -22,9 +22,9 @@ const NAV = [
   { to: "/media", key: "media" },
   { to: "/franchise", key: "franchise" },
   { to: "/acquisitions", key: "acquisitions" },
-  { to: "/careers", key: "careers" },
   { to: "/investors", key: "investors" },
   { to: "/contact", key: "contact" },
+  { to: "/careers", key: "careers" },
 ] as const;
 
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
