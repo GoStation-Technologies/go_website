@@ -160,13 +160,6 @@ function FranchisePage() {
                 {t("franchise.about.statB")}
               </span>
             </div>
-            <Button
-              onClick={() => document.getElementById("franchise-form")?.scrollIntoView({ behavior: "smooth" })}
-              className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
-              size="lg"
-            >
-              {t("franchise.about.cta")}
-            </Button>
           </div>
         </div>
       </section>
