@@ -57,19 +57,13 @@ export function JoinCta() {
                 </li>
               ))}
             </ul>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex justify-end">
               <Link
                 to="/acquisitions"
-                className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02]"
+                className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)]"
               >
                 {t("footer.acqCta")}
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-foreground/90 transition hover:border-white/50 hover:bg-white/5"
-              >
-                {t("nav.contact")}
               </Link>
             </div>
           </div>
