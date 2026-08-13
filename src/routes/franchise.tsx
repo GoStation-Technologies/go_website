@@ -69,12 +69,65 @@ function FranchisePage() {
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-16 text-white">
-        <div className="mx-auto max-w-7xl px-4">
-          <h1 className="text-4xl font-extrabold md:text-5xl">{t("franchise.title")}</h1>
-          <p className="mt-3 max-w-2xl text-white/80">{t("franchise.intro")}</p>
+      <section className="relative isolate overflow-hidden bg-brand-radial py-20 text-white md:py-24">
+        {/* brand gradient washes */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(900px 420px at 12% 0%, color-mix(in oklab, var(--accent) 32%, transparent), transparent 65%), radial-gradient(700px 380px at 95% 110%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 60%)",
+          }}
+        />
+        {/* fine grid */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+            maskImage: "radial-gradient(70% 100% at 50% 0%, black, transparent 75%)",
+          }}
+        />
+        {/* accent edge */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
+
+        {/* expressive station icons */}
+        <div aria-hidden className="pointer-events-none absolute inset-y-0 end-0 hidden w-1/2 items-center justify-center md:flex">
+          <Fuel className="absolute h-64 w-64 text-white/[0.06]" strokeWidth={0.6} />
+          <div className="relative grid grid-cols-2 gap-4 opacity-90">
+            {[Fuel, Store, Handshake, Building2].map((Icon, i) => (
+              <div
+                key={i}
+                className="flex h-20 w-20 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] shadow-lg backdrop-blur-sm"
+              >
+                <Icon className="h-8 w-8 text-accent" strokeWidth={1.6} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-4">
+          <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-accent">
+            <Fuel className="h-3.5 w-3.5" />
+            {t("franchise.about.eyebrow")}
+          </span>
+          <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-6xl">
+            {t("franchise.title")}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-white/75">{t("franchise.intro")}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <span className="rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-sm font-semibold text-white/90">
+              {t("franchise.about.statA")}
+            </span>
+            <span className="rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-sm font-semibold text-white/90">
+              {t("franchise.about.statB")}
+            </span>
+          </div>
         </div>
       </section>
+
 
       <section className="border-b bg-muted/30 py-16">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-2">
