@@ -271,6 +271,8 @@ export const en = {
     intro: "Financial reports, disclosures, and investor inquiries.",
     reports: "Financial reports",
     contact: "Investor inquiry",
+    contactSub:
+      "Get in touch with the GoStation investor relations team and receive the support and information you need.",
     download: "Download PDF",
     heroTitle: "Why invest in GoStation",
     heroBody:

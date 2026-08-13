@@ -230,7 +230,8 @@ function IRPage() {
 
 
       <section className="mx-auto max-w-3xl px-4 py-12">
-        <h2 className="mb-4 text-2xl font-bold">{t("investors.contact")}</h2>
+        <h2 className="mb-2 text-2xl font-bold">{t("investors.contact")}</h2>
+        <p className="mb-6 text-sm text-muted-foreground">{t("investors.contactSub")}</p>
         <Card><CardContent className="p-8">
           {ref && <div className="mb-4 rounded-lg border border-accent/40 bg-accent/10 p-3 text-sm">{t("common.referenceSaved")} <span className="font-mono">{ref}</span></div>}
           <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
