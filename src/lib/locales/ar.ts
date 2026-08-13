@@ -281,6 +281,13 @@ export const ar = {
     kpiRevenue: "الإيرادات السنوية",
     kpiGrowth: "النمو السنوي",
     kpiStations: "المحطات التشغيلية",
+    reportsEyebrow: "المعلومات المالية",
+    reportsTitle: "اطّلع على أحدث التقارير",
+    reportsEmpty: "لا توجد تقارير منشورة حتى الآن.",
+    view: "عرض",
+    reportTypes: { annual: "تقرير سنوي", quarterly: "تقرير ربع سنوي", esg: "تقرير الاستدامة" },
+    prev: "السابق",
+    next: "التالي",
   },
 
   auth: {
