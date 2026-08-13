@@ -91,16 +91,16 @@ function FranchisePage() {
             className="h-full w-full scale-[1.12] object-cover object-[62%_40%] opacity-80"
             style={{
               maskImage:
-                "radial-gradient(120% 130% at 88% 45%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.35) 62%, transparent 82%)",
+                "radial-gradient(120% 130% at 14% 45%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.35) 62%, transparent 82%)",
               WebkitMaskImage:
-                "radial-gradient(120% 130% at 88% 45%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.35) 62%, transparent 82%)",
+                "radial-gradient(120% 130% at 14% 45%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.35) 62%, transparent 82%)",
             }}
           />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to left, color-mix(in oklab, var(--ink) 25%, transparent) 0%, color-mix(in oklab, var(--ink) 70%, transparent) 45%, color-mix(in oklab, var(--ink) 92%, transparent) 78%, var(--ink) 100%)",
+                "linear-gradient(to right, color-mix(in oklab, var(--ink) 25%, transparent) 0%, color-mix(in oklab, var(--ink) 70%, transparent) 45%, color-mix(in oklab, var(--ink) 92%, transparent) 78%, var(--ink) 100%)",
             }}
           />
           <div
