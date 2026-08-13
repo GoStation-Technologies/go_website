@@ -70,20 +70,20 @@ function CountUp({ value }: { value: string }) {
 /** Professional stat cards that float over the section edge above them. */
 export function StatCards({ stats }: { stats: readonly Stat[] }) {
   return (
-    <div className="mx-auto mt-10 grid max-w-7xl grid-cols-2 gap-4 px-4 sm:px-6 lg:grid-cols-4 lg:gap-6">
+    <div className="mx-auto mt-8 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:px-6 lg:grid-cols-4 lg:gap-4">
       {stats.map((s, i) => (
         <div
           key={s.key}
-          className="group relative rounded-2xl border border-border/60 bg-card px-5 pb-6 pt-9 text-center shadow-elegant transition-all duration-300 hover:-translate-y-1.5 hover:shadow-glow"
+          className="group relative rounded-2xl border border-border/60 bg-card px-4 pb-5 pt-8 text-center shadow-elegant transition-all duration-300 hover:-translate-y-1.5 hover:shadow-glow"
           style={{ animationDelay: `${i * 90}ms` }}
         >
-          <div className="absolute -top-6 start-1/2 grid h-12 w-12 -translate-x-1/2 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition-transform duration-300 group-hover:scale-110 rtl:translate-x-1/2">
-            <s.icon className="h-5 w-5" />
+          <div className="absolute -top-5 start-1/2 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition-transform duration-300 group-hover:scale-110 rtl:translate-x-1/2">
+            <s.icon className="h-4 w-4" />
           </div>
-          <div className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
             {s.label}
           </div>
-          <div className="mt-2 font-display text-4xl font-black leading-none tracking-tight text-primary md:text-[2.75rem]">
+          <div className="mt-1.5 font-display text-3xl font-black leading-none tracking-tight text-primary md:text-[2.25rem]">
             <CountUp value={s.val} />
           </div>
         </div>
