@@ -19,7 +19,7 @@ export const Route = createFileRoute("/acquisitions")({
   head: () =>
     pageHead({
       path: "/acquisitions",
-      title: "الاستحواذ",
+      title: "Sell Your Station — GoStation Acquisitions",
       description:
         "GoStation acquires existing fuel stations across Saudi Arabia. Share your station details and our acquisitions team will evaluate and respond.",
     }),
