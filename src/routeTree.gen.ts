@@ -13,6 +13,7 @@ import { Route as StationsRouteImport } from './routes/stations'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
+import { Route as LeasingRouteImport } from './routes/leasing'
 import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -57,6 +58,11 @@ const McpRoute = McpRouteImport.update({
 const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
   id: '/manage-portal-9f4c2ab7',
   path: '/manage-portal-9f4c2ab7',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeasingRoute = LeasingRouteImport.update({
+  id: '/leasing',
+  path: '/leasing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvestorsRoute = InvestorsRouteImport.update({
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/leasing': typeof LeasingRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
   '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -239,6 +246,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/leasing': typeof LeasingRoute
   '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
@@ -270,6 +278,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
+  '/leasing': typeof LeasingRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
   '/mcp': typeof McpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -303,6 +312,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/leasing'
     | '/manage-portal-9f4c2ab7'
     | '/mcp'
     | '/sitemap.xml'
@@ -334,6 +344,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/leasing'
     | '/mcp'
     | '/sitemap.xml'
     | '/stations'
@@ -364,6 +375,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/franchise'
     | '/investors'
+    | '/leasing'
     | '/manage-portal-9f4c2ab7'
     | '/mcp'
     | '/sitemap.xml'
@@ -396,6 +408,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
+  LeasingRoute: typeof LeasingRoute
   ManagePortal9f4c2ab7Route: typeof ManagePortal9f4c2ab7RouteWithChildren
   McpRoute: typeof McpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -438,6 +451,13 @@ declare module '@tanstack/react-router' {
       path: '/manage-portal-9f4c2ab7'
       fullPath: '/manage-portal-9f4c2ab7'
       preLoaderRoute: typeof ManagePortal9f4c2ab7RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leasing': {
+      id: '/leasing'
+      path: '/leasing'
+      fullPath: '/leasing'
+      preLoaderRoute: typeof LeasingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/investors': {
@@ -656,6 +676,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
+  LeasingRoute: LeasingRoute,
   ManagePortal9f4c2ab7Route: ManagePortal9f4c2ab7RouteWithChildren,
   McpRoute: McpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
