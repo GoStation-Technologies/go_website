@@ -308,8 +308,14 @@ export const en = {
   footer: {
     tagline:
       "GoStation — the operational arm of Hala Saudi Petroleum Services. Building the future of fuel, mobility, and retail across the Kingdom since 2017.",
-    eyebrow: "Let's build together",
-    headline: "The Kingdom's fastest-growing station network. Join us.",
+    eyebrow: "Station acquisitions",
+    headline: "Own a station? We're ready to acquire it.",
+    acqBody:
+      "We evaluate your station technically and financially, present a fair and fast offer, then fully redevelop and operate it to GoStation standards.",
+    acqPoint1: "Evaluation within 5 business days",
+    acqPoint2: "Purchase or operating partnership",
+    acqPoint3: "Full station redevelopment",
+    acqCta: "Submit an acquisition request",
     company: "Company",
     resources: "Resources",
     legal: "Legal",
