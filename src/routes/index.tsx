@@ -105,7 +105,7 @@ function HomePage() {
   const stats = [
     { key: "statsStations", val: "180+" },
     { key: "statsRegions", val: "13" },
-    { key: "statsYears", val: "8" },
+    { key: "statsYears", val: t("home.statsYearsValue") },
     { key: "statsDaily", val: "50k+" },
   ] as const;
 
