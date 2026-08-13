@@ -171,6 +171,7 @@ export const en = {
     title: "Apply for a GoStation franchise",
     intro: "Join a growing network. Fill in the form and our BD team will contact you.",
     steps: { personal: "Personal", location: "Location", financial: "Financial" },
+    formIntro: "Fill out the form and the franchise team will contact you",
     submit: "Submit application",
     about: {
       eyebrow: "Franchise",
