@@ -49,7 +49,7 @@ export const en = {
     heroSub:
       "180+ stations across 13 regions. GoStation is redefining what a fuel station means in the Kingdom — fuel, retail, fleet, and franchise, engineered for 2026.",
     trustedBy: "Trusted across the Kingdom",
-    ctaFranchise: "Own a station",
+    ctaFranchise: "Apply for franchise",
     ctaStations: "Find a station",
     statsStations: "Stations",
     statsRegions: "Regions",
@@ -168,7 +168,7 @@ export const en = {
     directions: "Directions",
   },
   franchise: {
-    title: "Own a GoStation",
+    title: "Apply for a GoStation franchise",
     intro: "Join a growing network. Fill in the form and our BD team will contact you.",
     steps: { personal: "Personal", location: "Location", financial: "Financial" },
     submit: "Submit application",
