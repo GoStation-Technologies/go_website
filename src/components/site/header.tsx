@@ -41,9 +41,21 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
   const toggleLang = () => {
     const next = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar" ? "en" : "ar";
-    document.cookie = `gs_lang=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+    // Persist the choice. Inside cross-site preview iframes a `lax` cookie is
+    // dropped by the browser, so use `none; secure` on https and keep a
+    // localStorage copy as a fallback source of truth.
+    const crossSiteSafe = typeof location !== "undefined" && location.protocol === "https:";
+    document.cookie = `gs_lang=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=${
+      crossSiteSafe ? "none; secure" : "lax"
+    }`;
+    try {
+      localStorage.setItem("gs_lang", next);
+    } catch {
+      /* storage unavailable */
+    }
     i18n.changeLanguage(next);
   };
+
 
   const overlayTop = overlay && !scrolled;
 
