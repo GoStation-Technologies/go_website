@@ -12,10 +12,18 @@ const detectRequestLanguage = createIsomorphicFn()
   })
   .server((): ContentLanguage => {
     try {
-      const fromCookie = getLangFromCookieHeader(getRequestHeader("cookie"));
-      if (fromCookie) return fromCookie;
-      return getContentLanguage(getRequestHeader("accept-language"));
-    } catch {
+      const cookieHeader = getRequestHeader("cookie");
+      const fromCookie = getLangFromCookieHeader(cookieHeader);
+      if (fromCookie) {
+        console.log("[ssr] lang from cookie:", fromCookie);
+        return fromCookie;
+      }
+      const acceptLang = getRequestHeader("accept-language");
+      const fromAccept = getContentLanguage(acceptLang);
+      console.log("[ssr] lang from accept-language:", fromAccept, acceptLang);
+      return fromAccept;
+    } catch (e) {
+      console.log("[ssr] lang error:", e);
       return "en";
     }
   });

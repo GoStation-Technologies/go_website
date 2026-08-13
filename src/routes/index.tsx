@@ -240,19 +240,14 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="relative mx-auto h-28 w-28 md:h-32 md:w-32">
-            <div className="absolute inset-0 rounded-full border border-accent/30 bg-background shadow-card" />
-            <div
-              className="absolute inset-0"
-              style={{ clipPath: "inset(-60% 0% 0% 0%)" }}
-            >
-              <img
-                src={chairmanCutoutAsset.url}
-                alt={t("home.quoteAuthor")}
-                className="absolute bottom-0 left-1/2 h-[138%] w-auto max-w-none -translate-x-1/2 object-contain object-bottom drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
-              />
-            </div>
+          <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-accent/30 bg-background shadow-card md:h-40 md:w-40">
+            <img
+              src={chairmanCutoutAsset.url}
+              alt={t("home.quoteAuthor")}
+              className="h-full w-full object-contain object-center drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+            />
           </div>
+
 
           <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {t("home.quote")}
