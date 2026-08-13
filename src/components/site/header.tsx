@@ -19,12 +19,12 @@ import { ThemeToggle } from "@/components/theme-toggle";
 const NAV = [
   { to: "/about", key: "about" },
   { to: "/stations", key: "stations" },
-  { to: "/media", key: "media" },
   { to: "/franchise", key: "franchise" },
   { to: "/acquisitions", key: "acquisitions" },
   { to: "/investors", key: "investors" },
-  { to: "/contact", key: "contact" },
+  { to: "/media", key: "media" },
   { to: "/careers", key: "careers" },
+  { to: "/contact", key: "contact" },
 ] as const;
 
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
