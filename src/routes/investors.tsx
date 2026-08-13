@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,8 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { FileText, Download } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, FileDown } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
+import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
 
 
 export const Route = createFileRoute("/investors")({
@@ -39,6 +40,14 @@ function IRPage() {
       return data ?? [];
     },
   });
+
+  const railRef = useRef<HTMLDivElement>(null);
+  const scrollRail = (dir: number) => {
+    const el = railRef.current;
+    if (!el) return;
+    const rtl = getComputedStyle(el).direction === "rtl";
+    el.scrollBy({ left: dir * 296 * (rtl ? -1 : 1), behavior: "smooth" });
+  };
 
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
@@ -132,7 +141,7 @@ function IRPage() {
             <button
               type="button"
               aria-label={t("investors.prev")}
-              onClick={() => scrollBy(-1)}
+              onClick={() => scrollRail(-1)}
               className="grid h-12 w-12 place-items-center rounded-full border border-border/70 text-foreground/70 transition hover:border-accent hover:text-accent"
             >
               <ArrowRight className="h-5 w-5 rtl:hidden" />
@@ -141,7 +150,7 @@ function IRPage() {
             <button
               type="button"
               aria-label={t("investors.next")}
-              onClick={() => scrollBy(1)}
+              onClick={() => scrollRail(1)}
               className="grid h-12 w-12 place-items-center rounded-full border border-border/70 text-foreground/70 transition hover:border-accent hover:text-accent"
             >
               <ArrowLeft className="h-5 w-5 rtl:hidden" />
