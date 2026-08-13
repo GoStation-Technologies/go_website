@@ -14,7 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { FileText, Download, TrendingUp } from "lucide-react";
+import { FileText, Download } from "lucide-react";
+import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
+
 
 export const Route = createFileRoute("/investors")({
   component: IRPage,
@@ -61,31 +63,59 @@ function IRPage() {
   };
 
   const kpis = [
-    { label: lng === "ar" ? "الإيرادات" : "Revenue", value: "3.2B SAR", icon: TrendingUp },
-    { label: lng === "ar" ? "النمو السنوي" : "YoY growth", value: "+18%", icon: TrendingUp },
-    { label: lng === "ar" ? "المحطات" : "Stations", value: "180", icon: FileText },
+    { label: t("investors.kpiRevenue"), value: "3.2B", unit: lng === "ar" ? "ريال" : "SAR" },
+    { label: t("investors.kpiGrowth"), value: "+18%", unit: "" },
+    { label: t("investors.kpiStations"), value: "180+", unit: lng === "ar" ? "محطة" : "stations" },
   ];
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-16 text-white">
-        <div className="mx-auto max-w-7xl px-4">
-          <h1 className="text-4xl font-extrabold md:text-5xl">{t("investors.title")}</h1>
-          <p className="mt-3 max-w-2xl text-white/80">{t("investors.intro")}</p>
+      <section className="relative isolate overflow-hidden bg-ink text-white">
+        <img
+          src={stationCanopy.url}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full scale-105 object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-ink/80" />
+        <div
+          className="absolute inset-0"
+          aria-hidden
+          style={{
+            background:
+              "radial-gradient(900px 520px at 78% -10%, color-mix(in oklab, var(--ember) 20%, transparent), transparent 62%), linear-gradient(180deg, color-mix(in oklab, var(--ink) 55%, transparent) 0%, color-mix(in oklab, var(--ink) 88%, transparent) 70%, var(--background) 100%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-4xl px-4 pb-40 pt-28 text-center md:pb-48 md:pt-36">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs tracking-wide backdrop-blur-sm">
+            {t("investors.title")}
+          </span>
+          <h1 className="mt-5 text-balance text-3xl font-extrabold leading-tight md:text-5xl">
+            {t("investors.heroTitle")}
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-white/75 md:text-base">
+            {t("investors.heroBody")}
+          </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid gap-4 md:grid-cols-3">
-          {kpis.map((k) => (
-            <Card key={k.label}><CardContent className="p-6">
-              <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent"><k.icon className="h-5 w-5" /></div>
-              <div className="mt-3 text-3xl font-extrabold">{k.value}</div>
-              <div className="text-sm text-muted-foreground">{k.label}</div>
-            </CardContent></Card>
-          ))}
+      <section className="relative z-10 -mt-28 px-4 md:-mt-32">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border/60 bg-card/95 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)] backdrop-blur-xl">
+          <div className="grid divide-y divide-border/70 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:rtl:divide-x-reverse">
+            {kpis.map((k) => (
+              <div key={k.label} className="px-8 py-10 text-center">
+                <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
+                  {k.value}
+                  {k.unit && <span className="ms-2 text-lg font-bold md:text-xl">{k.unit}</span>}
+                </div>
+                <div className="mt-2 text-sm text-muted-foreground">{k.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
+
 
       <section className="mx-auto max-w-7xl px-4 pb-8">
         <h2 className="mb-4 text-2xl font-bold">{t("investors.reports")}</h2>
