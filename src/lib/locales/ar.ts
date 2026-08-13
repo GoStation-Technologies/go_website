@@ -5,7 +5,7 @@ export const ar = {
     about: "من نحن",
     stations: "المحطات",
     media: "المركز الإعلامي",
-    franchise: "امتلك محطة",
+    franchise: "قدّم طلب الامتياز",
     acquisitions: "استحواذ",
     careers: "الوظائف",
     investors: "المستثمرون",
@@ -49,7 +49,7 @@ export const ar = {
     heroSub:
       "أكثر من 180 محطة في 13 منطقة. قوستيشن تُعيد تعريف مفهوم محطة الوقود في المملكة — وقود، تجزئة، أساطيل، وامتياز، بمعايير 2026.",
     trustedBy: "ثقة عملائنا في كل مناطق المملكة",
-    ctaFranchise: "امتلك محطة",
+    ctaFranchise: "قدّم طلب الامتياز",
     ctaStations: "أقرب محطة",
     statsStations: "محطة",
     statsRegions: "منطقة",
@@ -171,7 +171,7 @@ export const ar = {
     directions: "الاتجاهات",
   },
   franchise: {
-    title: "امتلك محطة قوستيشن",
+    title: "قدّم طلب الامتياز",
     intro: "انضم إلى شبكة سريعة النمو. عبّئ النموذج وسيتواصل معك فريق تطوير الأعمال.",
     steps: { personal: "بيانات شخصية", location: "الموقع", financial: "المالية" },
     submit: "إرسال الطلب",
