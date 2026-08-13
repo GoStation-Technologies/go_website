@@ -7,6 +7,7 @@ export const en = {
     media: "Media Center",
     franchise: "Franchise",
     acquisitions: "Acquisitions",
+    leasing: "Retail leasing",
     careers: "Careers",
     investors: "Investors",
     contact: "Contact",
