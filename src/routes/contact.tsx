@@ -70,38 +70,7 @@ function ContactPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-16 md:grid-cols-[1fr_360px]">
-        <Card>
-          <CardContent className="p-8">
-            {ref && (
-              <div className="mb-6 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm">
-                <div className="font-semibold">{t("common.thanks")}</div>
-                <div className="mt-1">{t("common.referenceSaved")} <span className="font-mono">{ref}</span></div>
-              </div>
-            )}
-            <form onSubmit={onSubmit} className="grid gap-4 md:grid-cols-2">
-              <Field label={t("common.fullName")}><Input name="name" required /></Field>
-              <Field label={t("common.email")}><Input name="email" type="email" required /></Field>
-              <Field label={t("common.phone")}><Input name="phone" /></Field>
-              <Field label={t("common.category")}>
-                <Select name="category" defaultValue="general" required>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {cats.map((c) => <SelectItem key={c} value={c}>{t(`contact.cats.${c}`)}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label={t("common.subject")} className="md:col-span-2"><Input name="subject" required /></Field>
-              <Field label={t("common.message")} className="md:col-span-2"><Textarea name="message" rows={6} required /></Field>
-              <div className="md:col-span-2">
-                <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
-                  {busy ? t("common.submitting") : t("common.submit")}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-
+      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-16 md:grid-cols-[360px_1fr]">
         <div className="space-y-4">
           <Card>
             <CardContent className="space-y-5 p-6">
@@ -138,8 +107,43 @@ function ContactPage() {
           </Card>
           <InfoRow icon={Clock} title={t("contact.hours")} text={t("contact.address")} />
           <InfoRow icon={Mail} title="Email" text="contact@gostation.net" />
-          <InfoRow icon={Phone} title="Phone" text="+966 92000 0000" />
+          <InfoRow icon={Phone} title={t("contact.callCenter")} text={t("contact.callNumber")} />
         </div>
+
+        <Card>
+          <CardContent className="p-8">
+            <div className="mb-6">
+              <h2 className="text-xl font-extrabold">{t("contact.formTitle")}</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t("contact.formSub")}</p>
+            </div>
+            {ref && (
+              <div className="mb-6 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm">
+                <div className="font-semibold">{t("common.thanks")}</div>
+                <div className="mt-1">{t("common.referenceSaved")} <span className="font-mono">{ref}</span></div>
+              </div>
+            )}
+            <form onSubmit={onSubmit} className="grid gap-4 md:grid-cols-2">
+              <Field label={t("common.fullName")}><Input name="name" required /></Field>
+              <Field label={t("common.email")}><Input name="email" type="email" required /></Field>
+              <Field label={t("common.phone")}><Input name="phone" /></Field>
+              <Field label={t("common.category")}>
+                <Select name="category" defaultValue="general" required>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {cats.map((c) => <SelectItem key={c} value={c}>{t(`contact.cats.${c}`)}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label={t("common.subject")} className="md:col-span-2"><Input name="subject" required /></Field>
+              <Field label={t("common.message")} className="md:col-span-2"><Textarea name="message" rows={6} required /></Field>
+              <div className="md:col-span-2">
+                <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
+                  {busy ? t("common.submitting") : t("common.submit")}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pb-20">
