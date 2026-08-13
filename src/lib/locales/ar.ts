@@ -5,7 +5,7 @@ export const ar = {
     about: "عن قوستيشن",
     stations: "المحطات",
     media: "المركز الإعلامي",
-    franchise: "قدّم طلب الامتياز",
+    franchise: "الامتياز التجاري",
     acquisitions: "استحواذ",
     careers: "الوظائف",
     investors: "المستثمرون",
