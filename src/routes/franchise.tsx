@@ -12,7 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Quote } from "lucide-react";
+import stationImg from "@/assets/station-canopy.jpg.asset.json";
+
 
 export const Route = createFileRoute("/franchise")({
   component: FranchisePage,
@@ -74,7 +76,50 @@ function FranchisePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-4 py-16">
+      <section className="border-b bg-muted/30 py-16">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-2">
+          <div className="relative overflow-hidden rounded-3xl shadow-xl">
+            <img
+              src={stationImg.url}
+              alt={t("franchise.about.imgAlt")}
+              loading="lazy"
+              className="h-[320px] w-full object-cover md:h-[420px]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent" />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-accent">
+              {t("franchise.about.eyebrow")}
+            </p>
+            <Quote className="mt-4 h-8 w-8 text-accent/70" />
+            <h2 className="mt-3 text-2xl font-extrabold leading-snug md:text-3xl">
+              {t("franchise.about.heading")}
+            </h2>
+            <p className="mt-4 text-lg text-foreground/80">{t("franchise.about.quote")}</p>
+            <p className="mt-3 text-muted-foreground">{t("franchise.about.body")}</p>
+            <p className="mt-6 font-semibold">{t("franchise.about.caption")}</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <span className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent">
+                {t("franchise.about.statA")}
+              </span>
+              <span className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent">
+                {t("franchise.about.statB")}
+              </span>
+            </div>
+            <Button
+              onClick={() => document.getElementById("franchise-form")?.scrollIntoView({ behavior: "smooth" })}
+              className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
+              size="lg"
+            >
+              {t("franchise.about.cta")}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section id="franchise-form" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-16">
+
         {ref ? (
           <Card><CardContent className="p-10 text-center">
             <CheckCircle2 className="mx-auto h-14 w-14 text-accent" />
