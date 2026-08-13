@@ -11,7 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, PhoneCall } from "lucide-react";
+import { StationsMap } from "@/components/stations-map";
+
+const HQ = { lat: 24.7028, lng: 46.6752 };
+const HQ_DIRECTIONS = "https://www.google.com/maps/search/?api=1&query=24.7028,46.6752";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -28,6 +32,7 @@ function ContactPage() {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
+  const channels = (t("contact.channels", { returnObjects: true }) as string[]) ?? [];
   const cats = ["general", "support", "complaint", "franchise", "acquisition", "media", "investor"] as const;
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -98,12 +103,78 @@ function ContactPage() {
         </Card>
 
         <div className="space-y-4">
-          <InfoRow icon={MapPin} title="Address" text={t("contact.address")} />
-          <InfoRow icon={Clock} title="Hours" text={t("contact.hours")} />
+          <Card>
+            <CardContent className="space-y-5 p-6">
+              <div>
+                <h2 className="text-lg font-bold text-accent">{t("contact.infoTitle")}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("contact.infoBody")}</p>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg border bg-muted/40 p-3">
+                <PhoneCall className="h-5 w-5 text-accent" />
+                <div>
+                  <div className="text-sm font-semibold">{t("contact.callCenter")}</div>
+                  <a href="tel:8004411110" className="font-mono text-base font-bold tracking-wide">
+                    {t("contact.callNumber")}
+                  </a>
+                </div>
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-accent">{t("contact.hqTitle")}</div>
+                <div className="mt-1 text-sm font-medium">{t("contact.hqName")}</div>
+                <div className="text-sm text-muted-foreground">{t("contact.hqAddress")}</div>
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-accent">{t("contact.channelsTitle")}</div>
+                <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
+                  {channels.map((c) => (
+                    <li key={c} className="flex gap-2">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                      <span>{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+          <InfoRow icon={Clock} title={t("contact.hours")} text={t("contact.address")} />
           <InfoRow icon={Mail} title="Email" text="contact@gostation.net" />
           <InfoRow icon={Phone} title="Phone" text="+966 92000 0000" />
         </div>
       </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-20">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-2xl font-extrabold">{t("contact.mapTitle")}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t("contact.mapSub")}</p>
+          </div>
+          <a
+            href={HQ_DIRECTIONS}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground"
+          >
+            <MapPin className="h-4 w-4" />
+            {t("contact.directions")}
+          </a>
+        </div>
+        <StationsMap
+            points={[
+              {
+                id: "hq",
+                lat: HQ.lat,
+                lng: HQ.lng,
+                title: t("contact.hqName"),
+                subtitle: t("contact.hqAddress"),
+                href: HQ_DIRECTIONS,
+              },
+            ]}
+            center={[HQ.lat, HQ.lng]}
+            zoom={14}
+          className="h-[420px] w-full overflow-hidden rounded-xl border"
+        />
+      </section>
+
     </SiteLayout>
   );
 }
