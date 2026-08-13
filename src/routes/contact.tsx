@@ -11,7 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, PhoneCall } from "lucide-react";
+import { StationsMap } from "@/components/stations-map";
+
+const HQ = { lat: 24.7028, lng: 46.6752 };
+const HQ_DIRECTIONS = "https://www.google.com/maps/search/?api=1&query=24.7028,46.6752";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -28,6 +32,7 @@ function ContactPage() {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
+  const channels = (t("contact.channels", { returnObjects: true }) as string[]) ?? [];
   const cats = ["general", "support", "complaint", "franchise", "acquisition", "media", "investor"] as const;
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -153,8 +158,7 @@ function ContactPage() {
             {t("contact.directions")}
           </a>
         </div>
-        <ClientOnly fallback={<div className="h-[420px] w-full rounded-xl bg-muted" />}>
-          <StationsMap
+        <StationsMap
             points={[
               {
                 id: "hq",
@@ -167,9 +171,8 @@ function ContactPage() {
             ]}
             center={[HQ.lat, HQ.lng]}
             zoom={14}
-            className="h-[420px] w-full overflow-hidden rounded-xl border"
-          />
-        </ClientOnly>
+          className="h-[420px] w-full overflow-hidden rounded-xl border"
+        />
       </section>
 
     </SiteLayout>
