@@ -197,8 +197,24 @@ export const en = {
     },
   },
   acq: {
-    title: "Sell your station",
+    title: "Station acquisitions",
     intro: "Have an existing station? Submit the details and we'll evaluate a potential acquisition.",
+    eyebrow: "Acquisitions",
+    lead:
+      "Sell your station or enter an operating partnership with GoStation. We evaluate the site technically and financially, present a fair and fast offer, then fully redevelop and reopen it under our brand standards.",
+    detailsTitle: "Details",
+    formTitle: "Station details",
+    formSub: "Share your station data and our acquisitions team will contact you",
+    facts: {
+      valuation: "Offer value",
+      valuationBody: "Based on location, land area, and average daily sales.",
+      timeline: "Evaluation time",
+      timelineBody: "We contact you within 5 business days of receiving the request.",
+      docs: "Documents",
+      docsBody: "Title deed or lease, commercial registration, and operating licenses.",
+    },
+    submitCta: "Send request",
+    cancel: "Cancel",
     f: {
       stationName: "Station name",
       district: "District",
@@ -207,6 +223,7 @@ export const en = {
       avgSales: "Avg daily sales (SAR)",
     },
   },
+
 
   careers: {
     title: "Careers at GoStation",
