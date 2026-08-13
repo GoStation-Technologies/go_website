@@ -80,44 +80,38 @@ function FranchisePage() {
               "radial-gradient(900px 420px at 12% 0%, color-mix(in oklab, var(--accent) 32%, transparent), transparent 65%), radial-gradient(700px 380px at 95% 110%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 60%)",
           }}
         />
-        {/* fine grid */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.12]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.5) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(70% 100% at 50% 0%, black, transparent 75%)",
-          }}
-        />
         {/* accent edge */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
 
         {/* station photo blended into the gradient */}
-        <div aria-hidden className="pointer-events-none absolute inset-y-0 end-0 -z-10 hidden w-[62%] md:block">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 hidden md:block">
           <img
             src={heroStationImg.url}
             alt=""
-            className="h-full w-full scale-[1.18] object-cover object-[60%_38%]"
+            className="h-full w-full scale-[1.12] object-cover object-[62%_40%] opacity-80"
             style={{
               maskImage:
-                "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0.55) 60%, transparent 92%)",
+                "radial-gradient(120% 130% at 88% 45%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.35) 62%, transparent 82%)",
               WebkitMaskImage:
-                "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0.55) 60%, transparent 92%)",
+                "radial-gradient(120% 130% at 88% 45%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.35) 62%, transparent 82%)",
             }}
           />
-          <div className="absolute inset-0 bg-ink/55 mix-blend-multiply" />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(700px 420px at 80% 30%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 70%)",
+                "linear-gradient(to left, color-mix(in oklab, var(--ink) 25%, transparent) 0%, color-mix(in oklab, var(--ink) 70%, transparent) 45%, color-mix(in oklab, var(--ink) 92%, transparent) 78%, var(--ink) 100%)",
             }}
           />
-          <div className="absolute inset-y-0 start-0 w-1/2 bg-gradient-to-l from-transparent to-ink" />
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink to-transparent" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, var(--ink) 0%, transparent 45%), radial-gradient(800px 460px at 20% 0%, color-mix(in oklab, var(--accent) 20%, transparent), transparent 70%)",
+            }}
+          />
         </div>
+
 
         <div className="relative mx-auto max-w-7xl px-4">
           <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-accent">
