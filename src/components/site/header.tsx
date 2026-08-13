@@ -82,7 +82,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             <Link
               key={n.key}
               to={n.to}
-              className="relative whitespace-nowrap rounded-full px-2 py-2 text-[12px] font-medium text-foreground/70 transition hover:text-foreground xl:px-3 xl:text-[13px]"
+              className="relative whitespace-nowrap rounded-full px-2 py-2 text-[12px] font-medium text-foreground/70 transition hover:text-foreground xl:px-3 xl:text-[13px] after:absolute after:bottom-1 after:left-1/2 after:h-[2px] after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-accent after:transition-all hover:after:w-[70%]"
               activeProps={{
                 className: "text-primary bg-primary/5",
               }}
