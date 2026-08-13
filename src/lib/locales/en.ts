@@ -227,6 +227,31 @@ export const en = {
       capital: "Investment capital (SAR)",
     },
   },
+  lease: {
+    title: "Retail leasing",
+    eyebrow: "Retail leasing",
+    lead:
+      "Lease commercial space inside GoStation sites — retail shops, cafes, restaurants and car services — in high-traffic locations with flexible terms.",
+    detailsTitle: "Details",
+    formTitle: "Space leasing request",
+    formSub: "Share your business details and our leasing team will contact you",
+    facts: {
+      spaces: "Available spaces",
+      spacesBody: "From 20 m² to 300 m² inside the station or in adjacent buildings.",
+      timeline: "Response time",
+      timelineBody: "Our team replies within 5 business days of receiving the request.",
+      docs: "Documents",
+      docsBody: "Commercial registration, municipal licence, and a business profile.",
+    },
+    submitCta: "Submit request",
+    f: {
+      company: "Company / business name",
+      activity: "Business type",
+      district: "Preferred district",
+      area: "Required area (m²)",
+      duration: "Lease term (years)",
+    },
+  },
   acq: {
     title: "Station acquisitions",
     intro: "Have an existing station? Submit the details and we'll evaluate a potential acquisition.",
