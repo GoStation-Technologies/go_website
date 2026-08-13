@@ -15,6 +15,7 @@ import {
   Store,
   Building2,
   Star,
+  Droplet,
   Sparkles,
   ShieldCheck,
   Leaf,
@@ -211,7 +212,7 @@ function HomePage() {
                 key: s.key,
                 val: s.val,
                 label: t(`home.${s.key}`),
-                icon: [Fuel, MapPin, Star, Zap][i] ?? Fuel,
+                icon: [Fuel, MapPin, Droplet, Zap][i] ?? Fuel,
               }))}
             />
             <div className="mt-10">
