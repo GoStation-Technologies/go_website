@@ -172,6 +172,19 @@ export const en = {
     intro: "Join a growing network. Fill in the form and our BD team will contact you.",
     steps: { personal: "Personal", location: "Location", financial: "Financial" },
     submit: "Submit application",
+    about: {
+      eyebrow: "Franchise",
+      heading: "Become a partner in the GoStation network",
+      quote:
+        "A GoStation franchise gives you a complete station with a strong brand and a proven operating model — from fuel supply to the convenience store and auto-care services.",
+      body: "We support you across site selection, design, build-out, operations and marketing, with digital systems for sales, inventory and loyalty — and a team beside you from day one.",
+      caption: "A franchise model built on 180+ stations across 13 regions",
+      statA: "180+ stations",
+      statB: "13 regions",
+      cta: "Join the franchise",
+      imgAlt: "GoStation fuel station",
+    },
+
     f: {
       nationalId: "National ID",
       crNumber: "CR number (optional)",
