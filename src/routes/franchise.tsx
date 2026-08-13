@@ -93,19 +93,29 @@ function FranchisePage() {
         {/* accent edge */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
 
-        {/* expressive station icons */}
-        <div aria-hidden className="pointer-events-none absolute inset-y-0 end-0 hidden w-1/2 items-center justify-center md:flex">
-          <Fuel className="absolute h-64 w-64 text-white/[0.06]" strokeWidth={0.6} />
-          <div className="relative grid grid-cols-2 gap-4 opacity-90">
-            {[Fuel, Store, Handshake, Building2].map((Icon, i) => (
-              <div
-                key={i}
-                className="flex h-20 w-20 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] shadow-lg backdrop-blur-sm"
-              >
-                <Icon className="h-8 w-8 text-accent" strokeWidth={1.6} />
-              </div>
-            ))}
-          </div>
+        {/* station photo blended into the gradient */}
+        <div aria-hidden className="pointer-events-none absolute inset-y-0 end-0 -z-10 hidden w-[62%] md:block">
+          <img
+            src={heroStationImg.url}
+            alt=""
+            className="h-full w-full scale-[1.18] object-cover object-[60%_38%]"
+            style={{
+              maskImage:
+                "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0.55) 60%, transparent 92%)",
+              WebkitMaskImage:
+                "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0.55) 60%, transparent 92%)",
+            }}
+          />
+          <div className="absolute inset-0 bg-ink/55 mix-blend-multiply" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(700px 420px at 80% 30%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 70%)",
+            }}
+          />
+          <div className="absolute inset-y-0 start-0 w-1/2 bg-gradient-to-l from-transparent to-ink" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink to-transparent" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4">
