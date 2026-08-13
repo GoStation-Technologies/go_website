@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { getContentLanguage } from "@/lib/i18n";
+import { getContentLanguage, getLangFromCookieHeader } from "@/lib/i18n";
 
 /** Syncs <html lang> and <html dir> with the current i18n language. */
 export function LangBoot() {
