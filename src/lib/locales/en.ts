@@ -272,7 +272,14 @@ export const en = {
     reports: "Financial reports",
     contact: "Investor inquiry",
     download: "Download PDF",
+    heroTitle: "Why invest in GoStation",
+    heroBody:
+      "Built on a disciplined growth model, GoStation keeps creating long-term value for its shareholders through network expansion, resilient fuel and retail margins, and transparent governance across every station we operate.",
+    kpiRevenue: "Annual revenue",
+    kpiGrowth: "Year-over-year growth",
+    kpiStations: "Stations in operation",
   },
+
   auth: {
     title: "Sign in",
     email: "Email",
