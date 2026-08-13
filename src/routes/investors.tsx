@@ -117,28 +117,108 @@ function IRPage() {
       </section>
 
 
-      <section className="mx-auto max-w-7xl px-4 pb-8">
-        <h2 className="mb-4 text-2xl font-bold">{t("investors.reports")}</h2>
-        <div className="grid gap-3">
-          {reports.length === 0 && <p className="text-muted-foreground">No reports yet.</p>}
-          {reports.map((r) => (
-            <Card key={r.id}>
-              <CardContent className="flex items-center justify-between gap-3 p-5">
-                <div className="flex items-center gap-3">
-                  <FileText className="h-6 w-6 text-accent" />
-                  <div>
-                    <div className="font-semibold">{lng === "ar" ? r.title_ar : r.title_en}</div>
-                    <div className="text-xs text-muted-foreground">{r.report_type} · {r.report_year}</div>
+      <section className="mx-auto max-w-7xl px-4 pb-4 pt-20 md:pt-24">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
+              {t("investors.reportsEyebrow")}
+            </span>
+          </div>
+          <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">{t("investors.reportsTitle")}</h2>
+        </div>
+
+        <div className="mt-10 flex items-start gap-6">
+          <div className="hidden shrink-0 flex-col items-center gap-4 pt-16 md:flex">
+            <button
+              type="button"
+              aria-label={t("investors.prev")}
+              onClick={() => scrollBy(-1)}
+              className="grid h-12 w-12 place-items-center rounded-full border border-border/70 text-foreground/70 transition hover:border-accent hover:text-accent"
+            >
+              <ArrowRight className="h-5 w-5 rtl:hidden" />
+              <ArrowLeft className="hidden h-5 w-5 rtl:block" />
+            </button>
+            <button
+              type="button"
+              aria-label={t("investors.next")}
+              onClick={() => scrollBy(1)}
+              className="grid h-12 w-12 place-items-center rounded-full border border-border/70 text-foreground/70 transition hover:border-accent hover:text-accent"
+            >
+              <ArrowLeft className="h-5 w-5 rtl:hidden" />
+              <ArrowRight className="hidden h-5 w-5 rtl:block" />
+            </button>
+            {reports.length > 0 && (
+              <div className="mt-4 text-sm text-muted-foreground">
+                <span className="text-2xl font-bold text-foreground">{String(reports.length).padStart(2, "0")}</span>
+              </div>
+            )}
+          </div>
+
+          <div
+            ref={railRef}
+            className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {reports.length === 0 && <p className="text-muted-foreground">{t("investors.reportsEmpty")}</p>}
+            {reports.map((r) => (
+              <article key={r.id} className="w-[248px] shrink-0 snap-start md:w-[272px]">
+                <a
+                  href={r.file_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group relative block aspect-square overflow-hidden rounded-[2rem] bg-ink shadow-[0_24px_60px_-32px_rgba(15,23,42,0.6)] transition duration-500 hover:-translate-y-1"
+                >
+                  <span
+                    className="absolute inset-0 opacity-70 transition duration-500 group-hover:opacity-90"
+                    aria-hidden
+                    style={{
+                      background:
+                        "radial-gradient(420px 260px at 20% 0%, color-mix(in oklab, var(--ember) 26%, transparent), transparent 65%)",
+                    }}
+                  />
+                  <img
+                    src={logoWhite.url}
+                    alt=""
+                    aria-hidden
+                    className="absolute start-7 top-8 h-11 w-auto opacity-95"
+                  />
+                  <span className="absolute -bottom-3 start-6 select-none text-[5.5rem] font-black leading-none tracking-tight text-white/95 md:text-[6.5rem]">
+                    {r.report_year}
+                  </span>
+                </a>
+                <div className="mt-5 space-y-1.5">
+                  <div className="text-xs text-muted-foreground">
+                    {t(`investors.reportTypes.${r.report_type}`, { defaultValue: r.report_type })}
+                  </div>
+                  <h3 className="text-base font-semibold leading-snug">{lng === "ar" ? r.title_ar : r.title_en}</h3>
+                  <div className="flex items-center gap-5 pt-2 text-sm">
+                    <a
+                      href={r.file_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-muted-foreground transition hover:text-accent"
+                    >
+                      <Eye className="h-4 w-4" />
+                      {t("investors.view")}
+                    </a>
+                    <a
+                      href={r.file_url}
+                      download
+                      onClick={() => {
+                        void logReportDownload({ data: { reportId: r.id } }).catch(() => {});
+                      }}
+                      className="inline-flex items-center gap-1.5 text-muted-foreground transition hover:text-accent"
+                    >
+                      <FileDown className="h-4 w-4" />
+                      {t("investors.download")}
+                    </a>
                   </div>
                 </div>
-                <Button asChild variant="outline" size="sm" onClick={() => { void logReportDownload({ data: { reportId: r.id } }).catch(() => {}); }}>
-                  <a href={r.file_url} target="_blank" rel="noreferrer"><Download className="me-1 h-4 w-4" />{t("investors.download")}</a>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
       </section>
+
 
       <section className="mx-auto max-w-3xl px-4 py-12">
         <h2 className="mb-4 text-2xl font-bold">{t("investors.contact")}</h2>
