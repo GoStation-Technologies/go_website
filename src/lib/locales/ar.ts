@@ -2,7 +2,7 @@ export const ar = {
   brand: { name: "قوستيشن", tagline: "محطة وأكثر" },
   nav: {
     home: "الرئيسية",
-    about: "من نحن",
+    about: "عن قوستيشن",
     stations: "المحطات",
     media: "المركز الإعلامي",
     franchise: "قدّم طلب الامتياز",
