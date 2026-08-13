@@ -160,7 +160,27 @@ export const en = {
     },
     address: "Head Office — Riyadh, Kingdom of Saudi Arabia",
     hours: "Sun–Thu, 8:00 AM – 5:00 PM",
+    infoTitle: "Contact information",
+    infoBody:
+      "We keep working to make your experience easier by making every channel available around the clock. For enquiries or suggestions, call our unified number:",
+    callCenter: "Unified call center",
+    callNumber: "8004411110",
+    hqTitle: "Head office",
+    hqName: "Hala Saudi Petroleum Services Company",
+    hqAddress: "King Fahd Road, Riyadh, Kingdom of Saudi Arabia",
+    channelsTitle: "Our channels and response times",
+    channels: [
+      "Unified call center 24/7 — instant response",
+      "Live chat 16/7 — instant response",
+      "Customer care account on X 24/7 — reply within 15 minutes",
+      "Fuel reports center 24/7 — instant response",
+      "Virtual center and service centers on business days, 10:00–18:00",
+    ],
+    mapTitle: "Find us on the map",
+    mapSub: "Hala Saudi Petroleum Services Company — King Fahd Road, Riyadh",
+    directions: "Directions",
   },
+
   stations: {
     title: "Our stations",
     intro: "Find your nearest GoStation across the Kingdom.",
