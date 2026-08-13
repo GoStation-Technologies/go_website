@@ -278,6 +278,13 @@ export const en = {
     kpiRevenue: "Annual revenue",
     kpiGrowth: "Year-over-year growth",
     kpiStations: "Stations in operation",
+    reportsEyebrow: "Financial information",
+    reportsTitle: "Browse the latest reports",
+    reportsEmpty: "No reports published yet.",
+    view: "View",
+    reportTypes: { annual: "Annual report", quarterly: "Quarterly report", esg: "ESG report" },
+    prev: "Previous",
+    next: "Next",
   },
 
   auth: {
