@@ -7,8 +7,15 @@ import { getRequestHeader } from "@tanstack/react-start/server";
 
 const detectRequestLanguage = createIsomorphicFn()
   .client((): ContentLanguage => {
+    // Match the server-rendered HTML lang during hydration to avoid a
+    // language mismatch in environments where the server cannot see the
+    // browser cookie. The cookie will be applied after hydration.
+    const htmlLang =
+      typeof document !== "undefined" && document.documentElement.lang
+        ? getContentLanguage(document.documentElement.lang)
+        : undefined;
     const fromCookie = getLangFromCookieHeader(document.cookie);
-    return fromCookie ?? "en";
+    return htmlLang ?? fromCookie ?? "en";
   })
   .server((): ContentLanguage => {
     try {
