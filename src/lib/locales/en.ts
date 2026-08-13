@@ -149,6 +149,8 @@ export const en = {
   contact: {
     title: "Contact us",
     intro: "We're here to help. Choose a category and we'll route you to the right team.",
+    formTitle: "Register your details",
+    formSub: "Share your feedback and suggestions so we can contact you and improve our service.",
     cats: {
       general: "General inquiry",
       support: "Customer support",
