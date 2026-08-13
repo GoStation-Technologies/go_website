@@ -631,8 +631,8 @@ function HomePage() {
                 variant="outline"
                 className="h-12 rounded-lg border-2 border-white/60 bg-transparent px-7 text-sm font-semibold text-white hover:bg-white hover:text-ink"
               >
-                <Link to="/acquisitions">
-                  <MapPin className="me-2 h-4 w-4" /> {t("nav.acquisitions")}
+                <Link to="/leasing">
+                  <MapPin className="me-2 h-4 w-4" /> {t("nav.leasing")}
                 </Link>
               </Button>
             </div>
