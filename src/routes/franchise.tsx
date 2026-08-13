@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { CheckCircle2, Quote, Fuel, Store, Handshake, Building2, Award, BarChart3, GraduationCap, Network, TrendingUp, Truck } from "lucide-react";
 import stationImg from "@/assets/station-canopy.jpg.asset.json";
+import heroStationImg from "@/assets/franchise-station.jpg.asset.json";
 
 
 export const Route = createFileRoute("/franchise")({
