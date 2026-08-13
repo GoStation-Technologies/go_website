@@ -184,6 +184,36 @@ export const en = {
       cta: "Join the franchise",
       imgAlt: "GoStation fuel station",
     },
+    why: {
+      eyebrow: "What we offer",
+      title: "Franchise advantages",
+      items: {
+        brand: {
+          title: "A modern, attractive brand",
+          body: "Join a powerful, recognizable brand in the fuel station and service center sector.",
+        },
+        model: {
+          title: "A proven business model",
+          body: "Benefit from our successful experience and receive operating manuals and bespoke GoStation automation programs to maximize your return.",
+        },
+        support: {
+          title: "Full training & support",
+          body: "We provide comprehensive training and the support you need to start and run your own business efficiently and confidently.",
+        },
+        network: {
+          title: "A strong network",
+          body: "Join a network of qualified stations and benefit from our customers and partners from global and local brands.",
+        },
+        growth: {
+          title: "Growth opportunity",
+          body: "Seize the opportunity and benefit from dedicated support for qualified companies.",
+        },
+        logistics: {
+          title: "Logistics services",
+          body: "We operate a dedicated transport fleet equipped with the latest capabilities and equipment to maintain supply continuity and product quality.",
+        },
+      },
+    },
 
     f: {
       nationalId: "National ID",

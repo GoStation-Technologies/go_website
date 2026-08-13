@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CheckCircle2, Quote, Fuel, Store, Handshake, Building2 } from "lucide-react";
+import { CheckCircle2, Quote, Fuel, Store, Handshake, Building2, Award, BarChart3, GraduationCap, Network, TrendingUp, Truck } from "lucide-react";
 import stationImg from "@/assets/station-canopy.jpg.asset.json";
 
 
@@ -160,6 +160,44 @@ function FranchisePage() {
                 {t("franchise.about.statB")}
               </span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-muted/30 py-16">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-accent">
+              <Handshake className="h-3.5 w-3.5" />
+              {t("franchise.why.eyebrow")}
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">{t("franchise.why.title")}</h2>
+          </div>
+
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { key: "brand", icon: Award },
+              { key: "model", icon: BarChart3 },
+              { key: "support", icon: GraduationCap },
+              { key: "network", icon: Network },
+              { key: "growth", icon: TrendingUp },
+              { key: "logistics", icon: Truck },
+            ].map(({ key, icon: Icon }) => (
+              <div
+                key={key}
+                className="group relative flex items-start gap-4 rounded-2xl border border-border/60 bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent/10 text-accent">
+                  <Icon className="h-6 w-6" strokeWidth={1.6} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold">{t(`franchise.why.items.${key}.title`)}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {t(`franchise.why.items.${key}.body`)}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
