@@ -20,8 +20,16 @@ const nf1 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 export function RoiCalculator() {
   const { t } = useTranslation();
   const [v, setV] = useState(DEFAULTS);
-  const set = (k: keyof typeof DEFAULTS, value: number) =>
+  const [showResults, setShowResults] = useState(false);
+  const set = (k: keyof typeof DEFAULTS, value: number) => {
     setV((s) => ({ ...s, [k]: Number.isFinite(value) ? value : 0 }));
+    setShowResults(false);
+  };
+
+  const reset = () => {
+    setV(DEFAULTS);
+    setShowResults(false);
+  };
 
   const r = useMemo(() => {
     const fuelGross = v.litersPerDay * v.marginPerLiter * 365;
