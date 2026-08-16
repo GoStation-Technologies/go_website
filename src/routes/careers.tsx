@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud } from "lucide-react";
+import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud, Network, Users, BadgeCheck, TrendingUp, Send } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 
 export const Route = createFileRoute("/careers")({
