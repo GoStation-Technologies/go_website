@@ -59,28 +59,24 @@ function AboutPage() {
 
   return (
     <SiteLayout>
-      <section className="relative overflow-hidden bg-brand-radial py-20 text-white">
-        {/* Station canopy blended into the empty side of the banner */}
-        <div className="pointer-events-none absolute inset-y-0 end-0 hidden w-[58%] overflow-hidden md:block">
+      <section className="relative overflow-hidden bg-primary py-20 text-white">
+        {/* Cropped canopy detail, sitting under a full navy filter */}
+        <div className="pointer-events-none absolute inset-y-0 end-0 hidden w-[62%] overflow-hidden md:block">
           <img
             src={canopyImg.url}
             alt={lng === "ar" ? "مظلة محطة قوستيشن" : "GoStation station canopy"}
-            className="h-full w-full object-cover object-center opacity-70 mix-blend-luminosity"
+            className="h-full w-full scale-125 object-cover object-[50%_38%] opacity-45"
             style={{
-              WebkitMaskImage: `radial-gradient(120% 130% at ${lng === "ar" ? "0%" : "100%"} 50%, black 35%, rgba(0,0,0,0.55) 62%, transparent 88%)`,
-              maskImage: `radial-gradient(120% 130% at ${lng === "ar" ? "0%" : "100%"} 50%, black 35%, rgba(0,0,0,0.55) 62%, transparent 88%)`,
+              WebkitMaskImage: `linear-gradient(to ${lng === "ar" ? "left" : "right"}, transparent 0%, rgba(0,0,0,0.6) 40%, black 80%)`,
+              maskImage: `linear-gradient(to ${lng === "ar" ? "left" : "right"}, transparent 0%, rgba(0,0,0,0.6) 40%, black 80%)`,
             }}
             loading="eager"
           />
-          {/* navy unification so the photo reads as part of the brand gradient */}
-          <div className="absolute inset-0 bg-primary/45" />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(to ${lng === "ar" ? "right" : "left"}, transparent 0%, var(--primary) 88%)`,
-            }}
-          />
         </div>
+        {/* full-banner brand filter over everything */}
+        <div className="pointer-events-none absolute inset-0 bg-brand-radial opacity-80 mix-blend-multiply" />
+        <div className="pointer-events-none absolute inset-0 bg-primary/35" />
+
 
 
         <div className="relative z-10 mx-auto max-w-7xl px-4">
