@@ -47,27 +47,27 @@ export function RoiCalculator() {
         <div className="mb-10 text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
             <Calculator className="h-3.5 w-3.5" />
-            {t("franchise.roi.eyebrow")}
+            {t("investors.roi.eyebrow")}
           </span>
-          <h2 className="mt-4 text-3xl font-bold md:text-4xl">{t("franchise.roi.title")}</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">{t("franchise.roi.subtitle")}</p>
+          <h2 className="mt-4 text-3xl font-bold md:text-4xl">{t("investors.roi.title")}</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">{t("investors.roi.subtitle")}</p>
         </div>
 
         <Card className="overflow-hidden border border-border/80 shadow-xl">
           <CardContent className="p-6 md:p-8">
             <div className="mb-6 flex items-center justify-between gap-4">
-              <h3 className="text-lg font-semibold">{t("franchise.roi.inputsTitle")}</h3>
+              <h3 className="text-lg font-semibold">{t("investors.roi.inputsTitle")}</h3>
               <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" onClick={reset}>
                 <RotateCcw className="h-4 w-4" />
-                {t("franchise.roi.reset")}
+                {t("investors.roi.reset")}
               </Button>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
               <Field
                 icon={Droplets}
-                label={t("franchise.roi.f.liters")}
-                suffix={t("franchise.roi.u.liters")}
+                label={t("investors.roi.f.liters")}
+                suffix={t("investors.roi.u.liters")}
                 value={v.litersPerDay}
                 min={2000}
                 max={40000}
@@ -76,8 +76,8 @@ export function RoiCalculator() {
               />
               <Field
                 icon={BadgeDollarSign}
-                label={t("franchise.roi.f.margin")}
-                suffix={t("franchise.roi.u.sarPerLiter")}
+                label={t("investors.roi.f.margin")}
+                suffix={t("investors.roi.u.sarPerLiter")}
                 value={v.marginPerLiter}
                 min={0.05}
                 max={0.5}
@@ -87,8 +87,8 @@ export function RoiCalculator() {
               />
               <Field
                 icon={Banknote}
-                label={t("franchise.roi.f.opex")}
-                suffix={t("franchise.roi.u.sarMonth")}
+                label={t("investors.roi.f.opex")}
+                suffix={t("investors.roi.u.sarMonth")}
                 value={v.monthlyOpex}
                 min={10000}
                 max={500000}
@@ -97,8 +97,8 @@ export function RoiCalculator() {
               />
               <Field
                 icon={Landmark}
-                label={t("franchise.roi.f.investment")}
-                suffix={t("franchise.roi.u.sar")}
+                label={t("investors.roi.f.investment")}
+                suffix={t("investors.roi.u.sar")}
                 value={v.initialInvestment}
                 min={500000}
                 max={15000000}
@@ -110,26 +110,26 @@ export function RoiCalculator() {
             <div className="mt-8 flex justify-center">
               <Button size="lg" className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90" onClick={() => setShowResults(true)}>
                 <Calculator className="h-4 w-4" />
-                {t("franchise.roi.calculate")}
+                {t("investors.roi.calculate")}
               </Button>
             </div>
 
             {showResults ? (
               <div className="mt-8 border-t pt-6">
                 <div className="grid gap-4 sm:grid-cols-3">
-                  <Result icon={Wallet} label={t("franchise.roi.r.net")} value={nf.format(Math.round(r.net))} unit={t("franchise.roi.u.sarYear")} />
-                  <Result icon={TrendingUp} label={t("franchise.roi.r.roi")} value={`${nf1.format(r.roi)}%`} />
+                  <Result icon={Wallet} label={t("investors.roi.r.net")} value={nf.format(Math.round(r.net))} unit={t("investors.roi.u.sarYear")} />
+                  <Result icon={TrendingUp} label={t("investors.roi.r.roi")} value={`${nf1.format(r.roi)}%`} />
                   <Result
                     icon={Timer}
-                    label={t("franchise.roi.r.payback")}
+                    label={t("investors.roi.r.payback")}
                     value={r.payback > 0 ? `${nf1.format(r.payback)}` : "—"}
-                    unit={r.payback > 0 ? t("franchise.roi.u.years") : undefined}
+                    unit={r.payback > 0 ? t("investors.roi.u.years") : undefined}
                   />
                 </div>
               </div>
             ) : null}
 
-            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">{t("franchise.roi.disclaimer")}</p>
+            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">{t("investors.roi.disclaimer")}</p>
           </CardContent>
         </Card>
       </div>

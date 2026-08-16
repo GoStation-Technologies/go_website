@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { logReportDownload } from "@/lib/reports.functions";
 import { SiteLayout } from "@/components/site/site-layout";
+import { RoiCalculator } from "@/components/site/roi-calculator";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,6 +18,7 @@ import { toast } from "sonner";
 import { ArrowLeft, ArrowRight, Eye, FileDown } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
+
 
 
 export const Route = createFileRoute("/investors")({
@@ -162,7 +164,10 @@ function IRPage() {
         </div>
       </section>
 
+      <RoiCalculator />
+
       <section className="mx-auto max-w-7xl px-4 pb-4 pt-20 md:pt-24">
+
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
