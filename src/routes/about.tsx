@@ -3,6 +3,7 @@ import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { StoryTimeline } from "@/components/site/story-timeline";
