@@ -57,12 +57,30 @@ function AboutPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-20 text-white">
-        <div className="mx-auto max-w-7xl px-4">
+      <section className="relative overflow-hidden bg-brand-radial py-20 text-white">
+        {/* Station canopy filling the empty side of the banner */}
+        <div className="pointer-events-none absolute inset-y-0 end-0 hidden w-[52%] md:block">
+          <img
+            src={canopyImg.url}
+            alt={lng === "ar" ? "مظلة محطة قوستيشن" : "GoStation station canopy"}
+            className="h-full w-full object-cover object-center"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent 0%, black 42%, black 100%)",
+              maskImage:
+                "linear-gradient(to right, transparent 0%, black 42%, black 100%)",
+            }}
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-primary/25" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{t("about.title")}</h1>
-          <p className="mt-4 max-w-2xl text-white/80">{get("story_body")}</p>
+          <p className="mt-4 max-w-2xl text-white/80 md:max-w-xl">{get("story_body")}</p>
         </div>
       </section>
+
 
       <section className="mx-auto max-w-7xl px-4 py-16">
         <Tabs defaultValue="story">
