@@ -408,48 +408,11 @@ function HomePage() {
             </Button>
           </div>
 
-          {/* Stylised map card */}
+          {/* Live coverage map */}
           <div className="relative">
-            <div className="relative overflow-hidden rounded-3xl bg-hero-ink p-8 shadow-elegant">
-              <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
-              <div className="relative">
-                <div className="flex items-center justify-between text-primary-foreground/70">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em]">KSA</span>
-                  <span className="text-xs">2026</span>
-                </div>
-                {/* Dot cluster */}
-                <div className="relative mt-4 aspect-[4/3] w-full">
-                  {Array.from({ length: 32 }).map((_, i) => {
-                    const seed = (i * 9301 + 49297) % 233280;
-                    const x = ((seed / 233280) * 90 + 5);
-                    const y = (((i * 6151) % 233280) / 233280) * 90 + 5;
-                    const big = i % 7 === 0;
-                    return (
-                      <span
-                        key={i}
-                        style={{ left: `${x}%`, top: `${y}%` }}
-                        className={`absolute rounded-full ${
-                          big ? "h-2.5 w-2.5 bg-ember shadow-glow" : "h-1.5 w-1.5 bg-white/50"
-                        }`}
-                      />
-                    );
-                  })}
-                  {/* Central pulse */}
-                  <span className="absolute left-[46%] top-[52%] h-4 w-4 rounded-full bg-ember shadow-glow animate-pulse-glow" />
-                </div>
-                <div className="mt-6 grid grid-cols-2 gap-4 border-t border-white/10 pt-6 text-primary-foreground">
-                  <div>
-                    <div className="font-display text-3xl font-black text-ember">180+</div>
-                    <div className="text-xs text-primary-foreground/60">{t("home.statsStations")}</div>
-                  </div>
-                  <div>
-                    <div className="font-display text-3xl font-black text-ember">13</div>
-                    <div className="text-xs text-primary-foreground/60">{t("home.statsRegions")}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CoverageMap />
           </div>
+
         </div>
       </section>
 
