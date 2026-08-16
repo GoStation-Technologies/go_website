@@ -8,13 +8,16 @@ export type VideoItem = {
   slug: string;
   title_ar: string;
   title_en: string;
+  excerpt_ar?: string | null;
+  excerpt_en?: string | null;
   cover_url?: string | null;
+  published_at?: string | null;
   views_count?: number | null;
   duration_seconds?: number | null;
 };
 
 function formatViews(n: number, lng: string) {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}${lng === "ar" ? "M" : "M"}`;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
   return String(n);
 }
@@ -29,7 +32,17 @@ export function VideoCard({ video, className = "" }: { video: VideoItem; classNa
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const title = lng === "ar" ? video.title_ar : video.title_en;
+  const excerpt = lng === "ar" ? video.excerpt_ar : video.excerpt_en;
   const views = video.views_count ?? 0;
+
+  const fmtDate = (d?: string | null) =>
+    d
+      ? new Date(d).toLocaleDateString(lng === "ar" ? "ar-EG-u-nu-latn" : "en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      : "";
 
   return (
     <Link to="/media/$slug" params={{ slug: video.slug }} className={`group block ${className}`}>
@@ -62,9 +75,17 @@ export function VideoCard({ video, className = "" }: { video: VideoItem; classNa
         </div>
 
         <div className="flex flex-1 flex-col gap-2 p-5">
-          <h3 className="line-clamp-2 font-display text-base font-bold leading-snug transition group-hover:text-accent">
+          <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            {fmtDate(video.published_at)}
+          </div>
+          <h3 className="line-clamp-2 font-display text-lg font-bold leading-snug transition group-hover:text-accent">
             {title}
           </h3>
+          {excerpt ? (
+            <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+              {excerpt}
+            </p>
+          ) : null}
           <span className="mt-auto inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Eye className="h-4 w-4" />
             <span className="tabular-nums">{formatViews(views, lng)}</span>
@@ -75,3 +96,4 @@ export function VideoCard({ video, className = "" }: { video: VideoItem; classNa
     </Link>
   );
 }
+
