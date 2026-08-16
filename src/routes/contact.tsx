@@ -14,8 +14,8 @@ import { toast } from "sonner";
 import { Mail, MapPin, Clock, Phone, MessageCircle, Headphones } from "lucide-react";
 import { StationsMap } from "@/components/stations-map";
 
-const HQ = { lat: 24.7028, lng: 46.6752 };
-const HQ_DIRECTIONS = "https://www.google.com/maps/search/?api=1&query=24.7028,46.6752";
+const HQ = { lat: 24.8376898, lng: 46.6890245 };
+const HQ_DIRECTIONS = "https://maps.app.goo.gl/vQJKG388rNJCXqaVA";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,

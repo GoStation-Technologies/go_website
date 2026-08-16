@@ -169,7 +169,7 @@ export const en = {
     callNumber: "920002168",
     hqTitle: "Head office",
     hqName: "Hala Saudi Petroleum Services Company",
-    hqAddress: "King Fahd Road, Riyadh, Kingdom of Saudi Arabia",
+    hqAddress: "Anas Bin Malik Road, Al Narjis, Riyadh, Kingdom of Saudi Arabia",
     channelsTitle: "Our channels and response times",
     channels: [
       "Unified call center 24/7 — instant response",
@@ -179,7 +179,7 @@ export const en = {
       "Virtual center and service centers on business days, 10:00–18:00",
     ],
     mapTitle: "Find us on the map",
-    mapSub: "Hala Saudi Petroleum Services Company — King Fahd Road, Riyadh",
+    mapSub: "Hala Saudi Petroleum Services Company — Anas Bin Malik Road, Al Narjis, Riyadh",
     directions: "Directions",
   },
 
