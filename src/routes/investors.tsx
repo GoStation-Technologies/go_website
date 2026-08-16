@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Eye, FileDown, TrendingUp } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, FileDown } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
 
@@ -78,7 +78,6 @@ function IRPage() {
       label: t("investors.kpiRevenue"),
       value: "3.2B",
       unit: lng === "ar" ? "ريال" : "SAR",
-      trend: "+12%",
       chart: "area",
       data: [0.35, 0.42, 0.5, 0.56, 0.68, 0.82, 1.0],
     },
@@ -86,7 +85,6 @@ function IRPage() {
       label: t("investors.kpiGrowth"),
       value: "+18%",
       unit: "",
-      trend: lng === "ar" ? "سنوياً" : "YoY",
       chart: "bar",
       data: [0.45, 0.55, 0.62, 0.75, 0.82, 0.92, 1.0],
     },
@@ -94,7 +92,6 @@ function IRPage() {
       label: t("investors.kpiStations"),
       value: "180+",
       unit: lng === "ar" ? "محطة" : "stations",
-      trend: "+24",
       chart: "step",
       data: [0.25, 0.38, 0.45, 0.58, 0.72, 0.88, 1.0],
     },
@@ -337,7 +334,6 @@ type KpiConfig = {
   label: string;
   value: string;
   unit: string;
-  trend: string;
   chart: "area" | "bar" | "step";
   data: number[];
 };
@@ -345,33 +341,17 @@ type KpiConfig = {
 function KpiCard({ kpi }: { kpi: KpiConfig }) {
   const strokePath = buildPath(kpi.data, kpi.chart);
   const fillPath = buildFillPath(kpi.data, kpi.chart);
-  const isGrowth = kpi.chart === "bar";
 
   return (
     <div className="group relative flex flex-col items-start gap-4 px-6 py-8 sm:px-8 sm:py-10 md:py-12">
-      <div className="flex w-full items-start justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
-              {kpi.value}
-              {kpi.unit && (
-                <span className="ms-2 text-lg font-bold text-primary/80 md:text-xl">{kpi.unit}</span>
-              )}
-            </div>
-          </div>
-          <div className="mt-1 text-sm font-medium text-muted-foreground">{kpi.label}</div>
+      <div className="w-full">
+        <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
+          {kpi.value}
+          {kpi.unit && (
+            <span className="ms-2 text-lg font-bold text-primary/80 md:text-xl">{kpi.unit}</span>
+          )}
         </div>
-
-        <div
-          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
-            isGrowth
-              ? "bg-accent/12 text-accent"
-              : "bg-primary/10 text-primary"
-          }`}
-        >
-          <TrendingUp className="h-3.5 w-3.5" />
-          {kpi.trend}
-        </div>
+        <div className="mt-1 text-sm font-medium text-muted-foreground">{kpi.label}</div>
       </div>
 
       <div className="relative mt-2 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-primary/[0.06] to-accent/[0.04] px-4 py-5">
