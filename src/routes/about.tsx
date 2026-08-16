@@ -107,8 +107,40 @@ function AboutPage() {
 
           <TabsContent value="story" className="mt-8 space-y-10">
             <Card><CardContent className="prose max-w-none p-8"><h2 className="mb-3 text-2xl font-bold">{get("story_title")}</h2><p>{get("story_body")}</p></CardContent></Card>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <Card className="overflow-hidden">
+                <div className="border-b bg-muted/40 px-8 py-4">
+                  <h2 className="font-display text-xl font-bold text-accent">{t("about.founding.title")}</h2>
+                </div>
+                <CardContent className="p-8">
+                  <p className="leading-relaxed text-muted-foreground">{t("about.founding.body")}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="overflow-hidden">
+                <div className="border-b bg-muted/40 px-8 py-4">
+                  <h2 className="font-display text-xl font-bold text-accent">{t("about.activities.title")}</h2>
+                </div>
+                <CardContent className="p-8">
+                  <p className="font-semibold">{t("about.activities.lead")}</p>
+                  <ol className="mt-5 space-y-3">
+                    {(t("about.activities.items", { returnObjects: true }) as string[]).map((item, i) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <span className="font-display text-sm font-extrabold text-accent tabular-nums">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </CardContent>
+              </Card>
+            </div>
+
             <StoryTimeline />
           </TabsContent>
+
 
           <TabsContent value="vision" className="mt-8">
             <IconBlock icon={Eye} title={t("about.vision")} body={get("vision")} />
