@@ -105,7 +105,7 @@ function StationsPage() {
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder={ar ? "المنطقة" : "Region"} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="z-[2000]">
               <SelectItem value="all">{ar ? "كل المناطق" : "All regions"}</SelectItem>
               {regionOptions.map((r) => (
                 <SelectItem key={r.value} value={r.value}>{ar ? r.ar : r.en}</SelectItem>
@@ -116,7 +116,7 @@ function StationsPage() {
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={ar ? "نوع الوقود" : "Fuel type"} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="z-[2000]">
               <SelectItem value="all">{ar ? "كل الأنواع" : "All fuel types"}</SelectItem>
               {fuelOptions.map((f) => (
                 <SelectItem key={f} value={f}>{fuelLabel(f, ar)}</SelectItem>
