@@ -191,11 +191,10 @@ function AboutPage() {
                 </div>
 
                 <h4 className="mt-8 font-display text-lg font-bold">{t("about.sustain.pillarsTitle")}</h4>
-                <div className="mt-5 grid gap-5 md:grid-cols-3">
+                <div className="mt-5 grid gap-5 md:grid-cols-2">
                   {([
                     { k: "env", icon: Leaf },
                     { k: "social", icon: Users },
-                    { k: "gov", icon: ShieldCheck },
                   ] as const).map(({ k, icon: Icon }) => (
                     <div key={k} className="rounded-2xl border bg-card p-6 transition-colors hover:border-accent/50">
                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">

@@ -134,7 +134,7 @@ export const en = {
         "GoStation starts from a firm conviction that sustainability is not merely a social responsibility, but a foundation for improving operational efficiency, reducing risk, enhancing earnings quality and raising the company's investment appeal. Sound resource management, compliance with environmental standards, a balanced relationship with the community and entrenched corporate governance all strengthen the company's ability to grow in an orderly way and deliver stable long-term returns.",
       body3:
         "During 2025 the company continued developing its internal ESG framework in line with its 2026–2028 expansion plans, reinforcing readiness for advanced funding stages. The focus has been on aligning operational and oversight policies with best practice, and embedding sustainability into investment and operating decisions.",
-      pillarsTitle: "Our ESG framework rests on three connected pillars:",
+      pillarsTitle: "Our sustainability framework rests on two connected pillars:",
       pillars: {
         env: { title: "Environmental", body: "Managing environmental impact and improving the efficiency of every station." },
         social: { title: "Social", body: "A balanced relationship with the community and with our people." },
