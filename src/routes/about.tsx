@@ -135,6 +135,8 @@ function AboutPage() {
   );
 }
 
+type Leader = Database["public"]["Tables"]["leaders"]["Row"];
+
 function IconBlock({ icon: Icon, title, body }: { icon: React.ComponentType<{ className?: string }>; title: string; body: string }) {
   return (
     <Card>
@@ -144,6 +146,60 @@ function IconBlock({ icon: Icon, title, body }: { icon: React.ComponentType<{ cl
         </div>
         <h2 className="mt-4 text-2xl font-bold">{title}</h2>
         <p className="mt-2 text-muted-foreground">{body}</p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function ChairmanCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
+  const name = lng === "ar" ? leader.name_ar : leader.name_en;
+  const title = lng === "ar" ? leader.title_ar : leader.title_en;
+  const bio = lng === "ar" ? leader.bio_ar : leader.bio_en;
+  return (
+    <Card className="overflow-hidden border-0 shadow-2xl">
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-accent/40 px-6 pb-6 pt-8 sm:px-10 sm:pb-8 sm:pt-12">
+        <div className="absolute -start-10 -top-10 h-56 w-56 rounded-full bg-accent/20 blur-3xl" />
+        <div className="absolute -end-10 -bottom-10 h-56 w-56 rounded-full bg-primary-foreground/10 blur-3xl" />
+        <div className="relative mx-auto w-48 sm:w-56 md:w-64">
+          {leader.photo_url ? (
+            <img
+              src={leader.photo_url}
+              alt={name}
+              className="mx-auto w-full object-contain drop-shadow-2xl"
+            />
+          ) : (
+            <div className="aspect-[3/4] rounded-2xl bg-gradient-to-br from-primary-foreground/20 to-transparent" />
+          )}
+        </div>
+      </div>
+      <div className="bg-card px-6 py-6 text-center sm:px-10 sm:py-8">
+        <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
+          <Users className="h-6 w-6" />
+        </div>
+        <h2 className="mt-3 text-2xl font-bold sm:text-3xl">{name}</h2>
+        <p className="mt-1 text-base font-medium text-accent">{title}</p>
+        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">{bio}</p>
+      </div>
+    </Card>
+  );
+}
+
+function LeadershipCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
+  const name = lng === "ar" ? leader.name_ar : leader.name_en;
+  const title = lng === "ar" ? leader.title_ar : leader.title_en;
+  const bio = lng === "ar" ? leader.bio_ar : leader.bio_en;
+  return (
+    <Card className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+      <div className="relative aspect-[4/3] bg-gradient-to-br from-primary via-primary/80 to-accent/40">
+        <div className="absolute -start-4 -top-4 h-24 w-24 rounded-full bg-accent/20 blur-2xl" />
+        <div className="absolute end-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm">
+          <Users className="h-5 w-5" />
+        </div>
+      </div>
+      <CardContent className="p-5">
+        <h3 className="text-lg font-bold leading-tight">{name}</h3>
+        <p className="mt-1 text-sm font-medium text-accent">{title}</p>
+        <p className="mt-2 text-xs text-muted-foreground line-clamp-3">{bio}</p>
       </CardContent>
     </Card>
   );
