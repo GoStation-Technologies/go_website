@@ -487,6 +487,7 @@ export const ar = {
         cityEn: "المدينة (إنجليزي)", cityAr: "المدينة (عربي)",
         slugHint: "أدخل معرّفاً فريداً بصيغة رابط (مثل job-title-year) أو اتركه فارغاً ليُنشأ تلقائياً.",
         descriptionEn: "الوصف (إنجليزي)", descriptionAr: "الوصف (عربي)",
+        closingDate: "موعد انتهاء التقديم",
         activeHint: "نشطة (تظهر في صفحة الوظائف)",
       },
     },
