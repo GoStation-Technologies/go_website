@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { logReportDownload } from "@/lib/reports.functions";
 import { SiteLayout } from "@/components/site/site-layout";
+import { RoiCalculator } from "@/components/site/roi-calculator";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,6 +18,7 @@ import { toast } from "sonner";
 import { ArrowLeft, ArrowRight, Eye, FileDown } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
+
 
 
 export const Route = createFileRoute("/investors")({
