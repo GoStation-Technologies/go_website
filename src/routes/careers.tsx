@@ -310,6 +310,20 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
     </Dialog>
   );
 }
+function BenefitItem({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
+  return (
+    <div className="group flex items-start gap-3 rounded-xl border border-primary-foreground/10 bg-primary-foreground/5 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-primary-foreground/10 hover:shadow-lg hover:shadow-accent/10">
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent/20 text-accent transition-all duration-300 group-hover:scale-110 group-hover:bg-accent group-hover:text-accent-foreground">
+        {icon}
+      </span>
+      <span>
+        <span className="block text-sm font-bold text-primary-foreground">{title}</span>
+        <span className="block text-xs leading-relaxed text-primary-foreground/70">{body}</span>
+      </span>
+    </div>
+  );
+}
+
 function BannerStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
     <div className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-primary-foreground/15">
