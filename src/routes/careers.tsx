@@ -78,10 +78,7 @@ function CareersPage() {
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">{t("careers.lead")}</p>
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card px-5 py-4">
-            <p className="text-sm">
-              <span className="font-bold">{jobs.length}</span>{" "}
-              <span className="text-muted-foreground">{t("careers.jobsFound", { count: jobs.length }).replace(String(jobs.length), "").trim()}</span>
-            </p>
+            <p className="text-sm font-semibold">{t("careers.jobsFound", { count: jobs.length })}</p>
             <p className="text-sm text-muted-foreground">{t("careers.hrNote")}</p>
           </div>
         </div>
