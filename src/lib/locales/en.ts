@@ -377,6 +377,8 @@ export const en = {
     cert10002: "Customer satisfaction",
     cert14001: "Environmental management",
     cert45001: "Occupational health & safety",
+    unifiedCallCenter: "Unified Call Center",
+    callNumber: "8004411110",
   },
   admin: {
     brand: "GoStation Admin",
