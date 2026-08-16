@@ -396,16 +396,6 @@ function HomePage() {
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">
               {t("home.coverageSub")}
             </p>
-            <div className="mt-8 flex flex-wrap gap-2">
-              {regions.map((r) => (
-                <span
-                  key={r}
-                  className="rounded-full border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground/80 transition hover:border-accent hover:text-accent"
-                >
-                  {r}
-                </span>
-              ))}
-            </div>
             <Button
               asChild
               size="lg"
