@@ -130,7 +130,7 @@ export const ar = {
     values: "القيم",
     esg: "الاستدامة والحوكمة",
     leaders: "القيادة",
-    awards: "الجوائز",
+    awards: "الشهادات",
     journey: {
       eyebrow: "مسيرة النمو",
       title: "قصة نجاح تُكتب محطة بعد محطة",

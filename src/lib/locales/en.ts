@@ -127,7 +127,7 @@ export const en = {
     values: "Values",
     esg: "Sustainability & ESG",
     leaders: "Leadership",
-    awards: "Awards",
+    awards: "Certificates",
     journey: {
       eyebrow: "Growth journey",
       title: "A success story written station by station",
