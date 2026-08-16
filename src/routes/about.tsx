@@ -101,6 +101,7 @@ function AboutPage() {
             <TabsTrigger value="mission">{t("about.mission")}</TabsTrigger>
             <TabsTrigger value="values">{t("about.values")}</TabsTrigger>
             <TabsTrigger value="esg">{t("about.esg")}</TabsTrigger>
+            <TabsTrigger value="governance">{t("about.governance")}</TabsTrigger>
             <TabsTrigger value="leaders">{t("about.leaders")}</TabsTrigger>
             <TabsTrigger value="awards">{t("about.awards")}</TabsTrigger>
           </TabsList>
@@ -171,6 +172,45 @@ function AboutPage() {
 
           <TabsContent value="esg" className="mt-8">
             <IconBlock icon={Leaf} title={t("about.esg")} body={get("esg")} />
+          </TabsContent>
+
+
+          <TabsContent value="governance" className="mt-8">
+            <Card className="overflow-hidden">
+              <div className="border-b bg-muted/40 px-8 py-4">
+                <h2 className="font-display text-xl font-bold">{t("about.governance")}</h2>
+              </div>
+              <CardContent className="grid gap-10 p-8 lg:grid-cols-2">
+                <div>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
+                    <ShieldCheck className="h-4 w-4" />
+                    {t("investors.govEyebrow")}
+                  </span>
+                  <h3 className="mt-5 text-balance font-display text-2xl font-extrabold tracking-tight md:text-3xl">
+                    {t("investors.govTitle")}
+                  </h3>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">{t("investors.govBody")}</p>
+                  <div className="mt-6 rounded-2xl border bg-muted/40 p-6">
+                    <h4 className="font-display text-lg font-bold">{t("investors.govGoalTitle")}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("investors.govGoalBody")}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-display text-xl font-bold">{t("investors.govPillarsTitle")}</h4>
+                  <ol className="mt-5 space-y-4">
+                    {["govP1", "govP2", "govP3"].map((k, i) => (
+                      <li key={k} className="flex items-start gap-4 rounded-2xl border bg-card p-5 transition-colors hover:border-accent/50">
+                        <span className="font-display text-lg font-extrabold text-accent tabular-nums">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">{t(`investors.${k}`)}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="leaders" className="mt-8 space-y-8">
