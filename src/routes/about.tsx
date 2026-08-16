@@ -174,7 +174,7 @@ function ChairmanCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
           <blockquote className="relative">
             <p className="text-2xl font-semibold leading-relaxed text-primary-foreground md:text-3xl lg:text-4xl">
               <span className="text-accent/80">{openQuote}</span>
-              {t("about.quote")}
+              {t("home.quote")}
               <span className="text-accent/80">{closeQuote}</span>
             </p>
           </blockquote>
