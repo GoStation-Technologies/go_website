@@ -187,6 +187,29 @@ export const en = {
         "Managing the company's own transport fleet",
       ],
     },
+    roadmap: {
+      eyebrow: "Looking ahead",
+      title: "GoStation future roadmap",
+      lead: "A clear, phased growth plan toward a wider network, a smarter customer experience and a lower environmental footprint.",
+      p1: {
+        range: "2026-2027",
+        title: "Network consolidation",
+        body: "Strengthening presence in key regions and raising operating efficiency at every station.",
+        items: ["Network growth via franchise and acquisition", "Higher safety and quality standards", "Better stores and support services"],
+      },
+      p2: {
+        range: "2028-2030",
+        title: "Digital and energy shift",
+        body: "Digitizing the customer journey and gradually introducing clean energy solutions.",
+        items: ["Unified digital platform and advanced loyalty", "EV charging points", "Data analytics for fleet management"],
+      },
+      p3: {
+        range: "2031-2035",
+        title: "Leadership and sustainability",
+        body: "Reaching a sustainable, fully integrated station model across the Kingdom.",
+        items: ["Lower carbon footprint across operations", "Next-generation multi-service stations", "Strategic partnerships and regional expansion"],
+      },
+    },
     journey: {
 
       eyebrow: "Growth journey",
