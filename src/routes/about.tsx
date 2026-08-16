@@ -117,7 +117,6 @@ function AboutPage() {
             <IconBlock icon={Target} title={t("about.mission")} body={get("mission")} />
           </TabsContent>
           <TabsContent value="values" className="mt-8 space-y-8">
-            <IconBlock icon={Sparkles} title={t("about.values")} body={get("values")} />
             <div>
               <div className="mx-auto max-w-3xl text-center">
                 <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
