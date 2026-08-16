@@ -208,9 +208,8 @@ function FranchisePage() {
         </div>
       </section>
 
-      <RoiCalculator />
-
       <section id="franchise-form" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-16">
+
         <div className="mb-8 text-center">
           <p className="text-lg font-semibold text-foreground md:text-xl">
             {t("franchise.formIntro")}
