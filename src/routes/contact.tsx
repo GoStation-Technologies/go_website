@@ -258,11 +258,18 @@ function ContactPage() {
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return <div className={"grid gap-1.5 " + className}><Label>{label}</Label>{children}</div>;
 }
-function InfoRow({ icon: Icon, title, text }: { icon: React.ComponentType<{ className?: string }>; title: string; text: string }) {
+function InfoRow({ icon: Icon, title, text, tel }: { icon: React.ComponentType<{ className?: string }>; title: string; text: string; tel?: boolean }) {
   return (
     <Card><CardContent className="flex items-start gap-3 p-5">
       <div className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 text-accent"><Icon className="h-4 w-4" /></div>
-      <div><div className="text-sm font-semibold">{title}</div><div className="text-sm text-muted-foreground">{text}</div></div>
+      <div>
+        <div className="text-sm font-semibold">{title}</div>
+        {tel ? (
+          <a href={`tel:${text}`} className="text-sm text-muted-foreground hover:text-accent" dir="ltr">{text}</a>
+        ) : (
+          <div className="text-sm text-muted-foreground">{text}</div>
+        )}
+      </div>
     </CardContent></Card>
   );
 }
