@@ -61,7 +61,7 @@ export function CoverageMap() {
           <SelectTrigger className="w-[190px]">
             <SelectValue placeholder={ar ? "المنطقة" : "Region"} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="z-[2000]">
             <SelectItem value="all">{ar ? "كل المناطق" : "All regions"}</SelectItem>
             {SAUDI_REGIONS.map((r) => (
               <SelectItem key={r.value} value={r.value}>
@@ -74,7 +74,7 @@ export function CoverageMap() {
           <SelectTrigger className="w-[170px]">
             <SelectValue placeholder={ar ? "نوع الوقود" : "Fuel type"} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="z-[2000]">
             <SelectItem value="all">{ar ? "كل الأنواع" : "All fuel types"}</SelectItem>
             {FUEL_CODES.map((f) => (
               <SelectItem key={f} value={f}>
