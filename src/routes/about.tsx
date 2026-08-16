@@ -170,9 +170,84 @@ function AboutPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="esg" className="mt-8">
-            <IconBlock icon={Leaf} title={t("about.esg")} body={get("esg")} />
+          <TabsContent value="esg" className="mt-8 space-y-8">
+            <Card className="overflow-hidden">
+              <div className="border-b bg-muted/40 px-8 py-4">
+                <h2 className="font-display text-xl font-bold">{t("about.esg")}</h2>
+              </div>
+              <CardContent className="p-8">
+                <span className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
+                  <Leaf className="h-4 w-4" />
+                  {t("about.sustain.eyebrow")}
+                </span>
+                <h3 className="mt-5 text-balance font-display text-2xl font-extrabold tracking-tight md:text-3xl">
+                  {t("about.sustain.title")}
+                </h3>
+                <div className="mt-4 space-y-4 leading-relaxed text-muted-foreground">
+                  <p>{t("about.sustain.body")}</p>
+                  <p>{t("about.sustain.body2")}</p>
+                  <p>{t("about.sustain.body3")}</p>
+                  {get("esg") ? <p>{get("esg")}</p> : null}
+                </div>
+
+                <h4 className="mt-8 font-display text-lg font-bold">{t("about.sustain.pillarsTitle")}</h4>
+                <div className="mt-5 grid gap-5 md:grid-cols-3">
+                  {([
+                    { k: "env", icon: Leaf },
+                    { k: "social", icon: Users },
+                    { k: "gov", icon: ShieldCheck },
+                  ] as const).map(({ k, icon: Icon }) => (
+                    <div key={k} className="rounded-2xl border bg-card p-6 transition-colors hover:border-accent/50">
+                      <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <h5 className="mt-4 font-display text-lg font-bold">{t(`about.sustain.pillars.${k}.title`)}</h5>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        {t(`about.sustain.pillars.${k}.body`)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-6 rounded-2xl border bg-muted/40 p-6 text-sm leading-relaxed text-muted-foreground">
+                  {t("about.sustain.note")}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <div className="border-b bg-muted/40 px-8 py-4">
+                <h2 className="font-display text-xl font-bold text-accent">{t("about.sustain.envLabel")}</h2>
+              </div>
+              <CardContent className="grid gap-10 p-8 lg:grid-cols-2">
+                <div>
+                  <p className="font-display text-xl font-bold text-accent">“{t("about.sustain.envQuote")}”</p>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">{t("about.sustain.envIntro")}</p>
+                  <div className="mt-6 rounded-2xl border bg-muted/40 p-6">
+                    <h4 className="font-display text-lg font-bold">{t("about.sustain.envGoalTitle")}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("about.sustain.envGoalBody")}</p>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-display text-xl font-bold">{t("about.sustain.envAxesTitle")}</h4>
+                  <ol className="mt-5 space-y-4">
+                    {["envA1", "envA2", "envA3"].map((k, i) => (
+                      <li
+                        key={k}
+                        className="flex items-start gap-4 rounded-2xl border bg-card p-5 transition-colors hover:border-accent/50"
+                      >
+                        <span className="font-display text-lg font-extrabold text-accent tabular-nums">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">{t(`about.sustain.${k}`)}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
+
 
 
           <TabsContent value="governance" className="mt-8">
