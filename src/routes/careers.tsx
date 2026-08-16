@@ -70,14 +70,6 @@ function CareersPage() {
         />
         <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_20%_0%,color-mix(in_oklab,var(--color-accent)_35%,transparent),transparent_60%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/85 to-primary" />
-        <svg
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full opacity-30"
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-        >
-          <path className="animate-[wave-flow_14s_linear_infinite]" fill="currentColor" d="M0,64 C240,120 480,0 720,48 C960,96 1200,32 1440,72 L1440,120 L0,120 Z" />
-        </svg>
 
         <div className="relative mx-auto max-w-7xl px-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold backdrop-blur">
