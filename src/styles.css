@@ -36,6 +36,7 @@
   --color-brand-accent-foreground: var(--brand-accent-foreground);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
+  --color-brand-navy: var(--brand-navy);
   --color-ember: var(--ember);
   --color-ember-glow: var(--ember-glow);
   --color-sand: var(--sand);
@@ -141,20 +142,20 @@
 .glass-ink {
 
   --background: var(--ink);
-  --foreground: oklch(0.98 0.005 250);
+  --foreground: oklch(0.98 0.008 279);
   --card: color-mix(in oklab, var(--ink) 78%, white 4%);
-  --card-foreground: oklch(0.98 0.005 250);
+  --card-foreground: oklch(0.98 0.008 279);
   --popover: color-mix(in oklab, var(--ink) 78%, white 4%);
-  --popover-foreground: oklch(0.98 0.005 250);
-  --primary: oklch(0.98 0.005 250);
+  --popover-foreground: oklch(0.98 0.008 279);
+  --primary: oklch(0.98 0.008 279);
   --primary-foreground: var(--ink);
   --secondary: color-mix(in oklab, white 8%, transparent);
-  --secondary-foreground: oklch(0.98 0.005 250);
+  --secondary-foreground: oklch(0.98 0.008 279);
   --muted: color-mix(in oklab, white 6%, transparent);
-  --muted-foreground: oklch(0.82 0.02 250);
+  --muted-foreground: oklch(0.84 0.03 279);
   --border: color-mix(in oklab, white 12%, transparent);
   --input: color-mix(in oklab, white 14%, transparent);
-  color: oklch(0.98 0.005 250);
+  color: oklch(0.98 0.008 279);
 }
 
 @layer base {
@@ -330,17 +331,17 @@ html[dir="rtl"] .animate-wave-flow-slow { animation: wave-flow-rtl 34s linear in
    ───────────────────────────────────────────────────────────── */
 :root {
   --sidebar: var(--ink);
-  --sidebar-foreground: oklch(0.93 0.012 250);
+  --sidebar-foreground: oklch(0.94 0.015 279);
   --sidebar-primary: var(--ember);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: color-mix(in oklab, var(--ember) 22%, transparent);
-  --sidebar-accent-foreground: oklch(0.99 0.005 250);
+  --sidebar-accent-foreground: oklch(0.99 0.005 279);
   --sidebar-border: color-mix(in oklab, white 10%, transparent);
   --sidebar-ring: var(--ember);
 }
 .dark {
-  --sidebar: oklch(0.14 0.03 245);
-  --sidebar-foreground: oklch(0.93 0.012 250);
+  --sidebar: oklch(0.205 0.085 279);
+  --sidebar-foreground: oklch(0.94 0.015 279);
   --sidebar-accent: color-mix(in oklab, var(--ember) 26%, transparent);
   --sidebar-border: color-mix(in oklab, white 12%, transparent);
 }
