@@ -40,6 +40,7 @@ import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";
 import { JoinCta } from "@/components/site/join-cta";
+import { CoverageMap } from "@/components/site/coverage-map";
 
 
 export const Route = createFileRoute("/")({
@@ -123,11 +124,6 @@ function HomePage() {
     { icon: Leaf, k: "community" },
     { icon: Handshake, k: "innovation" },
   ] as const;
-
-  const regions = [
-    "Riyadh", "Makkah", "Madinah", "Eastern", "Asir", "Tabuk",
-    "Qassim", "Hail", "Jazan", "Najran", "Al-Baha", "Northern Borders", "Al-Jouf",
-  ];
 
   return (
     <SiteLayout overlayHeader>
