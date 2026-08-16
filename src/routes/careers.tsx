@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud } from "lucide-react";
+import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud, Network, Users, BadgeCheck, TrendingUp, Send } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 
 export const Route = createFileRoute("/careers")({
@@ -61,7 +61,7 @@ function CareersPage() {
   return (
     <SiteLayout>
       {/* Header banner */}
-      <section className="relative isolate overflow-hidden bg-primary py-20 text-primary-foreground">
+      <section className="relative isolate overflow-hidden bg-primary py-16 text-primary-foreground lg:py-20">
         <img
           src={stationCanopy.url}
           alt=""
@@ -72,28 +72,67 @@ function CareersPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/90 to-primary" />
 
         <div className="relative mx-auto max-w-7xl px-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold backdrop-blur">
-            <Briefcase className="h-3.5 w-3.5" />
-            {t("careers.eyebrow")}
+          <div className="grid items-center gap-10 lg:grid-cols-2">
+            {/* Benefits — fills the empty side of the banner */}
+            <div className="order-2 lg:order-2">
+              <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/8 p-5 backdrop-blur-md shadow-2xl shadow-black/20">
+                <h2 className="mb-4 text-center text-lg font-bold text-primary-foreground">{t("careers.benefits.title")}</h2>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                  <BenefitItem
+                    icon={<Network className="h-5 w-5" />}
+                    title={t("careers.benefits.network.title")}
+                    body={t("careers.benefits.network.body")}
+                  />
+                  <BenefitItem
+                    icon={<Users className="h-5 w-5" />}
+                    title={t("careers.benefits.environment.title")}
+                    body={t("careers.benefits.environment.body")}
+                  />
+                  <BenefitItem
+                    icon={<BadgeCheck className="h-5 w-5" />}
+                    title={t("careers.benefits.rewards.title")}
+                    body={t("careers.benefits.rewards.body")}
+                  />
+                  <BenefitItem
+                    icon={<TrendingUp className="h-5 w-5" />}
+                    title={t("careers.benefits.growth.title")}
+                    body={t("careers.benefits.growth.body")}
+                  />
+                  <BenefitItem
+                    icon={<Send className="h-5 w-5" />}
+                    title={t("careers.benefits.apply.title")}
+                    body={t("careers.benefits.apply.body")}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Title + stats */}
+            <div className="order-1 text-center lg:order-1 lg:text-start">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold backdrop-blur">
+                <Briefcase className="h-3.5 w-3.5" />
+                {t("careers.eyebrow")}
+              </div>
+
+              <h1 className="mt-6 max-w-3xl text-4xl font-extrabold tracking-tight md:text-6xl">
+                {t("careers.title")}
+              </h1>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/80 md:text-lg">
+                {t("careers.lead")}
+              </p>
+
+              <div className="mt-9 grid gap-3 sm:grid-cols-3">
+                <BannerStat icon={<Briefcase className="h-4 w-4" />} value={String(jobs.length)} label={t("careers.openings")} />
+                <BannerStat icon={<MapPin className="h-4 w-4" />} value={String(cityCount)} label={t("careers.cols.location")} />
+                <BannerStat icon={<Building2 className="h-4 w-4" />} value={String(deptCount)} label={t("careers.cols.department")} />
+              </div>
+
+              <p className="mt-6 inline-flex items-center gap-2 text-sm text-primary-foreground/75">
+                <UploadCloud className="h-4 w-4" />
+                {t("careers.hrNote")}
+              </p>
+            </div>
           </div>
-
-          <h1 className="mt-6 max-w-3xl text-4xl font-extrabold tracking-tight md:text-6xl">
-            {t("careers.title")}
-          </h1>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/80 md:text-lg">
-            {t("careers.lead")}
-          </p>
-
-          <div className="mt-9 grid gap-3 sm:max-w-2xl sm:grid-cols-3">
-            <BannerStat icon={<Briefcase className="h-4 w-4" />} value={String(jobs.length)} label={t("careers.openings")} />
-            <BannerStat icon={<MapPin className="h-4 w-4" />} value={String(cityCount)} label={t("careers.cols.location")} />
-            <BannerStat icon={<Building2 className="h-4 w-4" />} value={String(deptCount)} label={t("careers.cols.department")} />
-          </div>
-
-          <p className="mt-6 inline-flex items-center gap-2 text-sm text-primary-foreground/75">
-            <UploadCloud className="h-4 w-4" />
-            {t("careers.hrNote")}
-          </p>
         </div>
       </section>
 
@@ -271,6 +310,20 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
     </Dialog>
   );
 }
+function BenefitItem({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
+  return (
+    <div className="group flex items-start gap-3 rounded-xl border border-primary-foreground/10 bg-primary-foreground/5 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-primary-foreground/10 hover:shadow-lg hover:shadow-accent/10">
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent/20 text-accent transition-all duration-300 group-hover:scale-110 group-hover:bg-accent group-hover:text-accent-foreground">
+        {icon}
+      </span>
+      <span>
+        <span className="block text-sm font-bold text-primary-foreground">{title}</span>
+        <span className="block text-xs leading-relaxed text-primary-foreground/70">{body}</span>
+      </span>
+    </div>
+  );
+}
+
 function BannerStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
     <div className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-primary-foreground/15">
