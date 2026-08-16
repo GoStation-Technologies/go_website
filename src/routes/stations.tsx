@@ -178,7 +178,7 @@ function StationsPage() {
                   <div className="mt-3 flex flex-wrap gap-1">
                     {(s.fuel_types ?? []).map((f: string) => (
                       <span key={f} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs">
-                        <Fuel className="h-3 w-3" /> {f}
+                        <Fuel className="h-3 w-3" /> {fuelLabel(f, ar)}
                       </span>
                     ))}
                   </div>
