@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Eye, FileDown } from "lucide-react";
+import { ArrowLeft, ArrowRight, CircleDollarSign, Eye, FileDown, MapPinned, TrendingUp } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
 
@@ -78,22 +78,19 @@ function IRPage() {
       label: t("investors.kpiRevenue"),
       value: "3.2B",
       unit: lng === "ar" ? "ريال" : "SAR",
-      chart: "area",
-      data: [0.35, 0.42, 0.5, 0.56, 0.68, 0.82, 1.0],
+      icon: "revenue",
     },
     {
       label: t("investors.kpiGrowth"),
       value: "+18%",
       unit: "",
-      chart: "bar",
-      data: [0.45, 0.55, 0.62, 0.75, 0.82, 0.92, 1.0],
+      icon: "growth",
     },
     {
       label: t("investors.kpiStations"),
       value: "180+",
       unit: lng === "ar" ? "محطة" : "stations",
-      chart: "step",
-      data: [0.25, 0.38, 0.45, 0.58, 0.72, 0.88, 1.0],
+      icon: "stations",
     },
   ];
 
@@ -334,17 +331,16 @@ type KpiConfig = {
   label: string;
   value: string;
   unit: string;
-  chart: "area" | "bar" | "step";
-  data: number[];
+  icon: "revenue" | "growth" | "stations";
 };
 
 function KpiCard({ kpi }: { kpi: KpiConfig }) {
-  const strokePath = buildPath(kpi.data, kpi.chart);
-  const fillPath = buildFillPath(kpi.data, kpi.chart);
+  const Icon = kpi.icon === "revenue" ? CircleDollarSign : kpi.icon === "growth" ? TrendingUp : MapPinned;
+  const iconLabel = kpi.icon === "revenue" ? "Revenue" : kpi.icon === "growth" ? "Growth" : "Stations";
 
   return (
-    <div className="group relative flex flex-col items-start gap-4 px-6 py-8 sm:px-8 sm:py-10 md:py-12">
-      <div className="w-full">
+    <div className="group relative flex items-center justify-between gap-4 px-6 py-8 sm:px-8 sm:py-10 md:py-12">
+      <div>
         <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
           {kpi.value}
           {kpi.unit && (
@@ -354,122 +350,14 @@ function KpiCard({ kpi }: { kpi: KpiConfig }) {
         <div className="mt-1 text-sm font-medium text-muted-foreground">{kpi.label}</div>
       </div>
 
-      <div className="relative mt-2 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-primary/[0.06] to-accent/[0.04] px-4 py-5">
-        <svg
-          viewBox="0 0 200 64"
-          preserveAspectRatio="none"
-          className="h-16 w-full overflow-visible"
-          aria-hidden
-        >
-          <defs>
-            <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.35} />
-              <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.05} />
-            </linearGradient>
-            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="var(--primary)" />
-              <stop offset="100%" stopColor="var(--accent)" />
-            </linearGradient>
-          </defs>
-
-          {kpi.chart !== "bar" && <path d={fillPath} fill="url(#fillGrad)" />}
-          {kpi.chart !== "bar" && (
-            <path
-              d={strokePath}
-              fill="none"
-              stroke="url(#lineGrad)"
-              strokeWidth={3}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="drop-shadow-sm"
-            />
-          )}
-
-          {kpi.chart === "bar" &&
-            kpi.data.map((d, i) => {
-              const barWidth = 18;
-              const gap = 10;
-              const x = i * (barWidth + gap) + gap;
-              const h = d * 52;
-              const y = 60 - h;
-              return (
-                <rect
-                  key={i}
-                  x={x}
-                  y={y}
-                  width={barWidth}
-                  height={h}
-                  rx={4}
-                  fill={i === kpi.data.length - 1 ? "var(--accent)" : "var(--primary)"}
-                  fillOpacity={i === kpi.data.length - 1 ? 1 : 0.35}
-                />
-              );
-            })}
-
-          {kpi.chart !== "bar" && (
-            <circle cx="192" cy={8} r={5} fill="var(--accent)" className="shadow-glow" />
-          )}
-        </svg>
-
-        <div className="absolute bottom-0 start-0 h-px w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      <div className="relative shrink-0">
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 blur-md transition group-hover:from-primary/15 group-hover:to-accent/15" />
+        <div className="relative grid h-16 w-16 place-items-center rounded-2xl border border-primary/10 bg-gradient-to-br from-primary/[0.06] to-accent/[0.04] md:h-20 md:w-20">
+          <Icon className="h-8 w-8 text-primary md:h-10 md:w-10" aria-label={iconLabel} />
+        </div>
       </div>
     </div>
   );
-}
-
-function buildPath(data: number[], type: "area" | "bar" | "step"): string {
-  const w = 200;
-  const h = 64;
-  const pad = 6;
-  const points = data.map((d, i) => {
-    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
-    const y = h - pad - d * (h - pad * 2);
-    return { x, y };
-  });
-
-  if (type === "area") {
-    return points
-      .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
-      .join(" ");
-  }
-
-  let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
-  for (let i = 1; i < points.length; i++) {
-    const prev = points[i - 1];
-    const curr = points[i];
-    d += ` L ${prev.x.toFixed(1)} ${curr.y.toFixed(1)} L ${curr.x.toFixed(1)} ${curr.y.toFixed(1)}`;
-  }
-  return d;
-}
-
-function buildFillPath(data: number[], type: "area" | "bar" | "step"): string {
-  const w = 200;
-  const h = 64;
-  const pad = 6;
-  const points = data.map((d, i) => {
-    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
-    const y = h - pad - d * (h - pad * 2);
-    return { x, y };
-  });
-
-  let d = `M ${points[0].x.toFixed(1)} ${h - pad}`;
-  if (type === "area") {
-    d += ` L ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
-    for (let i = 1; i < points.length; i++) {
-      d += ` L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
-    }
-  } else {
-    for (let i = 0; i < points.length; i++) {
-      if (i === 0) {
-        d += ` L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
-      } else {
-        const prev = points[i - 1];
-        d += ` L ${prev.x.toFixed(1)} ${points[i].y.toFixed(1)} L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
-      }
-    }
-  }
-  d += ` L ${points[points.length - 1].x.toFixed(1)} ${h - pad} Z`;
-  return d;
 }
 
 function F({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
