@@ -108,7 +108,7 @@ function CareersPage() {
             </div>
 
             {/* Title + stats */}
-            <div className="order-1 text-center lg:order-2 lg:text-start">
+            <div className="order-1 text-center lg:order-1 lg:text-start">
               <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold backdrop-blur">
                 <Briefcase className="h-3.5 w-3.5" />
                 {t("careers.eyebrow")}
