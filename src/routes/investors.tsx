@@ -174,7 +174,7 @@ function IRPage() {
                   href={r.file_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="group relative block aspect-square overflow-hidden rounded-[2rem] bg-ink shadow-[0_24px_60px_-32px_rgba(15,23,42,0.6)] transition duration-500 hover:-translate-y-1"
+                  className="group relative block aspect-square overflow-hidden rounded-[2rem] bg-ink shadow-elegant transition duration-500 hover:-translate-y-1"
                 >
                   <span
                     className="absolute inset-0 opacity-70 transition duration-500 group-hover:opacity-90"
