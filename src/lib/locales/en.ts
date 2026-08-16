@@ -128,6 +128,37 @@ export const en = {
     esg: "Sustainability & ESG",
     leaders: "Leadership",
     awards: "Awards",
+    journey: {
+      eyebrow: "Growth journey",
+      title: "A success story written station by station",
+      lead: "From a single idea to one of Saudi Arabia's fastest-growing fuel networks — these are the milestones along the way.",
+      prev: "Previous",
+      next: "Next",
+      m1: {
+        title: "Founded on a vision",
+        body: "GoStation was founded with one ambition: a modern, dependable refuelling experience that raises the service bar in the Kingdom.",
+      },
+      m2: {
+        title: "First stations open",
+        body: "Our first stations opened under one brand identity, with strict operating and safety standards customers quickly trusted.",
+      },
+      m3: {
+        title: "Nationwide expansion",
+        body: "The network spread into new regions through franchising and the acquisition and redevelopment of existing stations.",
+      },
+      m4: {
+        title: "Digital transformation",
+        body: "We launched the GoStation app with a loyalty programme, digital payments and fleet reporting for corporate customers.",
+      },
+      m5: {
+        title: "A station and more",
+        body: "Retail stores, services and leasable commercial space turned every site into a complete destination.",
+      },
+      m6: {
+        title: "A national network",
+        body: "180+ stations across 13 regions and more than 800 million litres of fuel sold — and the journey continues.",
+      },
+    },
   },
   media: {
     title: "Media Center",

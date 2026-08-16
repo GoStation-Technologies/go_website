@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
+import { StoryTimeline } from "@/components/site/story-timeline";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Award, Eye, Target, Sparkles, Leaf, Users } from "lucide-react";
@@ -73,9 +75,11 @@ function AboutPage() {
             <TabsTrigger value="awards">{t("about.awards")}</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="story" className="mt-8">
+          <TabsContent value="story" className="mt-8 space-y-10">
             <Card><CardContent className="prose max-w-none p-8"><h2 className="mb-3 text-2xl font-bold">{get("story_title")}</h2><p>{get("story_body")}</p></CardContent></Card>
+            <StoryTimeline />
           </TabsContent>
+
           <TabsContent value="vision" className="mt-8">
             <IconBlock icon={Eye} title={t("about.vision")} body={get("vision")} />
           </TabsContent>
