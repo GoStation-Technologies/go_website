@@ -241,11 +241,20 @@ function LeadershipCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
   const bio = lng === "ar" ? leader.bio_ar : leader.bio_en;
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-primary via-primary/80 to-accent/40">
-        <div className="absolute -start-4 -top-4 h-24 w-24 rounded-full bg-accent/20 blur-2xl" />
-        <div className="absolute end-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm">
-          <Users className="h-5 w-5" />
-        </div>
+      <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-accent/40">
+        {leader.photo_url ? (
+          <img
+            src={leader.photo_url}
+            alt={name}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Users className="h-16 w-16 text-white/40" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/20 to-transparent" />
       </div>
       <CardContent className="p-5">
         <h3 className="text-lg font-bold leading-tight">{name}</h3>

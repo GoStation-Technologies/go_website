@@ -1,0 +1,4 @@
+UPDATE public.leaders SET photo_url = 'https://res.cloudinary.com/dca2x8jje/image/upload/v1786870185/DSC_8625_copy.jpg_kihmwm.jpg' WHERE id = '90ef83d9-fc6b-4962-81c9-d9d070fb6bd5';
+UPDATE public.leaders SET photo_url = 'https://res.cloudinary.com/dca2x8jje/image/upload/v1786870639/1744662006789_eodjjv.jpg' WHERE id = 'edfe0787-b893-4964-b108-db42febba92e';
+UPDATE public.leaders SET photo_url = 'https://res.cloudinary.com/dca2x8jje/image/upload/v1786870639/1686508977330_awdsbo.jpg' WHERE id = 'c48cc65d-2dd4-4adb-9ca6-d80ca8768642';
+UPDATE public.leaders SET photo_url = 'https://res.cloudinary.com/dca2x8jje/image/upload/v1786870639/1722761626761_xcikgd.jpg' WHERE id = '26f16d8f-569b-4993-b876-50d48078b732';
