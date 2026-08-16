@@ -110,7 +110,7 @@ function IRPage() {
       </section>
 
       <section className="relative z-10 -mt-28 px-4 md:-mt-32">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border/60 bg-card/95 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)] backdrop-blur-xl">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border/60 bg-card/95 shadow-elegant backdrop-blur-xl">
           <div className="grid divide-y divide-border/70 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:rtl:divide-x-reverse">
             {kpis.map((k) => (
               <div key={k.label} className="px-8 py-10 text-center">
@@ -174,7 +174,7 @@ function IRPage() {
                   href={r.file_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="group relative block aspect-square overflow-hidden rounded-[2rem] bg-ink shadow-[0_24px_60px_-32px_rgba(15,23,42,0.6)] transition duration-500 hover:-translate-y-1"
+                  className="group relative block aspect-square overflow-hidden rounded-[2rem] bg-ink shadow-elegant transition duration-500 hover:-translate-y-1"
                 >
                   <span
                     className="absolute inset-0 opacity-70 transition duration-500 group-hover:opacity-90"

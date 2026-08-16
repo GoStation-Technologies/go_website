@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "GoStation — A station and more" },
       { name: "description", content: "The fastest-growing fuel network in Saudi Arabia — live fuel prices, franchise opportunities, and a full station experience." },
-      { name: "theme-color", content: "#002B49" },
+      { name: "theme-color", content: "#1A1554" },
       { property: "og:title", content: "GoStation — A station and more" },
       { property: "og:description", content: "The fastest-growing fuel network in Saudi Arabia — live fuel prices, franchise opportunities, and a full station experience." },
       { property: "og:type", content: "website" },

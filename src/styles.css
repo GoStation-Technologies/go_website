@@ -36,6 +36,7 @@
   --color-brand-accent-foreground: var(--brand-accent-foreground);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
+  --color-brand-navy: var(--brand-navy);
   --color-ember: var(--ember);
   --color-ember-glow: var(--ember-glow);
   --color-sand: var(--sand);
@@ -51,46 +52,49 @@
 
 :root {
   --radius: 0.875rem;
-  /* GoStation 2026 — airy editorial: Cloud White + Ember */
-  --ink: oklch(0.21 0.04 265);              /* #0f172a slate ink */
-  --ink-2: oklch(0.28 0.04 265);
-  --ember: oklch(0.66 0.19 35);             /* #e85d3a ember */
-  --ember-glow: oklch(0.74 0.16 42);
-  --sand: oklch(0.94 0.008 250);            /* #e8ecf1 surface */
+  /* GoStation brand guidelines — Dark Blue R26 G21 B84 (#1A1554) + Orange R243 G115 B53 (#F37335) */
+  --brand-navy: oklch(0.251 0.109 278.6);   /* #1A1554 — exact brand navy */
+  --ink: oklch(0.30 0.115 279);             /* lifted navy for large surfaces */
+  --ink-2: oklch(0.385 0.13 280);           /* brighter navy for gradients */
+  --ember: oklch(0.698 0.174 44);           /* #F37335 — exact brand orange */
+  --ember-glow: oklch(0.765 0.147 53.5);
+  --sand: oklch(0.945 0.012 279);
 
-  --background: oklch(0.985 0.003 250);     /* #fafbfc */
-  --foreground: oklch(0.21 0.04 265);
+  --background: oklch(0.988 0.004 279);
+  --foreground: oklch(0.251 0.109 278.6);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.04 265);
+  --card-foreground: oklch(0.251 0.109 278.6);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.04 265);
-  --primary: oklch(0.21 0.04 265);
-  --primary-foreground: oklch(0.985 0.003 250);
-  --secondary: oklch(0.94 0.008 250);
-  --secondary-foreground: oklch(0.21 0.04 265);
-  --muted: oklch(0.96 0.005 250);
-  --muted-foreground: oklch(0.46 0.02 265);
-  --accent: oklch(0.66 0.19 35);
+  --popover-foreground: oklch(0.251 0.109 278.6);
+  --primary: oklch(0.251 0.109 278.6);
+  --primary-foreground: oklch(0.988 0.004 279);
+  --secondary: oklch(0.945 0.012 279);
+  --secondary-foreground: oklch(0.251 0.109 278.6);
+  --muted: oklch(0.963 0.008 279);
+  --muted-foreground: oklch(0.50 0.045 279);
+  --accent: oklch(0.698 0.174 44);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.6 0.24 27);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.91 0.006 250);
-  --input: oklch(0.91 0.006 250);
-  --ring: oklch(0.66 0.19 35);
-  --brand: oklch(0.21 0.04 265);
-  --brand-foreground: oklch(0.985 0.003 250);
-  --brand-accent: oklch(0.66 0.19 35);
+  --border: oklch(0.912 0.012 279);
+  --input: oklch(0.912 0.012 279);
+  --ring: oklch(0.698 0.174 44);
+  --brand: oklch(0.251 0.109 278.6);
+  --brand-foreground: oklch(0.988 0.004 279);
+  --brand-accent: oklch(0.698 0.174 44);
   --brand-accent-foreground: oklch(1 0 0);
-  --chart-1: oklch(0.21 0.04 265);
-  --chart-2: oklch(0.66 0.19 35);
-  --chart-3: oklch(0.55 0.14 220);
-  --chart-4: oklch(0.65 0.13 145);
-  --chart-5: oklch(0.75 0.15 85);
+  --chart-1: oklch(0.30 0.115 279);
+  --chart-2: oklch(0.698 0.174 44);
+  --chart-3: oklch(0.52 0.14 279);
+  --chart-4: oklch(0.765 0.147 53.5);
+  --chart-5: oklch(0.66 0.10 279);
 
   /* Reusable design tokens */
-  --shadow-elegant: 0 24px 60px -28px oklch(0 0 0 / 0.18);
+  --shadow-elegant: 0 24px 60px -28px color-mix(in oklab, var(--brand-navy) 32%, transparent);
   --shadow-glow: 0 20px 50px -20px color-mix(in oklab, var(--ember) 45%, transparent);
-  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.03), 0 8px 24px -14px oklch(0 0 0 / 0.08);
+  --shadow-card:
+    0 1px 2px color-mix(in oklab, var(--brand-navy) 8%, transparent),
+    0 8px 24px -14px color-mix(in oklab, var(--brand-navy) 18%, transparent);
   --gradient-ember: linear-gradient(135deg, var(--ember) 0%, var(--ember-glow) 100%);
   --gradient-ink: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
   --gradient-hero:
@@ -100,33 +104,34 @@
 }
 
 .dark {
-  --background: oklch(0.16 0.035 245);
-  --foreground: oklch(0.97 0.01 250);
-  --card: oklch(0.20 0.045 245);
-  --card-foreground: oklch(0.97 0.01 250);
-  --popover: oklch(0.20 0.045 245);
-  --popover-foreground: oklch(0.97 0.01 250);
-  --primary: oklch(0.97 0.01 250);
-  --primary-foreground: oklch(0.16 0.035 245);
-  --secondary: oklch(0.25 0.04 250);
-  --secondary-foreground: oklch(0.97 0.01 250);
-  --muted: oklch(0.24 0.035 250);
-  --muted-foreground: oklch(0.74 0.02 250);
-  --accent: oklch(0.74 0.19 45);
-  --accent-foreground: oklch(0.16 0.035 245);
+  --background: oklch(0.19 0.075 279);
+  --foreground: oklch(0.97 0.012 279);
+  --card: oklch(0.235 0.09 279);
+  --card-foreground: oklch(0.97 0.012 279);
+  --popover: oklch(0.235 0.09 279);
+  --popover-foreground: oklch(0.97 0.012 279);
+  --primary: oklch(0.97 0.012 279);
+  --primary-foreground: oklch(0.19 0.075 279);
+  --secondary: oklch(0.29 0.095 279);
+  --secondary-foreground: oklch(0.97 0.012 279);
+  --muted: oklch(0.275 0.085 279);
+  --muted-foreground: oklch(0.76 0.03 279);
+  --accent: oklch(0.735 0.165 47);
+  --accent-foreground: oklch(0.19 0.075 279);
   --destructive: oklch(0.7 0.19 22);
-  --destructive-foreground: oklch(0.97 0.01 250);
+  --destructive-foreground: oklch(0.97 0.012 279);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.74 0.19 45);
-  --brand: oklch(0.97 0.01 250);
-  --brand-foreground: oklch(0.16 0.035 245);
-  --sand: oklch(0.22 0.04 245);
+  --ring: oklch(0.735 0.165 47);
+  --brand: oklch(0.97 0.012 279);
+  --brand-foreground: oklch(0.19 0.075 279);
+  --sand: oklch(0.26 0.09 279);
 
   /* Recompose gradients so hero/radial surfaces stay cinematic in dark mode too */
   --shadow-elegant: 0 20px 60px -20px oklch(0 0 0 / 0.6);
   --shadow-card: 0 1px 2px oklch(0 0 0 / 0.4), 0 8px 24px -12px oklch(0 0 0 / 0.5);
 }
+
 
 /* Any section that paints its own dark ink background must keep light text
    regardless of the active theme. Scope tokens locally so children (buttons,
@@ -137,20 +142,20 @@
 .glass-ink {
 
   --background: var(--ink);
-  --foreground: oklch(0.98 0.005 250);
+  --foreground: oklch(0.98 0.008 279);
   --card: color-mix(in oklab, var(--ink) 78%, white 4%);
-  --card-foreground: oklch(0.98 0.005 250);
+  --card-foreground: oklch(0.98 0.008 279);
   --popover: color-mix(in oklab, var(--ink) 78%, white 4%);
-  --popover-foreground: oklch(0.98 0.005 250);
-  --primary: oklch(0.98 0.005 250);
+  --popover-foreground: oklch(0.98 0.008 279);
+  --primary: oklch(0.98 0.008 279);
   --primary-foreground: var(--ink);
   --secondary: color-mix(in oklab, white 8%, transparent);
-  --secondary-foreground: oklch(0.98 0.005 250);
+  --secondary-foreground: oklch(0.98 0.008 279);
   --muted: color-mix(in oklab, white 6%, transparent);
-  --muted-foreground: oklch(0.82 0.02 250);
+  --muted-foreground: oklch(0.84 0.03 279);
   --border: color-mix(in oklab, white 12%, transparent);
   --input: color-mix(in oklab, white 14%, transparent);
-  color: oklch(0.98 0.005 250);
+  color: oklch(0.98 0.008 279);
 }
 
 @layer base {
@@ -326,17 +331,17 @@ html[dir="rtl"] .animate-wave-flow-slow { animation: wave-flow-rtl 34s linear in
    ───────────────────────────────────────────────────────────── */
 :root {
   --sidebar: var(--ink);
-  --sidebar-foreground: oklch(0.93 0.012 250);
+  --sidebar-foreground: oklch(0.94 0.015 279);
   --sidebar-primary: var(--ember);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: color-mix(in oklab, var(--ember) 22%, transparent);
-  --sidebar-accent-foreground: oklch(0.99 0.005 250);
+  --sidebar-accent-foreground: oklch(0.99 0.005 279);
   --sidebar-border: color-mix(in oklab, white 10%, transparent);
   --sidebar-ring: var(--ember);
 }
 .dark {
-  --sidebar: oklch(0.14 0.03 245);
-  --sidebar-foreground: oklch(0.93 0.012 250);
+  --sidebar: oklch(0.205 0.085 279);
+  --sidebar-foreground: oklch(0.94 0.015 279);
   --sidebar-accent: color-mix(in oklab, var(--ember) 26%, transparent);
   --sidebar-border: color-mix(in oklab, white 12%, transparent);
 }
