@@ -10,12 +10,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Fuel, Search, Star, Clock } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Fuel, Search, Star, Clock, X } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
+import { regionForCity, regionLabel, fuelLabel, SAUDI_REGIONS } from "@/lib/regions";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
 );
+
 
 export const Route = createFileRoute("/stations")({
   component: StationsPage,
