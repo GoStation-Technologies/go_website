@@ -324,6 +324,14 @@ export const en = {
     position: "Position applied for",
     formIntro: "Fill in your details and upload your CV — it goes straight to the Human Resources team.",
     hrNote: "Your application is sent directly to GoStation Human Resources.",
+    benefits: {
+      title: "Why GoStation?",
+      network: { title: "National network", body: "180+ stations across 13 regions — a stable platform for career growth." },
+      environment: { title: "Professional environment", body: "A collaborative culture, integrated teams, and room for ownership and creativity." },
+      rewards: { title: "Competitive rewards", body: "Attractive salaries, performance incentives, and health coverage for you and your family." },
+      growth: { title: "Continuous growth", body: "Training programs, clear promotion paths, and specialization opportunities in every department." },
+      apply: { title: "Simple, direct application", body: "Apply in seconds and upload your CV — straight to the recruitment team." },
+    },
   },
   investors: {
     title: "Investor relations",
