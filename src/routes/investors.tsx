@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Eye, FileDown } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, FileDown, TrendingUp } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
 
@@ -73,10 +73,31 @@ function IRPage() {
     (e.target as HTMLFormElement).reset();
   };
 
-  const kpis = [
-    { label: t("investors.kpiRevenue"), value: "3.2B", unit: lng === "ar" ? "ريال" : "SAR" },
-    { label: t("investors.kpiGrowth"), value: "+18%", unit: "" },
-    { label: t("investors.kpiStations"), value: "180+", unit: lng === "ar" ? "محطة" : "stations" },
+  const kpis: KpiConfig[] = [
+    {
+      label: t("investors.kpiRevenue"),
+      value: "3.2B",
+      unit: lng === "ar" ? "ريال" : "SAR",
+      trend: "+12%",
+      chart: "area",
+      data: [0.35, 0.42, 0.5, 0.56, 0.68, 0.82, 1.0],
+    },
+    {
+      label: t("investors.kpiGrowth"),
+      value: "+18%",
+      unit: "",
+      trend: lng === "ar" ? "سنوياً" : "YoY",
+      chart: "bar",
+      data: [0.45, 0.55, 0.62, 0.75, 0.82, 0.92, 1.0],
+    },
+    {
+      label: t("investors.kpiStations"),
+      value: "180+",
+      unit: lng === "ar" ? "محطة" : "stations",
+      trend: "+24",
+      chart: "step",
+      data: [0.25, 0.38, 0.45, 0.58, 0.72, 0.88, 1.0],
+    },
   ];
 
   return (
@@ -98,7 +119,7 @@ function IRPage() {
           }}
         />
 
-        <div className="relative mx-auto max-w-4xl px-4 pb-40 pt-28 text-center md:pb-48 md:pt-36">
+        <div className="relative mx-auto max-w-4xl px-4 pb-44 pt-28 text-center md:pb-52 md:pt-36">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs tracking-wide backdrop-blur-sm">
             {t("investors.title")}
           </span>
@@ -115,13 +136,7 @@ function IRPage() {
         <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border/60 bg-card/95 shadow-elegant backdrop-blur-xl">
           <div className="grid divide-y divide-border/70 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:rtl:divide-x-reverse">
             {kpis.map((k) => (
-              <div key={k.label} className="px-8 py-10 text-center">
-                <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
-                  {k.value}
-                  {k.unit && <span className="ms-2 text-lg font-bold md:text-xl">{k.unit}</span>}
-                </div>
-                <div className="mt-2 text-sm text-muted-foreground">{k.label}</div>
-              </div>
+              <KpiCard key={k.label} kpi={k} />
             ))}
           </div>
         </div>
@@ -317,6 +332,166 @@ function IRPage() {
     </SiteLayout>
   );
 }
+
+type KpiConfig = {
+  label: string;
+  value: string;
+  unit: string;
+  trend: string;
+  chart: "area" | "bar" | "step";
+  data: number[];
+};
+
+function KpiCard({ kpi }: { kpi: KpiConfig }) {
+  const strokePath = buildPath(kpi.data, kpi.chart);
+  const fillPath = buildFillPath(kpi.data, kpi.chart);
+  const isGrowth = kpi.chart === "bar";
+
+  return (
+    <div className="group relative flex flex-col items-start gap-4 px-6 py-8 sm:px-8 sm:py-10 md:py-12">
+      <div className="flex w-full items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
+              {kpi.value}
+              {kpi.unit && (
+                <span className="ms-2 text-lg font-bold text-primary/80 md:text-xl">{kpi.unit}</span>
+              )}
+            </div>
+          </div>
+          <div className="mt-1 text-sm font-medium text-muted-foreground">{kpi.label}</div>
+        </div>
+
+        <div
+          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
+            isGrowth
+              ? "bg-accent/12 text-accent"
+              : "bg-primary/10 text-primary"
+          }`}
+        >
+          <TrendingUp className="h-3.5 w-3.5" />
+          {kpi.trend}
+        </div>
+      </div>
+
+      <div className="relative mt-2 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-primary/[0.06] to-accent/[0.04] px-4 py-5">
+        <svg
+          viewBox="0 0 200 64"
+          preserveAspectRatio="none"
+          className="h-16 w-full overflow-visible"
+          aria-hidden
+        >
+          <defs>
+            <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.35} />
+              <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.05} />
+            </linearGradient>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="var(--primary)" />
+              <stop offset="100%" stopColor="var(--accent)" />
+            </linearGradient>
+          </defs>
+
+          {kpi.chart !== "bar" && <path d={fillPath} fill="url(#fillGrad)" />}
+          {kpi.chart !== "bar" && (
+            <path
+              d={strokePath}
+              fill="none"
+              stroke="url(#lineGrad)"
+              strokeWidth={3}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="drop-shadow-sm"
+            />
+          )}
+
+          {kpi.chart === "bar" &&
+            kpi.data.map((d, i) => {
+              const barWidth = 18;
+              const gap = 10;
+              const x = i * (barWidth + gap) + gap;
+              const h = d * 52;
+              const y = 60 - h;
+              return (
+                <rect
+                  key={i}
+                  x={x}
+                  y={y}
+                  width={barWidth}
+                  height={h}
+                  rx={4}
+                  fill={i === kpi.data.length - 1 ? "var(--accent)" : "var(--primary)"}
+                  fillOpacity={i === kpi.data.length - 1 ? 1 : 0.35}
+                />
+              );
+            })}
+
+          {kpi.chart !== "bar" && (
+            <circle cx="192" cy={8} r={5} fill="var(--accent)" className="shadow-glow" />
+          )}
+        </svg>
+
+        <div className="absolute bottom-0 start-0 h-px w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      </div>
+    </div>
+  );
+}
+
+function buildPath(data: number[], type: "area" | "bar" | "step"): string {
+  const w = 200;
+  const h = 64;
+  const pad = 6;
+  const points = data.map((d, i) => {
+    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
+    const y = h - pad - d * (h - pad * 2);
+    return { x, y };
+  });
+
+  if (type === "area") {
+    return points
+      .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
+      .join(" ");
+  }
+
+  let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    d += ` L ${prev.x.toFixed(1)} ${curr.y.toFixed(1)} L ${curr.x.toFixed(1)} ${curr.y.toFixed(1)}`;
+  }
+  return d;
+}
+
+function buildFillPath(data: number[], type: "area" | "bar" | "step"): string {
+  const w = 200;
+  const h = 64;
+  const pad = 6;
+  const points = data.map((d, i) => {
+    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
+    const y = h - pad - d * (h - pad * 2);
+    return { x, y };
+  });
+
+  let d = `M ${points[0].x.toFixed(1)} ${h - pad}`;
+  if (type === "area") {
+    d += ` L ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+    for (let i = 1; i < points.length; i++) {
+      d += ` L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
+    }
+  } else {
+    for (let i = 0; i < points.length; i++) {
+      if (i === 0) {
+        d += ` L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
+      } else {
+        const prev = points[i - 1];
+        d += ` L ${prev.x.toFixed(1)} ${points[i].y.toFixed(1)} L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
+      }
+    }
+  }
+  d += ` L ${points[points.length - 1].x.toFixed(1)} ${h - pad} Z`;
+  return d;
+}
+
 function F({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return <div className={"grid gap-1.5 " + className}><Label>{label}</Label>{children}</div>;
 }
