@@ -345,13 +345,7 @@ function AboutPage() {
           <TabsContent value="awards" className="mt-8">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {(awards.data ?? []).map((a) => (
-                <Card key={a.id}>
-                  <CardContent className="p-6">
-                    <Award className="h-8 w-8 text-accent" />
-                    <h3 className="mt-3 font-bold">{lng === "ar" ? a.name_ar : a.name_en}</h3>
-                    <p className="text-sm text-muted-foreground">{lng === "ar" ? a.issuer_ar : a.issuer_en} · {a.year}</p>
-                  </CardContent>
-                </Card>
+                <AwardCard key={a.id} award={a} lng={lng} />
               ))}
             </div>
           </TabsContent>
