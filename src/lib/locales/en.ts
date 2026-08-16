@@ -126,6 +126,34 @@ export const en = {
     mission: "Mission",
     values: "Values",
     esg: "Sustainability & ESG",
+    sustain: {
+      eyebrow: "Sustainability & ESG",
+      title: "Sustainability as an investment pillar, not a formality",
+      body: "Sustainability is no longer a complementary framework or a formal commitment in today's business environment — it has become a core element in how companies are assessed, especially those seeking quality funding or long-term strategic partnerships. In a sector tied to infrastructure, energy and logistics services, adopting an integrated framework that addresses environmental, social and governance dimensions in a connected, methodical way matters more than ever.",
+      body2:
+        "GoStation starts from a firm conviction that sustainability is not merely a social responsibility, but a foundation for improving operational efficiency, reducing risk, enhancing earnings quality and raising the company's investment appeal. Sound resource management, compliance with environmental standards, a balanced relationship with the community and entrenched corporate governance all strengthen the company's ability to grow in an orderly way and deliver stable long-term returns.",
+      body3:
+        "During 2025 the company continued developing its internal ESG framework in line with its 2026–2028 expansion plans, reinforcing readiness for advanced funding stages. The focus has been on aligning operational and oversight policies with best practice, and embedding sustainability into investment and operating decisions.",
+      pillarsTitle: "Our ESG framework rests on three connected pillars:",
+      pillars: {
+        env: { title: "Environmental", body: "Managing environmental impact and improving the efficiency of every station." },
+        social: { title: "Social", body: "A balanced relationship with the community and with our people." },
+        gov: { title: "Governance", body: "Transparency, oversight and disciplined institutional decision-making." },
+      },
+      note: "This framework reflects a practical commitment to balancing economic growth with corporate responsibility, safeguarding business continuity and enhancing value for owners and stakeholders.",
+      envLabel: "First — Environment",
+      envQuote: "More efficient operations, lower environmental impact",
+      envIntro:
+        "Given the nature of fuel station operations, the environmental dimension is central to the operating system. The company focuses on managing environmental impact by improving operational efficiency, reducing loss and strengthening regulatory compliance.",
+      envAxesTitle: "Environmental focus areas",
+      envA1: "Improving energy consumption efficiency inside stations by adopting energy-saving equipment and precise operational management of working hours and facilities.",
+      envA2: "Applying advanced automation systems for inventory management and operations monitoring, reducing operational loss and limiting waste across supply chains.",
+      envA3: "Strict adherence to storage and environmental safety requirements per approved regulatory standards, with periodic site reviews.",
+      envGoalTitle: "Strategic objective",
+      envGoalBody:
+        "Reducing the environmental impact of every station while preserving operating efficiency and reinforcing long-term sustainability — lowering regulatory risk and raising the quality of operational assets.",
+    },
+
     governance: "Governance",
     leaders: "Leadership",
     awards: "Certificates",
