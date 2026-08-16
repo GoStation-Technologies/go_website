@@ -126,6 +126,7 @@ export const en = {
     mission: "Mission",
     values: "Values",
     esg: "Sustainability & ESG",
+    governance: "Governance",
     leaders: "Leadership",
     awards: "Certificates",
     founding: {
