@@ -22,13 +22,14 @@ type Job = {
   id?: string; slug: string; title_ar: string; title_en: string;
   department_en: string; department_ar: string; city_en: string; city_ar: string;
   employment_type: string;
+  closing_date?: string | null;
   description_ar?: string | null; description_en?: string | null; is_active: boolean;
 };
 
 const empty: Job = {
   slug: "", title_ar: "", title_en: "",
   department_en: "", department_ar: "", city_en: "", city_ar: "",
-  employment_type: "full_time",
+  employment_type: "full_time", closing_date: "",
   description_ar: "", description_en: "", is_active: true,
 };
 
