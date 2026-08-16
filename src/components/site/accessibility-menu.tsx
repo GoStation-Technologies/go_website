@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Accessibility,
   Contrast,
   ALargeSmall,
   Link2,
@@ -22,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getContentLanguage } from "@/lib/i18n";
+import a11yIconAsset from "@/assets/accessibility-icon.png.asset.json";
 
 const STORAGE_KEY = "gs_a11y";
 
@@ -245,10 +245,14 @@ export function AccessibilityMenu({ className }: { className?: string }) {
             variant="ghost"
             size="icon"
             aria-label={L.open}
-            className={`relative h-10 w-10 overflow-hidden rounded-full bg-accent/10 text-accent shadow-sm transition-all hover:bg-accent hover:text-accent-foreground hover:shadow-glow ${className ?? ""}`}
+            className={`h-9 w-9 rounded-full ${className ?? ""}`}
           >
-            <span className="absolute inset-0 rounded-full bg-gradient-to-br from-accent/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-            <Accessibility className="h-5 w-5" />
+            <img
+              src={a11yIconAsset.url}
+              alt=""
+              className="h-5 w-5 object-contain"
+              aria-hidden="true"
+            />
           </Button>
         </PopoverTrigger>
         <PopoverContent align="end" className="max-h-[75vh] w-[21rem] overflow-y-auto p-3">
