@@ -118,6 +118,9 @@ function AboutPage() {
           </TabsContent>
           <TabsContent value="values" className="mt-8">
             <Card>
+              <div className="border-b bg-muted/40 px-8 py-4">
+                <h2 className="font-display text-xl font-bold">{t("about.values")}</h2>
+              </div>
               <CardContent className="p-8">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {aboutValues.map(({ icon: Icon, k }) => (
