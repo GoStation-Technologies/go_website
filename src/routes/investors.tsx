@@ -345,33 +345,17 @@ type KpiConfig = {
 function KpiCard({ kpi }: { kpi: KpiConfig }) {
   const strokePath = buildPath(kpi.data, kpi.chart);
   const fillPath = buildFillPath(kpi.data, kpi.chart);
-  const isGrowth = kpi.chart === "bar";
 
   return (
     <div className="group relative flex flex-col items-start gap-4 px-6 py-8 sm:px-8 sm:py-10 md:py-12">
-      <div className="flex w-full items-start justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
-              {kpi.value}
-              {kpi.unit && (
-                <span className="ms-2 text-lg font-bold text-primary/80 md:text-xl">{kpi.unit}</span>
-              )}
-            </div>
-          </div>
-          <div className="mt-1 text-sm font-medium text-muted-foreground">{kpi.label}</div>
+      <div className="w-full">
+        <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
+          {kpi.value}
+          {kpi.unit && (
+            <span className="ms-2 text-lg font-bold text-primary/80 md:text-xl">{kpi.unit}</span>
+          )}
         </div>
-
-        <div
-          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
-            isGrowth
-              ? "bg-accent/12 text-accent"
-              : "bg-primary/10 text-primary"
-          }`}
-        >
-          <TrendingUp className="h-3.5 w-3.5" />
-          {kpi.trend}
-        </div>
+        <div className="mt-1 text-sm font-medium text-muted-foreground">{kpi.label}</div>
       </div>
 
       <div className="relative mt-2 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-primary/[0.06] to-accent/[0.04] px-4 py-5">
