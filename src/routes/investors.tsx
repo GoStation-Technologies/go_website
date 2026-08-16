@@ -73,10 +73,31 @@ function IRPage() {
     (e.target as HTMLFormElement).reset();
   };
 
-  const kpis = [
-    { label: t("investors.kpiRevenue"), value: "3.2B", unit: lng === "ar" ? "ريال" : "SAR" },
-    { label: t("investors.kpiGrowth"), value: "+18%", unit: "" },
-    { label: t("investors.kpiStations"), value: "180+", unit: lng === "ar" ? "محطة" : "stations" },
+  const kpis: KpiConfig[] = [
+    {
+      label: t("investors.kpiRevenue"),
+      value: "3.2B",
+      unit: lng === "ar" ? "ريال" : "SAR",
+      trend: "+12%",
+      chart: "area",
+      data: [0.35, 0.42, 0.5, 0.56, 0.68, 0.82, 1.0],
+    },
+    {
+      label: t("investors.kpiGrowth"),
+      value: "+18%",
+      unit: "",
+      trend: lng === "ar" ? "سنوياً" : "YoY",
+      chart: "bar",
+      data: [0.45, 0.55, 0.62, 0.75, 0.82, 0.92, 1.0],
+    },
+    {
+      label: t("investors.kpiStations"),
+      value: "180+",
+      unit: lng === "ar" ? "محطة" : "stations",
+      trend: "+24",
+      chart: "step",
+      data: [0.25, 0.38, 0.45, 0.58, 0.72, 0.88, 1.0],
+    },
   ];
 
   return (
@@ -98,7 +119,7 @@ function IRPage() {
           }}
         />
 
-        <div className="relative mx-auto max-w-4xl px-4 pb-40 pt-28 text-center md:pb-48 md:pt-36">
+        <div className="relative mx-auto max-w-4xl px-4 pb-44 pt-28 text-center md:pb-52 md:pt-36">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs tracking-wide backdrop-blur-sm">
             {t("investors.title")}
           </span>
@@ -115,13 +136,7 @@ function IRPage() {
         <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border/60 bg-card/95 shadow-elegant backdrop-blur-xl">
           <div className="grid divide-y divide-border/70 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:rtl:divide-x-reverse">
             {kpis.map((k) => (
-              <div key={k.label} className="px-8 py-10 text-center">
-                <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
-                  {k.value}
-                  {k.unit && <span className="ms-2 text-lg font-bold md:text-xl">{k.unit}</span>}
-                </div>
-                <div className="mt-2 text-sm text-muted-foreground">{k.label}</div>
-              </div>
+              <KpiCard key={k.label} kpi={k} />
             ))}
           </div>
         </div>
