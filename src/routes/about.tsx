@@ -246,7 +246,40 @@ function AboutPage() {
                 </div>
               </CardContent>
             </Card>
+
+            <Card className="overflow-hidden">
+              <div className="border-b bg-muted/40 px-8 py-4">
+                <h2 className="font-display text-xl font-bold text-accent">{t("about.sustain.socLabel")}</h2>
+              </div>
+              <CardContent className="grid gap-10 p-8 lg:grid-cols-2">
+                <div>
+                  <p className="font-display text-xl font-bold text-accent">“{t("about.sustain.socQuote")}”</p>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">{t("about.sustain.socIntro")}</p>
+                  <div className="mt-6 rounded-2xl border bg-muted/40 p-6">
+                    <h4 className="font-display text-lg font-bold">{t("about.sustain.socGoalTitle")}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("about.sustain.socGoalBody")}</p>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-display text-xl font-bold">{t("about.sustain.socAxesTitle")}</h4>
+                  <ol className="mt-5 space-y-4">
+                    {["socA1", "socA2", "socA3"].map((k, i) => (
+                      <li
+                        key={k}
+                        className="flex items-start gap-4 rounded-2xl border bg-card p-5 transition-colors hover:border-accent/50"
+                      >
+                        <span className="font-display text-lg font-extrabold text-accent tabular-nums">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">{t(`about.sustain.${k}`)}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
+
 
 
 
