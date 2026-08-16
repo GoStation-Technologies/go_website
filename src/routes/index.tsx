@@ -39,6 +39,7 @@ import partnerLogo from "@/assets/gostation-logo.png.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";
+import { VideoCard } from "@/components/site/video-card";
 import { JoinCta } from "@/components/site/join-cta";
 import { CoverageMap } from "@/components/site/coverage-map";
 
@@ -510,7 +511,8 @@ function HomePage() {
                     </div>
                   </article>
                 </Link>
-              ))}
+                ),
+              )}
             </MediaCarousel>
           )}
         </div>
