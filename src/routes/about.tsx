@@ -255,9 +255,6 @@ function LeadershipCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/20 to-transparent" />
-        <div className="absolute end-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm">
-          <Users className="h-5 w-5" />
-        </div>
       </div>
       <CardContent className="p-5">
         <h3 className="text-lg font-bold leading-tight">{name}</h3>
