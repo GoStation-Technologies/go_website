@@ -66,10 +66,10 @@ function CareersPage() {
           src={stationCanopy.url}
           alt=""
           aria-hidden
-          className="absolute inset-0 h-full w-full object-cover opacity-20"
+          className="absolute inset-0 h-full w-full scale-105 object-cover opacity-[0.14]"
         />
         <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_20%_0%,color-mix(in_oklab,var(--color-accent)_35%,transparent),transparent_60%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/85 to-primary" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/90 to-primary" />
 
         <div className="relative mx-auto max-w-7xl px-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold backdrop-blur">
