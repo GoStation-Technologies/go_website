@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Accessibility,
   Contrast,
   ALargeSmall,
   Link2,
@@ -22,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getContentLanguage } from "@/lib/i18n";
+import a11yIconAsset from "@/assets/accessibility-icon.png.asset.json";
 
 const STORAGE_KEY = "gs_a11y";
 
