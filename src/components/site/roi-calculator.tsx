@@ -57,7 +57,7 @@ export function RoiCalculator() {
           <CardContent className="p-6 md:p-8">
             <div className="mb-6 flex items-center justify-between gap-4">
               <h3 className="text-lg font-semibold">{t("franchise.roi.inputsTitle")}</h3>
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" onClick={() => setV(DEFAULTS)}>
+              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" onClick={reset}>
                 <RotateCcw className="h-4 w-4" />
                 {t("franchise.roi.reset")}
               </Button>
