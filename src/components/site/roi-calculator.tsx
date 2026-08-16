@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
 import { Calculator, TrendingUp, Timer, Wallet, RotateCcw, Droplets, BadgeDollarSign, Banknote, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -47,96 +46,74 @@ export function RoiCalculator() {
         </div>
 
         <Card className="overflow-hidden border border-border/80 shadow-xl">
-          <div className="grid lg:grid-cols-[1fr,280px]">
-            <CardContent className="p-6 md:p-8">
-              <div className="mb-6 flex items-center justify-between gap-4">
-                <h3 className="text-lg font-semibold">{t("franchise.roi.inputsTitle")}</h3>
-                <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" onClick={() => setV(DEFAULTS)}>
-                  <RotateCcw className="h-4 w-4" />
-                  {t("franchise.roi.reset")}
-                </Button>
-              </div>
-
-              <div className="grid gap-6 sm:grid-cols-2">
-                <Field
-                  icon={Droplets}
-                  label={t("franchise.roi.f.liters")}
-                  suffix={t("franchise.roi.u.liters")}
-                  value={v.litersPerDay}
-                  min={2000}
-                  max={40000}
-                  step={500}
-                  onChange={(n) => set("litersPerDay", n)}
-                />
-                <Field
-                  icon={BadgeDollarSign}
-                  label={t("franchise.roi.f.margin")}
-                  suffix={t("franchise.roi.u.sarPerLiter")}
-                  value={v.marginPerLiter}
-                  min={0.05}
-                  max={0.5}
-                  step={0.01}
-                  decimals={2}
-                  onChange={(n) => set("marginPerLiter", n)}
-                />
-                <Field
-                  icon={Banknote}
-                  label={t("franchise.roi.f.opex")}
-                  suffix={t("franchise.roi.u.sarMonth")}
-                  value={v.monthlyOpex}
-                  min={10000}
-                  max={500000}
-                  step={5000}
-                  onChange={(n) => set("monthlyOpex", n)}
-                />
-                <Field
-                  icon={Landmark}
-                  label={t("franchise.roi.f.investment")}
-                  suffix={t("franchise.roi.u.sar")}
-                  value={v.initialInvestment}
-                  min={500000}
-                  max={15000000}
-                  step={100000}
-                  onChange={(n) => set("initialInvestment", n)}
-                />
-              </div>
-
-              <div className="mt-8 border-t pt-6">
-                <div className="grid gap-4 sm:grid-cols-3">
-                  <Result icon={Wallet} label={t("franchise.roi.r.net")} value={nf.format(Math.round(r.net))} unit={t("franchise.roi.u.sarYear")} />
-                  <Result icon={TrendingUp} label={t("franchise.roi.r.roi")} value={`${nf1.format(r.roi)}%`} />
-                  <Result
-                    icon={Timer}
-                    label={t("franchise.roi.r.payback")}
-                    value={r.payback > 0 ? `${nf1.format(r.payback)}` : "—"}
-                    unit={r.payback > 0 ? t("franchise.roi.u.years") : undefined}
-                  />
-                </div>
-              </div>
-            </CardContent>
-
-            <div className="relative flex flex-col justify-between bg-primary p-6 text-primary-foreground md:p-8">
-              <div aria-hidden className="pointer-events-none absolute inset-0 opacity-10">
-                <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent blur-3xl" />
-                <div className="absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-white/30 blur-3xl" />
-              </div>
-
-              <div className="relative">
-                <p className="text-sm font-medium opacity-80">{t("franchise.roi.r.net")}</p>
-                <p className="mt-2 text-4xl font-extrabold tabular-nums md:text-5xl" dir="ltr">
-                  {nf.format(Math.round(r.net))}
-                </p>
-                <p className="mt-1 text-sm opacity-80">{t("franchise.roi.u.sarYear")}</p>
-              </div>
-
-              <div className="relative mt-8 space-y-4">
-                <MiniRow label={t("franchise.roi.r.roi")} value={`${nf1.format(r.roi)}%`} />
-                <MiniRow label={t("franchise.roi.r.payback")} value={r.payback > 0 ? `${nf1.format(r.payback)} ${t("franchise.roi.u.years")}` : "—"} />
-              </div>
-
-              <p className="relative mt-8 text-xs leading-relaxed opacity-70">{t("franchise.roi.disclaimer")}</p>
+          <CardContent className="p-6 md:p-8">
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <h3 className="text-lg font-semibold">{t("franchise.roi.inputsTitle")}</h3>
+              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" onClick={() => setV(DEFAULTS)}>
+                <RotateCcw className="h-4 w-4" />
+                {t("franchise.roi.reset")}
+              </Button>
             </div>
-          </div>
+
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Field
+                icon={Droplets}
+                label={t("franchise.roi.f.liters")}
+                suffix={t("franchise.roi.u.liters")}
+                value={v.litersPerDay}
+                min={2000}
+                max={40000}
+                step={500}
+                onChange={(n) => set("litersPerDay", n)}
+              />
+              <Field
+                icon={BadgeDollarSign}
+                label={t("franchise.roi.f.margin")}
+                suffix={t("franchise.roi.u.sarPerLiter")}
+                value={v.marginPerLiter}
+                min={0.05}
+                max={0.5}
+                step={0.01}
+                decimals={2}
+                onChange={(n) => set("marginPerLiter", n)}
+              />
+              <Field
+                icon={Banknote}
+                label={t("franchise.roi.f.opex")}
+                suffix={t("franchise.roi.u.sarMonth")}
+                value={v.monthlyOpex}
+                min={10000}
+                max={500000}
+                step={5000}
+                onChange={(n) => set("monthlyOpex", n)}
+              />
+              <Field
+                icon={Landmark}
+                label={t("franchise.roi.f.investment")}
+                suffix={t("franchise.roi.u.sar")}
+                value={v.initialInvestment}
+                min={500000}
+                max={15000000}
+                step={100000}
+                onChange={(n) => set("initialInvestment", n)}
+              />
+            </div>
+
+            <div className="mt-8 border-t pt-6">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Result icon={Wallet} label={t("franchise.roi.r.net")} value={nf.format(Math.round(r.net))} unit={t("franchise.roi.u.sarYear")} />
+                <Result icon={TrendingUp} label={t("franchise.roi.r.roi")} value={`${nf1.format(r.roi)}%`} />
+                <Result
+                  icon={Timer}
+                  label={t("franchise.roi.r.payback")}
+                  value={r.payback > 0 ? `${nf1.format(r.payback)}` : "—"}
+                  unit={r.payback > 0 ? t("franchise.roi.u.years") : undefined}
+                />
+              </div>
+            </div>
+
+            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">{t("franchise.roi.disclaimer")}</p>
+          </CardContent>
         </Card>
       </div>
     </section>
@@ -185,7 +162,6 @@ function Field({
         />
         <span className="w-16 shrink-0 text-xs text-muted-foreground">{suffix}</span>
       </div>
-      <Slider dir="ltr" value={[Math.min(Math.max(value, min), max)]} min={min} max={max} step={step} onValueChange={([n]) => onChange(n)} />
     </div>
   );
 }
@@ -218,15 +194,3 @@ function Result({
     </div>
   );
 }
-
-function MiniRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3 last:border-0 last:pb-0">
-      <span className="text-sm opacity-80">{label}</span>
-      <span className="text-sm font-bold tabular-nums" dir="ltr">
-        {value}
-      </span>
-    </div>
-  );
-}
-
