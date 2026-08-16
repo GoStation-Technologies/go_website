@@ -169,6 +169,8 @@ export const en = {
     governance: "Governance",
     leaders: "Leadership",
     awards: "Certificates",
+    viewAward: "View certificate",
+    awardNoImage: "No image available for this certificate yet.",
     founding: {
       title: "Founding",
       body: "Saudi Hala Petroleum Services Company was established in 2017 with a clear operating identity, aiming to build a national network for managing, operating and maintaining fuel stations and service centres across the Kingdom of Saudi Arabia.",

@@ -10,7 +10,9 @@ import { StoryTimeline } from "@/components/site/story-timeline";
 import canopyImg from "@/assets/station-canopy.jpg.asset.json";
 
 
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Award, Eye, Target, Sparkles, Leaf, Users, Quote, ShieldCheck, Handshake } from "lucide-react";
 
@@ -460,5 +462,59 @@ function LeadershipCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
         <p className="mt-2 text-xs text-muted-foreground line-clamp-3">{bio}</p>
       </CardContent>
     </Card>
+  );
+}
+
+type AwardRow = Database["public"]["Tables"]["awards"]["Row"];
+
+function AwardCard({ award: a, lng }: { award: AwardRow; lng: "ar" | "en" }) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const title = lng === "ar" ? a.name_ar : a.name_en;
+  const issuer = lng === "ar" ? a.issuer_ar : a.issuer_en;
+
+  return (
+    <>
+      <Card className="group relative transition-shadow hover:shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex items-start justify-between gap-3">
+            <Award className="h-8 w-8 text-accent" />
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label={t("about.viewAward")}
+              title={t("about.viewAward")}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-accent hover:bg-accent/10 hover:text-accent"
+            >
+              <Eye className="h-4 w-4" />
+            </button>
+          </div>
+          <h3 className="mt-3 font-bold">{title}</h3>
+          <p className="text-sm text-muted-foreground">{issuer} · {a.year}</p>
+        </CardContent>
+      </Card>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-start">{title}</DialogTitle>
+            <DialogDescription className="text-start">{issuer} · {a.year}</DialogDescription>
+          </DialogHeader>
+          {a.image_url ? (
+            <img
+              src={a.image_url}
+              alt={title ?? ""}
+              className="max-h-[70vh] w-full rounded-xl border border-border object-contain bg-muted/30"
+              loading="lazy"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
+              <Award className="h-12 w-12 text-accent" />
+              <p className="text-sm text-muted-foreground">{t("about.awardNoImage")}</p>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
