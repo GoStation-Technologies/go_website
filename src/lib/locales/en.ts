@@ -490,7 +490,40 @@ export const en = {
     govGoalTitle: "Strategic objective",
     govGoalBody:
       "Building institutional readiness that supports advanced funding stages, strengthens the confidence of partners and financiers, and paves the way for a potential future listing.",
+    roi: {
+      eyebrow: "Demo calculator",
+      title: "GoStation ROI calculator",
+      subtitle: "Adjust the inputs to match your site and expectations for an instant estimate of annual net profit and payback period.",
+      inputsTitle: "Site assumptions",
+      calculate: "Calculate results",
+      reset: "Reset defaults",
+      disclaimer: "Figures are indicative estimates for illustration only and are not an offer or commitment; actual results depend on location, volumes and operating costs.",
+      f: {
+        liters: "Fuel volume",
+        margin: "Margin per liter",
+        store: "Store monthly revenue",
+        storeMargin: "Store gross margin",
+        opex: "Monthly operating costs",
+        investment: "Initial investment",
+      },
+      u: {
+        liters: "L/day",
+        sarPerLiter: "SAR/L",
+        sarMonth: "SAR/mo",
+        sar: "SAR",
+        sarYear: "SAR / year",
+        years: "years",
+      },
+      r: {
+        net: "Estimated annual net profit",
+        roi: "Return on investment",
+        payback: "Payback period",
+        fuelGross: "Annual fuel gross profit",
+        storeGross: "Annual store gross profit",
+      },
+    },
   },
+
 
   auth: {
     title: "Sign in",
