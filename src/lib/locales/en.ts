@@ -288,6 +288,7 @@ export const en = {
       title: "GoStation ROI calculator",
       subtitle: "Adjust the inputs to match your site and expectations for an instant estimate of annual net profit and payback period.",
       inputsTitle: "Site assumptions",
+      calculate: "Calculate results",
       reset: "Reset defaults",
       disclaimer: "Figures are indicative estimates for illustration only and are not an offer or commitment; actual results depend on location, volumes and operating costs.",
       f: {
