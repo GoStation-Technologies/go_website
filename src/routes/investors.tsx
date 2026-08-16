@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Eye, FileDown } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, FileDown, TrendingUp } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
 
