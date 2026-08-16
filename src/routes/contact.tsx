@@ -63,10 +63,91 @@ function ContactPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-16 text-white">
-        <div className="mx-auto max-w-7xl px-4">
-          <h1 className="text-4xl font-extrabold md:text-5xl">{t("contact.title")}</h1>
-          <p className="mt-3 max-w-2xl text-white/80">{t("contact.intro")}</p>
+      <section className="relative overflow-hidden bg-ink py-20 text-white md:py-28">
+        {/* Layered navy → orange gradient background */}
+        <div className="absolute inset-0 bg-hero-ink" />
+        <div className="absolute -top-1/4 right-0 h-[600px] w-[600px] rounded-full bg-ember/15 blur-[120px] animate-pulse-glow" />
+        <div className="absolute -bottom-1/4 left-0 h-[500px] w-[500px] rounded-full bg-ember/10 blur-[100px]" />
+        <div className="absolute inset-0 bg-grid-ink opacity-40" />
+
+        {/* Floating interactive contact icons */}
+        <div className="pointer-events-none absolute inset-0 hidden lg:block">
+          <a
+            href="mailto:contact@gostation.net"
+            className="pointer-events-auto absolute top-[18%] right-[12%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow"
+            aria-label={t("common.email")}
+          >
+            <Mail className="h-6 w-6 text-white" />
+          </a>
+          <a
+            href="tel:8004411110"
+            className="pointer-events-auto absolute top-[40%] left-[8%] flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow-delay"
+            aria-label={t("contact.callCenter")}
+          >
+            <Phone className="h-7 w-7 text-white" />
+          </a>
+          <a
+            href="#contact-form"
+            className="pointer-events-auto absolute bottom-[22%] right-[18%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow-delay-2"
+            aria-label={t("common.message")}
+          >
+            <MessageCircle className="h-6 w-6 text-white" />
+          </a>
+          <a
+            href="#hq-map"
+            className="pointer-events-auto absolute bottom-[30%] left-[14%] flex h-12 w-12 items-center justify-center rounded-xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow"
+            aria-label={t("contact.mapTitle")}
+          >
+            <MapPin className="h-5 w-5 text-white" />
+          </a>
+          <div className="pointer-events-auto absolute top-[25%] left-[28%] flex h-10 w-10 items-center justify-center rounded-lg bg-ember/20 backdrop-blur-sm border border-ember/20 transition-all duration-300 hover:scale-110 hover:bg-ember/30 animate-float-slow-delay-2">
+            <Headphones className="h-4 w-4 text-white" />
+          </div>
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-4 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm border border-white/10 animate-rise-in">
+            <span className="h-2 w-2 rounded-full bg-ember" />
+            {t("contact.infoTitle")}
+          </span>
+          <h1 className="mt-6 text-4xl font-extrabold md:text-6xl lg:text-7xl animate-rise-in" style={{ animationDelay: "0.1s" }}>
+            {t("contact.title")}
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-white/80 animate-rise-in" style={{ animationDelay: "0.2s" }}>
+            {t("contact.intro")}
+          </p>
+        </div>
+
+        {/* Animated wavy lines */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 overflow-hidden">
+          <div className="absolute bottom-0 flex w-[200%] animate-wave-flow-slow">
+            <svg className="h-28 w-1/2" viewBox="0 0 1440 120" preserveAspectRatio="none">
+              <path
+                fill="rgba(255,255,255,0.04)"
+                d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z"
+              />
+            </svg>
+            <svg className="h-28 w-1/2" viewBox="0 0 1440 120" preserveAspectRatio="none">
+              <path
+                fill="rgba(255,255,255,0.04)"
+                d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z"
+              />
+            </svg>
+          </div>
+          <div className="absolute bottom-0 flex w-[200%] animate-wave-flow">
+            <svg className="h-24 w-1/2" viewBox="0 0 1440 100" preserveAspectRatio="none">
+              <path
+                fill="rgba(232,93,58,0.12)"
+                d="M0,50 C360,100 720,0 1080,50 C1260,80 1350,20 1440,50 L1440,100 L0,100 Z"
+              />
+            </svg>
+            <svg className="h-24 w-1/2" viewBox="0 0 1440 100" preserveAspectRatio="none">
+              <path
+                fill="rgba(232,93,58,0.12)"
+                d="M0,50 C360,100 720,0 1080,50 C1260,80 1350,20 1440,50 L1440,100 L0,100 Z"
+              />
+            </svg>
+          </div>
         </div>
       </section>
 
