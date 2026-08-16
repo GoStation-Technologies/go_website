@@ -1,0 +1,1 @@
+ALTER TABLE public.job_openings ADD COLUMN IF NOT EXISTS closing_date date;

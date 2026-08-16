@@ -22,13 +22,14 @@ type Job = {
   id?: string; slug: string; title_ar: string; title_en: string;
   department_en: string; department_ar: string; city_en: string; city_ar: string;
   employment_type: string;
+  closing_date?: string | null;
   description_ar?: string | null; description_en?: string | null; is_active: boolean;
 };
 
 const empty: Job = {
   slug: "", title_ar: "", title_en: "",
   department_en: "", department_ar: "", city_en: "", city_ar: "",
-  employment_type: "full_time",
+  employment_type: "full_time", closing_date: "",
   description_ar: "", description_en: "", is_active: true,
 };
 
@@ -103,6 +104,7 @@ function CareersPage() {
               <Field label={t("admin.careers.f.departmentAr")} lang="ar"><Input className={inputCls} dir="rtl" value={form.department_ar} onChange={(e) => setForm({ ...form, department_ar: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.cityEn")} lang="en"><Input className={inputCls} value={form.city_en} onChange={(e) => setForm({ ...form, city_en: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.cityAr")} lang="ar"><Input className={inputCls} dir="rtl" value={form.city_ar} onChange={(e) => setForm({ ...form, city_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.closingDate")}><Input type="date" className={inputCls} value={form.closing_date ?? ""} onChange={(e) => setForm({ ...form, closing_date: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.descriptionEn")} lang="en"><Textarea className={inputCls} rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.descriptionAr")} lang="ar"><Textarea className={inputCls} dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
               <FormRow>

@@ -526,6 +526,7 @@ const JobInput = z.object({
   employment_type: z.string().min(1),
   description_ar: z.string().optional().nullable(),
   description_en: z.string().optional().nullable(),
+  closing_date: z.string().trim().max(20).optional().nullable().transform((v) => (v ? v : null)),
   is_active: z.boolean().default(true),
 });
 
