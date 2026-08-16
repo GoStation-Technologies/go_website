@@ -78,22 +78,19 @@ function IRPage() {
       label: t("investors.kpiRevenue"),
       value: "3.2B",
       unit: lng === "ar" ? "ريال" : "SAR",
-      chart: "area",
-      data: [0.35, 0.42, 0.5, 0.56, 0.68, 0.82, 1.0],
+      icon: "revenue",
     },
     {
       label: t("investors.kpiGrowth"),
       value: "+18%",
       unit: "",
-      chart: "bar",
-      data: [0.45, 0.55, 0.62, 0.75, 0.82, 0.92, 1.0],
+      icon: "growth",
     },
     {
       label: t("investors.kpiStations"),
       value: "180+",
       unit: lng === "ar" ? "محطة" : "stations",
-      chart: "step",
-      data: [0.25, 0.38, 0.45, 0.58, 0.72, 0.88, 1.0],
+      icon: "stations",
     },
   ];
 
