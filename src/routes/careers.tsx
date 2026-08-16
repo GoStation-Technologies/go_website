@@ -11,10 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud } from "lucide-react";
+import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 
 export const Route = createFileRoute("/careers")({
   component: CareersPage,
@@ -55,32 +55,53 @@ function CareersPage() {
   });
 
   const today = new Date().toISOString().slice(0, 10);
+  const cityCount = new Set(jobs.map((j) => j.city)).size;
+  const deptCount = new Set(jobs.map((j) => j.department)).size;
 
   return (
     <SiteLayout>
-      {/* Header */}
-      <section className="border-b bg-gradient-to-b from-muted/60 to-background py-14">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary">
-              <Briefcase className="h-5 w-5" />
-            </span>
-            <span className="text-sm font-medium text-muted-foreground">{t("careers.eyebrow")}</span>
-          </div>
-          <div className="mt-5 flex flex-wrap items-center gap-4">
-            <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
-              <span className="text-primary">{t("careers.title")}</span>
-            </h1>
-            <Badge variant="secondary" className="rounded-full px-4 py-1.5 text-sm font-semibold">
-              {t("careers.positions", { count: jobs.length })}
-            </Badge>
-          </div>
-          <p className="mt-4 max-w-3xl text-lg text-muted-foreground">{t("careers.lead")}</p>
+      {/* Header banner */}
+      <section className="relative isolate overflow-hidden bg-primary py-20 text-primary-foreground">
+        <img
+          src={stationCanopy.url}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_20%_0%,color-mix(in_oklab,var(--color-accent)_35%,transparent),transparent_60%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/85 to-primary" />
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full opacity-30"
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+        >
+          <path className="animate-[wave-flow_14s_linear_infinite]" fill="currentColor" d="M0,64 C240,120 480,0 720,48 C960,96 1200,32 1440,72 L1440,120 L0,120 Z" />
+        </svg>
 
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card px-5 py-4">
-            <p className="text-sm font-semibold">{t("careers.jobsFound", { count: jobs.length })}</p>
-            <p className="text-sm text-muted-foreground">{t("careers.hrNote")}</p>
+        <div className="relative mx-auto max-w-7xl px-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold backdrop-blur">
+            <Briefcase className="h-3.5 w-3.5" />
+            {t("careers.eyebrow")}
           </div>
+
+          <h1 className="mt-6 max-w-3xl text-4xl font-extrabold tracking-tight md:text-6xl">
+            {t("careers.title")}
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/80 md:text-lg">
+            {t("careers.lead")}
+          </p>
+
+          <div className="mt-9 grid gap-3 sm:max-w-2xl sm:grid-cols-3">
+            <BannerStat icon={<Briefcase className="h-4 w-4" />} value={String(jobs.length)} label={t("careers.openings")} />
+            <BannerStat icon={<MapPin className="h-4 w-4" />} value={String(cityCount)} label={t("careers.cols.location")} />
+            <BannerStat icon={<Building2 className="h-4 w-4" />} value={String(deptCount)} label={t("careers.cols.department")} />
+          </div>
+
+          <p className="mt-6 inline-flex items-center gap-2 text-sm text-primary-foreground/75">
+            <UploadCloud className="h-4 w-4" />
+            {t("careers.hrNote")}
+          </p>
         </div>
       </section>
 
@@ -122,7 +143,6 @@ function CareersPage() {
                       </td>
                       <td className="px-4 py-4">
                         <span className="font-bold text-primary">{lng === "ar" ? j.title_ar : j.title_en}</span>
-                        <span className="ms-2 align-middle text-xs text-muted-foreground">{j.employment_type}</span>
                       </td>
                       <td className="whitespace-nowrap px-4 py-4 text-muted-foreground">
                         <span className="inline-flex items-center gap-1">
@@ -255,6 +275,20 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
     </Dialog>
   );
 }
+function BannerStat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
+  return (
+    <div className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-primary-foreground/15">
+      <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent/20 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+        {icon}
+      </span>
+      <span>
+        <span className="block text-xl font-extrabold leading-none">{value}</span>
+        <span className="block text-xs text-primary-foreground/70">{label}</span>
+      </span>
+    </div>
+  );
+}
+
 function F({ label, children }: { label: string; children: React.ReactNode }) {
   return <div className="grid gap-1.5"><Label>{label}</Label>{children}</div>;
 }
