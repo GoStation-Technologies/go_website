@@ -67,11 +67,10 @@ function AboutPage() {
             alt={lng === "ar" ? "مظلة محطة قوستيشن" : "GoStation station canopy"}
             className="h-full w-full object-cover object-center"
             style={{
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent 0%, black 42%, black 100%)",
-              maskImage:
-                "linear-gradient(to right, transparent 0%, black 42%, black 100%)",
+              WebkitMaskImage: `linear-gradient(to ${lng === "ar" ? "left" : "right"}, transparent 0%, black 45%, black 100%)`,
+              maskImage: `linear-gradient(to ${lng === "ar" ? "left" : "right"}, transparent 0%, black 45%, black 100%)`,
             }}
+
             loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-primary/25" />
