@@ -109,9 +109,43 @@ function AboutPage() {
           <TabsContent value="mission" className="mt-8">
             <IconBlock icon={Target} title={t("about.mission")} body={get("mission")} />
           </TabsContent>
-          <TabsContent value="values" className="mt-8">
+          <TabsContent value="values" className="mt-8 space-y-8">
             <IconBlock icon={Sparkles} title={t("about.values")} body={get("values")} />
+            <div>
+              <div className="mx-auto max-w-3xl text-center">
+                <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
+                <h2 className="mt-3 text-balance font-display text-3xl font-bold leading-tight tracking-tight md:text-4xl">
+                  {t("home.valuesTitle")}
+                </h2>
+                <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-muted-foreground md:text-base">
+                  {t("home.valuesSub")}
+                </p>
+              </div>
+              <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {aboutValues.map(({ icon: Icon, k }) => (
+                  <article
+                    key={k}
+                    className="group relative flex flex-col overflow-hidden rounded-2xl border bg-card p-6 transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-xl"
+                  >
+                    <div className="mb-6 grid h-12 w-12 place-items-center rounded-xl bg-accent/10 text-accent transition-all duration-500 group-hover:scale-105 group-hover:bg-accent group-hover:text-accent-foreground">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="font-display text-lg font-bold tracking-tight">
+                      {t(`home.values.${k}.title`)}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {t(`home.values.${k}.body`)}
+                    </p>
+                    <div
+                      aria-hidden
+                      className="mt-6 h-px w-10 bg-accent/60 transition-all duration-500 group-hover:w-full group-hover:bg-gradient-to-r group-hover:from-accent group-hover:to-transparent"
+                    />
+                  </article>
+                ))}
+              </div>
+            </div>
           </TabsContent>
+
           <TabsContent value="esg" className="mt-8">
             <IconBlock icon={Leaf} title={t("about.esg")} body={get("esg")} />
           </TabsContent>
