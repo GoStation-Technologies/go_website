@@ -128,7 +128,8 @@ export const ar = {
     vision: "الرؤية",
     mission: "الرسالة",
     values: "القيم",
-    esg: "الاستدامة والحوكمة",
+    esg: "الاستدامة",
+    governance: "الحوكمة",
     leaders: "القيادة",
     awards: "الشهادات",
     founding: {
