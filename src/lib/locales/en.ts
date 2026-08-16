@@ -152,7 +152,19 @@ export const en = {
       envGoalTitle: "Strategic objective",
       envGoalBody:
         "Reducing the environmental impact of every station while preserving operating efficiency and reinforcing long-term sustainability — lowering regulatory risk and raising the quality of operational assets.",
+      socLabel: "Second — Community",
+      socQuote: "A community partnership that supports growth",
+      socIntro:
+        "The company believes that its geographic expansion is matched by a direct commitment toward the communities it serves. The social dimension covers empowering national talent, improving service quality and strengthening the relationship with customers.",
+      socAxesTitle: "Social focus areas",
+      socA1: "Providing local job opportunities across our areas of presence, supporting the local economy and reinforcing employment stability.",
+      socA2: "Investing in training operational teams and raising safety and quality standards in the workplace.",
+      socA3: "Improving the traveler and customer experience by developing facilities and supporting services inside the stations.",
+      socGoalTitle: "Strategic impact",
+      socGoalBody:
+        "Strengthening the brand as an active and responsible community partner, increasing customer loyalty and supporting revenue sustainability through a long-term relationship with the community.",
     },
+
 
     governance: "Governance",
     leaders: "Leadership",
