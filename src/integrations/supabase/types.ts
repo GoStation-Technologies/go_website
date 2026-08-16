@@ -715,6 +715,7 @@ export type Database = {
           body_en: string | null
           cover_url: string | null
           created_at: string
+          duration_seconds: number | null
           event_date: string | null
           event_location_ar: string | null
           event_location_en: string | null
@@ -729,6 +730,8 @@ export type Database = {
           title_ar: string
           title_en: string
           updated_at: string
+          video_url: string | null
+          views_count: number
         }
         Insert: {
           author_id?: string | null
@@ -736,6 +739,7 @@ export type Database = {
           body_en?: string | null
           cover_url?: string | null
           created_at?: string
+          duration_seconds?: number | null
           event_date?: string | null
           event_location_ar?: string | null
           event_location_en?: string | null
@@ -750,6 +754,8 @@ export type Database = {
           title_ar: string
           title_en: string
           updated_at?: string
+          video_url?: string | null
+          views_count?: number
         }
         Update: {
           author_id?: string | null
@@ -757,6 +763,7 @@ export type Database = {
           body_en?: string | null
           cover_url?: string | null
           created_at?: string
+          duration_seconds?: number | null
           event_date?: string | null
           event_location_ar?: string | null
           event_location_en?: string | null
@@ -771,6 +778,8 @@ export type Database = {
           title_ar?: string
           title_en?: string
           updated_at?: string
+          video_url?: string | null
+          views_count?: number
         }
         Relationships: []
       }
