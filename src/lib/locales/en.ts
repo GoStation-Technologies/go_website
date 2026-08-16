@@ -490,6 +490,18 @@ export const en = {
         fuelGross: "Annual fuel gross profit",
         storeGross: "Annual store gross profit",
       },
+      howItWorksTitle: "How does the investment calculator work?",
+      howItWorksIntro:
+        "GoStation's smart investment calculator lets you estimate the expected return quickly and accurately, without memorizing formulas or doing manual calculations.",
+      howItWorksInputsTitle: "Just enter the following information:",
+      howItWorksInput1:
+        "Daily fuel volume: the expected average litres of petrol and diesel sold per day.",
+      howItWorksInput2: "Margin per litre: the expected average profit per litre of fuel.",
+      howItWorksInput3:
+        "Monthly operating costs: including salaries, maintenance, services and daily station operations.",
+      howItWorksInput4: "Initial investment: the total cost to fit out and operate the station.",
+      howItWorksResult:
+        "Once you enter the values, the calculator automatically calculates annual net profit, return on investment percentage, and capital payback period, and displays them in clear numbers.",
     },
   },
 
