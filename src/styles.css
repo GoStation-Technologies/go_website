@@ -212,8 +212,24 @@ html[dir="rtl"] .marquee-track { animation: marquee-rtl 45s linear infinite; }
   .animate-ken-burns { animation: none; }
 }
 .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+.animate-float-slow-delay { animation: float-slow 7s ease-in-out infinite; animation-delay: 1.5s; }
+.animate-float-slow-delay-2 { animation: float-slow 8s ease-in-out infinite; animation-delay: 3s; }
 .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
 .animate-rise-in { animation: rise-in .7s cubic-bezier(.2,.7,.2,1) both; }
+
+/* Flowing waves */
+@keyframes wave-flow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes wave-flow-rtl {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.animate-wave-flow { animation: wave-flow 22s linear infinite; }
+.animate-wave-flow-slow { animation: wave-flow 34s linear infinite; }
+html[dir="rtl"] .animate-wave-flow { animation: wave-flow-rtl 22s linear infinite; }
+html[dir="rtl"] .animate-wave-flow-slow { animation: wave-flow-rtl 34s linear infinite; }
 
 /* Backgrounds */
 .bg-hero-ink { background: var(--gradient-hero); }
