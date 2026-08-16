@@ -94,20 +94,26 @@ function AboutPage() {
             <IconBlock icon={Leaf} title={t("about.esg")} body={get("esg")} />
           </TabsContent>
 
-          <TabsContent value="leaders" className="mt-8">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {(leaders.data ?? []).map((l) => (
-                <Card key={l.id}>
-                  <div className="aspect-square bg-gradient-to-br from-primary to-accent/60" />
-                  <CardContent className="p-5">
-                    <div className="flex items-center gap-2 text-primary"><Users className="h-4 w-4" /></div>
-                    <h3 className="mt-1 font-bold">{lng === "ar" ? l.name_ar : l.name_en}</h3>
-                    <p className="text-sm text-accent">{lng === "ar" ? l.title_ar : l.title_en}</p>
-                    <p className="mt-2 text-xs text-muted-foreground">{lng === "ar" ? l.bio_ar : l.bio_en}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+          <TabsContent value="leaders" className="mt-8 space-y-8">
+            {(() => {
+              const all = (leaders.data ?? []) as Leader[];
+              const chairman = all.find(
+                (l) =>
+                  l.title_en?.toLowerCase().includes("chairman") ||
+                  l.title_ar?.includes("رئيس مجلس"),
+              );
+              const team = chairman ? all.filter((l) => l.id !== chairman.id) : all;
+              return (
+                <>
+                  {chairman && <ChairmanCard leader={chairman} lng={lng} />}
+                  <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                    {team.map((l) => (
+                      <LeadershipCard key={l.id} leader={l} lng={lng} />
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
           </TabsContent>
 
           <TabsContent value="awards" className="mt-8">
