@@ -3,7 +3,6 @@ import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { submitFranchiseApplication } from "@/lib/submissions.functions";
-import { RoiCalculator } from "@/components/site/roi-calculator";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
 
@@ -16,6 +15,7 @@ import { toast } from "sonner";
 import { CheckCircle2, Quote, Fuel, Store, Handshake, Building2, Award, BarChart3, GraduationCap, Network, TrendingUp, Truck } from "lucide-react";
 import stationImg from "@/assets/station-canopy.jpg.asset.json";
 import heroStationImg from "@/assets/franchise-station.jpg.asset.json";
+
 
 
 export const Route = createFileRoute("/franchise")({
