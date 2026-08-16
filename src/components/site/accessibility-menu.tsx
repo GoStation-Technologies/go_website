@@ -245,12 +245,12 @@ export function AccessibilityMenu({ className }: { className?: string }) {
             variant="ghost"
             size="icon"
             aria-label={L.open}
-            className={`h-9 w-9 rounded-full ${className ?? ""}`}
+            className={`h-10 w-10 rounded-full hover:bg-accent/10 focus-visible:ring-2 focus-visible:ring-accent ${className ?? ""}`}
           >
             <img
               src={a11yIconAsset.url}
               alt=""
-              className="h-5 w-5 object-contain"
+              className="h-6 w-6 object-contain"
               aria-hidden="true"
             />
           </Button>
