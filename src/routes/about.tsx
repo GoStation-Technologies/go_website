@@ -7,6 +7,8 @@ import type { Database } from "@/integrations/supabase/types";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { StoryTimeline } from "@/components/site/story-timeline";
+import canopyImg from "@/assets/station-canopy.jpg.asset.json";
+
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
