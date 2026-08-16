@@ -402,6 +402,7 @@ export const en = {
     cvTooLarge: "The CV file is larger than 4 MB.",
     coverLetter: "Cover letter",
     openings: "Open positions",
+    openingsTitle: "Current open positions",
     noOpenings: "No open positions right now — check back soon.",
     eyebrow: "Careers",
     positions: "{{count}} positions",
