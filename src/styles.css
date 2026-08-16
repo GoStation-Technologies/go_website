@@ -468,3 +468,59 @@ html.a11y-cursor * {
       4 2,
     auto !important;
 }
+
+/* ── Additional a11y preferences ─────────────────────────────────────── */
+html.a11y-desaturate body {
+  filter: saturate(0.25);
+}
+html.a11y-monochrome body {
+  filter: grayscale(1);
+}
+html.a11y-line-height body,
+html.a11y-line-height body * {
+  line-height: 2.1 !important;
+}
+html.a11y-align-start body p,
+html.a11y-align-start body li,
+html.a11y-align-start body h1,
+html.a11y-align-start body h2,
+html.a11y-align-start body h3,
+html.a11y-align-start body h4 {
+  text-align: start !important;
+}
+html.a11y-align-center body p,
+html.a11y-align-center body li,
+html.a11y-align-center body h1,
+html.a11y-align-center body h2,
+html.a11y-align-center body h3,
+html.a11y-align-center body h4 {
+  text-align: center !important;
+}
+html.a11y-tooltips [aria-label]:hover::after,
+html.a11y-tooltips [title]:hover::after {
+  content: attr(aria-label) attr(title);
+  position: fixed;
+  z-index: 9999;
+  inset-block-end: 1rem;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  max-width: 90vw;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  background: hsl(0 0% 8%);
+  color: #fff;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+html.a11y-reading-guide {
+  cursor: none;
+}
+.a11y-guide-bar {
+  position: fixed;
+  inset-inline: 0;
+  height: 2.25rem;
+  background: color-mix(in oklch, var(--accent) 25%, transparent);
+  border-block: 2px solid var(--accent);
+  pointer-events: none;
+  z-index: 9998;
+}
