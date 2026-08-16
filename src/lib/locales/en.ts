@@ -321,6 +321,7 @@ export const en = {
     cols: { posted: "Posted", department: "Department", title: "Title", location: "Location", deadline: "Deadline", action: "" },
     openUntilFurther: "Open",
     closed: "Closed",
+    position: "Position applied for",
     formIntro: "Fill in your details and upload your CV — it goes straight to the Human Resources team.",
     hrNote: "Your application is sent directly to GoStation Human Resources.",
   },
