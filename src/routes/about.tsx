@@ -152,33 +152,62 @@ function IconBlock({ icon: Icon, title, body }: { icon: React.ComponentType<{ cl
 }
 
 function ChairmanCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
+  const { t } = useTranslation();
   const name = lng === "ar" ? leader.name_ar : leader.name_en;
   const title = lng === "ar" ? leader.title_ar : leader.title_en;
-  const bio = lng === "ar" ? leader.bio_ar : leader.bio_en;
+  const openQuote = lng === "ar" ? "«" : "“";
+  const closeQuote = lng === "ar" ? "»" : "”";
+
   return (
     <Card className="overflow-hidden border-0 shadow-2xl">
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-accent/40 px-6 pb-6 pt-8 sm:px-10 sm:pb-8 sm:pt-12">
-        <div className="absolute -start-10 -top-10 h-56 w-56 rounded-full bg-accent/20 blur-3xl" />
-        <div className="absolute -end-10 -bottom-10 h-56 w-56 rounded-full bg-primary-foreground/10 blur-3xl" />
-        <div className="relative mx-auto w-48 sm:w-56 md:w-64">
+      <div className="relative flex min-h-[360px] flex-col-reverse items-stretch overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-accent/40 md:flex-row">
+        {/* ambient light */}
+        <div className="absolute -start-10 -top-10 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
+        <div className="absolute -end-10 -bottom-10 h-72 w-72 rounded-full bg-primary-foreground/10 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary-foreground/10 via-transparent to-transparent opacity-40" />
+
+        {/* Quote / text side */}
+        <div className="relative z-10 flex flex-1 flex-col justify-center px-6 py-8 md:px-10 md:py-12 lg:px-14">
+          <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-accent">
+            <Quote className="h-5 w-5" />
+          </div>
+          <blockquote className="relative">
+            <p className="text-2xl font-semibold leading-relaxed text-primary-foreground md:text-3xl lg:text-4xl">
+              <span className="text-accent/80">{openQuote}</span>
+              {t("about.quote")}
+              <span className="text-accent/80">{closeQuote}</span>
+            </p>
+          </blockquote>
+          <div className="mt-8 flex items-center gap-4">
+            <div className="h-14 w-14 overflow-hidden rounded-full border-2 border-accent/30 bg-primary-foreground/10">
+              {leader.photo_url ? (
+                <img src={leader.photo_url} alt={name} className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-primary-foreground/40">
+                  <Users className="h-6 w-6" />
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="font-bold text-primary-foreground">{name}</p>
+              <p className="text-sm font-medium text-accent">{title}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Image side */}
+        <div className="relative z-10 flex w-full items-end justify-center md:w-5/12 lg:w-1/3">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/20 via-transparent to-transparent opacity-60" />
           {leader.photo_url ? (
             <img
               src={leader.photo_url}
               alt={name}
-              className="mx-auto w-full object-contain drop-shadow-2xl"
+              className="relative z-10 max-h-80 w-auto object-contain drop-shadow-2xl md:max-h-[420px]"
             />
           ) : (
-            <div className="aspect-[3/4] rounded-2xl bg-gradient-to-br from-primary-foreground/20 to-transparent" />
+            <div className="aspect-[3/4] w-full max-w-sm rounded-t-2xl bg-gradient-to-br from-primary-foreground/20 to-transparent" />
           )}
         </div>
-      </div>
-      <div className="bg-card px-6 py-6 text-center sm:px-10 sm:py-8">
-        <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
-          <Users className="h-6 w-6" />
-        </div>
-        <h2 className="mt-3 text-2xl font-bold sm:text-3xl">{name}</h2>
-        <p className="mt-1 text-base font-medium text-accent">{title}</p>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">{bio}</p>
       </div>
     </Card>
   );
