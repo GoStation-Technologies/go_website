@@ -334,7 +334,6 @@ type KpiConfig = {
   label: string;
   value: string;
   unit: string;
-  trend: string;
   chart: "area" | "bar" | "step";
   data: number[];
 };
