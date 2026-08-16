@@ -181,7 +181,7 @@ function ContactPage() {
           <InfoRow icon={Mail} title="Email" text="contact@gostation.net" />
         </div>
 
-        <Card>
+        <Card id="contact-form">
           <CardContent className="p-8">
             <div className="mb-6">
               <h2 className="text-xl font-extrabold">{t("contact.formTitle")}</h2>
@@ -217,7 +217,7 @@ function ContactPage() {
         </Card>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-20">
+      <section id="hq-map" className="mx-auto max-w-7xl px-4 pb-20">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-2xl font-extrabold">{t("contact.mapTitle")}</h2>
