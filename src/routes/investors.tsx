@@ -126,6 +126,42 @@ function IRPage() {
       </section>
 
 
+      <section className="mx-auto max-w-7xl px-4 pt-20 md:pt-24">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 text-xs font-semibold text-accent-foreground">
+              {t("investors.govEyebrow")}
+            </span>
+            <h2 className="mt-5 text-balance text-3xl font-extrabold tracking-tight md:text-4xl">
+              {t("investors.govTitle")}
+            </h2>
+            <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">{t("investors.govBody")}</p>
+
+            <div className="mt-8 rounded-2xl border border-border/60 bg-muted/40 p-6">
+              <h3 className="font-display text-lg font-bold">{t("investors.govGoalTitle")}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("investors.govGoalBody")}</p>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-display text-xl font-bold">{t("investors.govPillarsTitle")}</h3>
+            <ol className="mt-5 space-y-4">
+              {["govP1", "govP2", "govP3"].map((k, i) => (
+                <li
+                  key={k}
+                  className="flex items-start gap-5 rounded-2xl border border-border/60 bg-card p-5 shadow-sm transition hover:border-accent/60"
+                >
+                  <span className="text-3xl font-extrabold leading-none text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="pt-1 text-sm leading-relaxed text-foreground/85">{t(`investors.${k}`)}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 pb-4 pt-20 md:pt-24">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
