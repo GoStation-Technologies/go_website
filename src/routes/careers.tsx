@@ -7,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -15,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Briefcase, MapPin } from "lucide-react";
+import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud } from "lucide-react";
 
 export const Route = createFileRoute("/careers")({
   component: CareersPage,
@@ -24,51 +23,144 @@ export const Route = createFileRoute("/careers")({
       path: "/careers",
       title: "Careers at GoStation — Jobs Across Saudi Arabia",
       description:
-        "Build your career with GoStation. Browse open roles in operations, retail, engineering and corporate functions across Saudi Arabia and apply online.",
+        "Browse every open role at GoStation with department, location, posting date and application deadline — and apply online with your CV.",
     }),
 });
+
+function useDateFmt() {
+  const { i18n } = useTranslation();
+  const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
+  const fmt = new Intl.DateTimeFormat(lng === "ar" ? "ar-EG-u-nu-latn" : "en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "2-digit",
+  });
+  return (v?: string | null) => (v ? fmt.format(new Date(v)) : null);
+}
 
 function CareersPage() {
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
+  const fmtDate = useDateFmt();
   const { data: jobs = [] } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {
-      const { data } = await supabase.from("job_openings").select("*").eq("is_active", true).order("posted_at", { ascending: false });
+      const { data } = await supabase
+        .from("job_openings")
+        .select("*")
+        .eq("is_active", true)
+        .order("posted_at", { ascending: false });
       return data ?? [];
     },
   });
 
+  const today = new Date().toISOString().slice(0, 10);
+
   return (
     <SiteLayout>
-      <section className="bg-brand-radial py-16 text-white">
+      {/* Header */}
+      <section className="border-b bg-gradient-to-b from-muted/60 to-background py-14">
         <div className="mx-auto max-w-7xl px-4">
-          <h1 className="text-4xl font-extrabold md:text-5xl">{t("careers.title")}</h1>
-          <p className="mt-3 max-w-2xl text-white/80">{t("careers.intro")}</p>
+          <div className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary">
+              <Briefcase className="h-5 w-5" />
+            </span>
+            <span className="text-sm font-medium text-muted-foreground">{t("careers.eyebrow")}</span>
+          </div>
+          <div className="mt-5 flex flex-wrap items-center gap-4">
+            <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
+              <span className="text-primary">{t("careers.title")}</span>
+            </h1>
+            <Badge variant="secondary" className="rounded-full px-4 py-1.5 text-sm font-semibold">
+              {t("careers.positions", { count: jobs.length })}
+            </Badge>
+          </div>
+          <p className="mt-4 max-w-3xl text-lg text-muted-foreground">{t("careers.lead")}</p>
+
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card px-5 py-4">
+            <p className="text-sm">
+              <span className="font-bold">{jobs.length}</span>{" "}
+              <span className="text-muted-foreground">{t("careers.jobsFound", { count: jobs.length }).replace(String(jobs.length), "").trim()}</span>
+            </p>
+            <p className="text-sm text-muted-foreground">{t("careers.hrNote")}</p>
+          </div>
         </div>
       </section>
-      <section className="mx-auto max-w-5xl px-4 py-16">
-        <h2 className="mb-6 text-2xl font-bold">{t("careers.openings")}</h2>
-        {jobs.length === 0 ? (
-          <p className="text-muted-foreground">{t("careers.noOpenings")}</p>
-        ) : (
-          <div className="space-y-3">
-            {jobs.map((j) => (
-              <Card key={j.id}>
-                <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold">{lng === "ar" ? j.title_ar : j.title_en}</h3>
-                    <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                      <span className="inline-flex items-center gap-1"><Briefcase className="h-3 w-3" />{(lng === "ar" ? j.department_ar : j.department_en) || j.department}</span>
-                      <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{(lng === "ar" ? j.city_ar : j.city_en) || j.city}</span>
 
-                      <Badge variant="outline">{j.employment_type}</Badge>
-                    </div>
-                  </div>
-                  <ApplyDialog jobId={j.id} jobTitle={lng === "ar" ? j.title_ar : j.title_en} />
-                </CardContent>
-              </Card>
-            ))}
+      {/* Listing */}
+      <section className="mx-auto max-w-7xl px-4 py-10">
+        <div className="mb-3 flex items-center gap-2 rounded-md bg-muted/60 px-4 py-2 text-sm">
+          <span className="font-semibold">{t("careers.total")}</span>
+          <span>{jobs.length}</span>
+        </div>
+
+        {jobs.length === 0 ? (
+          <p className="rounded-xl border bg-card p-10 text-center text-muted-foreground">{t("careers.noOpenings")}</p>
+        ) : (
+          <div className="overflow-x-auto rounded-xl border bg-card">
+            <table className="min-w-full text-sm">
+              <thead className="bg-muted/70 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 text-start">{t("careers.cols.posted")}</th>
+                  <th className="px-4 py-3 text-start">{t("careers.cols.department")}</th>
+                  <th className="px-4 py-3 text-start">{t("careers.cols.title")}</th>
+                  <th className="px-4 py-3 text-start">{t("careers.cols.location")}</th>
+                  <th className="px-4 py-3 text-start">{t("careers.cols.deadline")}</th>
+                  <th className="px-4 py-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {jobs.map((j) => {
+                  const closed = j.closing_date ? String(j.closing_date) < today : false;
+                  return (
+                    <tr key={j.id} className="border-t transition-colors hover:bg-muted/40">
+                      <td className="whitespace-nowrap px-4 py-4 text-muted-foreground">{fmtDate(j.posted_at)}</td>
+                      <td className="px-4 py-4">
+                        <span className="inline-flex items-center gap-2 text-muted-foreground">
+                          <span className="grid h-8 w-8 place-items-center rounded-full bg-primary/10 text-primary">
+                            <Building2 className="h-4 w-4" />
+                          </span>
+                          {(lng === "ar" ? j.department_ar : j.department_en) || j.department}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className="font-bold text-primary">{lng === "ar" ? j.title_ar : j.title_en}</span>
+                        <span className="ms-2 align-middle text-xs text-muted-foreground">{j.employment_type}</span>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted-foreground">
+                        <span className="inline-flex items-center gap-1">
+                          <MapPin className="h-3.5 w-3.5" />
+                          {(lng === "ar" ? j.city_ar : j.city_en) || j.city}
+                        </span>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4">
+                        {j.closing_date ? (
+                          <span
+                            className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs ${
+                              closed
+                                ? "border-muted-foreground/30 text-muted-foreground"
+                                : "border-destructive/40 text-destructive"
+                            }`}
+                          >
+                            <CalendarClock className="h-3.5 w-3.5" />
+                            {fmtDate(j.closing_date)}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">{t("careers.openUntilFurther")}</span>
+                        )}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-end">
+                        {closed ? (
+                          <span className="text-xs text-muted-foreground">{t("careers.closed")}</span>
+                        ) : (
+                          <ApplyDialog jobId={j.id} jobTitle={lng === "ar" ? j.title_ar : j.title_en} />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
       </section>
@@ -127,23 +219,34 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-accent text-accent-foreground hover:bg-accent/90">{t("careers.apply")}</Button>
+        <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
+          {t("careers.apply")}
+        </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader><DialogTitle>{jobTitle}</DialogTitle></DialogHeader>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{jobTitle}</DialogTitle>
+        </DialogHeader>
         {ref ? (
           <div className="p-2 text-center">
             <p className="text-sm">{t("common.thanks")}</p>
-            <p className="mt-1 text-sm">{t("common.referenceSaved")} <span className="font-mono">{ref}</span></p>
+            <p className="mt-1 text-sm">
+              {t("common.referenceSaved")} <span className="font-mono">{ref}</span>
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">{t("careers.hrNote")}</p>
           </div>
         ) : (
           <form onSubmit={submit} className="grid gap-3">
+            <p className="text-sm text-muted-foreground">{t("careers.formIntro")}</p>
             <F label={t("common.fullName")}><Input name="name" required /></F>
             <F label={t("common.email")}><Input type="email" name="email" required /></F>
             <F label={t("common.phone")}><Input name="phone" required /></F>
             <F label="LinkedIn URL"><Input name="linkedin" /></F>
             <F label={t("careers.cv")}>
-              <Input type="file" name="cv" accept=".pdf,.doc,.docx" />
+              <div className="flex items-center gap-2 rounded-md border border-dashed p-2">
+                <UploadCloud className="h-4 w-4 text-muted-foreground" />
+                <Input type="file" name="cv" accept=".pdf,.doc,.docx" className="border-0 p-0 shadow-none" />
+              </div>
             </F>
             <F label={t("careers.coverLetter")}><Textarea rows={4} name="cover" /></F>
             <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
