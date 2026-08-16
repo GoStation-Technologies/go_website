@@ -385,6 +385,17 @@ export const en = {
     reportTypes: { annual: "Annual report", quarterly: "Quarterly report", esg: "ESG report" },
     prev: "Previous",
     next: "Next",
+    govEyebrow: "Governance",
+    govTitle: "Strong governance as the basis for disciplined growth",
+    govBody:
+      "Governance is the corporate pillar that most influences how investors and financiers assess a company. GoStation has built a governance framework that strengthens transparency, supports financial discipline, and raises institutional readiness.",
+    govPillarsTitle: "Governance pillars",
+    govP1: "A clear organizational structure defining responsibilities and decision-making lines.",
+    govP2: "An internal auditor reinforcing independent oversight and compliance with financial and operational policies.",
+    govP3: "Central ERP systems supporting transparency, accurate real-time reporting, and better internal disclosure.",
+    govGoalTitle: "Strategic objective",
+    govGoalBody:
+      "Building institutional readiness that supports advanced funding stages, strengthens the confidence of partners and financiers, and paves the way for a potential future listing.",
   },
 
   auth: {
