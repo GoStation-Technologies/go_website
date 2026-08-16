@@ -605,6 +605,7 @@ export type Database = {
           city: string
           city_ar: string | null
           city_en: string | null
+          closing_date: string | null
           created_at: string
           department: string
           department_ar: string | null
@@ -624,6 +625,7 @@ export type Database = {
           city: string
           city_ar?: string | null
           city_en?: string | null
+          closing_date?: string | null
           created_at?: string
           department: string
           department_ar?: string | null
@@ -643,6 +645,7 @@ export type Database = {
           city?: string
           city_ar?: string | null
           city_en?: string | null
+          closing_date?: string | null
           created_at?: string
           department?: string
           department_ar?: string | null
