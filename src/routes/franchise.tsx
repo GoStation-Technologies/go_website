@@ -3,6 +3,7 @@ import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { submitFranchiseApplication } from "@/lib/submissions.functions";
+import { RoiCalculator } from "@/components/site/roi-calculator";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
 
@@ -206,6 +207,8 @@ function FranchisePage() {
           </div>
         </div>
       </section>
+
+      <RoiCalculator />
 
       <section id="franchise-form" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-16">
         <div className="mb-8 text-center">
