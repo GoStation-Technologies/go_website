@@ -166,7 +166,7 @@ export const en = {
     infoBody:
       "We keep working to make your experience easier by making every channel available around the clock. For enquiries or suggestions, call our unified number:",
     callCenter: "Unified call center",
-    callNumber: "8004411110",
+    callNumber: "920002168",
     hqTitle: "Head office",
     hqName: "Hala Saudi Petroleum Services Company",
     hqAddress: "King Fahd Road, Riyadh, Kingdom of Saudi Arabia",
@@ -378,7 +378,7 @@ export const en = {
     cert14001: "Environmental management",
     cert45001: "Occupational health & safety",
     unifiedCallCenter: "Unified Call Center",
-    callNumber: "8004411110",
+    callNumber: "920002168",
   },
   admin: {
     brand: "GoStation Admin",

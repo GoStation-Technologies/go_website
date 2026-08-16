@@ -80,7 +80,7 @@ function ContactPage() {
             <Mail className="h-6 w-6 text-white" />
           </a>
           <a
-            href="tel:8004411110"
+            href="tel:920002168"
             className="pointer-events-auto absolute top-[40%] left-[8%] flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow-delay"
             aria-label={t("contact.callCenter")}
           >
