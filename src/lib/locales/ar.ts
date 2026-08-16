@@ -231,6 +231,7 @@ export const ar = {
     videos: "مكتبة الفيديو",
     latestNews: "أحدث الأخبار",
     upcomingEvents: "الأحداث والفعاليات",
+    views: " مشاهدة",
     videoLibrary: "مكتبة الفيديو",
     readMore: "اقرأ المزيد",
     prev: "السابق",

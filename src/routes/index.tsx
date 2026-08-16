@@ -39,6 +39,7 @@ import partnerLogo from "@/assets/gostation-logo.png.asset.json";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";
+import { VideoCard } from "@/components/site/video-card";
 import { JoinCta } from "@/components/site/join-cta";
 import { CoverageMap } from "@/components/site/coverage-map";
 
@@ -76,7 +77,7 @@ function HomePage() {
       const { data } = await supabase
         .from("news_articles")
         .select(
-          "id, slug, kind, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at, event_date, event_location_ar, event_location_en",
+          "id, slug, kind, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at, event_date, event_location_ar, event_location_en, views_count, duration_seconds",
         )
         .eq("is_published", true)
         .in("kind", ["news", "event", "video"])
@@ -459,7 +460,10 @@ function HomePage() {
             </div>
           ) : (
             <MediaCarousel>
-              {homeMedia.map((n) => (
+              {homeMedia.map((n) =>
+                n.kind === "video" ? (
+                  <VideoCard key={n.id} video={n} className="w-[300px] shrink-0 snap-start sm:w-[360px]" />
+                ) : (
                 <Link
                   key={n.id}
                   to="/media/$slug"
@@ -507,7 +511,8 @@ function HomePage() {
                     </div>
                   </article>
                 </Link>
-              ))}
+                ),
+              )}
             </MediaCarousel>
           )}
         </div>

@@ -228,6 +228,7 @@ export const en = {
     videos: "Video library",
     latestNews: "Latest news",
     upcomingEvents: "Events & activities",
+    views: " views",
     videoLibrary: "Video library",
     readMore: "Read more",
     prev: "Previous",
