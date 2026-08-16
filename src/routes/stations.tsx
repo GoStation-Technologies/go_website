@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Fuel, Search, Star, Clock, X } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
-import { regionForCity, regionLabel, fuelLabel, SAUDI_REGIONS } from "@/lib/regions";
+import { regionForCity, fuelLabel, SAUDI_REGIONS } from "@/lib/regions";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
