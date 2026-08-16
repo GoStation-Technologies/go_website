@@ -140,6 +140,21 @@ function CareersPage() {
 
       {/* Listing */}
       <section className="mx-auto max-w-7xl px-4 py-10">
+        <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-accent">
+              <Briefcase className="h-4 w-4" />
+              {t("careers.eyebrow")}
+            </span>
+            <h2 className="mt-2 text-2xl font-extrabold text-primary sm:text-3xl">
+              {t("careers.openingsTitle")}
+            </h2>
+          </div>
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
+            {t("careers.lead")}
+          </p>
+        </div>
+
         {jobs.length === 0 ? (
           <p className="rounded-xl border bg-card p-10 text-center text-muted-foreground">{t("careers.noOpenings")}</p>
         ) : (
