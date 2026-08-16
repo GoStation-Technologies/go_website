@@ -12,7 +12,14 @@ import canopyImg from "@/assets/station-canopy.jpg.asset.json";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Award, Eye, Target, Sparkles, Leaf, Users, Quote } from "lucide-react";
+import { Award, Eye, Target, Sparkles, Leaf, Users, Quote, ShieldCheck, Handshake } from "lucide-react";
+
+const aboutValues = [
+  { icon: Sparkles, k: "excellence" },
+  { icon: ShieldCheck, k: "integrity" },
+  { icon: Leaf, k: "community" },
+  { icon: Handshake, k: "innovation" },
+] as const;
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
