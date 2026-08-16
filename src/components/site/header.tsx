@@ -15,6 +15,7 @@ import logoAsset from "@/assets/gostation-logo.png.asset.json";
 import logoWhiteAsset from "@/assets/gostation-logo-white.png.asset.json";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { AccessibilityMenu } from "@/components/site/accessibility-menu";
 
 const NAV = [
   { to: "/about", key: "about" },
@@ -107,6 +108,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
+          <AccessibilityMenu />
           <Button
             variant="ghost"
             size="sm"

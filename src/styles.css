@@ -423,3 +423,48 @@ html[dir="rtl"] .animate-wave-flow-slow { animation: wave-flow-rtl 34s linear in
 .admin-scope .rounded-xl.border {
   box-shadow: var(--shadow-card);
 }
+
+/* ── Accessibility (a11y) user preferences ───────────────────────────── */
+:root {
+  --a11y-text-scale: 1;
+}
+html body {
+  font-size: calc(1rem * var(--a11y-text-scale));
+}
+html.a11y-contrast body {
+  filter: contrast(1.35) saturate(1.15);
+}
+html.a11y-spacing body {
+  letter-spacing: 0.06em;
+  word-spacing: 0.14em;
+  line-height: 1.9;
+}
+html.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+  outline: 1px dashed currentColor;
+  outline-offset: 2px;
+}
+html.a11y-dyslexia body,
+html.a11y-dyslexia body * {
+  font-family: Verdana, Tahoma, "IBM Plex Sans Arabic", sans-serif !important;
+}
+html.a11y-no-images img,
+html.a11y-no-images video,
+html.a11y-no-images svg[data-decorative="true"] {
+  visibility: hidden !important;
+}
+html.a11y-no-anim *,
+html.a11y-no-anim *::before,
+html.a11y-no-anim *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+html.a11y-cursor,
+html.a11y-cursor * {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'><path d='M4 2l7 18 2.5-7L21 10z' fill='black' stroke='white' stroke-width='1.2'/></svg>")
+      4 2,
+    auto !important;
+}
