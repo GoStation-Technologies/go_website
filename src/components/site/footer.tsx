@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail } from "lucide-react";
+import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail, Phone } from "lucide-react";
 import logoAsset from "@/assets/gostation-logo-white.png.asset.json";
 import isoLogo from "@/assets/iso-logo.png.asset.json";
 
@@ -55,6 +55,11 @@ export function SiteFooter() {
           <div className="mt-2 flex items-center gap-2 text-sm text-foreground/90">
             <Mail className="h-4 w-4 shrink-0 text-ember-glow" />
             <a href="mailto:info@gostation.net" className="hover:text-ember-glow">info@gostation.net</a>
+          </div>
+          <div className="mt-2 flex items-center gap-2 text-sm text-foreground/90">
+            <Phone className="h-4 w-4 shrink-0 text-ember-glow" />
+            <a href="tel:8004411110" className="hover:text-ember-glow" dir="ltr">8004411110</a>
+            <span className="text-foreground/70">— {t("footer.unifiedCallCenter")}</span>
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
             {[
