@@ -107,18 +107,27 @@ export function RoiCalculator() {
               />
             </div>
 
-            <div className="mt-8 border-t pt-6">
-              <div className="grid gap-4 sm:grid-cols-3">
-                <Result icon={Wallet} label={t("franchise.roi.r.net")} value={nf.format(Math.round(r.net))} unit={t("franchise.roi.u.sarYear")} />
-                <Result icon={TrendingUp} label={t("franchise.roi.r.roi")} value={`${nf1.format(r.roi)}%`} />
-                <Result
-                  icon={Timer}
-                  label={t("franchise.roi.r.payback")}
-                  value={r.payback > 0 ? `${nf1.format(r.payback)}` : "—"}
-                  unit={r.payback > 0 ? t("franchise.roi.u.years") : undefined}
-                />
-              </div>
+            <div className="mt-8 flex justify-center">
+              <Button size="lg" className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90" onClick={() => setShowResults(true)}>
+                <Calculator className="h-4 w-4" />
+                {t("franchise.roi.calculate")}
+              </Button>
             </div>
+
+            {showResults ? (
+              <div className="mt-8 border-t pt-6">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <Result icon={Wallet} label={t("franchise.roi.r.net")} value={nf.format(Math.round(r.net))} unit={t("franchise.roi.u.sarYear")} />
+                  <Result icon={TrendingUp} label={t("franchise.roi.r.roi")} value={`${nf1.format(r.roi)}%`} />
+                  <Result
+                    icon={Timer}
+                    label={t("franchise.roi.r.payback")}
+                    value={r.payback > 0 ? `${nf1.format(r.payback)}` : "—"}
+                    unit={r.payback > 0 ? t("franchise.roi.u.years") : undefined}
+                  />
+                </div>
+              </div>
+            ) : null}
 
             <p className="mt-6 text-xs leading-relaxed text-muted-foreground">{t("franchise.roi.disclaimer")}</p>
           </CardContent>
