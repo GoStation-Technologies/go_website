@@ -314,13 +314,13 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
 }
 function BenefitItem({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div className="group flex items-start gap-3 rounded-xl border border-primary-foreground/10 bg-primary-foreground/5 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-primary-foreground/10 hover:shadow-lg hover:shadow-accent/10">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent/20 text-accent transition-all duration-300 group-hover:scale-110 group-hover:bg-accent group-hover:text-accent-foreground">
+    <div className="group flex items-start gap-4 border-b border-primary-foreground/10 py-3.5 transition-colors duration-300 last:border-b-0 hover:border-primary-foreground/20">
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent/15 text-accent transition-all duration-300 group-hover:scale-105 group-hover:bg-accent group-hover:text-accent-foreground">
         {icon}
       </span>
       <span>
         <span className="block text-sm font-bold text-primary-foreground">{title}</span>
-        <span className="block text-xs leading-relaxed text-primary-foreground/70">{body}</span>
+        <span className="block text-xs leading-relaxed text-primary-foreground/75">{body}</span>
       </span>
     </div>
   );
