@@ -7,8 +7,8 @@ import { Calculator, TrendingUp, Timer, Wallet, RotateCcw, Droplets, BadgeDollar
 import { Button } from "@/components/ui/button";
 
 const DEFAULTS = {
-  litersPerDay: 12000,
-  marginPerLiter: 0.15,
+  litersPerDay: 25000,
+  marginPerLiter: 0.18,
   storeMonthlyRevenue: 45000,
   storeMargin: 25,
   monthlyOpex: 90000,
