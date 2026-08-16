@@ -74,7 +74,7 @@ function CareersPage() {
         <div className="relative mx-auto max-w-7xl px-4">
           <div className="grid items-center gap-10 lg:grid-cols-2">
             {/* Benefits — fills the empty side of the banner */}
-            <div className="order-2 lg:order-1">
+            <div className="order-2 lg:order-2">
               <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/8 p-5 backdrop-blur-md shadow-2xl shadow-black/20">
                 <h2 className="mb-4 text-center text-lg font-bold text-primary-foreground">{t("careers.benefits.title")}</h2>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
