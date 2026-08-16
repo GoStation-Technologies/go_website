@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
+import { StoryTimeline } from "@/components/site/story-timeline";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Award, Eye, Target, Sparkles, Leaf, Users } from "lucide-react";
