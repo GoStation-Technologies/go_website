@@ -78,15 +78,6 @@ function ContactPage() {
                 <h2 className="text-lg font-bold text-accent">{t("contact.infoTitle")}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("contact.infoBody")}</p>
               </div>
-              <div className="flex items-center gap-3 rounded-lg border bg-muted/40 p-3">
-                <PhoneCall className="h-5 w-5 text-accent" />
-                <div>
-                  <div className="text-sm font-semibold">{t("contact.callCenter")}</div>
-                  <a href="tel:8004411110" className="font-mono text-base font-bold tracking-wide">
-                    {t("contact.callNumber")}
-                  </a>
-                </div>
-              </div>
               <div>
                 <div className="text-sm font-semibold text-accent">{t("contact.hqTitle")}</div>
                 <div className="mt-1 text-sm font-medium">{t("contact.hqName")}</div>
@@ -107,7 +98,6 @@ function ContactPage() {
           </Card>
           <InfoRow icon={Clock} title={t("contact.hours")} text={t("contact.address")} />
           <InfoRow icon={Mail} title="Email" text="contact@gostation.net" />
-          <InfoRow icon={Phone} title={t("contact.callCenter")} text={t("contact.callNumber")} />
         </div>
 
         <Card>
