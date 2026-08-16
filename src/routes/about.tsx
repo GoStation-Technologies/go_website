@@ -128,7 +128,7 @@ function AboutPage() {
               return (
                 <>
                   {chairman && <ChairmanCard leader={chairman} lng={lng} />}
-                  <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                  <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {team.map((l) => (
                       <LeadershipCard key={l.id} leader={l} lng={lng} />
                     ))}
