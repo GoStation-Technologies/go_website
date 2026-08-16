@@ -60,21 +60,28 @@ function AboutPage() {
   return (
     <SiteLayout>
       <section className="relative overflow-hidden bg-brand-radial py-20 text-white">
-        {/* Station canopy filling the empty side of the banner */}
-        <div className="pointer-events-none absolute inset-y-0 end-0 hidden w-[52%] md:block">
+        {/* Station canopy blended into the empty side of the banner */}
+        <div className="pointer-events-none absolute inset-y-0 end-0 hidden w-[58%] overflow-hidden md:block">
           <img
             src={canopyImg.url}
             alt={lng === "ar" ? "مظلة محطة قوستيشن" : "GoStation station canopy"}
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover object-center opacity-70 mix-blend-luminosity"
             style={{
-              WebkitMaskImage: `linear-gradient(to ${lng === "ar" ? "left" : "right"}, transparent 0%, black 45%, black 100%)`,
-              maskImage: `linear-gradient(to ${lng === "ar" ? "left" : "right"}, transparent 0%, black 45%, black 100%)`,
+              WebkitMaskImage: `radial-gradient(120% 130% at ${lng === "ar" ? "0%" : "100%"} 50%, black 35%, rgba(0,0,0,0.55) 62%, transparent 88%)`,
+              maskImage: `radial-gradient(120% 130% at ${lng === "ar" ? "0%" : "100%"} 50%, black 35%, rgba(0,0,0,0.55) 62%, transparent 88%)`,
             }}
-
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-primary/25" />
+          {/* navy unification so the photo reads as part of the brand gradient */}
+          <div className="absolute inset-0 bg-primary/45" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(to ${lng === "ar" ? "right" : "left"}, transparent 0%, var(--primary) 88%)`,
+            }}
+          />
         </div>
+
 
         <div className="relative z-10 mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{t("about.title")}</h1>
