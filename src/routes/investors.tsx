@@ -164,9 +164,6 @@ function IRPage() {
         </div>
       </section>
 
-      <RoiCalculator />
-
-      <section className="mx-auto max-w-7xl px-4 pb-4 pt-20 md:pt-24">
 
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -269,8 +266,25 @@ function IRPage() {
         </div>
       </section>
 
+      <RoiCalculator />
+
+      <section className="mx-auto max-w-4xl px-4 py-12 md:py-16">
+        <div className="rounded-3xl border border-border/60 bg-card p-8 shadow-elegant md:p-10">
+          <h2 className="mb-4 text-2xl font-bold">{t("investors.roi.howItWorksTitle")}</h2>
+          <p className="leading-relaxed text-muted-foreground">{t("investors.roi.howItWorksIntro")}</p>
+          <h3 className="mt-6 mb-3 font-semibold">{t("investors.roi.howItWorksInputsTitle")}</h3>
+          <ol className="list-decimal space-y-3 ps-5 leading-relaxed text-muted-foreground">
+            <li>{t("investors.roi.howItWorksInput1")}</li>
+            <li>{t("investors.roi.howItWorksInput2")}</li>
+            <li>{t("investors.roi.howItWorksInput3")}</li>
+            <li>{t("investors.roi.howItWorksInput4")}</li>
+          </ol>
+          <p className="mt-5 leading-relaxed text-muted-foreground">{t("investors.roi.howItWorksResult")}</p>
+        </div>
+      </section>
 
       <section className="mx-auto max-w-3xl px-4 py-12">
+
         <h2 className="mb-2 text-2xl font-bold">{t("investors.contact")}</h2>
         <p className="mb-6 text-sm text-muted-foreground">{t("investors.contactSub")}</p>
         <Card><CardContent className="p-8">
