@@ -242,6 +242,15 @@ function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
         ) : (
           <form onSubmit={submit} className="grid gap-3">
             <p className="text-sm text-muted-foreground">{t("careers.formIntro")}</p>
+            <F label={t("careers.position")}>
+              <Input
+                name="position"
+                value={jobTitle}
+                readOnly
+                aria-readonly="true"
+                className="bg-muted/60 font-medium text-foreground"
+              />
+            </F>
             <F label={t("common.fullName")}><Input name="name" required /></F>
             <F label={t("common.email")}><Input type="email" name="email" required /></F>
             <F label={t("common.phone")}><Input name="phone" required /></F>
