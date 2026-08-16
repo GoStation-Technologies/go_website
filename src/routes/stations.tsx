@@ -10,12 +10,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Fuel, Search, Star, Clock } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Fuel, Search, Star, Clock, X } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
+import { regionForCity, fuelLabel, SAUDI_REGIONS } from "@/lib/regions";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
 );
+
 
 export const Route = createFileRoute("/stations")({
   component: StationsPage,
@@ -31,7 +34,10 @@ export const Route = createFileRoute("/stations")({
 function StationsPage() {
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
+  const ar = lng === "ar";
   const [q, setQ] = useState("");
+  const [region, setRegion] = useState("all");
+  const [fuel, setFuel] = useState("all");
   const { data = [] } = useQuery({
     queryKey: ["stations"],
     queryFn: async () => {
@@ -40,9 +46,25 @@ function StationsPage() {
     },
   });
 
+  const regionOptions = useMemo(() => {
+    const present = new Set(
+      data.map((s) => regionForCity(s.city_en, s.city_ar)).filter(Boolean) as string[],
+    );
+    return SAUDI_REGIONS.filter((r) => present.has(r.value));
+  }, [data]);
+
+  const fuelOptions = useMemo(() => {
+    const set = new Set<string>();
+    for (const s of data) for (const f of s.fuel_types ?? []) set.add(f);
+    return [...set].sort();
+  }, [data]);
+
   const filtered = data.filter((s) => {
     const hay = [s.city_ar, s.city_en, s.district_ar, s.district_en, s.name_ar, s.name_en].filter(Boolean).join(" ").toLowerCase();
-    return hay.includes(q.toLowerCase());
+    if (!hay.includes(q.toLowerCase())) return false;
+    if (region !== "all" && regionForCity(s.city_en, s.city_ar) !== region) return false;
+    if (fuel !== "all" && !(s.fuel_types ?? []).includes(fuel)) return false;
+    return true;
   });
 
   const mapPoints = useMemo(
@@ -62,6 +84,8 @@ function StationsPage() {
     [filtered, lng],
   );
 
+  const hasFilters = region !== "all" || fuel !== "all" || q !== "";
+
   return (
     <SiteLayout>
       <section className="bg-brand-radial py-16 text-white">
@@ -72,13 +96,50 @@ function StationsPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-10">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="relative flex-1 max-w-md">
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <div className="relative min-w-[220px] flex-1 max-w-md">
             <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("stations.search")} className="ps-9" />
           </div>
+          <Select value={region} onValueChange={setRegion}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder={ar ? "المنطقة" : "Region"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{ar ? "كل المناطق" : "All regions"}</SelectItem>
+              {regionOptions.map((r) => (
+                <SelectItem key={r.value} value={r.value}>{ar ? r.ar : r.en}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={fuel} onValueChange={setFuel}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder={ar ? "نوع الوقود" : "Fuel type"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{ar ? "كل الأنواع" : "All fuel types"}</SelectItem>
+              {fuelOptions.map((f) => (
+                <SelectItem key={f} value={f}>{fuelLabel(f, ar)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {hasFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setQ("");
+                setRegion("all");
+                setFuel("all");
+              }}
+            >
+              <X className="me-1 h-4 w-4" />
+              {ar ? "مسح" : "Clear"}
+            </Button>
+          )}
           <div className="text-sm text-muted-foreground">{filtered.length} / {data.length}</div>
         </div>
+
 
         <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
           <Card className="min-h-[480px] overflow-hidden p-0">
@@ -117,7 +178,7 @@ function StationsPage() {
                   <div className="mt-3 flex flex-wrap gap-1">
                     {(s.fuel_types ?? []).map((f: string) => (
                       <span key={f} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs">
-                        <Fuel className="h-3 w-3" /> {f}
+                        <Fuel className="h-3 w-3" /> {fuelLabel(f, ar)}
                       </span>
                     ))}
                   </div>
