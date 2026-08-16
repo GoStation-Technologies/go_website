@@ -179,6 +179,7 @@ function ContactPage() {
           </Card>
           <InfoRow icon={Clock} title={t("contact.hours")} text={t("contact.address")} />
           <InfoRow icon={Mail} title="Email" text="contact@gostation.net" />
+          <InfoRow icon={Phone} title={t("contact.callCenter")} text={t("contact.callNumber")} tel />
         </div>
 
         <Card id="contact-form">
