@@ -110,7 +110,7 @@ function IRPage() {
       </section>
 
       <section className="relative z-10 -mt-28 px-4 md:-mt-32">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border/60 bg-card/95 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)] backdrop-blur-xl">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border/60 bg-card/95 shadow-elegant backdrop-blur-xl">
           <div className="grid divide-y divide-border/70 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:rtl:divide-x-reverse">
             {kpis.map((k) => (
               <div key={k.label} className="px-8 py-10 text-center">
