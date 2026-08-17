@@ -22,11 +22,11 @@ const NAV = [
   { to: "/stations", key: "stations" },
   { to: "/franchise", key: "franchise" },
   { to: "/investors", key: "acquisitions" },
-  { to: "/investors", key: "investors" },
   { to: "/media", key: "media" },
   { to: "/careers", key: "careers" },
   { to: "/contact", key: "contact" },
 ] as const;
+
 
 
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
