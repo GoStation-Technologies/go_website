@@ -238,23 +238,25 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64">
-            <img
-              src={chairmanCutoutAsset.url}
-              alt={t("home.quoteAuthor")}
-              className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
-            />
+          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64 group cursor-default transition-transform duration-700 ease-out hover:scale-105 focus-within:scale-105">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-accent via-accent/60 to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-40" aria-hidden />
+            <div className="relative h-full w-full overflow-hidden rounded-full transition-transform duration-700 ease-out group-hover:scale-105 group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
+              <img
+                src={chairmanCutoutAsset.url}
+                alt={t("home.quoteAuthor")}
+                className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)] transition-transform duration-700 ease-out group-hover:scale-110"
+              />
+            </div>
           </div>
-
-
 
           <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
             {t("home.quote")}
           </blockquote>
-          <div className="mt-8 text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
+          <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent transition-transform duration-500 hover:scale-105">
             {t("home.quoteAuthor")}
           </div>
-          <div className="mt-1 text-xs text-muted-foreground">{t("home.quoteRole")}</div>
+          <div className="mt-1.5 text-sm text-muted-foreground">{t("home.quoteRole")}</div>
+
         </div>
       </section>
 
