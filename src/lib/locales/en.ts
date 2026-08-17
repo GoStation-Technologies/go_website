@@ -45,9 +45,9 @@ export const en = {
   home: {
     heroBadge: "Saudi Arabia • Fuel & mobility",
     awardBadge: "IFM Awards 2025 — Fastest-growing in KSA",
-    heroLine1: "A station.",
-    heroLine2: "And so much more.",
-    heroTitle: "A station and more",
+    heroLine1: "GoStation...",
+    heroLine2: "A station and more.",
+    heroTitle: "GoStation... A station and more",
     heroSub:
       "180+ stations across 13 regions. GoStation is redefining what a fuel station means in the Kingdom — fuel, retail, fleet, and franchise, engineered for 2026.",
     trustedBy: "Trusted across the Kingdom",
