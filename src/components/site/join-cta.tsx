@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import stationAsset from "@/assets/station-canopy.jpg.asset.json";
 
 export function JoinCta() {
@@ -34,12 +34,19 @@ export function JoinCta() {
       />
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-12 md:py-20">
-        <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
+        <div className="flex flex-col items-start gap-4 sm:flex-row md:items-center">
           <Link
-            to="/franchise"
-            className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)]"
+            to="/acquisitions"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-white/10 hover:shadow-[0_0_28px_rgba(255,255,255,0.12)] sm:w-auto"
           >
-            {t("home.ctaFranchise")}
+            <MapPin className="h-4 w-4" />
+            {t("home.ctaAcquisition")}
+          </Link>
+          <Link
+            to="/leasing"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)] sm:w-auto"
+          >
+            {t("home.ctaLeasing")}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         </div>
@@ -57,3 +64,4 @@ export function JoinCta() {
     </section>
   );
 }
+
