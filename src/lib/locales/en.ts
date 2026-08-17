@@ -76,17 +76,18 @@ export const en = {
     svc: {
       fuel: {
         title: "Fuel stations",
-        body: "A modern network delivering Petrol 91, 95, and Diesel with convenience stores and full auto-care services.",
+        body: "High-quality fuel and complete car services at every station.",
       },
       retail: {
         title: "Real estate leasing",
-        body: "Premium retail units inside high-traffic stations — perfect for cafés, F&B brands, and services.",
+        body: "Premium retail spaces inside high-traffic stations.",
       },
-      fleet: { title: "Go Fleet", body: "Complete solutions for managing corporate fleet fuel with e-invoicing and full digital spend control." },
+      fleet: { title: "Go Fleet", body: "Smart fleet fuel management with e-invoicing." },
       invest: {
         title: "Investment",
-        body: "Invest with GoStation and benefit from an integrated operating model, a trusted brand, and sustainable growth opportunities in the station sector.",
+        body: "Trusted investment opportunities in a growing station network.",
       },
+
 
     },
     quote:
