@@ -206,6 +206,7 @@ function HomePage() {
           />
           <div className="relative">
             <StatCards
+              key={lng}
               stats={stats.map((s, i) => ({
                 key: s.key,
                 val: s.val,
