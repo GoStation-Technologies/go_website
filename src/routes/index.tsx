@@ -918,9 +918,9 @@ function ServiceCard({
         <h3 className={`mt-5 font-display font-bold leading-tight ${compact ? "text-lg" : "text-2xl"}`}>
           {title}
         </h3>
-        {!compact && (
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
-        )}
+        <p className={`leading-relaxed text-muted-foreground ${compact ? "mt-2 text-sm" : "mt-2 text-sm"}`}>
+          {body}
+        </p>
       </div>
       <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-accent">
         {cta}
