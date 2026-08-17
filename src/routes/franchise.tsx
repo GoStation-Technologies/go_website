@@ -23,7 +23,7 @@ export const Route = createFileRoute("/franchise")({
   head: () =>
     pageHead({
       path: "/franchise",
-      title: "Franchise with GoStation — Own a Fuel Station",
+      title: "Franchise application — GoStation",
       description:
         "Partner with GoStation and operate your own fuel station in Saudi Arabia. Review the requirements and submit your franchise application in three steps.",
     }),
