@@ -39,28 +39,27 @@ export function JoinCta() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-12 md:py-20">
         {/* Text column: naturally starts on the right in RTL, left in LTR */}
         <div className="text-start">
-          <div className="eyebrow text-ember-glow">{t("home.ctaBannerEyebrow")}</div>
+          <div className="eyebrow text-ember-glow">{t("home.franchiseBannerEyebrow")}</div>
           <h2 className="mt-4 text-balance text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
-            {t("home.ctaBanner")}
+            {t("home.franchiseBanner")}
           </h2>
           <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-foreground/80 md:text-lg">
-            {t("home.ctaBannerText")}
+            {t("home.franchiseBannerText")}
           </p>
         </div>
 
         {/* Single CTA button centered in its column for visual balance */}
         <div className="flex flex-col items-center sm:flex-row md:items-center md:justify-center">
           <Link
-            to="/acquisitions"
+            to="/franchise"
             className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)] sm:w-auto"
           >
-            <MapPin className="h-4 w-4" />
-            {t("home.ctaRequestAcquisition")}
-
-
+            <Handshake className="h-4 w-4" />
+            {t("home.ctaRequestFranchise")}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         </div>
+
       </div>
     </section>
   );
