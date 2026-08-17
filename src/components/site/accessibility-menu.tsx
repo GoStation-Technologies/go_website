@@ -247,10 +247,18 @@ export function AccessibilityMenu({ className }: { className?: string }) {
             aria-label={L.open}
             className={`h-10 w-10 rounded-full hover:bg-accent/10 focus-visible:ring-2 focus-visible:ring-accent ${className ?? ""}`}
           >
-            <img
-              src={a11yIconAsset.url}
-              alt=""
-              className="h-6 w-6 object-contain"
+            <div
+              className="h-6 w-6 bg-foreground"
+              style={{
+                WebkitMaskImage: `url(${a11yIconAsset.url})`,
+                maskImage: `url(${a11yIconAsset.url})`,
+                WebkitMaskSize: "contain",
+                maskSize: "contain",
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskPosition: "center",
+              }}
               aria-hidden="true"
             />
           </Button>
