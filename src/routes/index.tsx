@@ -159,7 +159,7 @@ function HomePage() {
                 size="lg"
                 className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
               >
-                <Link to="/franchise">
+                <Link to="/investors">
                   {t("home.ctaFranchise")}
                   <ArrowUpRight className="ms-1 h-4 w-4" />
                 </Link>
