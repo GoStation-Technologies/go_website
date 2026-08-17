@@ -241,11 +241,11 @@ function HomePage() {
             <div className="relative mx-auto h-36 w-36 md:h-44 md:w-44">
               {/* circular frame background */}
               <div className="absolute inset-0 rounded-full border border-accent/30 bg-background shadow-card" />
-              {/* enlarged image — head overflows the top while middle/bottom stay inside */}
+              {/* enlarged image — anchored at bottom/center so middle and bottom stay inside the frame while the head overflows the top */}
               <img
                 src={chairmanCutoutAsset.url}
                 alt={t("home.quoteAuthor")}
-                className="absolute -top-[18%] left-1/2 h-[125%] w-auto max-w-[110%] -translate-x-1/2 object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+                className="absolute bottom-0 left-1/2 h-[128%] w-auto max-w-[112%] -translate-x-1/2 object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
               />
             </div>
 
