@@ -14,6 +14,7 @@ export const ar = {
     signin: "تسجيل الدخول",
     dashboard: "لوحة التحكم",
     signout: "تسجيل الخروج",
+    franchiseCta: "قدّم طلب الامتياز",
   },
   common: {
     learnMore: "اعرف المزيد",

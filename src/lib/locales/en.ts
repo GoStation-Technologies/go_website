@@ -14,6 +14,7 @@ export const en = {
     signin: "Sign in",
     dashboard: "Dashboard",
     signout: "Sign out",
+    franchiseCta: "Submit franchise request",
   },
   common: {
     learnMore: "Learn more",

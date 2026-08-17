@@ -124,7 +124,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             className="hidden h-9 rounded-full bg-accent px-4 text-xs font-semibold text-accent-foreground shadow-glow transition-all hover:scale-[1.02] hover:bg-accent/90 sm:inline-flex"
           >
             <Link to="/franchise">
-              {t("home.ctaFranchise")}
+              {t("nav.franchiseCta")}
               <ArrowUpRight className="ms-1 h-3.5 w-3.5" />
             </Link>
           </Button>
