@@ -58,7 +58,7 @@ export const en = {
     statsStations: "Stations",
     statsRegions: "Regions",
     statsYears: "Fuel sales",
-    statsYearsValue: "800+ million liters",
+    statsYearsValue: "800+ M Liter",
     statsDaily: "Daily customers",
     alwaysReady: "Always ready",
     alwaysReadySub: "24/7 service across the Kingdom",
