@@ -245,10 +245,10 @@ export function AccessibilityMenu({ className }: { className?: string }) {
             variant="ghost"
             size="icon"
             aria-label={L.open}
-            className={`h-10 w-10 rounded-full hover:bg-accent/10 focus-visible:ring-2 focus-visible:ring-accent ${className ?? ""}`}
+            className={`group h-10 w-10 rounded-full transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-accent ${className ?? ""}`}
           >
             <div
-              className="h-6 w-6 bg-foreground"
+              className="h-6 w-6 bg-foreground transition-colors group-hover:bg-white"
               style={{
                 WebkitMaskImage: `url(${a11yIconAsset.url})`,
                 maskImage: `url(${a11yIconAsset.url})`,
