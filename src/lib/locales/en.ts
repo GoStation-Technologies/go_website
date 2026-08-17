@@ -289,7 +289,6 @@ export const en = {
     channels: [
       "Unified call center 24/7 — instant response",
       "Live chat 16/7 — instant response",
-      "Customer care account on X 24/7 — reply within 15 minutes",
       "Fuel reports center 24/7 — instant response",
       "Virtual center and service centers on business days, 10:00–18:00",
     ],
