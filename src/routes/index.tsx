@@ -238,13 +238,14 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-accent/30 bg-background shadow-card md:h-40 md:w-40">
+          <div className="relative mx-auto h-40 w-40 md:h-56 md:w-56">
             <img
               src={chairmanCutoutAsset.url}
               alt={t("home.quoteAuthor")}
-              className="h-full w-full object-contain object-center drop-shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+              className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
             />
           </div>
+
 
 
           <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
