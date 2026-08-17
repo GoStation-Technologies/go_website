@@ -105,10 +105,11 @@ function HomePage() {
     },
   });
 
+  const statsYearsValue = t("home.statsYearsValue");
   const stats = [
     { key: "statsStations", val: "180+" },
     { key: "statsRegions", val: "13" },
-    { key: "statsYears", val: t("home.statsYearsValue") },
+    { key: "statsYears", val: statsYearsValue },
     { key: "statsDaily", val: "50k+" },
   ] as const;
 
@@ -205,6 +206,7 @@ function HomePage() {
           />
           <div className="relative">
             <StatCards
+              key={lng}
               stats={stats.map((s, i) => ({
                 key: s.key,
                 val: s.val,
