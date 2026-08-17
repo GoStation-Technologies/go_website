@@ -123,6 +123,7 @@ export const en = {
     ctaBannerEyebrow: "Acquisitions",
     ctaBanner: "Strategic acquisition opportunities",
     ctaBannerText: "Do you own an existing fuel station or qualified land for a new station? Share the details and our team will evaluate your opportunity.",
+    ctaRequestAcquisition: "Request acquisition",
   },
   about: {
     title: "About GoStation",

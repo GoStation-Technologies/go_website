@@ -48,20 +48,14 @@ export function JoinCta() {
           </p>
         </div>
 
-        {/* Buttons column: naturally ends on the left in RTL, right in LTR */}
-        <div className="flex flex-col items-start gap-4 sm:flex-row md:items-center md:justify-end">
+        {/* Single CTA button aligned to the end */}
+        <div className="flex flex-col items-start sm:flex-row md:items-center md:justify-end">
           <Link
             to="/acquisitions"
-            className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-white/10 hover:shadow-[0_0_28px_rgba(255,255,255,0.12)] sm:w-auto"
-          >
-            <MapPin className="h-4 w-4" />
-            {t("home.ctaAcquisition")}
-          </Link>
-          <Link
-            to="/leasing"
             className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)] sm:w-auto"
           >
-            {t("home.ctaLeasing")}
+            <MapPin className="h-4 w-4" />
+            {t("home.ctaRequestAcquisition")}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         </div>
