@@ -7,7 +7,7 @@ export const en = {
     media: "Media Center",
     franchise: "Franchise",
     acquisitions: "Acquisitions",
-    leasing: "Retail leasing",
+    leasing: "Real estate leasing",
     careers: "Careers",
     investors: "Investors",
     contact: "Contact",
@@ -69,14 +69,14 @@ export const en = {
     servicesEyebrow: "What we do",
     servicesTitle: "One brand. A complete station experience.",
     servicesSub:
-      "From premium fuel to retail leasing, fleet solutions, and site acquisition — everything a modern Saudi station needs, under one roof.",
+      "From premium fuel to real estate leasing, fleet solutions, and site acquisition — everything a modern Saudi station needs, under one roof.",
     svc: {
       fuel: {
         title: "Fuel stations",
         body: "A modern network delivering Petrol 91, 95, and Diesel with convenience stores and full auto-care services.",
       },
       retail: {
-        title: "Retail leasing",
+        title: "Real estate leasing",
         body: "Premium retail units inside high-traffic stations — perfect for cafés, F&B brands, and services.",
       },
       fleet: { title: "Go Fleet", body: "Smart fleet fuel management with e-invoicing and full spend control." },
@@ -366,12 +366,12 @@ export const en = {
     },
   },
   lease: {
-    title: "Retail leasing",
-    eyebrow: "Retail leasing",
+    title: "Real estate leasing",
+    eyebrow: "Real estate leasing",
     lead:
       "Lease commercial space inside GoStation sites — retail shops, cafes, restaurants and car services — in high-traffic locations with flexible terms.",
     detailsTitle: "Details",
-    formTitle: "Space leasing request",
+    formTitle: "Real estate leasing request",
     formSub: "Share your business details and our leasing team will contact you",
     facts: {
       spaces: "Available spaces",

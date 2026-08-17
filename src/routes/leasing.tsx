@@ -19,7 +19,7 @@ export const Route = createFileRoute("/leasing")({
   head: () =>
     pageHead({
       path: "/leasing",
-      title: "Retail Leasing — GoStation",
+      title: "Real Estate Leasing — GoStation",
       description:
         "Lease retail space at GoStation fuel stations across Saudi Arabia. Share your requirements and our leasing team will get back to you.",
     }),
