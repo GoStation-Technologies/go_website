@@ -82,11 +82,12 @@ export const en = {
         title: "Real estate leasing",
         body: "Premium retail units inside high-traffic stations — perfect for cafés, F&B brands, and services.",
       },
-      fleet: { title: "Go Fleet", body: "Smart fleet fuel management with e-invoicing and full spend control." },
+      fleet: { title: "Go Fleet", body: "Complete solutions for managing corporate fleet fuel with e-invoicing and full digital spend control." },
       invest: {
-        title: "Investment & acquisition",
-        body: "Selling a station? We offer fair, fast acquisition and site development.",
+        title: "Investment",
+        body: "Invest with GoStation and benefit from an integrated operating model, a trusted brand, and sustainable growth opportunities in the station sector.",
       },
+
     },
     quote:
       "At GoStation, excellence is not an option — it is a daily commitment. We are engineering the future of Saudi mobility, one station at a time.",
