@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight, Handshake } from "lucide-react";
 import stationAsset from "@/assets/station-canopy.jpg.asset.json";
 
 export function JoinCta() {
@@ -51,11 +51,12 @@ export function JoinCta() {
         {/* Single CTA button centered in its column for visual balance */}
         <div className="flex flex-col items-center sm:flex-row md:items-center md:justify-center">
           <Link
-            to="/acquisitions"
+            to="/franchise"
             className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)] sm:w-auto"
           >
-            <MapPin className="h-4 w-4" />
+            <Handshake className="h-4 w-4" />
             {t("home.ctaRequestAcquisition")}
+
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         </div>
