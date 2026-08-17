@@ -21,12 +21,13 @@ const NAV = [
   { to: "/about", key: "about" },
   { to: "/stations", key: "stations" },
   { to: "/franchise", key: "franchise" },
-  { to: "/acquisitions", key: "acquisitions" },
-  { to: "/investors", key: "investors" },
+  { to: "/investors", key: "acquisitions" },
   { to: "/media", key: "media" },
   { to: "/careers", key: "careers" },
   { to: "/contact", key: "contact" },
 ] as const;
+
+
 
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   const { t, i18n } = useTranslation();

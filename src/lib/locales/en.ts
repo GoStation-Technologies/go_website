@@ -6,7 +6,7 @@ export const en = {
     stations: "Stations",
     media: "Media Center",
     franchise: "Franchise",
-    acquisitions: "Acquisitions",
+    acquisitions: "Investments",
     leasing: "Real estate leasing",
     careers: "Careers",
     investors: "Investors",
