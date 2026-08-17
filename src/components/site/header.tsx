@@ -163,7 +163,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                   onClick={() => setOpen(false)}
                   className="mt-4 inline-flex items-center justify-center gap-1 rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground shadow-glow"
                 >
-                  {t("home.ctaFranchise")}
+                  {t("nav.franchiseCta")}
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </nav>
