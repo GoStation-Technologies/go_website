@@ -150,9 +150,6 @@ function CareersPage() {
               {t("careers.openingsTitle")}
             </h2>
           </div>
-          <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-            {t("careers.lead")}
-          </p>
         </div>
 
         {jobs.length === 0 ? (
