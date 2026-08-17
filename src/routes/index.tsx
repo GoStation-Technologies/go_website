@@ -238,7 +238,7 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="relative mx-auto h-40 w-40 md:h-56 md:w-56">
+          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64">
             <img
               src={chairmanCutoutAsset.url}
               alt={t("home.quoteAuthor")}
