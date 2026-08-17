@@ -6,7 +6,7 @@ export const ar = {
     stations: "المحطات",
     media: "المركز الإعلامي",
     franchise: "الامتياز التجاري",
-    acquisitions: "الاستحواذ",
+    acquisitions: "الاستثمار",
     leasing: "التأجير العقاري",
     careers: "الوظائف",
     investors: "المستثمرون",
