@@ -97,7 +97,7 @@ export const en = {
     partnersTitle: "Trusted by leading businesses",
     partnersSub:
       "Strategic partners who rely on the GoStation network for fuel, fleet, and retail operations across the Kingdom.",
-    partnersStories: "View success stories",
+    partnersStories: "Invest with GoStation",
     partnersCta: "Become a partner",
     coverageEyebrow: "Coverage",
     coverageTitle: "From Riyadh to the borders of the Kingdom.",
