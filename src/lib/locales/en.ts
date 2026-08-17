@@ -50,7 +50,8 @@ export const en = {
     heroSub:
       "180+ stations across 13 regions. GoStation is redefining what a fuel station means in the Kingdom — fuel, retail, fleet, and franchise, engineered for 2026.",
     trustedBy: "Trusted across the Kingdom",
-    ctaFranchise: "Apply for franchise",
+    ctaAcquisition: "Acquisitions",
+    ctaLeasing: "Real estate leasing",
     ctaStations: "Find a station",
     statsStations: "Stations",
     statsRegions: "Regions",
@@ -115,9 +116,9 @@ export const en = {
     reviewsSub:
       "At GoStation we listen closely to every customer's opinion, and we turn it into a professional service that lives up to their expectations — every visit, at every station.",
     pricesTitle: "Today's fuel prices (Aramco)",
-    ctaBannerEyebrow: "Partner with us",
-    ctaBanner: "Ready to be part of GoStation?",
-    ctaBannerText: "Apply for a franchise, sell your station, or lease retail space — in a few clicks.",
+    ctaBannerEyebrow: "Acquisitions",
+    ctaBanner: "Strategic acquisition opportunities",
+    ctaBannerText: "Do you own an existing fuel station or qualified land for a new station? Share the details and our team will evaluate your opportunity.",
   },
   about: {
     title: "About GoStation",
