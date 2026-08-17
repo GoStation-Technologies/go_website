@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, Handshake } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import stationAsset from "@/assets/station-canopy.jpg.asset.json";
 
 export function JoinCta() {
