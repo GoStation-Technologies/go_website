@@ -124,6 +124,12 @@ export const en = {
     ctaBanner: "Strategic acquisition opportunities",
     ctaBannerText: "Do you own an existing fuel station or qualified land for a new station? Share the details and our team will evaluate your opportunity.",
     ctaRequestAcquisition: "Request acquisition",
+    franchiseBannerEyebrow: "Franchise",
+    franchiseBanner: "Become a GoStation franchise partner",
+    franchiseBannerText:
+      "Join the GoStation franchise model and benefit from a trusted brand, complete operational support, and proven investment returns.",
+    ctaRequestFranchise: "Submit franchise request",
+
 
 
   },
