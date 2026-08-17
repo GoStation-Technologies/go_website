@@ -100,7 +100,7 @@ export const ar = {
     partnersTitle: "شركاء النجاح",
     partnersSub:
       "شركاء استراتيجيون يعتمدون على شبكة قوستيشن في الوقود وإدارة الأساطيل والتجزئة في مختلف مناطق المملكة.",
-    partnersStories: "قصص النجاح",
+    partnersStories: "استثمر مع قوسيتشن",
     partnersCta: "كن شريكاً",
     coverageEyebrow: "الانتشار",
     coverageTitle: "من الرياض إلى حدود المملكة.",
