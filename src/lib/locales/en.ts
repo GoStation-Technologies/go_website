@@ -120,10 +120,11 @@ export const en = {
     reviewsSub:
       "At GoStation we listen closely to every customer's opinion, and we turn it into a professional service that lives up to their expectations — every visit, at every station.",
     pricesTitle: "Today's fuel prices (Aramco)",
-    ctaBannerEyebrow: "Franchise",
-    ctaBanner: "Become a GoStation franchise partner",
-    ctaBannerText: "Join the GoStation franchise model and benefit from a trusted brand, complete operational support, and proven investment returns.",
-    ctaRequestAcquisition: "Submit franchise request",
+    ctaBannerEyebrow: "Acquisitions",
+    ctaBanner: "Strategic acquisition opportunities",
+    ctaBannerText: "Do you own an existing fuel station or qualified land for a new station? Share the details and our team will evaluate your opportunity.",
+    ctaRequestAcquisition: "Request acquisition",
+
 
   },
   about: {
