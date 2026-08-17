@@ -114,7 +114,7 @@ function HomePage() {
 
   const services = [
     { icon: Fuel, k: "fuel", href: "/stations" },
-    { icon: Store, k: "retail", href: "/franchise" },
+    { icon: Store, k: "retail", href: "/leasing" },
     { icon: Truck, k: "fleet", href: "/contact" },
     { icon: Building2, k: "invest", href: "/acquisitions" },
   ] as const;
