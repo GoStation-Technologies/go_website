@@ -126,6 +126,7 @@ export const ar = {
     ctaBannerEyebrow: "الاستحواذ",
     ctaBanner: "نبحث عن فرص استحواذ استراتيجية",
     ctaBannerText: "هل تملك محطة وقود قائمة أو أرضاً مؤهلة لتشييد محطة جديدة؟ شاركنا تفاصيل فرصتك وسنتواصل معك لدراستها.",
+    ctaRequestAcquisition: "طلب استحواذ",
   },
   about: {
     title: "عن قوستيشن",
