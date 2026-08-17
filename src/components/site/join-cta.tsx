@@ -1,72 +1,57 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import stationAsset from "@/assets/station-canopy.jpg.asset.json";
 
 export function JoinCta() {
   const { t } = useTranslation();
-  const points = [t("footer.acqPoint1"), t("footer.acqPoint2"), t("footer.acqPoint3")];
   return (
-    <section className="relative overflow-hidden bg-hero-ink text-foreground">
+    <section className="relative overflow-hidden rounded-[2rem] bg-hero-ink text-foreground md:mx-6 lg:mx-10">
       <img
         src={stationAsset.url}
         alt=""
         aria-hidden
         loading="lazy"
-        className="absolute inset-0 h-full w-full scale-[1.65] object-cover object-[70%_38%] opacity-60"
+        className="absolute inset-0 h-full w-full scale-[1.1] object-cover object-[50%_40%] opacity-60"
       />
-      <div className="absolute inset-0 bg-ink/55 mix-blend-multiply" aria-hidden />
+      <div className="absolute inset-0 bg-ink/60 mix-blend-multiply" aria-hidden />
       <div
         className="absolute inset-0"
         aria-hidden
         style={{
           background:
-            "linear-gradient(100deg, color-mix(in oklab, var(--ink) 94%, transparent) 0%, color-mix(in oklab, var(--ink) 82%, transparent) 38%, color-mix(in oklab, var(--ink) 45%, transparent) 62%, color-mix(in oklab, var(--ink) 12%, transparent) 100%)",
+            "linear-gradient(110deg, color-mix(in oklab, var(--ink) 92%, transparent) 0%, color-mix(in oklab, var(--ink) 70%, transparent) 40%, color-mix(in oklab, var(--accent) 28%, transparent) 72%, color-mix(in oklab, var(--accent) 55%, transparent) 100%)",
         }}
       />
       <div
-        className="absolute inset-x-0 bottom-0 h-1/2"
+        className="absolute inset-0 opacity-20"
         aria-hidden
         style={{
-          background:
-            "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--ink) 70%, transparent) 100%)",
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.04) 2px, rgba(255,255,255,0.04) 3px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.04) 2px, rgba(255,255,255,0.04) 3px)",
+          backgroundSize: "40px 40px",
         }}
       />
-      <div className="absolute inset-0 bg-grid-ink opacity-15" aria-hidden />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-[1.35fr_1fr] md:items-center">
-          <div>
-            <div className="eyebrow text-ember-glow">{t("footer.eyebrow")}</div>
-            <h2 className="mt-4 max-w-2xl text-balance text-4xl font-bold leading-[1.05] sm:text-5xl md:text-6xl">
-              {t("footer.headline")}
-            </h2>
-            <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-foreground/75 md:text-lg">
-              {t("footer.acqBody")}
-            </p>
-          </div>
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-12 md:py-20">
+        <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
+          <Link
+            to="/franchise"
+            className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)]"
+          >
+            {t("home.ctaFranchise")}
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </Link>
+        </div>
 
-          <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-6 backdrop-blur-md md:p-7">
-            <ul className="space-y-3">
-              {points.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-sm text-foreground/85">
-                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
-                    <Check className="h-3 w-3" />
-                  </span>
-                  <span>{p}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6 flex justify-end">
-              <Link
-                to="/acquisitions"
-                className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-glow transition hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(249,115,22,0.35)]"
-              >
-                {t("footer.acqCta")}
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
-            </div>
-          </div>
+        <div className="text-end">
+          <div className="eyebrow text-ember-glow">{t("home.ctaBannerEyebrow")}</div>
+          <h2 className="mt-4 text-balance text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
+            {t("home.ctaBanner")}
+          </h2>
+          <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-foreground/80 md:text-lg">
+            {t("home.ctaBannerText")}
+          </p>
         </div>
       </div>
     </section>
