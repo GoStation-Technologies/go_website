@@ -117,7 +117,7 @@ function HomePage() {
     { icon: Fuel, k: "fuel", href: "/stations" },
     { icon: Store, k: "retail", href: "/leasing" },
     { icon: Truck, k: "fleet", href: "/contact" },
-    { icon: Building2, k: "invest", href: "/acquisitions" },
+    { icon: Building2, k: "invest", href: "/investors" },
   ] as const;
 
   const values = [
