@@ -168,7 +168,7 @@ export const en = {
 
     governance: "Governance",
     leaders: "Leadership",
-    awards: "Certificates",
+    awards: "Accreditations & Awards",
     viewAward: "View certificate",
     awardNoImage: "No image available for this certificate yet.",
     founding: {
