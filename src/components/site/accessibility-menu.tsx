@@ -194,7 +194,13 @@ export function AccessibilityMenu({ className }: { className?: string }) {
     onClick: () => void;
     hint?: string;
   }[] = [
-    { key: "contrast", label: L.contrast, icon: Contrast, active: s.contrast, onClick: () => update({ contrast: !s.contrast }) },
+    {
+      key: "contrast",
+      label: L.contrast,
+      icon: Contrast,
+      active: s.contrast,
+      onClick: () => update({ contrast: !s.contrast }),
+    },
     {
       key: "text",
       label: L.text,
@@ -203,13 +209,49 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       onClick: () => update({ textScale: (s.textScale + 1) % 4 }),
       hint: s.textScale > 0 ? `+${s.textScale * 10}%` : undefined,
     },
-    { key: "spacing", label: L.spacing, icon: AlignVerticalSpaceAround, active: s.spacing, onClick: () => update({ spacing: !s.spacing }) },
-    { key: "links", label: L.links, icon: Link2, active: s.links, onClick: () => update({ links: !s.links }) },
-    { key: "dyslexia", label: L.dyslexia, icon: Type, active: s.dyslexia, onClick: () => update({ dyslexia: !s.dyslexia }) },
-    { key: "hideImages", label: L.images, icon: ImageOff, active: s.hideImages, onClick: () => update({ hideImages: !s.hideImages }) },
-    { key: "stopAnimations", label: L.anim, icon: PauseCircle, active: s.stopAnimations, onClick: () => update({ stopAnimations: !s.stopAnimations }) },
+    {
+      key: "spacing",
+      label: L.spacing,
+      icon: AlignVerticalSpaceAround,
+      active: s.spacing,
+      onClick: () => update({ spacing: !s.spacing }),
+    },
+    {
+      key: "links",
+      label: L.links,
+      icon: Link2,
+      active: s.links,
+      onClick: () => update({ links: !s.links }),
+    },
+    {
+      key: "dyslexia",
+      label: L.dyslexia,
+      icon: Type,
+      active: s.dyslexia,
+      onClick: () => update({ dyslexia: !s.dyslexia }),
+    },
+    {
+      key: "hideImages",
+      label: L.images,
+      icon: ImageOff,
+      active: s.hideImages,
+      onClick: () => update({ hideImages: !s.hideImages }),
+    },
+    {
+      key: "stopAnimations",
+      label: L.anim,
+      icon: PauseCircle,
+      active: s.stopAnimations,
+      onClick: () => update({ stopAnimations: !s.stopAnimations }),
+    },
     { key: "structure", label: L.structure, icon: Layers, active: false, onClick: openStructure },
-    { key: "bigCursor", label: L.cursor, icon: MousePointer2, active: s.bigCursor, onClick: () => update({ bigCursor: !s.bigCursor }) },
+    {
+      key: "bigCursor",
+      label: L.cursor,
+      icon: MousePointer2,
+      active: s.bigCursor,
+      onClick: () => update({ bigCursor: !s.bigCursor }),
+    },
     {
       key: "saturation",
       label: L.saturation,
@@ -226,8 +268,20 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       onClick: () => update({ align: (s.align + 1) % 3 }),
       hint: s.align === 1 ? L.start : s.align === 2 ? L.center : undefined,
     },
-    { key: "lineHeight", label: L.lineHeight, icon: MoveVertical, active: s.lineHeight, onClick: () => update({ lineHeight: !s.lineHeight }) },
-    { key: "guide", label: L.guide, icon: Ruler, active: s.readingGuide, onClick: () => update({ readingGuide: !s.readingGuide }) },
+    {
+      key: "lineHeight",
+      label: L.lineHeight,
+      icon: MoveVertical,
+      active: s.lineHeight,
+      onClick: () => update({ lineHeight: !s.lineHeight }),
+    },
+    {
+      key: "guide",
+      label: L.guide,
+      icon: Ruler,
+      active: s.readingGuide,
+      onClick: () => update({ readingGuide: !s.readingGuide }),
+    },
   ];
 
   return (
@@ -273,7 +327,9 @@ export function AccessibilityMenu({ className }: { className?: string }) {
                       : "border-border/70 bg-muted/40 text-foreground/80 hover:bg-muted"
                   }`}
                 >
-                  <Icon className={`h-5 w-5 ${tile.active ? "text-accent" : "text-foreground/70"}`} />
+                  <Icon
+                    className={`h-5 w-5 ${tile.active ? "text-accent" : "text-foreground/70"}`}
+                  />
                   <span className="text-[11px] font-medium leading-tight">{tile.label}</span>
                   {tile.hint ? (
                     <span className="text-[10px] font-semibold text-accent">{tile.hint}</span>
@@ -311,7 +367,11 @@ export function AccessibilityMenu({ className }: { className?: string }) {
               <p className="mb-2 font-semibold">{L.headings}</p>
               <ul className="space-y-1">
                 {outline?.headings.map((h, i) => (
-                  <li key={i} style={{ paddingInlineStart: `${(h.level - 1) * 12}px` }} className="text-muted-foreground">
+                  <li
+                    key={i}
+                    style={{ paddingInlineStart: `${(h.level - 1) * 12}px` }}
+                    className="text-muted-foreground"
+                  >
                     {h.text}
                   </li>
                 ))}
