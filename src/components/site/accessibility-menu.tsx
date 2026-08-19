@@ -13,7 +13,6 @@ import {
   Droplet,
   AlignLeft,
   MoveVertical,
-  Info,
   Layers,
   Ruler,
 } from "lucide-react";
@@ -37,7 +36,6 @@ type Settings = {
   saturation: number; // 0 off, 1 low, 2 grayscale
   lineHeight: boolean;
   align: number; // 0 off, 1 start, 2 center
-  tooltips: boolean;
   readingGuide: boolean;
 };
 
@@ -53,7 +51,6 @@ const DEFAULTS: Settings = {
   saturation: 0,
   lineHeight: false,
   align: 0,
-  tooltips: false,
   readingGuide: false,
 };
 
@@ -72,7 +69,6 @@ function apply(s: Settings) {
   el.classList.toggle("a11y-line-height", s.lineHeight);
   el.classList.toggle("a11y-align-start", s.align === 1);
   el.classList.toggle("a11y-align-center", s.align === 2);
-  el.classList.toggle("a11y-tooltips", s.tooltips);
   el.classList.toggle("a11y-reading-guide", s.readingGuide);
   el.style.setProperty("--a11y-text-scale", String(1 + s.textScale * 0.1));
 }
@@ -92,7 +88,6 @@ const LABELS = {
     saturation: "Saturation",
     lineHeight: "Line height",
     align: "Text align",
-    tooltips: "Tooltips",
     structure: "Page structure",
     guide: "Reading guide",
     reset: "Reset all accessibility settings",
@@ -117,7 +112,6 @@ const LABELS = {
     saturation: "التشبع",
     lineHeight: "ارتفاع خط",
     align: "محاذاة النص",
-    tooltips: "التلميحات",
     structure: "هيكل الصفحة",
     guide: "مسطرة القراءة",
     reset: "إعادة تعيين كافة إعدادات إمكانية الوصول",
@@ -200,7 +194,13 @@ export function AccessibilityMenu({ className }: { className?: string }) {
     onClick: () => void;
     hint?: string;
   }[] = [
-    { key: "contrast", label: L.contrast, icon: Contrast, active: s.contrast, onClick: () => update({ contrast: !s.contrast }) },
+    {
+      key: "contrast",
+      label: L.contrast,
+      icon: Contrast,
+      active: s.contrast,
+      onClick: () => update({ contrast: !s.contrast }),
+    },
     {
       key: "text",
       label: L.text,
@@ -209,14 +209,49 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       onClick: () => update({ textScale: (s.textScale + 1) % 4 }),
       hint: s.textScale > 0 ? `+${s.textScale * 10}%` : undefined,
     },
-    { key: "spacing", label: L.spacing, icon: AlignVerticalSpaceAround, active: s.spacing, onClick: () => update({ spacing: !s.spacing }) },
-    { key: "links", label: L.links, icon: Link2, active: s.links, onClick: () => update({ links: !s.links }) },
-    { key: "dyslexia", label: L.dyslexia, icon: Type, active: s.dyslexia, onClick: () => update({ dyslexia: !s.dyslexia }) },
-    { key: "hideImages", label: L.images, icon: ImageOff, active: s.hideImages, onClick: () => update({ hideImages: !s.hideImages }) },
-    { key: "stopAnimations", label: L.anim, icon: PauseCircle, active: s.stopAnimations, onClick: () => update({ stopAnimations: !s.stopAnimations }) },
+    {
+      key: "spacing",
+      label: L.spacing,
+      icon: AlignVerticalSpaceAround,
+      active: s.spacing,
+      onClick: () => update({ spacing: !s.spacing }),
+    },
+    {
+      key: "links",
+      label: L.links,
+      icon: Link2,
+      active: s.links,
+      onClick: () => update({ links: !s.links }),
+    },
+    {
+      key: "dyslexia",
+      label: L.dyslexia,
+      icon: Type,
+      active: s.dyslexia,
+      onClick: () => update({ dyslexia: !s.dyslexia }),
+    },
+    {
+      key: "hideImages",
+      label: L.images,
+      icon: ImageOff,
+      active: s.hideImages,
+      onClick: () => update({ hideImages: !s.hideImages }),
+    },
+    {
+      key: "stopAnimations",
+      label: L.anim,
+      icon: PauseCircle,
+      active: s.stopAnimations,
+      onClick: () => update({ stopAnimations: !s.stopAnimations }),
+    },
     { key: "structure", label: L.structure, icon: Layers, active: false, onClick: openStructure },
-    { key: "tooltips", label: L.tooltips, icon: Info, active: s.tooltips, onClick: () => update({ tooltips: !s.tooltips }) },
-    { key: "bigCursor", label: L.cursor, icon: MousePointer2, active: s.bigCursor, onClick: () => update({ bigCursor: !s.bigCursor }) },
+    {
+      key: "bigCursor",
+      label: L.cursor,
+      icon: MousePointer2,
+      active: s.bigCursor,
+      onClick: () => update({ bigCursor: !s.bigCursor }),
+    },
     {
       key: "saturation",
       label: L.saturation,
@@ -233,8 +268,20 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       onClick: () => update({ align: (s.align + 1) % 3 }),
       hint: s.align === 1 ? L.start : s.align === 2 ? L.center : undefined,
     },
-    { key: "lineHeight", label: L.lineHeight, icon: MoveVertical, active: s.lineHeight, onClick: () => update({ lineHeight: !s.lineHeight }) },
-    { key: "guide", label: L.guide, icon: Ruler, active: s.readingGuide, onClick: () => update({ readingGuide: !s.readingGuide }) },
+    {
+      key: "lineHeight",
+      label: L.lineHeight,
+      icon: MoveVertical,
+      active: s.lineHeight,
+      onClick: () => update({ lineHeight: !s.lineHeight }),
+    },
+    {
+      key: "guide",
+      label: L.guide,
+      icon: Ruler,
+      active: s.readingGuide,
+      onClick: () => update({ readingGuide: !s.readingGuide }),
+    },
   ];
 
   return (
@@ -280,7 +327,9 @@ export function AccessibilityMenu({ className }: { className?: string }) {
                       : "border-border/70 bg-muted/40 text-foreground/80 hover:bg-muted"
                   }`}
                 >
-                  <Icon className={`h-5 w-5 ${tile.active ? "text-accent" : "text-foreground/70"}`} />
+                  <Icon
+                    className={`h-5 w-5 ${tile.active ? "text-accent" : "text-foreground/70"}`}
+                  />
                   <span className="text-[11px] font-medium leading-tight">{tile.label}</span>
                   {tile.hint ? (
                     <span className="text-[10px] font-semibold text-accent">{tile.hint}</span>
@@ -318,7 +367,11 @@ export function AccessibilityMenu({ className }: { className?: string }) {
               <p className="mb-2 font-semibold">{L.headings}</p>
               <ul className="space-y-1">
                 {outline?.headings.map((h, i) => (
-                  <li key={i} style={{ paddingInlineStart: `${(h.level - 1) * 12}px` }} className="text-muted-foreground">
+                  <li
+                    key={i}
+                    style={{ paddingInlineStart: `${(h.level - 1) * 12}px` }}
+                    className="text-muted-foreground"
+                  >
                     {h.text}
                   </li>
                 ))}
