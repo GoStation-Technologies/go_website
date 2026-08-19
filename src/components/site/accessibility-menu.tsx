@@ -209,7 +209,6 @@ export function AccessibilityMenu({ className }: { className?: string }) {
     { key: "hideImages", label: L.images, icon: ImageOff, active: s.hideImages, onClick: () => update({ hideImages: !s.hideImages }) },
     { key: "stopAnimations", label: L.anim, icon: PauseCircle, active: s.stopAnimations, onClick: () => update({ stopAnimations: !s.stopAnimations }) },
     { key: "structure", label: L.structure, icon: Layers, active: false, onClick: openStructure },
-    { key: "tooltips", label: L.tooltips, icon: Info, active: s.tooltips, onClick: () => update({ tooltips: !s.tooltips }) },
     { key: "bigCursor", label: L.cursor, icon: MousePointer2, active: s.bigCursor, onClick: () => update({ bigCursor: !s.bigCursor }) },
     {
       key: "saturation",
