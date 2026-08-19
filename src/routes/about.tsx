@@ -421,13 +421,13 @@ function ChairmanCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
         </div>
 
         {/* Image side */}
-        <div className="relative z-10 flex w-full items-end justify-center md:w-5/12 lg:w-1/3">
+        <div className="relative z-10 flex w-full items-end justify-end md:w-5/12 lg:w-1/3">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/20 via-transparent to-transparent opacity-60" />
           {leader.photo_url ? (
             <img
               src={leader.photo_url}
               alt={name}
-              className="relative z-10 max-h-80 w-auto object-contain drop-shadow-2xl md:max-h-[420px]"
+              className="relative z-10 max-h-72 w-auto max-w-full object-contain drop-shadow-2xl md:max-h-[320px]"
             />
           ) : (
             <div className="aspect-[3/4] w-full max-w-sm rounded-t-2xl bg-gradient-to-br from-primary-foreground/20 to-transparent" />
