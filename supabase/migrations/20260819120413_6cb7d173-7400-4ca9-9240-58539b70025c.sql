@@ -1,0 +1,1 @@
+update public.leaders set photo_url = '/__l5e/assets-v1/ffaa1f7d-63cd-473f-9459-4c1a66935137/chairman-cutout.png' where id = '89dfab7d-9491-49e6-8d54-6aa6b3411d9e';
