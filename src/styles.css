@@ -496,22 +496,6 @@ html.a11y-align-center body h3,
 html.a11y-align-center body h4 {
   text-align: center !important;
 }
-html.a11y-tooltips [aria-label]:hover::after,
-html.a11y-tooltips [title]:hover::after {
-  content: attr(aria-label) attr(title);
-  position: fixed;
-  z-index: 9999;
-  inset-block-end: 1rem;
-  inset-inline-start: 50%;
-  transform: translateX(-50%);
-  max-width: 90vw;
-  padding: 0.4rem 0.75rem;
-  border-radius: 0.5rem;
-  background: hsl(0 0% 8%);
-  color: #fff;
-  font-size: 0.85rem;
-  pointer-events: none;
-}
 html.a11y-reading-guide {
   cursor: none;
 }
