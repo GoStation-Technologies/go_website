@@ -13,7 +13,6 @@ import {
   Droplet,
   AlignLeft,
   MoveVertical,
-  Info,
   Layers,
   Ruler,
 } from "lucide-react";
@@ -37,7 +36,6 @@ type Settings = {
   saturation: number; // 0 off, 1 low, 2 grayscale
   lineHeight: boolean;
   align: number; // 0 off, 1 start, 2 center
-  tooltips: boolean;
   readingGuide: boolean;
 };
 
@@ -53,7 +51,6 @@ const DEFAULTS: Settings = {
   saturation: 0,
   lineHeight: false,
   align: 0,
-  tooltips: false,
   readingGuide: false,
 };
 
@@ -72,7 +69,6 @@ function apply(s: Settings) {
   el.classList.toggle("a11y-line-height", s.lineHeight);
   el.classList.toggle("a11y-align-start", s.align === 1);
   el.classList.toggle("a11y-align-center", s.align === 2);
-  el.classList.toggle("a11y-tooltips", s.tooltips);
   el.classList.toggle("a11y-reading-guide", s.readingGuide);
   el.style.setProperty("--a11y-text-scale", String(1 + s.textScale * 0.1));
 }
