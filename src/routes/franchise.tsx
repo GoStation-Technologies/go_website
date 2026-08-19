@@ -157,15 +157,6 @@ function FranchisePage() {
             </h2>
             <p className="mt-4 text-lg text-foreground/80">{t("franchise.about.quote")}</p>
             <p className="mt-3 text-muted-foreground">{t("franchise.about.body")}</p>
-            <p className="mt-6 font-semibold">{t("franchise.about.caption")}</p>
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent">
-                {t("franchise.about.statA")}
-              </span>
-              <span className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent">
-                {t("franchise.about.statB")}
-              </span>
-            </div>
           </div>
         </div>
       </section>
