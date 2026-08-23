@@ -220,6 +220,7 @@ function HomePage() {
               stats={stats.map((s, i) => ({
                 key: s.key,
                 val: s.val,
+                loading: "loading" in s ? s.loading : false,
                 label: t(`home.${s.key}`),
                 icon: [Fuel, MapPin, Droplet, Zap][i] ?? Fuel,
               }))}
