@@ -84,7 +84,14 @@ export function StatCards({ stats }: { stats: readonly Stat[] }) {
             {s.label}
           </div>
           <div className="mt-1.5 font-display text-3xl font-black leading-none tracking-tight text-primary md:text-[2.25rem]">
-            <CountUp value={s.val} />
+            {s.loading ? (
+              <span
+                aria-hidden
+                className="mx-auto block h-8 w-20 animate-pulse rounded-md bg-muted md:h-9"
+              />
+            ) : (
+              <CountUp value={s.val} />
+            )}
           </div>
         </div>
       ))}
