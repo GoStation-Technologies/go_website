@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 
-type Stat = { key: string; val: string; label: string; icon: LucideIcon };
+type Stat = { key: string; val: string; label: string; icon: LucideIcon; loading?: boolean };
 
 /** Parses "180+" / "3,500,000+" / "50k+" into numeric part + prefix/suffix. */
 function parse(val: string) {
