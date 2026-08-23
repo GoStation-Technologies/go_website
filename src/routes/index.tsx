@@ -42,6 +42,7 @@ import { MediaCarousel } from "@/components/site/media-carousel";
 import { VideoCard } from "@/components/site/video-card";
 import { JoinCta } from "@/components/site/join-cta";
 import { CoverageMap } from "@/components/site/coverage-map";
+import { getDataverseStats } from "@/lib/dataverse.functions";
 
 
 export const Route = createFileRoute("/")({
