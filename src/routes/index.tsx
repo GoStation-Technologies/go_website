@@ -105,10 +105,19 @@ function HomePage() {
     },
   });
 
+  const dataverse = useQuery({
+    queryKey: ["dataverse-stats"],
+    queryFn: () => getDataverseStats(),
+    staleTime: 5 * 60_000,
+    retry: 1,
+  });
+  const liveStations = dataverse.data?.stations ?? 180;
+  const liveRegions = dataverse.data?.regions ?? 13;
+
   const statsYearsValue = t("home.statsYearsValue");
   const stats = [
-    { key: "statsStations", val: "180+" },
-    { key: "statsRegions", val: "13" },
+    { key: "statsStations", val: `${liveStations}+`, loading: dataverse.isLoading },
+    { key: "statsRegions", val: `${liveRegions}`, loading: dataverse.isLoading },
     { key: "statsYears", val: statsYearsValue },
     { key: "statsDaily", val: "50k+" },
   ] as const;
