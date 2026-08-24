@@ -6,7 +6,8 @@ import { MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { regionForCity, fuelLabel, SAUDI_REGIONS } from "@/lib/regions";
+import { fuelLabel } from "@/lib/regions";
+import { useActiveStationRegions } from "@/hooks/use-station-stats";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -20,6 +21,7 @@ export function CoverageMap() {
   const ar = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar";
   const [region, setRegion] = useState("all");
   const [fuel, setFuel] = useState("all");
+  const { data: regions = [] } = useActiveStationRegions();
 
   const { data = [] } = useQuery({
     queryKey: ["stations"],
@@ -32,7 +34,7 @@ export function CoverageMap() {
   const points = useMemo(
     () =>
       data
-        .filter((s) => (region === "all" ? true : regionForCity(s.city_en, s.city_ar) === region))
+        .filter((s) => (region === "all" ? true : s.region_id === region))
         .filter((s) => (fuel === "all" ? true : (s.fuel_types ?? []).includes(fuel)))
         .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
         .map((s) => ({
@@ -47,6 +49,7 @@ export function CoverageMap() {
         })),
     [data, region, fuel, ar],
   );
+
 
   const fallback = (
     <div className="flex h-[420px] items-center justify-center bg-muted">
