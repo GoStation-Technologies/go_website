@@ -17,12 +17,12 @@ import { Route as LeasingRouteImport } from './routes/leasing'
 import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as FranchiseRouteImport } from './routes/franchise'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MediaIndexRouteImport } from './routes/media.index'
 import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-portal-9f4c2ab7.index'
+import { Route as CareersIndexRouteImport } from './routes/careers.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
 import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
 import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
@@ -81,11 +81,6 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CareersRoute = CareersRouteImport.update({
-  id: '/careers',
-  path: '/careers',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AcquisitionsRoute = AcquisitionsRouteImport.update({
   id: '/acquisitions',
   path: '/acquisitions',
@@ -112,6 +107,11 @@ const ManagePortal9f4c2ab7IndexRoute =
     path: '/',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const CareersIndexRoute = CareersIndexRouteImport.update({
+  id: '/careers/',
+  path: '/careers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediaSlugRoute = MediaSlugRouteImport.update({
   id: '/media/$slug',
   path: '/media/$slug',
@@ -178,9 +178,9 @@ const ManagePortal9f4c2ab7AbuseRoute =
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
 const CareersSlugRoute = CareersSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => CareersRoute,
+  id: '/careers/$slug',
+  path: '/careers/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
@@ -216,7 +216,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
@@ -239,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/careers/': typeof CareersIndexRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/media/': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -249,7 +249,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
@@ -271,6 +270,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/careers': typeof CareersIndexRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7IndexRoute
   '/media': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -282,7 +282,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
@@ -305,6 +304,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
   '/manage-portal-9f4c2ab7_/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/careers/': typeof CareersIndexRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/media/': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -317,7 +317,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/acquisitions'
-    | '/careers'
     | '/contact'
     | '/franchise'
     | '/investors'
@@ -340,6 +339,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/submissions'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
+    | '/careers/'
     | '/manage-portal-9f4c2ab7/'
     | '/media/'
     | '/.lovable/oauth/consent'
@@ -350,7 +350,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/acquisitions'
-    | '/careers'
     | '/contact'
     | '/franchise'
     | '/investors'
@@ -372,6 +371,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/submissions'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
+    | '/careers'
     | '/manage-portal-9f4c2ab7'
     | '/media'
     | '/.lovable/oauth/consent'
@@ -382,7 +382,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/acquisitions'
-    | '/careers'
     | '/contact'
     | '/franchise'
     | '/investors'
@@ -405,6 +404,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/submissions'
     | '/manage-portal-9f4c2ab7_/login'
     | '/media/$slug'
+    | '/careers/'
     | '/manage-portal-9f4c2ab7/'
     | '/media/'
     | '/.lovable/oauth/consent'
@@ -416,7 +416,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AcquisitionsRoute: typeof AcquisitionsRoute
-  CareersRoute: typeof CareersRouteWithChildren
   ContactRoute: typeof ContactRoute
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
@@ -427,8 +426,10 @@ export interface RootRouteChildren {
   StationsRoute: typeof StationsRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  CareersSlugRoute: typeof CareersSlugRoute
   ManagePortal9f4c2ab7LoginRoute: typeof ManagePortal9f4c2ab7LoginRoute
   MediaSlugRoute: typeof MediaSlugRoute
+  CareersIndexRoute: typeof CareersIndexRoute
   MediaIndexRoute: typeof MediaIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -493,13 +494,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/careers': {
-      id: '/careers'
-      path: '/careers'
-      fullPath: '/careers'
-      preLoaderRoute: typeof CareersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/acquisitions': {
       id: '/acquisitions'
       path: '/acquisitions'
@@ -534,6 +528,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/manage-portal-9f4c2ab7/'
       preLoaderRoute: typeof ManagePortal9f4c2ab7IndexRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/careers/': {
+      id: '/careers/'
+      path: '/careers'
+      fullPath: '/careers/'
+      preLoaderRoute: typeof CareersIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/media/$slug': {
       id: '/media/$slug'
@@ -614,10 +615,10 @@ declare module '@tanstack/react-router' {
     }
     '/careers/$slug': {
       id: '/careers/$slug'
-      path: '/$slug'
+      path: '/careers/$slug'
       fullPath: '/careers/$slug'
       preLoaderRoute: typeof CareersSlugRouteImport
-      parentRoute: typeof CareersRoute
+      parentRoute: typeof rootRouteImport
     }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
@@ -657,17 +658,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface CareersRouteChildren {
-  CareersSlugRoute: typeof CareersSlugRoute
-}
-
-const CareersRouteChildren: CareersRouteChildren = {
-  CareersSlugRoute: CareersSlugRoute,
-}
-
-const CareersRouteWithChildren =
-  CareersRoute._addFileChildren(CareersRouteChildren)
-
 interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7AbuseRoute: typeof ManagePortal9f4c2ab7AbuseRoute
   ManagePortal9f4c2ab7ApplicationsRoute: typeof ManagePortal9f4c2ab7ApplicationsRoute
@@ -702,7 +692,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AcquisitionsRoute: AcquisitionsRoute,
-  CareersRoute: CareersRouteWithChildren,
   ContactRoute: ContactRoute,
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
@@ -714,8 +703,10 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  CareersSlugRoute: CareersSlugRoute,
   ManagePortal9f4c2ab7LoginRoute: ManagePortal9f4c2ab7LoginRoute,
   MediaSlugRoute: MediaSlugRoute,
+  CareersIndexRoute: CareersIndexRoute,
   MediaIndexRoute: MediaIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
