@@ -70,6 +70,8 @@ export function fuelLabel(code: string, ar: boolean): string {
     "95": ["Gasoline 95", "بنزين 95"],
     "98": ["Gasoline 98", "بنزين 98"],
     diesel: ["Diesel", "ديزل"],
+    kerosene: ["Kerosene", "كيروسين"],
+    ev: ["EV Charging", "شحن كهربائي"],
   };
   const hit = map[code.toLowerCase()];
   return hit ? (ar ? hit[1] : hit[0]) : code;

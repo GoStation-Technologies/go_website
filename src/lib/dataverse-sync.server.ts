@@ -34,6 +34,26 @@ const STATUS_LABELS: Record<number, string> = {
   120870005: "اخرى",
 };
 
+/** Dataverse `ah_stationsitems` multi-select option set → internal fuel codes. */
+const FUEL_CODES: Record<number, string> = {
+  120870000: "91",
+  120870001: "95",
+  120870003: "98",
+  120870002: "diesel",
+  120870004: "kerosene",
+};
+
+/** Parse "120870000,120870001" into distinct internal fuel codes. */
+function parseFuelTypes(v: unknown): string[] {
+  if (typeof v !== "string" || !v.trim()) return [];
+  const out = new Set<string>();
+  for (const part of v.split(",")) {
+    const code = FUEL_CODES[Number(part.trim())];
+    if (code) out.add(code);
+  }
+  return [...out];
+}
+
 const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
 const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
 
@@ -155,6 +175,7 @@ export async function syncDataverseLocations(): Promise<SyncResult> {
         district_en: str(r["ah_district"]),
         address_ar: str(r["ah_street"]),
         address_en: str(r["ah_street"]),
+        fuel_types: parseFuelTypes(r["ah_stationsitems"]),
         lat: num(r["ah_latitudey"]),
         lng: num(r["ah_longitudex"]),
         status,
