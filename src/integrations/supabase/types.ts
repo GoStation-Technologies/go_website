@@ -1216,6 +1216,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      active_station_regions: {
+        Args: never
+        Returns: {
+          id: string
+          is_master_ksa: boolean
+          name: string
+          name_ar: string
+          name_en: string
+          stations_count: number
+        }[]
+      }
       export_jobs_lease: {
         Args: { _limit?: number }
         Returns: {
@@ -1256,6 +1267,13 @@ export type Database = {
       rate_limit_purge: {
         Args: { _older_than_seconds?: number }
         Returns: number
+      }
+      station_network_stats: {
+        Args: never
+        Returns: {
+          active_regions_count: number
+          stations_count: number
+        }[]
       }
       submit_acquisition_request: { Args: { payload: Json }; Returns: string }
       submit_contact_message: { Args: { payload: Json }; Returns: string }
