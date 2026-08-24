@@ -49,9 +49,9 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7")({
     }
   },
   loader: async () => {
-    const res = await getMyStaffRoles();
-    // Authenticated but not staff: no portal, no hints.
-    if (!res.roles.length) throw redirect({ to: "/" });
+    const res = await getMyAdminAccess();
+    // Authenticated but not staff, or admin profile disabled: no portal, no hints.
+    if (!res.roles.length || !res.isActive) throw redirect({ to: "/" });
     return { roles: res.roles };
   },
   component: AdminLayout,
