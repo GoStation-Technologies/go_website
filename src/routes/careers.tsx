@@ -357,6 +357,3 @@ function BannerStat({ icon, value, label }: { icon: React.ReactNode; value: stri
   );
 }
 
-function F({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="grid gap-1.5"><Label>{label}</Label>{children}</div>;
-}
