@@ -196,6 +196,8 @@ function StationsPage() {
                 <StationsMap
                   className="h-[480px] w-full"
                   points={mapPoints}
+                  userLocation={coords}
+                  userLabel={ar ? "موقعك الحالي" : "You are here"}
                 />
               </Suspense>
             </ClientOnly>
