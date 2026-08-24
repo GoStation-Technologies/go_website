@@ -125,10 +125,10 @@ function FranchisePage() {
           <p className="mt-4 max-w-2xl text-lg text-white/75">{t("franchise.intro")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <span className="rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-sm font-semibold text-white/90">
-              {t("franchise.about.statA")}
+              {t("franchise.about.statA", { stations: stationsCount })}
             </span>
             <span className="rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-sm font-semibold text-white/90">
-              {t("franchise.about.statB")}
+              {t("franchise.about.statB", { regions: activeRegionsCount })}
             </span>
           </div>
         </div>

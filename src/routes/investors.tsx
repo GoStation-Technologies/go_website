@@ -88,7 +88,7 @@ function IRPage() {
     },
     {
       label: t("investors.kpiStations"),
-      value: "180+",
+      value: `${stationsCount}+`,
       unit: lng === "ar" ? "محطة" : "stations",
       icon: "stations",
     },

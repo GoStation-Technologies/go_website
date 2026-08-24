@@ -77,7 +77,7 @@ function CareersPage() {
                   <BenefitItem
                     icon={<Network className="h-5 w-5" />}
                     title={t("careers.benefits.network.title")}
-                    body={t("careers.benefits.network.body")}
+                    body={t("careers.benefits.network.body", { stations: stationsCount, regions: activeRegionsCount })}
                   />
                   <BenefitItem
                     icon={<Users className="h-5 w-5" />}

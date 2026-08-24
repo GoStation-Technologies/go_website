@@ -161,7 +161,7 @@ function HomePage() {
             </h1>
 
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/80">
-              {t("home.heroSub")}
+              {t("home.heroSub", { stations: liveStations, regions: liveRegions })}
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
@@ -407,7 +407,7 @@ function HomePage() {
               {t("home.coverageTitle")}
             </h2>
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">
-              {t("home.coverageSub")}
+              {t("home.coverageSub", { stations: liveStations, regions: liveRegions })}
             </p>
             <Button
               asChild
