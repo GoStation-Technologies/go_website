@@ -210,9 +210,14 @@ function CareersPage() {
                         {closed ? (
                           <span className="text-xs text-muted-foreground">{t("careers.closed")}</span>
                         ) : (
-                          <ApplyDialog jobId={j.id} jobTitle={lng === "ar" ? j.title_ar : j.title_en} />
+                          <Link to="/careers/$slug" params={{ slug: j.slug }}>
+                            <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                              {t("careers.apply")}
+                            </Button>
+                          </Link>
                         )}
                       </td>
+
                     </tr>
                   );
                 })}
