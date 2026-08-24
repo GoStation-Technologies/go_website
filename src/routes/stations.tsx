@@ -139,12 +139,15 @@ function StationsPage() {
               ))}
             </SelectContent>
           </Select>
+          <Button variant="outline" size="sm" onClick={requestLocation} disabled={geoStatus === "prompting"}>
+            <LocateFixed className="me-1 h-4 w-4" />
+            {ar ? "موقعي الحالي" : "Use my location"}
+          </Button>
           {hasFilters && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
-                setQ("");
                 setRegion("all");
                 setFuel("all");
               }}
@@ -156,9 +159,26 @@ function StationsPage() {
           <div className="text-sm text-muted-foreground">{filtered.length} / {data.length}</div>
         </div>
 
+        {(geoStatus === "denied" || geoStatus === "unavailable") && (
+          <p className="mb-4 text-sm text-muted-foreground">
+            {ar
+              ? "تعذّر تحديد موقعك — يتم عرض جميع المحطات بالترتيب الأبجدي."
+              : "Location unavailable — showing all stations alphabetically."}
+          </p>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-          <Card className="min-h-[480px] overflow-hidden p-0">
+          <Card className="relative min-h-[480px] overflow-hidden p-0">
+            <Button
+              type="button"
+              size="icon"
+              variant="secondary"
+              aria-label={ar ? "موقعي الحالي" : "Use my location"}
+              onClick={requestLocation}
+              className="absolute end-3 top-3 z-[1000] h-9 w-9 rounded-full shadow-md"
+            >
+              <Navigation className="h-4 w-4" />
+            </Button>
             <ClientOnly
               fallback={
                 <div className="flex h-[480px] items-center justify-center bg-muted">
