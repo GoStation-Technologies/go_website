@@ -15,6 +15,9 @@ type Props = {
   center?: [number, number];
   zoom?: number;
   onSelect?: (id: string) => void;
+  /** Current user position — rendered as a distinct blue pin, map pans to it. */
+  userLocation?: { lat: number; lng: number } | null;
+  userLabel?: string;
 };
 
 /**
@@ -27,6 +30,8 @@ export function StationsMap({
   center = [24.7136, 46.6753], // Riyadh
   zoom = 6,
   onSelect,
+  userLocation = null,
+  userLabel = "You are here",
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<unknown>(null);
@@ -91,10 +96,26 @@ export function StationsMap({
           if (onSelect) m.on("click", () => onSelect(p.id));
           return m;
         });
-      const group = L.layerGroup(markers).addTo(map);
+      const layers = [...markers];
+
+      if (userLocation && Number.isFinite(userLocation.lat) && Number.isFinite(userLocation.lng)) {
+        const userIcon = L.divIcon({
+          className: "gs-marker",
+          html: `<span class="gs-user-dot"></span><span class="gs-user-pulse"></span>`,
+          iconSize: [20, 20],
+          iconAnchor: [10, 10],
+        });
+        const um = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon, title: userLabel });
+        um.bindPopup(`<strong>${escapeHtml(userLabel)}</strong>`);
+        layers.push(um);
+      }
+
+      const group = L.layerGroup(layers).addTo(map);
       layerRef.current = group;
 
-      if (markers.length) {
+      if (userLocation) {
+        map.setView([userLocation.lat, userLocation.lng], 11);
+      } else if (markers.length) {
         const bounds = L.latLngBounds(markers.map((m) => m.getLatLng()));
         map.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
       }
@@ -103,7 +124,7 @@ export function StationsMap({
     return () => {
       cancelled = true;
     };
-  }, [points, center, zoom, onSelect]);
+  }, [points, center, zoom, onSelect, userLocation, userLabel]);
 
   useEffect(() => {
     return () => {

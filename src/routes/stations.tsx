@@ -7,14 +7,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Fuel, Search, Star, Clock, X } from "lucide-react";
+import { MapPin, Fuel, Star, Clock, X, LocateFixed, Navigation } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
 import { fuelLabel } from "@/lib/regions";
 import { useActiveStationRegions } from "@/hooks/use-station-stats";
+import { useGeolocation } from "@/hooks/use-geolocation";
+import { haversineKm, formatDistance } from "@/lib/geo";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -36,7 +37,6 @@ function StationsPage() {
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const ar = lng === "ar";
-  const [q, setQ] = useState("");
   const [region, setRegion] = useState("all");
   const [fuel, setFuel] = useState("all");
   const { data = [] } = useQuery({
@@ -59,13 +59,33 @@ function StationsPage() {
     return [...set].sort();
   }, [data]);
 
-  const filtered = data.filter((s) => {
-    const hay = [s.city_ar, s.city_en, s.district_ar, s.district_en, s.name_ar, s.name_en].filter(Boolean).join(" ").toLowerCase();
-    if (!hay.includes(q.toLowerCase())) return false;
-    if (region !== "all" && s.region_id !== region) return false;
-    if (fuel !== "all" && !(s.fuel_types ?? []).includes(fuel)) return false;
-    return true;
-  });
+  const { coords, status: geoStatus, request: requestLocation } = useGeolocation(true);
+
+  const filtered = useMemo(() => {
+    const list = data
+      .filter((s) => {
+        if (region !== "all" && s.region_id !== region) return false;
+        if (fuel !== "all" && !(s.fuel_types ?? []).includes(fuel)) return false;
+        return true;
+      })
+      .map((s) => ({
+        ...s,
+        distanceKm:
+          coords && typeof s.lat === "number" && typeof s.lng === "number"
+            ? haversineKm(coords, { lat: s.lat, lng: s.lng })
+            : null,
+      }));
+
+    if (coords) {
+      return list.sort(
+        (a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity),
+      );
+    }
+    return list.sort((a, b) =>
+      ((ar ? a.name_ar : a.name_en) ?? "").localeCompare((ar ? b.name_ar : b.name_en) ?? "", ar ? "ar" : "en"),
+    );
+  }, [data, region, fuel, coords, ar]);
+
 
   const mapPoints = useMemo(
     () =>
@@ -84,7 +104,7 @@ function StationsPage() {
     [filtered, lng],
   );
 
-  const hasFilters = region !== "all" || fuel !== "all" || q !== "";
+  const hasFilters = region !== "all" || fuel !== "all";
 
   return (
     <SiteLayout>
@@ -97,10 +117,6 @@ function StationsPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="mb-6 flex flex-wrap items-center gap-3">
-          <div className="relative min-w-[220px] flex-1 max-w-md">
-            <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("stations.search")} className="ps-9" />
-          </div>
           <Select value={region} onValueChange={setRegion}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder={ar ? "المنطقة" : "Region"} />
@@ -123,12 +139,15 @@ function StationsPage() {
               ))}
             </SelectContent>
           </Select>
+          <Button variant="outline" size="sm" onClick={requestLocation} disabled={geoStatus === "prompting"}>
+            <LocateFixed className="me-1 h-4 w-4" />
+            {ar ? "موقعي الحالي" : "Use my location"}
+          </Button>
           {hasFilters && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
-                setQ("");
                 setRegion("all");
                 setFuel("all");
               }}
@@ -140,9 +159,26 @@ function StationsPage() {
           <div className="text-sm text-muted-foreground">{filtered.length} / {data.length}</div>
         </div>
 
+        {(geoStatus === "denied" || geoStatus === "unavailable") && (
+          <p className="mb-4 text-sm text-muted-foreground">
+            {ar
+              ? "تعذّر تحديد موقعك — يتم عرض جميع المحطات بالترتيب الأبجدي."
+              : "Location unavailable — showing all stations alphabetically."}
+          </p>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-          <Card className="min-h-[480px] overflow-hidden p-0">
+          <Card className="relative min-h-[480px] overflow-hidden p-0">
+            <Button
+              type="button"
+              size="icon"
+              variant="secondary"
+              aria-label={ar ? "موقعي الحالي" : "Use my location"}
+              onClick={requestLocation}
+              className="absolute end-3 top-3 z-[1000] h-9 w-9 rounded-full shadow-md"
+            >
+              <Navigation className="h-4 w-4" />
+            </Button>
             <ClientOnly
               fallback={
                 <div className="flex h-[480px] items-center justify-center bg-muted">
@@ -160,6 +196,8 @@ function StationsPage() {
                 <StationsMap
                   className="h-[480px] w-full"
                   points={mapPoints}
+                  userLocation={coords}
+                  userLabel={ar ? "موقعك الحالي" : "You are here"}
                 />
               </Suspense>
             </ClientOnly>
@@ -172,6 +210,12 @@ function StationsPage() {
                     <div>
                       <h3 className="font-semibold">{lng === "ar" ? s.name_ar : s.name_en}</h3>
                       <p className="text-xs text-muted-foreground">{lng === "ar" ? `${s.city_ar} · ${s.district_ar ?? ""}` : `${s.city_en} · ${s.district_en ?? ""}`}</p>
+                      {s.distanceKm != null && (
+                        <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-accent">
+                          <Navigation className="h-3 w-3" />
+                          {formatDistance(s.distanceKm, ar)}
+                        </p>
+                      )}
                     </div>
                     {s.is_24h && <Badge className="bg-accent text-accent-foreground"><Clock className="me-1 h-3 w-3" />{t("stations.open24")}</Badge>}
                   </div>

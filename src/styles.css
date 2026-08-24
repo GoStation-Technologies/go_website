@@ -446,6 +446,28 @@ html[dir="rtl"] .animate-wave-flow-slow {
   background: color-mix(in oklab, var(--ember) 45%, transparent);
   animation: pulse-glow 2.2s ease-in-out infinite;
 }
+.gs-user-dot {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #2563eb;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px color-mix(in oklab, var(--ink) 45%, transparent);
+  z-index: 2;
+}
+.gs-user-pulse {
+  position: absolute;
+  inset: -8px;
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  background: color-mix(in oklab, #2563eb 35%, transparent);
+  animation: pulse-glow 2.2s ease-in-out infinite;
+}
 .leaflet-container {
   font-family: var(--font-sans);
   border-radius: 12px;
