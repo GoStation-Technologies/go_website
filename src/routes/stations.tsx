@@ -37,7 +37,6 @@ function StationsPage() {
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const ar = lng === "ar";
-  const [q, setQ] = useState("");
   const [region, setRegion] = useState("all");
   const [fuel, setFuel] = useState("all");
   const { data = [] } = useQuery({
