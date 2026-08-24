@@ -452,6 +452,15 @@ export const en = {
     openUntilFurther: "Open",
     closed: "Closed",
     position: "Position applied for",
+    viewDetails: "View details",
+    detail: {
+      back: "Back to all jobs",
+      overview: "Job description",
+      responsibilities: "Responsibilities",
+      requirements: "Requirements",
+      applyExternal: "Apply for this job",
+      notFound: "This job posting is no longer available.",
+    },
     formIntro: "Fill in your details and upload your CV — it goes straight to the Human Resources team.",
     hrNote: "Your application is sent directly to GoStation Human Resources.",
     benefits: {
