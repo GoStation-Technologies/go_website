@@ -1,20 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { submitJobApplication } from "@/lib/careers.functions";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { toast } from "sonner";
 import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud, Network, Users, BadgeCheck, TrendingUp, Send } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
+
 
 export const Route = createFileRoute("/careers")({
   component: CareersPage,
@@ -210,9 +204,14 @@ function CareersPage() {
                         {closed ? (
                           <span className="text-xs text-muted-foreground">{t("careers.closed")}</span>
                         ) : (
-                          <ApplyDialog jobId={j.id} jobTitle={lng === "ar" ? j.title_ar : j.title_en} />
+                          <Link to="/careers/$slug" params={{ slug: j.slug }}>
+                            <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                              {t("careers.apply")}
+                            </Button>
+                          </Link>
                         )}
                       </td>
+
                     </tr>
                   );
                 })}
@@ -225,105 +224,8 @@ function CareersPage() {
   );
 }
 
-const MAX_CV_BYTES = 4 * 1024 * 1024;
 
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("read_failed"));
-    reader.onload = () => {
-      const result = String(reader.result ?? "");
-      resolve(result.slice(result.indexOf(",") + 1));
-    };
-    reader.readAsDataURL(file);
-  });
-}
 
-function ApplyDialog({ jobId, jobTitle }: { jobId: string; jobTitle: string }) {
-  const { t } = useTranslation();
-  const [busy, setBusy] = useState(false);
-  const [ref, setRef] = useState<string | null>(null);
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const file = fd.get("cv") as File | null;
-    if (file && file.size > MAX_CV_BYTES) return toast.error(t("careers.cvTooLarge"));
-    setBusy(true);
-    try {
-      const cv =
-        file && file.size > 0
-          ? { name: file.name, type: file.type || "application/pdf", data: await fileToBase64(file) }
-          : null;
-      const res = await submitJobApplication({
-        data: {
-          job_id: jobId,
-          full_name: String(fd.get("name")),
-          email: String(fd.get("email")),
-          phone: String(fd.get("phone")),
-          linkedin_url: String(fd.get("linkedin") ?? ""),
-          cover_letter: String(fd.get("cover") ?? ""),
-          cv,
-        },
-      });
-      setRef(res.reference);
-      toast.success(t("common.thanks"));
-    } catch {
-      toast.error(t("common.error"));
-    } finally {
-      setBusy(false);
-    }
-  };
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
-          {t("careers.apply")}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{jobTitle}</DialogTitle>
-        </DialogHeader>
-        {ref ? (
-          <div className="p-2 text-center">
-            <p className="text-sm">{t("common.thanks")}</p>
-            <p className="mt-1 text-sm">
-              {t("common.referenceSaved")} <span className="font-mono">{ref}</span>
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">{t("careers.hrNote")}</p>
-          </div>
-        ) : (
-          <form onSubmit={submit} className="grid gap-3">
-            <p className="text-sm text-muted-foreground">{t("careers.formIntro")}</p>
-            <F label={t("careers.position")}>
-              <Input
-                name="position"
-                value={jobTitle}
-                readOnly
-                aria-readonly="true"
-                className="bg-muted/60 font-medium text-foreground"
-              />
-            </F>
-            <F label={t("common.fullName")}><Input name="name" required /></F>
-            <F label={t("common.email")}><Input type="email" name="email" required /></F>
-            <F label={t("common.phone")}><Input name="phone" required /></F>
-            <F label="LinkedIn URL"><Input name="linkedin" /></F>
-            <F label={t("careers.cv")}>
-              <div className="flex items-center gap-2 rounded-md border border-dashed p-2">
-                <UploadCloud className="h-4 w-4 text-muted-foreground" />
-                <Input type="file" name="cv" accept=".pdf,.doc,.docx" className="border-0 p-0 shadow-none" />
-              </div>
-            </F>
-            <F label={t("careers.coverLetter")}><Textarea rows={4} name="cover" /></F>
-            <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
-              {busy ? t("common.submitting") : t("common.submit")}
-            </Button>
-          </form>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-}
 function BenefitItem({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
     <div className="group flex items-start gap-4 border-b border-primary-foreground/10 py-3.5 transition-colors duration-300 last:border-b-0 hover:border-primary-foreground/20">
@@ -352,6 +254,3 @@ function BannerStat({ icon, value, label }: { icon: React.ReactNode; value: stri
   );
 }
 
-function F({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="grid gap-1.5"><Label>{label}</Label>{children}</div>;
-}

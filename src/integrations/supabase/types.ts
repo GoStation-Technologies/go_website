@@ -602,6 +602,7 @@ export type Database = {
       }
       job_openings: {
         Row: {
+          apply_url: string | null
           city: string
           city_ar: string | null
           city_en: string | null
@@ -616,12 +617,17 @@ export type Database = {
           id: string
           is_active: boolean
           posted_at: string
+          requirements_ar: string | null
+          requirements_en: string | null
+          responsibilities_ar: string | null
+          responsibilities_en: string | null
           slug: string
           title_ar: string
           title_en: string
           updated_at: string
         }
         Insert: {
+          apply_url?: string | null
           city: string
           city_ar?: string | null
           city_en?: string | null
@@ -636,12 +642,17 @@ export type Database = {
           id?: string
           is_active?: boolean
           posted_at?: string
+          requirements_ar?: string | null
+          requirements_en?: string | null
+          responsibilities_ar?: string | null
+          responsibilities_en?: string | null
           slug: string
           title_ar: string
           title_en: string
           updated_at?: string
         }
         Update: {
+          apply_url?: string | null
           city?: string
           city_ar?: string | null
           city_en?: string | null
@@ -656,6 +667,10 @@ export type Database = {
           id?: string
           is_active?: boolean
           posted_at?: string
+          requirements_ar?: string | null
+          requirements_en?: string | null
+          responsibilities_ar?: string | null
+          responsibilities_en?: string | null
           slug?: string
           title_ar?: string
           title_en?: string
