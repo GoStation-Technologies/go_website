@@ -170,6 +170,12 @@ async function sendSms(db: Db, phone: string, code: string) {
   const dest = phone.replace(/[^\d]/g, "");
 
   try {
+    console.info("[sms-diagnostic] outgoing request", {
+      url,
+      src: sender,
+      dests: [dest],
+      tokenLength: token.length,
+    });
     const res = await fetch(url, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -187,6 +193,10 @@ async function sendSms(db: Db, phone: string, code: string) {
     });
     statusCode = res.status;
     responseBody = (await res.text()).slice(0, 2000);
+    console.info("[sms-diagnostic] provider response", {
+      status: statusCode,
+      responseText: responseBody,
+    });
     let accepted = 0;
     try {
       const parsed = JSON.parse(responseBody) as { jobId?: unknown; accepted?: unknown };
