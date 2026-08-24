@@ -117,10 +117,6 @@ function StationsPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="mb-6 flex flex-wrap items-center gap-3">
-          <div className="relative min-w-[220px] flex-1 max-w-md">
-            <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("stations.search")} className="ps-9" />
-          </div>
           <Select value={region} onValueChange={setRegion}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder={ar ? "المنطقة" : "Region"} />
