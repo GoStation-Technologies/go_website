@@ -10,7 +10,7 @@ import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud, Network, User
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 
 
-export const Route = createFileRoute("/careers")({
+export const Route = createFileRoute("/careers/")({
   component: CareersPage,
   head: () =>
     pageHead({
