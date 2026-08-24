@@ -90,7 +90,7 @@ export function CoverageMap() {
           </SelectTrigger>
           <SelectContent className="z-[2000]">
             <SelectItem value="all">{ar ? "كل الأنواع" : "All fuel types"}</SelectItem>
-            {FUEL_CODES.map((f) => (
+            {fuelOptions.map((f) => (
               <SelectItem key={f} value={f}>
                 {fuelLabel(f, ar)}
               </SelectItem>
