@@ -49,7 +49,7 @@ export const en = {
     heroLine2: "A station and more.",
     heroTitle: "GoStation... A station and more",
     heroSub:
-      "180+ stations across 13 regions. GoStation is redefining what a fuel station means in the Kingdom — fuel, retail, fleet, and franchise, engineered for 2026.",
+      "{{stations}}+ stations across {{regions}} regions. GoStation is redefining what a fuel station means in the Kingdom — fuel, retail, fleet, and franchise, engineered for 2026.",
     trustedBy: "Trusted across the Kingdom",
     ctaFranchise: "Invest with GoStation",
     ctaAcquisition: "Acquisitions",
@@ -102,7 +102,7 @@ export const en = {
     coverageEyebrow: "Coverage",
     coverageTitle: "From Riyadh to the borders of the Kingdom.",
     coverageSub:
-      "180+ stations spanning 13 regions — with strategic new sites launching every quarter as part of Vision 2030.",
+      "{{stations}}+ stations spanning {{regions}} regions — with strategic new sites launching every quarter as part of Vision 2030.",
     valuesEyebrow: "What we stand for",
     valuesTitle: "Four values. One promise.",
     valuesSub:
@@ -253,7 +253,7 @@ export const en = {
       },
       m6: {
         title: "A national network",
-        body: "180+ stations across 13 regions and more than 800 million litres of fuel sold — and the journey continues.",
+        body: "{{stations}}+ stations across {{regions}} regions and more than 800 million litres of fuel sold — and the journey continues.",
       },
     },
   },
@@ -331,9 +331,9 @@ export const en = {
       quote:
         "A GoStation franchise gives you a complete station with a strong brand and a proven operating model — from fuel supply to the convenience store and auto-care services.",
       body: "We support you across site selection, design, build-out, operations and marketing, with digital systems for sales, inventory and loyalty — and a team beside you from day one.",
-      caption: "A franchise model built on 180+ stations across 13 regions",
-      statA: "180+ stations",
-      statB: "13 regions",
+      caption: "A franchise model built on {{stations}}+ stations across {{regions}} regions",
+      statA: "{{stations}}+ stations",
+      statB: "{{regions}} regions",
       cta: "Join the franchise",
       imgAlt: "GoStation fuel station",
     },
@@ -465,7 +465,7 @@ export const en = {
     hrNote: "Your application is sent directly to GoStation Human Resources.",
     benefits: {
       title: "Why GoStation?",
-      network: { title: "National network", body: "180+ stations across 13 regions — a stable platform for career growth." },
+      network: { title: "National network", body: "{{stations}}+ stations across {{regions}} regions — a stable platform for career growth." },
       environment: { title: "Professional environment", body: "A collaborative culture, integrated teams, and room for ownership and creativity." },
       rewards: { title: "Competitive rewards", body: "Attractive salaries, performance incentives, and health coverage for you and your family." },
       growth: { title: "Continuous growth", body: "Training programs, clear promotion paths, and specialization opportunities in every department." },
