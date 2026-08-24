@@ -7,14 +7,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Fuel, Search, Star, Clock, X } from "lucide-react";
+import { MapPin, Fuel, Star, Clock, X, LocateFixed, Navigation } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
 import { fuelLabel } from "@/lib/regions";
 import { useActiveStationRegions } from "@/hooks/use-station-stats";
+import { useGeolocation } from "@/hooks/use-geolocation";
+import { haversineKm, formatDistance } from "@/lib/geo";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
