@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useStationStats } from "@/hooks/use-station-stats";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/investors")({
 
 function IRPage() {
   const { t, i18n } = useTranslation();
+  const { stationsCount, activeRegionsCount } = useStationStats();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const { data: reports = [] } = useQuery({
     queryKey: ["reports"],

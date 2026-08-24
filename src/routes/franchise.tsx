@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useStationStats } from "@/hooks/use-station-stats";
 import { submitFranchiseApplication } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/franchise")({
 
 function FranchisePage() {
   const { t } = useTranslation();
+  const { stationsCount, activeRegionsCount } = useStationStats();
   const [step, setStep] = useState<0 | 1 | 2>(0);
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
