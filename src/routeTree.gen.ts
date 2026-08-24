@@ -34,6 +34,7 @@ import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage
 import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
 import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
 import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
+import { Route as CareersSlugRouteImport } from './routes/careers.$slug'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
@@ -176,6 +177,11 @@ const ManagePortal9f4c2ab7AbuseRoute =
     path: '/abuse',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const CareersSlugRoute = CareersSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => CareersRoute,
+} as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
     id: '/.well-known/oauth-protected-resource',
@@ -210,7 +216,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/careers': typeof CareersRoute
+  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
@@ -221,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/stations': typeof StationsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/careers/$slug': typeof CareersSlugRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -242,7 +249,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/careers': typeof CareersRoute
+  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
@@ -252,6 +259,7 @@ export interface FileRoutesByTo {
   '/stations': typeof StationsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/careers/$slug': typeof CareersSlugRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -274,7 +282,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/acquisitions': typeof AcquisitionsRoute
-  '/careers': typeof CareersRoute
+  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/franchise': typeof FranchiseRoute
   '/investors': typeof InvestorsRoute
@@ -285,6 +293,7 @@ export interface FileRoutesById {
   '/stations': typeof StationsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/careers/$slug': typeof CareersSlugRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -319,6 +328,7 @@ export interface FileRouteTypes {
     | '/stations'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/careers/$slug'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -350,6 +360,7 @@ export interface FileRouteTypes {
     | '/stations'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/careers/$slug'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -382,6 +393,7 @@ export interface FileRouteTypes {
     | '/stations'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/careers/$slug'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -404,7 +416,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AcquisitionsRoute: typeof AcquisitionsRoute
-  CareersRoute: typeof CareersRoute
+  CareersRoute: typeof CareersRouteWithChildren
   ContactRoute: typeof ContactRoute
   FranchiseRoute: typeof FranchiseRoute
   InvestorsRoute: typeof InvestorsRoute
@@ -600,6 +612,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7AbuseRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/careers/$slug': {
+      id: '/careers/$slug'
+      path: '/$slug'
+      fullPath: '/careers/$slug'
+      preLoaderRoute: typeof CareersSlugRouteImport
+      parentRoute: typeof CareersRoute
+    }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
       path: '/.well-known/oauth-protected-resource'
@@ -638,6 +657,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface CareersRouteChildren {
+  CareersSlugRoute: typeof CareersSlugRoute
+}
+
+const CareersRouteChildren: CareersRouteChildren = {
+  CareersSlugRoute: CareersSlugRoute,
+}
+
+const CareersRouteWithChildren =
+  CareersRoute._addFileChildren(CareersRouteChildren)
+
 interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7AbuseRoute: typeof ManagePortal9f4c2ab7AbuseRoute
   ManagePortal9f4c2ab7ApplicationsRoute: typeof ManagePortal9f4c2ab7ApplicationsRoute
@@ -672,7 +702,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AcquisitionsRoute: AcquisitionsRoute,
-  CareersRoute: CareersRoute,
+  CareersRoute: CareersRouteWithChildren,
   ContactRoute: ContactRoute,
   FranchiseRoute: FranchiseRoute,
   InvestorsRoute: InvestorsRoute,
