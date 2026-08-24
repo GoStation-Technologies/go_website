@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect, useRouter } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
-import { getMyStaffRoles } from "@/lib/admin.functions";
+import { getMyAdminAccess } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { LogOut, Globe } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
