@@ -3,7 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-export const OTP_TTL_SECONDS = 600;
+export const OTP_TTL_SECONDS = 180;
 const RESEND_COOLDOWN_SECONDS = 60;
 const MAX_OTP_PER_HOUR = 10;
 const MAX_FAILED_LOGINS = 10;
