@@ -42,7 +42,7 @@ import { MediaCarousel } from "@/components/site/media-carousel";
 import { VideoCard } from "@/components/site/video-card";
 import { JoinCta } from "@/components/site/join-cta";
 import { CoverageMap } from "@/components/site/coverage-map";
-import { getDataverseStats } from "@/lib/dataverse.functions";
+import { useStationStats } from "@/hooks/use-station-stats";
 
 
 export const Route = createFileRoute("/")({
@@ -53,13 +53,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "GoStation — the fastest-growing fuel network in Saudi Arabia. 180+ stations, 13 regions, and a full station experience: fuel, retail, fleet, and franchise.",
+          "GoStation — the fastest-growing fuel network in Saudi Arabia. 193+ stations across 56 areas, and a full station experience: fuel, retail, fleet, and franchise.",
       },
       { property: "og:title", content: "GoStation — A station and more" },
       {
         property: "og:description",
         content:
-          "180+ stations. 13 regions. One brand redefining the Saudi station experience.",
+          "193+ stations. 56 areas. One brand redefining the Saudi station experience.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://org-story-weaver.lovable.app/" },
@@ -106,19 +106,13 @@ function HomePage() {
     },
   });
 
-  const dataverse = useQuery({
-    queryKey: ["dataverse-stats"],
-    queryFn: () => getDataverseStats(),
-    staleTime: 5 * 60_000,
-    retry: 1,
-  });
-  const liveStations = dataverse.data?.stations ?? 180;
-  const liveRegions = dataverse.data?.regions ?? 13;
+  const { stationsCount: liveStations, activeRegionsCount: liveRegions, isLoading: statsLoading } =
+    useStationStats();
 
   const statsYearsValue = t("home.statsYearsValue");
   const stats = [
-    { key: "statsStations", val: `${liveStations}+`, loading: dataverse.isLoading },
-    { key: "statsRegions", val: `${liveRegions}`, loading: dataverse.isLoading },
+    { key: "statsStations", val: `${liveStations}+`, loading: statsLoading },
+    { key: "statsRegions", val: `${liveRegions}`, loading: statsLoading },
     { key: "statsYears", val: statsYearsValue },
     { key: "statsDaily", val: "50k+" },
   ] as const;

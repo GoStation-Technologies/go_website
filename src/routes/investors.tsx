@@ -35,7 +35,7 @@ export const Route = createFileRoute("/investors")({
 
 function IRPage() {
   const { t, i18n } = useTranslation();
-  const { stationsCount, activeRegionsCount } = useStationStats();
+  const { stationsCount } = useStationStats();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const { data: reports = [] } = useQuery({
     queryKey: ["reports"],
