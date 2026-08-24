@@ -15,6 +15,9 @@ type Props = {
   center?: [number, number];
   zoom?: number;
   onSelect?: (id: string) => void;
+  /** Current user position — rendered as a distinct blue pin, map pans to it. */
+  userLocation?: { lat: number; lng: number } | null;
+  userLabel?: string;
 };
 
 /**
