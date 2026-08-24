@@ -116,6 +116,12 @@ function CareersPage() {
               <Field label={t("admin.careers.f.closingDate")}><Input type="date" className={inputCls} value={form.closing_date ?? ""} onChange={(e) => setForm({ ...form, closing_date: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.descriptionEn")} lang="en"><Textarea className={inputCls} rows={5} value={form.description_en ?? ""} onChange={(e) => setForm({ ...form, description_en: e.target.value })} /></Field>
               <Field label={t("admin.careers.f.descriptionAr")} lang="ar"><Textarea className={inputCls} dir="rtl" rows={5} value={form.description_ar ?? ""} onChange={(e) => setForm({ ...form, description_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.responsibilitiesEn")} lang="en"><Textarea className={inputCls} rows={5} value={form.responsibilities_en ?? ""} onChange={(e) => setForm({ ...form, responsibilities_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.responsibilitiesAr")} lang="ar"><Textarea className={inputCls} dir="rtl" rows={5} value={form.responsibilities_ar ?? ""} onChange={(e) => setForm({ ...form, responsibilities_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.requirementsEn")} lang="en"><Textarea className={inputCls} rows={5} value={form.requirements_en ?? ""} onChange={(e) => setForm({ ...form, requirements_en: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.requirementsAr")} lang="ar"><Textarea className={inputCls} dir="rtl" rows={5} value={form.requirements_ar ?? ""} onChange={(e) => setForm({ ...form, requirements_ar: e.target.value })} /></Field>
+              <Field label={t("admin.careers.f.applyUrl")} className="sm:col-span-2"><Input className={inputCls} dir="ltr" placeholder="https://" value={form.apply_url ?? ""} onChange={(e) => setForm({ ...form, apply_url: e.target.value })} /></Field>
+
               <FormRow>
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />{t("admin.careers.f.activeHint")}</label>
               </FormRow>
