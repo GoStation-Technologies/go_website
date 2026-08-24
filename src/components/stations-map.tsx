@@ -30,6 +30,8 @@ export function StationsMap({
   center = [24.7136, 46.6753], // Riyadh
   zoom = 6,
   onSelect,
+  userLocation = null,
+  userLabel = "You are here",
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<unknown>(null);
