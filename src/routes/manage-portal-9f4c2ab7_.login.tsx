@@ -51,11 +51,17 @@ function AdminLoginPage() {
     // Always use client-side routing. A hard reload here (window.location)
     // can re-enter a partially-invalidated module graph and throw
     // "Cannot read properties of null (reading 'useContext')".
-    const safe =
+    const target =
       redirectTo && redirectTo.startsWith("/manage-portal-9f4c2ab7")
         ? redirectTo
         : "/manage-portal-9f4c2ab7";
-    navigate({ to: safe, replace: true });
+    const [pathname, search] = target.split("?");
+    navigate({
+      to: pathname ?? "/manage-portal-9f4c2ab7",
+      search: search ? Object.fromEntries(new URLSearchParams(search)) : undefined,
+      replace: true,
+    } as never);
+
   }, [navigate, redirectTo]);
 
 
