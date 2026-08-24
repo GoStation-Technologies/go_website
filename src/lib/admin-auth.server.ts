@@ -81,7 +81,7 @@ export function timingSafeEqualHex(a: string, b: string): boolean {
 function generateCode(): string {
   const buf = new Uint32Array(1);
   crypto.getRandomValues(buf);
-  return String(buf[0]! % 1_000_000).padStart(6, "0");
+  return String((buf[0] ?? 0) % 1_000_000).padStart(6, "0");
 }
 
 export function maskPhone(phone: string): string {
@@ -177,15 +177,23 @@ async function sendSms(db: Db, phone: string, code: string) {
         src: sender,
         body: `Your verification code is: ${code}`,
         dests: [dest],
+        // OTP traffic must use the transactional route. Requesting DLRs also
+        // lets the provider expose carrier-level delivery failures for the job.
+        msgClass: "transactional",
+        dlr: true,
+        details: true,
+        secure: true,
       }),
     });
     statusCode = res.status;
     responseBody = (await res.text()).slice(0, 2000);
+    let accepted = 0;
     try {
-      const parsed = JSON.parse(responseBody) as { jobId?: unknown };
+      const parsed = JSON.parse(responseBody) as { jobId?: unknown; accepted?: unknown };
       if (parsed && typeof parsed.jobId !== "undefined" && parsed.jobId !== null) {
         jobId = String(parsed.jobId);
       }
+      accepted = typeof parsed.accepted === "number" ? parsed.accepted : 0;
     } catch {
       /* non-JSON response */
     }
@@ -196,7 +204,7 @@ async function sendSms(db: Db, phone: string, code: string) {
       response_body: responseBody,
       job_id: jobId,
     });
-    return res.ok;
+    return res.ok && accepted > 0 && Boolean(jobId);
   } catch (err) {
     await db.from("sms_logs").insert({
       phone,
