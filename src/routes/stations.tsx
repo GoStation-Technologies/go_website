@@ -59,13 +59,33 @@ function StationsPage() {
     return [...set].sort();
   }, [data]);
 
-  const filtered = data.filter((s) => {
-    const hay = [s.city_ar, s.city_en, s.district_ar, s.district_en, s.name_ar, s.name_en].filter(Boolean).join(" ").toLowerCase();
-    if (!hay.includes(q.toLowerCase())) return false;
-    if (region !== "all" && s.region_id !== region) return false;
-    if (fuel !== "all" && !(s.fuel_types ?? []).includes(fuel)) return false;
-    return true;
-  });
+  const { coords, status: geoStatus, request: requestLocation } = useGeolocation(true);
+
+  const filtered = useMemo(() => {
+    const list = data
+      .filter((s) => {
+        if (region !== "all" && s.region_id !== region) return false;
+        if (fuel !== "all" && !(s.fuel_types ?? []).includes(fuel)) return false;
+        return true;
+      })
+      .map((s) => ({
+        ...s,
+        distanceKm:
+          coords && typeof s.lat === "number" && typeof s.lng === "number"
+            ? haversineKm(coords, { lat: s.lat, lng: s.lng })
+            : null,
+      }));
+
+    if (coords) {
+      return list.sort(
+        (a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity),
+      );
+    }
+    return list.sort((a, b) =>
+      ((ar ? a.name_ar : a.name_en) ?? "").localeCompare((ar ? b.name_ar : b.name_en) ?? "", ar ? "ar" : "en"),
+    );
+  }, [data, region, fuel, coords, ar]);
+
 
   const mapPoints = useMemo(
     () =>
