@@ -13,7 +13,7 @@ const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
 );
 
-const FUEL_CODES = ["95", "91", "98", "diesel"] as const;
+const FUEL_ORDER = ["91", "95", "98", "diesel", "kerosene", "ev"];
 
 /** Interactive KSA coverage map with region + fuel-type filters. */
 export function CoverageMap() {
@@ -30,6 +30,16 @@ export function CoverageMap() {
       return data ?? [];
     },
   });
+
+  const fuelOptions = useMemo(() => {
+    const set = new Set<string>();
+    for (const s of data) for (const f of s.fuel_types ?? []) set.add(f);
+    return [...set].sort((a, b) => {
+      const ia = FUEL_ORDER.indexOf(a);
+      const ib = FUEL_ORDER.indexOf(b);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    });
+  }, [data]);
 
   const points = useMemo(
     () =>
