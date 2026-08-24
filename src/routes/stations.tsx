@@ -210,6 +210,12 @@ function StationsPage() {
                     <div>
                       <h3 className="font-semibold">{lng === "ar" ? s.name_ar : s.name_en}</h3>
                       <p className="text-xs text-muted-foreground">{lng === "ar" ? `${s.city_ar} · ${s.district_ar ?? ""}` : `${s.city_en} · ${s.district_en ?? ""}`}</p>
+                      {s.distanceKm != null && (
+                        <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-accent">
+                          <Navigation className="h-3 w-3" />
+                          {formatDistance(s.distanceKm, ar)}
+                        </p>
+                      )}
                     </div>
                     {s.is_24h && <Badge className="bg-accent text-accent-foreground"><Clock className="me-1 h-3 w-3" />{t("stations.open24")}</Badge>}
                   </div>
