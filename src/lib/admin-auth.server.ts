@@ -166,6 +166,9 @@ async function sendSms(db: Db, phone: string, code: string) {
   let responseBody = "";
   let jobId: string | null = null;
 
+  // Most GCC gateways expect a bare MSISDN (966XXXXXXXXX), not an E.164 "+" prefix.
+  const dest = phone.replace(/[^\d]/g, "");
+
   try {
     const res = await fetch(url, {
       method: "POST",
@@ -173,7 +176,7 @@ async function sendSms(db: Db, phone: string, code: string) {
       body: JSON.stringify({
         src: sender,
         body: `Your verification code is: ${code}`,
-        dests: [phone],
+        dests: [dest],
       }),
     });
     statusCode = res.status;
