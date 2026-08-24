@@ -19,6 +19,27 @@ export const getMyStaffRoles = createServerFn({ method: "GET" })
     return { roles: (data ?? []).map((r) => r.role as string) };
   });
 
+/**
+ * Staff roles + admin_profiles.is_active for the current user.
+ * Both must pass for portal access.
+ */
+export const getMyAdminAccess = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const [rolesRes, profileRes] = await Promise.all([
+      context.supabase.from("user_roles").select("role").eq("user_id", context.userId),
+      context.supabase
+        .from("admin_profiles")
+        .select("is_active")
+        .eq("user_id", context.userId)
+        .maybeSingle(),
+    ]);
+    return {
+      roles: (rolesRes.data ?? []).map((r) => r.role as string),
+      isActive: Boolean(profileRes.data?.is_active),
+    };
+  });
+
 const OverviewInput = z.object({
   days: z.number().int().min(1).max(90).default(14),
 }).optional();

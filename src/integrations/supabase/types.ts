@@ -161,6 +161,30 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_profiles: {
+        Row: {
+          created_at: string
+          is_active: boolean
+          phone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          is_active?: boolean
+          phone: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          is_active?: boolean
+          phone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       application_status_history: {
         Row: {
           changed_by: string | null
@@ -723,6 +747,63 @@ export type Database = {
         }
         Relationships: []
       }
+      login_attempts: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          ip: string | null
+          succeeded: boolean
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          ip?: string | null
+          succeeded: boolean
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          ip?: string | null
+          succeeded?: boolean
+        }
+        Relationships: []
+      }
+      login_otps: {
+        Row: {
+          attempts: number
+          created_at: string
+          expires_at: string
+          id: string
+          is_used: boolean
+          otp_hash: string
+          phone: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          expires_at: string
+          id?: string
+          is_used?: boolean
+          otp_hash: string
+          phone: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          is_used?: boolean
+          otp_hash?: string
+          phone?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       news_articles: {
         Row: {
           author_id: string | null
@@ -1027,6 +1108,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sms_logs: {
+        Row: {
+          id: string
+          job_id: string | null
+          message: string
+          phone: string
+          response_body: string | null
+          sent_at: string
+          status_code: number | null
+        }
+        Insert: {
+          id?: string
+          job_id?: string | null
+          message: string
+          phone: string
+          response_body?: string | null
+          sent_at?: string
+          status_code?: number | null
+        }
+        Update: {
+          id?: string
+          job_id?: string | null
+          message?: string
+          phone?: string
+          response_body?: string | null
+          sent_at?: string
+          status_code?: number | null
+        }
+        Relationships: []
       }
       stations: {
         Row: {
