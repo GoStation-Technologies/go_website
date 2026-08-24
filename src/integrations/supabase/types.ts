@@ -969,6 +969,39 @@ export type Database = {
         }
         Relationships: []
       }
+      regions: {
+        Row: {
+          created_at: string
+          dataverse_code: number | null
+          id: string
+          is_master_ksa: boolean
+          name: string
+          name_ar: string | null
+          name_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dataverse_code?: number | null
+          id?: string
+          is_master_ksa?: boolean
+          name: string
+          name_ar?: string | null
+          name_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dataverse_code?: number | null
+          id?: string
+          is_master_ksa?: boolean
+          name?: string
+          name_ar?: string | null
+          name_en?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       report_downloads: {
         Row: {
           downloaded_at: string
@@ -1002,6 +1035,7 @@ export type Database = {
           city_ar: string
           city_en: string
           created_at: string
+          dataverse_id: string | null
           district_ar: string | null
           district_en: string | null
           fuel_types: string[]
@@ -1012,12 +1046,15 @@ export type Database = {
           id: string
           is_24h: boolean
           is_active: boolean
-          lat: number
-          lng: number
+          lat: number | null
+          lng: number | null
+          master_region_id: string | null
           name_ar: string
           name_en: string
           photo_url: string | null
+          region_id: string | null
           services: string[]
+          status: string | null
           updated_at: string
         }
         Insert: {
@@ -1026,6 +1063,7 @@ export type Database = {
           city_ar: string
           city_en: string
           created_at?: string
+          dataverse_id?: string | null
           district_ar?: string | null
           district_en?: string | null
           fuel_types?: string[]
@@ -1036,12 +1074,15 @@ export type Database = {
           id?: string
           is_24h?: boolean
           is_active?: boolean
-          lat: number
-          lng: number
+          lat?: number | null
+          lng?: number | null
+          master_region_id?: string | null
           name_ar: string
           name_en: string
           photo_url?: string | null
+          region_id?: string | null
           services?: string[]
+          status?: string | null
           updated_at?: string
         }
         Update: {
@@ -1050,6 +1091,7 @@ export type Database = {
           city_ar?: string
           city_en?: string
           created_at?: string
+          dataverse_id?: string | null
           district_ar?: string | null
           district_en?: string | null
           fuel_types?: string[]
@@ -1060,15 +1102,33 @@ export type Database = {
           id?: string
           is_24h?: boolean
           is_active?: boolean
-          lat?: number
-          lng?: number
+          lat?: number | null
+          lng?: number | null
+          master_region_id?: string | null
           name_ar?: string
           name_en?: string
           photo_url?: string | null
+          region_id?: string | null
           services?: string[]
+          status?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "stations_master_region_id_fkey"
+            columns: ["master_region_id"]
+            isOneToOne: false
+            referencedRelation: "regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stations_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "regions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       support_tickets: {
         Row: {
@@ -1156,6 +1216,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      active_station_regions: {
+        Args: never
+        Returns: {
+          id: string
+          is_master_ksa: boolean
+          name: string
+          name_ar: string
+          name_en: string
+          stations_count: number
+        }[]
+      }
       export_jobs_lease: {
         Args: { _limit?: number }
         Returns: {
@@ -1196,6 +1267,13 @@ export type Database = {
       rate_limit_purge: {
         Args: { _older_than_seconds?: number }
         Returns: number
+      }
+      station_network_stats: {
+        Args: never
+        Returns: {
+          active_regions_count: number
+          stations_count: number
+        }[]
       }
       submit_acquisition_request: { Args: { payload: Json }; Returns: string }
       submit_contact_message: { Args: { payload: Json }; Returns: string }

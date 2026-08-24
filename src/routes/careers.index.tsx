@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
+import { useStationStats } from "@/hooks/use-station-stats";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
@@ -34,6 +35,7 @@ function useDateFmt() {
 
 function CareersPage() {
   const { t, i18n } = useTranslation();
+  const { stationsCount, activeRegionsCount } = useStationStats();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const fmtDate = useDateFmt();
   const { data: jobs = [] } = useQuery({
@@ -77,7 +79,7 @@ function CareersPage() {
                   <BenefitItem
                     icon={<Network className="h-5 w-5" />}
                     title={t("careers.benefits.network.title")}
-                    body={t("careers.benefits.network.body")}
+                    body={t("careers.benefits.network.body", { stations: stationsCount, regions: activeRegionsCount })}
                   />
                   <BenefitItem
                     icon={<Users className="h-5 w-5" />}

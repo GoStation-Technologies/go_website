@@ -13,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Fuel, Search, Star, Clock, X } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
-import { regionForCity, fuelLabel, SAUDI_REGIONS } from "@/lib/regions";
+import { fuelLabel } from "@/lib/regions";
+import { useActiveStationRegions } from "@/hooks/use-station-stats";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/stations")({
       path: "/stations",
       title: "Find a GoStation — Station Locator & Live Fuel Prices",
       description:
-        "Search 180+ GoStation fuel stations across 13 Saudi regions. Filter by city, services and amenities, and view live fuel prices on the map.",
+        "Search 193+ GoStation fuel stations across Saudi Arabia. Filter by region, fuel type and services, and get directions from the live map.",
     }),
 });
 
@@ -46,12 +47,11 @@ function StationsPage() {
     },
   });
 
+  const { data: allRegions = [] } = useActiveStationRegions();
   const regionOptions = useMemo(() => {
-    const present = new Set(
-      data.map((s) => regionForCity(s.city_en, s.city_ar)).filter(Boolean) as string[],
-    );
-    return SAUDI_REGIONS.filter((r) => present.has(r.value));
-  }, [data]);
+    const present = new Set(data.map((s) => s.region_id).filter(Boolean) as string[]);
+    return allRegions.filter((r) => present.has(r.id));
+  }, [data, allRegions]);
 
   const fuelOptions = useMemo(() => {
     const set = new Set<string>();
@@ -62,7 +62,7 @@ function StationsPage() {
   const filtered = data.filter((s) => {
     const hay = [s.city_ar, s.city_en, s.district_ar, s.district_en, s.name_ar, s.name_en].filter(Boolean).join(" ").toLowerCase();
     if (!hay.includes(q.toLowerCase())) return false;
-    if (region !== "all" && regionForCity(s.city_en, s.city_ar) !== region) return false;
+    if (region !== "all" && s.region_id !== region) return false;
     if (fuel !== "all" && !(s.fuel_types ?? []).includes(fuel)) return false;
     return true;
   });
@@ -108,7 +108,7 @@ function StationsPage() {
             <SelectContent className="z-[2000]">
               <SelectItem value="all">{ar ? "كل المناطق" : "All regions"}</SelectItem>
               {regionOptions.map((r) => (
-                <SelectItem key={r.value} value={r.value}>{ar ? r.ar : r.en}</SelectItem>
+                <SelectItem key={r.id} value={r.id}>{(ar ? r.name_ar : r.name_en) ?? r.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>

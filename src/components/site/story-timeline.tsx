@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useStationStats } from "@/hooks/use-station-stats";
 import { ChevronLeft, ChevronRight, Flag, Fuel, MapPin, Smartphone, Rocket, Trophy } from "lucide-react";
 import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
 import pylon from "@/assets/gostation-pylon.jpg.asset.json";
@@ -18,6 +19,7 @@ const MILESTONES = [
 
 export function StoryTimeline() {
   const { t } = useTranslation();
+  const { stationsCount, activeRegionsCount } = useStationStats();
   const railRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [active, setActive] = useState(0);
@@ -129,7 +131,7 @@ export function StoryTimeline() {
                 />
                 <h3 className="font-bold">{t(`about.journey.${m.key}.title`)}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {t(`about.journey.${m.key}.body`)}
+                  {t(`about.journey.${m.key}.body`, { stations: stationsCount, regions: activeRegionsCount })}
                 </p>
               </div>
             </article>
