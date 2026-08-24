@@ -104,7 +104,7 @@ function StationsPage() {
     [filtered, lng],
   );
 
-  const hasFilters = region !== "all" || fuel !== "all" || q !== "";
+  const hasFilters = region !== "all" || fuel !== "all";
 
   return (
     <SiteLayout>
