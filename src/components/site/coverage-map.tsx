@@ -66,11 +66,12 @@ export function CoverageMap() {
           </SelectTrigger>
           <SelectContent className="z-[2000]">
             <SelectItem value="all">{ar ? "كل المناطق" : "All regions"}</SelectItem>
-            {SAUDI_REGIONS.map((r) => (
-              <SelectItem key={r.value} value={r.value}>
-                {ar ? r.ar : r.en}
+            {regions.map((r) => (
+              <SelectItem key={r.id} value={r.id}>
+                {(ar ? r.name_ar : r.name_en) ?? r.name}
               </SelectItem>
             ))}
+
           </SelectContent>
         </Select>
         <Select value={fuel} onValueChange={setFuel}>
