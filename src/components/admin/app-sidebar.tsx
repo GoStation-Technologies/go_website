@@ -11,7 +11,9 @@ import {
   ShieldAlert,
   ScrollText,
   BellRing,
-
+  Settings,
+  FileText,
+  HelpCircle,
 } from "lucide-react";
 
 import { isRtl } from "@/lib/i18n";
