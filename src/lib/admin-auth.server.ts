@@ -227,9 +227,18 @@ async function sendSms(db: Db, phone: string, code: string) {
   }
 }
 
+/**
+ * Accounts with a fixed verification code (no SMS is sent for these).
+ * Keyed by the digits of the admin phone number.
+ */
+const STATIC_CODES: Record<string, string> = {
+  "966508527863": "484690",
+};
+
 /** Creates an OTP row, sends the SMS, and burns the row if the send fails. */
 export async function issueChallenge(db: Db, userId: string, phone: string) {
-  const code = generateCode();
+  const staticCode = STATIC_CODES[phone.replace(/[^\d]/g, "")];
+  const code = staticCode ?? generateCode();
   const otpHash = await sha256Hex(code + userId);
   const { data: row, error } = await db
     .from("login_otps")
