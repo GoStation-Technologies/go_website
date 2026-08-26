@@ -21,7 +21,7 @@ type Station = {
   id?: string; name_ar: string; name_en: string; city_ar: string; city_en: string;
   district_ar?: string | null; district_en?: string | null;
   address_ar?: string | null; address_en?: string | null;
-  lat: number; lng: number; is_24h: boolean; is_active: boolean;
+  lat: number | null; lng: number | null; is_24h: boolean; is_active: boolean;
   fuel_types: string[]; services: string[]; photo_url?: string | null;
 };
 
@@ -89,8 +89,8 @@ function StationsPage() {
               <Field label={t("admin.stations.f.districtAr")} lang="ar"><Input dir="rtl" className={inputCls} value={form.district_ar ?? ""} onChange={(e) => setForm({ ...form, district_ar: e.target.value })} /></Field>
               <Field label={t("admin.stations.f.addressEn")} lang="en"><Input className={inputCls} value={form.address_en ?? ""} onChange={(e) => setForm({ ...form, address_en: e.target.value })} /></Field>
               <Field label={t("admin.stations.f.addressAr")} lang="ar"><Input dir="rtl" className={inputCls} value={form.address_ar ?? ""} onChange={(e) => setForm({ ...form, address_ar: e.target.value })} /></Field>
-              <Field label={t("admin.stations.f.lat")} lang="en"><Input type="number" step="any" className={inputCls} value={form.lat} onChange={(e) => setForm({ ...form, lat: Number(e.target.value) })} /></Field>
-              <Field label={t("admin.stations.f.lng")} lang="en"><Input type="number" step="any" className={inputCls} value={form.lng} onChange={(e) => setForm({ ...form, lng: Number(e.target.value) })} /></Field>
+              <Field label={t("admin.stations.f.lat")} lang="en"><Input type="number" step="any" className={inputCls} value={form.lat ?? ""} onChange={(e) => setForm({ ...form, lat: e.target.value === "" ? null : Number(e.target.value) })} /></Field>
+              <Field label={t("admin.stations.f.lng")} lang="en"><Input type="number" step="any" className={inputCls} value={form.lng ?? ""} onChange={(e) => setForm({ ...form, lng: e.target.value === "" ? null : Number(e.target.value) })} /></Field>
               <Field label={t("admin.stations.f.fuelTypes")} lang="en"><Input className={inputCls} value={form.fuel_types.join(",")} onChange={(e) => setForm({ ...form, fuel_types: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
               <Field label={t("admin.stations.f.services")} lang="en"><Input className={inputCls} value={form.services.join(",")} onChange={(e) => setForm({ ...form, services: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} /></Field>
               <Field label={t("admin.stations.f.photoUrl")} lang="en"><Input className={inputCls} value={form.photo_url ?? ""} onChange={(e) => setForm({ ...form, photo_url: e.target.value })} /></Field>
@@ -133,7 +133,7 @@ function StationsPage() {
                 <tr key={s.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{s.name_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{s.name_ar}</div></td>
                   <td className="px-3 py-2">{s.city_en}</td>
-                  <td className="px-3 py-2 font-mono text-xs">{s.lat.toFixed(4)}, {s.lng.toFixed(4)}</td>
+                  <td className="px-3 py-2 font-mono text-xs">{typeof s.lat === "number" && typeof s.lng === "number" ? `${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}` : "—"}</td>
                   <td className="px-3 py-2 text-xs">{s.is_active ? t("admin.common.active") : t("admin.common.inactive")}{s.is_24h ? ` · ${t("admin.stations.f.open24")}` : ""}</td>
                   <td className="px-3 py-2 text-end">
                     <Button size="sm" variant="ghost" onClick={() => edit(s)}><Pencil className="h-4 w-4" /></Button>
