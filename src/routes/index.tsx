@@ -43,6 +43,8 @@ import { VideoCard } from "@/components/site/video-card";
 import { JoinCta } from "@/components/site/join-cta";
 import { CoverageMap } from "@/components/site/coverage-map";
 import { useStationStats } from "@/hooks/use-station-stats";
+import { usePageContent, useSiteSettings } from "@/hooks/use-cms";
+import { Testimonials } from "@/components/site/testimonials";
 
 
 export const Route = createFileRoute("/")({
@@ -69,6 +71,8 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const cms = usePageContent("home");
+  const { setting } = useSiteSettings();
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
@@ -342,11 +346,11 @@ function HomePage() {
           <div>
             <div className="eyebrow">{t("home.servicesEyebrow")}</div>
             <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
-              {t("home.servicesTitle")}
+              {cms.field("services", "title", t("home.servicesTitle"))}
             </h2>
           </div>
           <p className="max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-            {t("home.servicesSub")}
+            {cms.field("services", "subtitle", t("home.servicesSub"))}
           </p>
         </div>
 
@@ -398,10 +402,14 @@ function HomePage() {
           <div>
             <div className="eyebrow">{t("home.coverageEyebrow")}</div>
             <h2 className="mt-4 text-balance text-4xl font-bold leading-[1.05] md:text-5xl">
-              {t("home.coverageTitle")}
+              {cms.field("network", "title", t("home.coverageTitle"))}
             </h2>
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">
-              {t("home.coverageSub", { stations: liveStations, regions: liveRegions })}
+              {cms.field(
+                "network",
+                "subtitle",
+                t("home.coverageSub", { stations: liveStations, regions: liveRegions }),
+              )}
             </p>
             <Button
               asChild
@@ -431,7 +439,7 @@ function HomePage() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="eyebrow">{t("home.newsEyebrow")}</div>
-            <h2 className="mt-4 text-4xl font-bold md:text-5xl">{t("home.newsTitle")}</h2>
+            <h2 className="mt-4 text-4xl font-bold md:text-5xl">{cms.field("media", "title", t("home.newsTitle"))}</h2>
           </div>
           <Link
             to="/media"
@@ -701,16 +709,18 @@ function HomePage() {
               <Sparkles className="h-3.5 w-3.5 text-[var(--ember)]" /> {t("goapp.eyebrow")}
             </div>
             <h2 className="mt-6 text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight md:text-5xl lg:text-[3.4rem]">
-              {t("goapp.title")}
+              {setting("go_app", "headline_" + (i18n.language?.startsWith("ar") ? "ar" : "en"), cms.field("go_app", "title", t("goapp.title")))}
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/70 lg:mx-0">
-              {t("goapp.sub")}
+              {setting("go_app", "description_" + (i18n.language?.startsWith("ar") ? "ar" : "en"), cms.field("go_app", "content", t("goapp.sub")))}
             </p>
 
             {/* store badges */}
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <a
-                href="#"
+                href={setting("go_app", "android_url", "#")}
+                target={setting("go_app", "android_url") ? "_blank" : undefined}
+                rel="noreferrer"
                 className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <PlayIcon className="h-7 w-7" />
@@ -720,7 +730,9 @@ function HomePage() {
                 </span>
               </a>
               <a
-                href="#"
+                href={setting("go_app", "ios_url", "#")}
+                target={setting("go_app", "ios_url") ? "_blank" : undefined}
+                rel="noreferrer"
                 className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <AppleIcon className="h-7 w-7" />
@@ -766,6 +778,14 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ============ CUSTOMER REVIEWS (CMS) ============ */}
+      {cms.visible("testimonials") ? (
+        <Testimonials
+          title={cms.field("testimonials", "title", t("home.testimonialsTitle", { defaultValue: "What our customers say" }))}
+          subtitle={cms.field("testimonials", "subtitle", "")}
+        />
+      ) : null}
 
       {/* ============ PARTNERS / TRUSTED BY ============ */}
       <section className="border-t border-border/60 bg-secondary/30 py-20 md:py-24">
