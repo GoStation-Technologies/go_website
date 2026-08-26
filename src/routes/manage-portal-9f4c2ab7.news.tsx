@@ -58,10 +58,18 @@ function NewsPage() {
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<News>(empty);
+  const [tab, setTab] = useState<Tab>("all");
 
   const { data, isFetching } = useQuery({ queryKey: ["admin", "news"], queryFn: () => adminListNews() });
   const upsert = useMutation({
-    mutationFn: (n: News) => adminUpsertNews({ data: n }),
+    mutationFn: (n: News) =>
+      adminUpsertNews({
+        data: {
+          ...n,
+          event_date: n.event_date ? new Date(n.event_date).toISOString() : null,
+          duration_seconds: n.duration_seconds ? Number(n.duration_seconds) : null,
+        },
+      }),
     onSuccess: () => { toast.success(t("admin.common.saved")); setOpen(false); qc.invalidateQueries({ queryKey: ["admin", "news"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -71,7 +79,8 @@ function NewsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const rows = (data?.rows ?? []) as News[];
+  const allRows = (data?.rows ?? []) as News[];
+  const rows = tab === "all" ? allRows : allRows.filter((n) => n.kind === tab);
   const view = useListView<News>({
     rows,
     search: (n) => `${n.title_en} ${n.title_ar} ${n.slug} ${n.kind}`,
@@ -106,6 +115,40 @@ function NewsPage() {
               <Field label={t("admin.news.f.excerptAr")} lang="ar"><Textarea className={inputCls} dir="rtl" rows={2} value={form.excerpt_ar ?? ""} onChange={(e) => setForm({ ...form, excerpt_ar: e.target.value })} /></Field>
               <Field label={t("admin.news.f.bodyEn")} lang="en"><Textarea className={inputCls} rows={5} value={form.body_en ?? ""} onChange={(e) => setForm({ ...form, body_en: e.target.value })} /></Field>
               <Field label={t("admin.news.f.bodyAr")} lang="ar"><Textarea className={inputCls} dir="rtl" rows={5} value={form.body_ar ?? ""} onChange={(e) => setForm({ ...form, body_ar: e.target.value })} /></Field>
+              {form.kind === "event" ? (
+                <>
+                  <Field label={t("admin.news.f.eventDate", { defaultValue: "Event date" })} lang="en">
+                    <Input
+                      className={inputCls}
+                      type="datetime-local"
+                      value={form.event_date ? String(form.event_date).slice(0, 16) : ""}
+                      onChange={(e) => setForm({ ...form, event_date: e.target.value })}
+                    />
+                  </Field>
+                  <Field label={t("admin.news.f.eventLocation", { defaultValue: "Location" })} lang="en">
+                    <Input className={inputCls} value={form.event_location_en ?? ""} onChange={(e) => setForm({ ...form, event_location_en: e.target.value })} />
+                  </Field>
+                  <Field label="الموقع (AR)" lang="ar">
+                    <Input className={inputCls} dir="rtl" value={form.event_location_ar ?? ""} onChange={(e) => setForm({ ...form, event_location_ar: e.target.value })} />
+                  </Field>
+                </>
+              ) : null}
+              {form.kind === "video" ? (
+                <>
+                  <Field label={t("admin.news.f.videoUrl", { defaultValue: "Video URL (YouTube / Vimeo / direct)" })} lang="en">
+                    <Input dir="ltr" className={inputCls} value={form.video_url ?? ""} onChange={(e) => setForm({ ...form, video_url: e.target.value })} />
+                  </Field>
+                  <Field label={t("admin.news.f.duration", { defaultValue: "Duration (seconds)" })} lang="en">
+                    <Input
+                      dir="ltr"
+                      type="number"
+                      className={inputCls}
+                      value={form.duration_seconds ?? ""}
+                      onChange={(e) => setForm({ ...form, duration_seconds: e.target.value ? Number(e.target.value) : null })}
+                    />
+                  </Field>
+                </>
+              ) : null}
               <Field label={t("admin.news.f.coverUrl")} lang="en"><Input dir="ltr" className={inputCls} value={form.cover_url ?? ""} onChange={(e) => setForm({ ...form, cover_url: e.target.value })} /></Field>
               <FormRow>
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_published} onCheckedChange={(v) => setForm({ ...form, is_published: v })} />{t("admin.common.published")}</label>
@@ -118,6 +161,19 @@ function NewsPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {TABS.map((k) => (
+          <Button
+            key={k}
+            size="sm"
+            variant={k === tab ? "default" : "outline"}
+            onClick={() => setTab(k)}
+          >
+            {k === "all" ? t("admin.common.all", { defaultValue: "All" }) : t(`admin.news.kinds.${k}`)}
+          </Button>
+        ))}
       </div>
 
       <ListToolbar
