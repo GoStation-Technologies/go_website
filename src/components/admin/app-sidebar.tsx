@@ -42,6 +42,7 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "notifications", url: "/manage-portal-9f4c2ab7/notifications", icon: BellRing },
   { key: "content", url: "/manage-portal-9f4c2ab7/content", icon: FileText },
   { key: "faqs", url: "/manage-portal-9f4c2ab7/faqs", icon: HelpCircle },
+  { key: "otpWhitelist", url: "/manage-portal-9f4c2ab7/otp-whitelist", icon: KeyRound },
   { key: "settings", url: "/manage-portal-9f4c2ab7/settings", icon: Settings },
 ];
 
