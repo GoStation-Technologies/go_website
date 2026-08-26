@@ -25,6 +25,7 @@ import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-p
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
 import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
+import { Route as ManagePortal9f4c2ab7TestimonialsRouteImport } from './routes/manage-portal-9f4c2ab7.testimonials'
 import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
 import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
 import { Route as ManagePortal9f4c2ab7SettingsRouteImport } from './routes/manage-portal-9f4c2ab7.settings'
@@ -128,6 +129,12 @@ const ManagePortal9f4c2ab7LoginRoute =
     id: '/manage-portal-9f4c2ab7_/login',
     path: '/manage-portal-9f4c2ab7/login',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const ManagePortal9f4c2ab7TestimonialsRoute =
+  ManagePortal9f4c2ab7TestimonialsRouteImport.update({
+    id: '/testimonials',
+    path: '/testimonials',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
 const ManagePortal9f4c2ab7SubmissionsRoute =
   ManagePortal9f4c2ab7SubmissionsRouteImport.update({
@@ -282,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/careers/': typeof CareersIndexRoute
@@ -320,6 +328,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/careers': typeof CareersIndexRoute
@@ -360,6 +369,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7_/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
   '/careers/': typeof CareersIndexRoute
@@ -401,6 +411,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
     | '/careers/'
@@ -439,6 +450,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
     | '/careers'
@@ -478,6 +490,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7_/login'
     | '/media/$slug'
     | '/careers/'
@@ -628,6 +641,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/manage-portal-9f4c2ab7/login'
       preLoaderRoute: typeof ManagePortal9f4c2ab7LoginRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/manage-portal-9f4c2ab7/testimonials': {
+      id: '/manage-portal-9f4c2ab7/testimonials'
+      path: '/testimonials'
+      fullPath: '/manage-portal-9f4c2ab7/testimonials'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7TestimonialsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
     }
     '/manage-portal-9f4c2ab7/submissions': {
       id: '/manage-portal-9f4c2ab7/submissions'
@@ -793,6 +813,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7SettingsRoute: typeof ManagePortal9f4c2ab7SettingsRoute
   ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
   ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
+  ManagePortal9f4c2ab7TestimonialsRoute: typeof ManagePortal9f4c2ab7TestimonialsRoute
   ManagePortal9f4c2ab7IndexRoute: typeof ManagePortal9f4c2ab7IndexRoute
   ManagePortal9f4c2ab7PagesSlugRoute: typeof ManagePortal9f4c2ab7PagesSlugRoute
 }
@@ -812,6 +833,7 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7SettingsRoute: ManagePortal9f4c2ab7SettingsRoute,
   ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
   ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
+  ManagePortal9f4c2ab7TestimonialsRoute: ManagePortal9f4c2ab7TestimonialsRoute,
   ManagePortal9f4c2ab7IndexRoute: ManagePortal9f4c2ab7IndexRoute,
   ManagePortal9f4c2ab7PagesSlugRoute: ManagePortal9f4c2ab7PagesSlugRoute,
 }
