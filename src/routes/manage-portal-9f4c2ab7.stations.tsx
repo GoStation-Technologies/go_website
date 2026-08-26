@@ -21,7 +21,7 @@ type Station = {
   id?: string; name_ar: string; name_en: string; city_ar: string; city_en: string;
   district_ar?: string | null; district_en?: string | null;
   address_ar?: string | null; address_en?: string | null;
-  lat: number; lng: number; is_24h: boolean; is_active: boolean;
+  lat: number | null; lng: number | null; is_24h: boolean; is_active: boolean;
   fuel_types: string[]; services: string[]; photo_url?: string | null;
 };
 
@@ -133,7 +133,7 @@ function StationsPage() {
                 <tr key={s.id} className="border-t">
                   <td className="px-3 py-2"><div className="font-medium">{s.name_en}</div><div className="text-xs text-muted-foreground" dir="rtl">{s.name_ar}</div></td>
                   <td className="px-3 py-2">{s.city_en}</td>
-                  <td className="px-3 py-2 font-mono text-xs">{s.lat.toFixed(4)}, {s.lng.toFixed(4)}</td>
+                  <td className="px-3 py-2 font-mono text-xs">{typeof s.lat === "number" && typeof s.lng === "number" ? `${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}` : "—"}</td>
                   <td className="px-3 py-2 text-xs">{s.is_active ? t("admin.common.active") : t("admin.common.inactive")}{s.is_24h ? ` · ${t("admin.stations.f.open24")}` : ""}</td>
                   <td className="px-3 py-2 text-end">
                     <Button size="sm" variant="ghost" onClick={() => edit(s)}><Pencil className="h-4 w-4" /></Button>
