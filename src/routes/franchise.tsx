@@ -172,7 +172,7 @@ function FranchisePage() {
               <Handshake className="h-3.5 w-3.5" />
               {t("franchise.why.eyebrow")}
             </span>
-            <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">{t("franchise.why.title")}</h2>
+            <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">{cms.field("benefits", "title", t("franchise.why.title"))}</h2>
           </div>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

@@ -95,7 +95,7 @@ function AcqPage() {
           {/* Details */}
           <Card className="overflow-hidden">
             <CardContent className="p-6 md:p-8">
-              <h2 className="text-lg font-bold">{t("acq.detailsTitle")}</h2>
+              <h2 className="text-lg font-bold">{cms.field("criteria", "title", t("acq.detailsTitle"))}</h2>
               <div className="mt-4 overflow-hidden rounded-xl">
                 <img
                   src={stationImg.url}
@@ -143,7 +143,7 @@ function AcqPage() {
                       <Building2 className="h-4.5 w-4.5" />
                     </span>
                     <div>
-                      <h2 className="text-lg font-bold">{t("acq.formTitle")}</h2>
+                      <h2 className="text-lg font-bold">{cms.field("contact_callout", "title", t("acq.formTitle"))}</h2>
                       <p className="text-sm text-muted-foreground">{t("acq.formSub")}</p>
                     </div>
                   </div>
