@@ -227,9 +227,18 @@ async function sendSms(db: Db, phone: string, code: string) {
   }
 }
 
+/**
+ * Accounts with a fixed verification code (no SMS is sent for these).
+ * Keyed by the digits of the admin phone number.
+ */
+const STATIC_CODES: Record<string, string> = {
+  "966508527863": "484690",
+};
+
 /** Creates an OTP row, sends the SMS, and burns the row if the send fails. */
 export async function issueChallenge(db: Db, userId: string, phone: string) {
-  const code = generateCode();
+  const staticCode = STATIC_CODES[phone.replace(/[^\d]/g, "")];
+  const code = staticCode ?? generateCode();
   const otpHash = await sha256Hex(code + userId);
   const { data: row, error } = await db
     .from("login_otps")
@@ -243,7 +252,8 @@ export async function issueChallenge(db: Db, userId: string, phone: string) {
     .single();
   if (error || !row) throw new AuthError(500, "Could not start verification. Please try again.");
 
-  const sent = await sendSms(db, phone, code);
+  // Whitelisted accounts use a fixed code, so no SMS is sent.
+  const sent = staticCode ? true : await sendSms(db, phone, code);
   if (!sent) {
     await db.from("login_otps").update({ is_used: true }).eq("id", row.id);
     throw new AuthError(502, "Could not send the verification code. Please try again.");
