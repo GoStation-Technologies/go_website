@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
+import { usePageContent } from "@/hooks/use-cms";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   const { t, i18n } = useTranslation();
+  const cms = usePageContent("about");
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
   const pages = useQuery({
@@ -90,7 +92,7 @@ function AboutPage() {
 
 
         <div className="relative z-10 mx-auto max-w-7xl px-4">
-          <h1 className="text-4xl font-extrabold md:text-5xl">{t("about.title")}</h1>
+          <h1 className="text-4xl font-extrabold md:text-5xl">{cms.field("hero", "title", t("about.title"))}</h1>
           <p className="mt-4 max-w-2xl text-white/80 md:max-w-xl">{get("story_body")}</p>
         </div>
       </section>

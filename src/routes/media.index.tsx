@@ -2,6 +2,7 @@ import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePageContent } from "@/hooks/use-cms";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
@@ -27,6 +28,7 @@ type Filter = "all" | "news" | "event" | "video";
 
 function MediaPage() {
   const { t, i18n } = useTranslation();
+  const cms = usePageContent("media");
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const [filter, setFilter] = useState<Filter>("all");
 
@@ -65,8 +67,8 @@ function MediaPage() {
           <span className="text-xs font-semibold uppercase tracking-[0.24em] text-white/60">
             {t("media.eyebrow")}
           </span>
-          <h1 className="mt-3 text-4xl font-extrabold md:text-6xl">{t("media.title")}</h1>
-          <p className="mt-4 max-w-2xl text-white/70">{t("media.intro")}</p>
+          <h1 className="mt-3 text-4xl font-extrabold md:text-6xl">{cms.field("hero", "title", t("media.title"))}</h1>
+          <p className="mt-4 max-w-2xl text-white/70">{cms.field("hero", "subtitle", t("media.intro"))}</p>
         </div>
       </section>
 

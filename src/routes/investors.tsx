@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePageContent } from "@/hooks/use-cms";
 import { useStationStats } from "@/hooks/use-station-stats";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,6 +36,7 @@ export const Route = createFileRoute("/investors")({
 
 function IRPage() {
   const { t, i18n } = useTranslation();
+  const cms = usePageContent("investors");
   const { stationsCount } = useStationStats();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const { data: reports = [] } = useQuery({
@@ -120,7 +122,7 @@ function IRPage() {
             {t("investors.title")}
           </span>
           <h1 className="mt-5 text-balance text-3xl font-extrabold leading-tight md:text-5xl">
-            {t("investors.heroTitle")}
+            {cms.field("hero", "title", t("investors.heroTitle"))}
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-white/75 md:text-base">
             {t("investors.heroBody")}

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePageContent } from "@/hooks/use-cms";
 import { submitAcquisitionRequest } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/acquisitions")({
 
 function AcqPage() {
   const { t } = useTranslation();
+  const cms = usePageContent("acquisitions");
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
   const [city, setCity] = useState("");
@@ -82,8 +84,8 @@ function AcqPage() {
             <Handshake className="h-3.5 w-3.5" />
             {t("acq.eyebrow")}
           </span>
-          <h1 className="mt-4 text-3xl font-extrabold text-primary md:text-4xl">{t("acq.title")}</h1>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground">{t("acq.lead")}</p>
+          <h1 className="mt-4 text-3xl font-extrabold text-primary md:text-4xl">{cms.field("hero", "title", t("acq.title"))}</h1>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground">{cms.field("hero", "subtitle", t("acq.lead"))}</p>
         </div>
       </section>
 

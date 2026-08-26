@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePageContent } from "@/hooks/use-cms";
 import { useStationStats } from "@/hooks/use-station-stats";
 import { submitFranchiseApplication } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/franchise")({
 
 function FranchisePage() {
   const { t } = useTranslation();
+  const cms = usePageContent("franchise");
   const { stationsCount, activeRegionsCount } = useStationStats();
   const [step, setStep] = useState<0 | 1 | 2>(0);
   const [busy, setBusy] = useState(false);
@@ -122,9 +124,9 @@ function FranchisePage() {
             {t("franchise.about.eyebrow")}
           </span>
           <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-6xl">
-            {t("franchise.title")}
+            {cms.field("hero", "title", t("franchise.title"))}
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/75">{t("franchise.intro")}</p>
+          <p className="mt-4 max-w-2xl text-lg text-white/75">{cms.field("hero", "subtitle", t("franchise.intro"))}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <span className="rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-sm font-semibold text-white/90">
               {t("franchise.about.statA", { stations: stationsCount })}
