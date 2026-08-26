@@ -128,3 +128,49 @@ export const adminDeleteFaq = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/* ---------------------------------------------------------------- testimonials */
+
+const TestimonialInput = z.object({
+  id: z.string().uuid().optional(),
+  author_en: z.string().min(1).max(200),
+  author_ar: z.string().min(1).max(200),
+  role_en: z.string().max(200).nullish(),
+  role_ar: z.string().max(200).nullish(),
+  quote_en: z.string().min(1).max(2000),
+  quote_ar: z.string().min(1).max(2000),
+  avatar_url: z.string().max(1000).nullish(),
+  rating: z.number().int().min(1).max(5).default(5),
+  sort_order: z.number().int().min(0).max(9999).default(0),
+  is_active: z.boolean().default(true),
+});
+
+export const adminListTestimonials = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("testimonials")
+      .select("*")
+      .order("sort_order")
+      .order("created_at");
+    if (error) throw new Error(error.message);
+    return { rows: data ?? [] };
+  });
+
+export const adminUpsertTestimonial = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => TestimonialInput.parse(d))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("testimonials").upsert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminDeleteTestimonial = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("testimonials").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

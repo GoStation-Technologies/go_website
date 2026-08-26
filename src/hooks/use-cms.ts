@@ -134,3 +134,43 @@ export function useFaqs(category?: string) {
 
   return { items, isLoading: q.isLoading };
 }
+
+export type Testimonial = {
+  id: string;
+  author: string;
+  role: string;
+  quote: string;
+  avatar_url: string | null;
+  rating: number;
+};
+
+/** Published customer reviews, localized to the active content language. */
+export function useTestimonials() {
+  const { i18n } = useTranslation();
+  const lang = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
+
+  const q = useQuery({
+    queryKey: ["cms", "testimonials"],
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const items: Testimonial[] = (q.data ?? []).map((r) => ({
+    id: r.id,
+    author: lang === "ar" ? r.author_ar : r.author_en,
+    role: (lang === "ar" ? r.role_ar : r.role_en) ?? "",
+    quote: lang === "ar" ? r.quote_ar : r.quote_en,
+    avatar_url: r.avatar_url,
+    rating: r.rating ?? 5,
+  }));
+
+  return { items, isLoading: q.isLoading };
+}
