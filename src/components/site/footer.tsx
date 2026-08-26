@@ -22,7 +22,27 @@ function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
 
 
 export function SiteFooter() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { setting } = useSiteSettings();
+  const ar = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar";
+
+  const email = setting("contact", "email", "info@gostation.net");
+  const phone = setting("contact", "phone", "920002168");
+  const address = setting("contact", ar ? "address_ar" : "address_en", t("contact.address"));
+  const copyright = setting(
+    "footer",
+    ar ? "copyright_ar" : "copyright_en",
+    `© ${new Date().getFullYear()} ${t("brand.name")} — ${t("footer.rights")}`,
+  );
+  const socials: { Icon: (p: React.SVGProps<SVGSVGElement>) => JSX.Element | React.ReactElement; label: string; href: string }[] = [
+    { Icon: XIcon, label: "X", href: setting("social_links", "x") },
+    { Icon: Instagram, label: "Instagram", href: setting("social_links", "instagram") },
+    { Icon: Linkedin, label: "LinkedIn", href: setting("social_links", "linkedin") },
+    { Icon: Youtube, label: "YouTube", href: setting("social_links", "youtube") },
+    { Icon: TikTokIcon, label: "TikTok", href: setting("social_links", "tiktok") },
+    { Icon: Facebook, label: "Facebook", href: setting("social_links", "facebook") },
+  ];
+
   return (
     <footer className="relative mt-24 overflow-hidden bg-hero-ink text-foreground">
       <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
