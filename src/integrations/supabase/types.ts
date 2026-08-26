@@ -391,6 +391,48 @@ export type Database = {
         }
         Relationships: []
       }
+      faqs: {
+        Row: {
+          answer_ar: string
+          answer_en: string
+          category: string
+          created_at: string
+          id: string
+          published_at: string | null
+          question_ar: string
+          question_en: string
+          sort_order: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          answer_ar: string
+          answer_en: string
+          category?: string
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          question_ar: string
+          question_en: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          answer_ar?: string
+          answer_en?: string
+          category?: string
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          question_ar?: string
+          question_en?: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       financial_reports: {
         Row: {
           created_at: string
@@ -921,6 +963,57 @@ export type Database = {
         }
         Relationships: []
       }
+      page_sections: {
+        Row: {
+          content_ar: string | null
+          content_en: string | null
+          created_at: string
+          id: string
+          is_visible: boolean
+          media_url: string | null
+          page_slug: string
+          section_key: string
+          sort_order: number
+          subtitle_ar: string | null
+          subtitle_en: string | null
+          title_ar: string | null
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          content_ar?: string | null
+          content_en?: string | null
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          media_url?: string | null
+          page_slug: string
+          section_key: string
+          sort_order?: number
+          subtitle_ar?: string | null
+          subtitle_en?: string | null
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content_ar?: string | null
+          content_en?: string | null
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          media_url?: string | null
+          page_slug?: string
+          section_key?: string
+          sort_order?: number
+          subtitle_ar?: string | null
+          subtitle_en?: string | null
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       page_views: {
         Row: {
           created_at: string
@@ -1108,6 +1201,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
       }
       sms_logs: {
         Row: {
