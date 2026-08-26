@@ -25,13 +25,22 @@ type News = {
   body_ar?: string | null; body_en?: string | null;
   cover_url?: string | null; is_published: boolean; is_featured: boolean;
   published_at?: string | null;
+  event_date?: string | null;
+  event_location_en?: string | null; event_location_ar?: string | null;
+  video_url?: string | null; duration_seconds?: number | null;
 };
 
 const empty: News = {
   slug: "", kind: "news", title_ar: "", title_en: "",
   excerpt_ar: "", excerpt_en: "", body_ar: "", body_en: "",
   cover_url: "", is_published: false, is_featured: false, published_at: null,
+  event_date: null, event_location_en: "", event_location_ar: "",
+  video_url: "", duration_seconds: null,
 };
+
+const TABS = ["all", "news", "event", "video", "press"] as const;
+type Tab = (typeof TABS)[number];
+
 
 function slugify(s: string) {
   return s
