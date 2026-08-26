@@ -813,6 +813,9 @@ export const en = {
       audit: "Audit log",
       notifications: "Notifications",
       applications: "Applications",
+      content: "Page content",
+      faqs: "FAQs",
+      settings: "Site settings",
     },
     applications: {
       title: "Job applications",

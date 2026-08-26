@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
+import { usePageContent } from "@/hooks/use-cms";
 import { useStationStats } from "@/hooks/use-station-stats";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,6 +36,7 @@ function useDateFmt() {
 
 function CareersPage() {
   const { t, i18n } = useTranslation();
+  const cms = usePageContent("careers");
   const { stationsCount, activeRegionsCount } = useStationStats();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const fmtDate = useDateFmt();
@@ -113,7 +115,7 @@ function CareersPage() {
               </div>
 
               <h1 className="mt-6 max-w-3xl text-4xl font-extrabold tracking-tight md:text-6xl">
-                {t("careers.title")}
+                {cms.field("hero", "title", t("careers.title"))}
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/80 md:text-lg">
                 {t("careers.lead")}

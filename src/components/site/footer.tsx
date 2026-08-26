@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail, Phone } from "lucide-react";
 import logoAsset from "@/assets/gostation-logo-white.png.asset.json";
 import isoLogo from "@/assets/iso-logo.png.asset.json";
+import { useSiteSettings } from "@/hooks/use-cms";
+import { getContentLanguage } from "@/lib/i18n";
 
 function XIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -22,7 +24,27 @@ function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
 
 
 export function SiteFooter() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { setting } = useSiteSettings();
+  const ar = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar";
+
+  const email = setting("contact", "email", "info@gostation.net");
+  const phone = setting("contact", "phone", "920002168");
+  const address = setting("contact", ar ? "address_ar" : "address_en", t("contact.address"));
+  const copyright = setting(
+    "footer",
+    ar ? "copyright_ar" : "copyright_en",
+    `© ${new Date().getFullYear()} ${t("brand.name")} — ${t("footer.rights")}`,
+  );
+  const socials: { Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; label: string; href: string }[] = [
+    { Icon: XIcon, label: "X", href: setting("social_links", "x") },
+    { Icon: Instagram, label: "Instagram", href: setting("social_links", "instagram") },
+    { Icon: Linkedin, label: "LinkedIn", href: setting("social_links", "linkedin") },
+    { Icon: Youtube, label: "YouTube", href: setting("social_links", "youtube") },
+    { Icon: TikTokIcon, label: "TikTok", href: setting("social_links", "tiktok") },
+    { Icon: Facebook, label: "Facebook", href: setting("social_links", "facebook") },
+  ];
+
   return (
     <footer className="relative mt-24 overflow-hidden bg-hero-ink text-foreground">
       <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
@@ -50,29 +72,24 @@ export function SiteFooter() {
           </p>
           <div className="mt-5 flex items-start gap-2 text-sm text-foreground/90">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ember-glow" />
-            <span>{t("contact.address")}</span>
+            <span>{address}</span>
           </div>
           <div className="mt-2 flex items-center gap-2 text-sm text-foreground/90">
             <Mail className="h-4 w-4 shrink-0 text-ember-glow" />
-            <a href="mailto:info@gostation.net" className="hover:text-ember-glow">info@gostation.net</a>
+            <a href={`mailto:${email}`} className="hover:text-ember-glow">{email}</a>
           </div>
           <div className="mt-2 flex items-center gap-2 text-sm text-foreground/90">
             <Phone className="h-4 w-4 shrink-0 text-ember-glow" />
-            <a href="tel:920002168" className="hover:text-ember-glow" dir="ltr">920002168</a>
+            <a href={`tel:${phone}`} className="hover:text-ember-glow" dir="ltr">{phone}</a>
             <span className="text-foreground/70">— {t("footer.unifiedCallCenter")}</span>
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
-            {[
-              { Icon: XIcon, label: "X" },
-              { Icon: Instagram, label: "Instagram" },
-              { Icon: Linkedin, label: "LinkedIn" },
-              { Icon: Youtube, label: "YouTube" },
-              { Icon: TikTokIcon, label: "TikTok" },
-              { Icon: Facebook, label: "Facebook" },
-            ].map(({ Icon, label }) => (
+            {socials.map(({ Icon, label, href }) => (
               <a
                 key={label}
-                href="#"
+                href={href || "#"}
+                target={href ? "_blank" : undefined}
+                rel={href ? "noreferrer" : undefined}
                 aria-label={label}
                 className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-foreground/90 transition hover:border-ember-glow hover:bg-ember/20 hover:text-ember-glow"
               >
@@ -135,7 +152,7 @@ export function SiteFooter() {
       <div className="relative border-t border-white/10">
 
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-foreground/75 sm:flex-row sm:px-6">
-          <div>© {new Date().getFullYear()} {t("brand.name")} — {t("footer.rights")}</div>
+          <div>{copyright}</div>
           <div className="tracking-[0.18em]">{t("footer.microcopy")}</div>
         </div>
       </div>

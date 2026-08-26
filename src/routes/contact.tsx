@@ -13,9 +13,10 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { toast } from "sonner";
 import { Mail, MapPin, Clock, Phone, MessageCircle, Headphones } from "lucide-react";
 import { StationsMap } from "@/components/stations-map";
+import { useSiteSettings, usePageContent } from "@/hooks/use-cms";
 
 const HQ = { lat: 24.8376898, lng: 46.6890245 };
-const HQ_DIRECTIONS = "https://maps.app.goo.gl/vQJKG388rNJCXqaVA";
+const HQ_DIRECTIONS_FALLBACK = "https://maps.app.goo.gl/vQJKG388rNJCXqaVA";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -30,6 +31,11 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const { t } = useTranslation();
+  const { setting } = useSiteSettings();
+  const cms = usePageContent("contact");
+  const email = setting("contact", "email", "contact@gostation.net");
+  const phone = setting("contact", "phone", "920002168");
+  const HQ_DIRECTIONS = setting("contact", "maps_url", HQ_DIRECTIONS_FALLBACK);
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
   const channels = (t("contact.channels", { returnObjects: true }) as string[]) ?? [];
@@ -73,14 +79,14 @@ function ContactPage() {
         {/* Floating interactive contact icons */}
         <div className="pointer-events-none absolute inset-0 hidden lg:block">
           <a
-            href="mailto:contact@gostation.net"
+            href={`mailto:${email}`}
             className="pointer-events-auto absolute top-[18%] right-[12%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow"
             aria-label={t("common.email")}
           >
             <Mail className="h-6 w-6 text-white" />
           </a>
           <a
-            href="tel:920002168"
+            href={`tel:${phone}`}
             className="pointer-events-auto absolute top-[40%] left-[8%] flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow-delay"
             aria-label={t("contact.callCenter")}
           >
@@ -111,10 +117,10 @@ function ContactPage() {
             {t("contact.infoTitle")}
           </span>
           <h1 className="mt-6 text-4xl font-extrabold md:text-6xl lg:text-7xl animate-rise-in" style={{ animationDelay: "0.1s" }}>
-            {t("contact.title")}
+            {cms.field("hero", "title", t("contact.title"))}
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-white/80 animate-rise-in" style={{ animationDelay: "0.2s" }}>
-            {t("contact.intro")}
+            {cms.field("hero", "subtitle", t("contact.intro"))}
           </p>
         </div>
 
@@ -178,8 +184,8 @@ function ContactPage() {
             </CardContent>
           </Card>
           <InfoRow icon={Clock} title={t("contact.hours")} text={t("contact.address")} />
-          <InfoRow icon={Mail} title="Email" text="contact@gostation.net" />
-          <InfoRow icon={Phone} title={t("contact.callCenter")} text={t("contact.callNumber")} tel />
+          <InfoRow icon={Mail} title="Email" text={email} />
+          <InfoRow icon={Phone} title={t("contact.callCenter")} text={setting("contact", "phone", t("contact.callNumber"))} tel />
         </div>
 
         <Card id="contact-form">

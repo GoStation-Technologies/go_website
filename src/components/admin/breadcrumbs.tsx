@@ -19,6 +19,10 @@ const KEYS: Record<string, string> = {
   chats: "admin.nav.chats",
   abuse: "admin.nav.abuse",
   audit: "admin.nav.audit",
+  notifications: "admin.nav.notifications",
+  content: "admin.nav.content",
+  faqs: "admin.nav.faqs",
+  settings: "admin.nav.settings",
 };
 
 export function AdminBreadcrumbs() {

@@ -4,6 +4,7 @@ import { SiteFooter } from "./footer";
 import { CookieBanner } from "./cookie-banner";
 import { LangBoot } from "./lang-boot";
 import { ChatWidget } from "./chat-widget";
+import { AnnouncementBar } from "./announcement-bar";
 
 export function SiteLayout({
   children,
@@ -16,6 +17,7 @@ export function SiteLayout({
   return (
     <div className="min-h-screen bg-background text-foreground">
       <LangBoot />
+      {!overlayHeader && <AnnouncementBar />}
       <SiteHeader overlay={overlayHeader} />
       <main>{children}</main>
       <SiteFooter />
