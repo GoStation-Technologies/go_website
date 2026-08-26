@@ -22,6 +22,7 @@ const KEYS: Record<string, string> = {
   notifications: "admin.nav.notifications",
   content: "admin.nav.content",
   faqs: "admin.nav.faqs",
+  "otp-whitelist": "admin.nav.otpWhitelist",
   settings: "admin.nav.settings",
 };
 

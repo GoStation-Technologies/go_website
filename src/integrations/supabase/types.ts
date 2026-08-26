@@ -963,6 +963,42 @@ export type Database = {
         }
         Relationships: []
       }
+      otp_whitelist: {
+        Row: {
+          created_at: string
+          fixed_code: string | null
+          id: string
+          is_active: boolean
+          label: string | null
+          mode: string
+          notes: string | null
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          fixed_code?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          mode?: string
+          notes?: string | null
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          fixed_code?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          mode?: string
+          notes?: string | null
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       page_sections: {
         Row: {
           content_ar: string | null
