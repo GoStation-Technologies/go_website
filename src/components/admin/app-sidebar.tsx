@@ -14,6 +14,7 @@ import {
   Settings,
   FileText,
   HelpCircle,
+  KeyRound,
 } from "lucide-react";
 
 import { isRtl } from "@/lib/i18n";

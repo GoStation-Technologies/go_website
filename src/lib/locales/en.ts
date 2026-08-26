@@ -815,6 +815,7 @@ export const en = {
       applications: "Applications",
       content: "Page content",
       faqs: "FAQs",
+      otpWhitelist: "OTP whitelist",
       settings: "Site settings",
     },
     applications: {

@@ -818,6 +818,7 @@ export const ar = {
       applications: "طلبات التوظيف",
       content: "محتوى الصفحات",
       faqs: "الأسئلة الشائعة",
+      otpWhitelist: "قائمة رموز التحقق",
       settings: "إعدادات الموقع",
     },
     applications: {
