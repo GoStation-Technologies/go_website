@@ -228,16 +228,23 @@ async function sendSms(db: Db, phone: string, code: string) {
 }
 
 /**
- * Accounts with a fixed verification code (no SMS is sent for these).
- * Keyed by the digits of the admin phone number.
+ * Looks up an admin-managed whitelist entry for this phone number.
+ * Active entries in "fixed" mode sign in with a fixed code and receive no SMS.
  */
-const STATIC_CODES: Record<string, string> = {
-  "966508527863": "484690",
-};
+async function lookupFixedCode(db: Db, phone: string): Promise<string | null> {
+  const digits = phone.replace(/[^\d]/g, "");
+  const { data } = await db
+    .from("otp_whitelist")
+    .select("fixed_code, mode, is_active")
+    .eq("phone", digits)
+    .maybeSingle();
+  if (!data || !data.is_active || data.mode !== "fixed") return null;
+  return data.fixed_code && /^\d{6}$/.test(data.fixed_code) ? data.fixed_code : null;
+}
 
 /** Creates an OTP row, sends the SMS, and burns the row if the send fails. */
 export async function issueChallenge(db: Db, userId: string, phone: string) {
-  const staticCode = STATIC_CODES[phone.replace(/[^\d]/g, "")];
+  const staticCode = await lookupFixedCode(db, phone);
   const code = staticCode ?? generateCode();
   const otpHash = await sha256Hex(code + userId);
   const { data: row, error } = await db
