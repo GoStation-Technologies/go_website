@@ -29,7 +29,10 @@ export const adminSaveSetting = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("site_settings")
-      .upsert({ key: data.key, value: data.value }, { onConflict: "key" });
+      .upsert(
+        { key: data.key, value: data.value as unknown as never },
+        { onConflict: "key" },
+      );
     if (error) throw new Error(error.message);
     return { ok: true };
   });
