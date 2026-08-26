@@ -41,6 +41,7 @@ import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-p
 import { Route as CareersSlugRouteImport } from './routes/careers.$slug'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as ManagePortal9f4c2ab7PagesSlugRouteImport } from './routes/manage-portal-9f4c2ab7.pages.$slug'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksSyncDataverseLocationsRouteImport } from './routes/api/public/hooks/sync-dataverse-locations'
@@ -223,6 +224,12 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ManagePortal9f4c2ab7PagesSlugRoute =
+  ManagePortal9f4c2ab7PagesSlugRouteImport.update({
+    id: '/pages/$slug',
+    path: '/pages/$slug',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -282,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/media/': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
 }
@@ -319,6 +327,7 @@ export interface FileRoutesByTo {
   '/media': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
 }
@@ -358,6 +367,7 @@ export interface FileRoutesById {
   '/media/': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
 }
@@ -398,6 +408,7 @@ export interface FileRouteTypes {
     | '/media/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
   fileRoutesByTo: FileRoutesByTo
@@ -435,6 +446,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
   id:
@@ -473,6 +485,7 @@ export interface FileRouteTypes {
     | '/media/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
   fileRoutesById: FileRoutesById
@@ -728,6 +741,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manage-portal-9f4c2ab7/pages/$slug': {
+      id: '/manage-portal-9f4c2ab7/pages/$slug'
+      path: '/pages/$slug'
+      fullPath: '/manage-portal-9f4c2ab7/pages/$slug'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7PagesSlugRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -774,6 +794,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
   ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
   ManagePortal9f4c2ab7IndexRoute: typeof ManagePortal9f4c2ab7IndexRoute
+  ManagePortal9f4c2ab7PagesSlugRoute: typeof ManagePortal9f4c2ab7PagesSlugRoute
 }
 
 const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
@@ -792,6 +813,7 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
   ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
   ManagePortal9f4c2ab7IndexRoute: ManagePortal9f4c2ab7IndexRoute,
+  ManagePortal9f4c2ab7PagesSlugRoute: ManagePortal9f4c2ab7PagesSlugRoute,
 }
 
 const ManagePortal9f4c2ab7RouteWithChildren =
