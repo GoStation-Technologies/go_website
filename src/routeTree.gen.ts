@@ -28,6 +28,7 @@ import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-p
 import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
 import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
 import { Route as ManagePortal9f4c2ab7SettingsRouteImport } from './routes/manage-portal-9f4c2ab7.settings'
+import { Route as ManagePortal9f4c2ab7OtpWhitelistRouteImport } from './routes/manage-portal-9f4c2ab7.otp-whitelist'
 import { Route as ManagePortal9f4c2ab7NotificationsRouteImport } from './routes/manage-portal-9f4c2ab7.notifications'
 import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-portal-9f4c2ab7.news'
 import { Route as ManagePortal9f4c2ab7FaqsRouteImport } from './routes/manage-portal-9f4c2ab7.faqs'
@@ -143,6 +144,12 @@ const ManagePortal9f4c2ab7SettingsRoute =
   ManagePortal9f4c2ab7SettingsRouteImport.update({
     id: '/settings',
     path: '/settings',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7OtpWhitelistRoute =
+  ManagePortal9f4c2ab7OtpWhitelistRouteImport.update({
+    id: '/otp-whitelist',
+    path: '/otp-whitelist',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
 const ManagePortal9f4c2ab7NotificationsRoute =
@@ -264,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/faqs': typeof ManagePortal9f4c2ab7FaqsRoute
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
+  '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -300,6 +308,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/faqs': typeof ManagePortal9f4c2ab7FaqsRoute
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
+  '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -338,6 +347,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/faqs': typeof ManagePortal9f4c2ab7FaqsRoute
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
+  '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -377,6 +387,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/faqs'
     | '/manage-portal-9f4c2ab7/news'
     | '/manage-portal-9f4c2ab7/notifications'
+    | '/manage-portal-9f4c2ab7/otp-whitelist'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -413,6 +424,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/faqs'
     | '/manage-portal-9f4c2ab7/news'
     | '/manage-portal-9f4c2ab7/notifications'
+    | '/manage-portal-9f4c2ab7/otp-whitelist'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -450,6 +462,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/faqs'
     | '/manage-portal-9f4c2ab7/news'
     | '/manage-portal-9f4c2ab7/notifications'
+    | '/manage-portal-9f4c2ab7/otp-whitelist'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -624,6 +637,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7SettingsRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/otp-whitelist': {
+      id: '/manage-portal-9f4c2ab7/otp-whitelist'
+      path: '/otp-whitelist'
+      fullPath: '/manage-portal-9f4c2ab7/otp-whitelist'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7OtpWhitelistRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/notifications': {
       id: '/manage-portal-9f4c2ab7/notifications'
       path: '/notifications'
@@ -749,6 +769,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7FaqsRoute: typeof ManagePortal9f4c2ab7FaqsRoute
   ManagePortal9f4c2ab7NewsRoute: typeof ManagePortal9f4c2ab7NewsRoute
   ManagePortal9f4c2ab7NotificationsRoute: typeof ManagePortal9f4c2ab7NotificationsRoute
+  ManagePortal9f4c2ab7OtpWhitelistRoute: typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   ManagePortal9f4c2ab7SettingsRoute: typeof ManagePortal9f4c2ab7SettingsRoute
   ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
   ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -766,6 +787,7 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7NewsRoute: ManagePortal9f4c2ab7NewsRoute,
   ManagePortal9f4c2ab7NotificationsRoute:
     ManagePortal9f4c2ab7NotificationsRoute,
+  ManagePortal9f4c2ab7OtpWhitelistRoute: ManagePortal9f4c2ab7OtpWhitelistRoute,
   ManagePortal9f4c2ab7SettingsRoute: ManagePortal9f4c2ab7SettingsRoute,
   ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
   ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
