@@ -17,6 +17,7 @@ export function SiteLayout({
   return (
     <div className="min-h-screen bg-background text-foreground">
       <LangBoot />
+      {!overlayHeader && <AnnouncementBar />}
       <SiteHeader overlay={overlayHeader} />
       <main>{children}</main>
       <SiteFooter />
