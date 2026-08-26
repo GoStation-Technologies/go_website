@@ -40,6 +40,9 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "abuse", url: "/manage-portal-9f4c2ab7/abuse", icon: ShieldAlert },
   { key: "audit", url: "/manage-portal-9f4c2ab7/audit", icon: ScrollText },
   { key: "notifications", url: "/manage-portal-9f4c2ab7/notifications", icon: BellRing },
+  { key: "content", url: "/manage-portal-9f4c2ab7/content", icon: FileText },
+  { key: "faqs", url: "/manage-portal-9f4c2ab7/faqs", icon: HelpCircle },
+  { key: "settings", url: "/manage-portal-9f4c2ab7/settings", icon: Settings },
 ];
 
 
