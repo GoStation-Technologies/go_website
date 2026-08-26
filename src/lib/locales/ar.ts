@@ -816,6 +816,9 @@ export const ar = {
       audit: "سجل التدقيق",
       notifications: "الإشعارات",
       applications: "طلبات التوظيف",
+      content: "محتوى الصفحات",
+      faqs: "الأسئلة الشائعة",
+      settings: "إعدادات الموقع",
     },
     applications: {
       title: "طلبات التوظيف",
