@@ -816,6 +816,12 @@ export const en = {
       content: "Page content",
       faqs: "FAQs",
       otpWhitelist: "OTP whitelist",
+      testimonials: "Customer reviews",
+      pageHome: "Homepage content",
+      pageAbout: "About page",
+      pageFranchise: "Franchise page",
+      pageAcquisitions: "Acquisitions page",
+      pageInvestors: "Investor Relations page",
       settings: "Site settings",
     },
     applications: {

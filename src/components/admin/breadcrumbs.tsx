@@ -24,6 +24,13 @@ const KEYS: Record<string, string> = {
   faqs: "admin.nav.faqs",
   "otp-whitelist": "admin.nav.otpWhitelist",
   settings: "admin.nav.settings",
+  testimonials: "admin.nav.testimonials",
+  pages: "admin.nav.content",
+  home: "admin.nav.pageHome",
+  about: "admin.nav.pageAbout",
+  franchise: "admin.nav.pageFranchise",
+  acquisitions: "admin.nav.pageAcquisitions",
+  investors: "admin.nav.pageInvestors",
 };
 
 export function AdminBreadcrumbs() {
