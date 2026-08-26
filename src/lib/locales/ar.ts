@@ -819,6 +819,12 @@ export const ar = {
       content: "محتوى الصفحات",
       faqs: "الأسئلة الشائعة",
       otpWhitelist: "قائمة رموز التحقق",
+      testimonials: "آراء العملاء",
+      pageHome: "محتوى الصفحة الرئيسية",
+      pageAbout: "صفحة عن الشركة",
+      pageFranchise: "صفحة الامتياز",
+      pageAcquisitions: "صفحة الاستحواذ",
+      pageInvestors: "صفحة علاقات المستثمرين",
       settings: "إعدادات الموقع",
     },
     applications: {

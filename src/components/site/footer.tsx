@@ -31,6 +31,7 @@ export function SiteFooter() {
   const email = setting("contact", "email", "info@gostation.net");
   const phone = setting("contact", "phone", "920002168");
   const address = setting("contact", ar ? "address_ar" : "address_en", t("contact.address"));
+  const hours = setting("contact", ar ? "hours_ar" : "hours_en", t("contact.hours"));
   const copyright = setting(
     "footer",
     ar ? "copyright_ar" : "copyright_en",
@@ -115,7 +116,7 @@ export function SiteFooter() {
         <FooterColumn title={t("footer.legal")}>
           <li className="text-foreground/80">{t("footer.privacy")}</li>
           <li className="text-foreground/80">{t("footer.terms")}</li>
-          <li className="text-foreground/80">{t("contact.hours")}</li>
+          <li className="text-foreground/80">{hours}</li>
         </FooterColumn>
       </div>
 

@@ -125,7 +125,7 @@ function IRPage() {
             {cms.field("hero", "title", t("investors.heroTitle"))}
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-white/75 md:text-base">
-            {t("investors.heroBody")}
+            {cms.field("hero", "subtitle", t("investors.heroBody"))}
           </p>
         </div>
       </section>
@@ -148,9 +148,9 @@ function IRPage() {
               {t("investors.govEyebrow")}
             </span>
             <h2 className="mt-5 text-balance text-3xl font-extrabold tracking-tight md:text-4xl">
-              {t("investors.govTitle")}
+              {cms.field("highlights", "title", t("investors.govTitle"))}
             </h2>
-            <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">{t("investors.govBody")}</p>
+            <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">{cms.field("highlights", "content", t("investors.govBody"))}</p>
 
             <div className="mt-8 rounded-2xl border border-border/60 bg-muted/40 p-6">
               <h3 className="font-display text-lg font-bold">{t("investors.govGoalTitle")}</h3>
@@ -184,7 +184,7 @@ function IRPage() {
               {t("investors.reportsEyebrow")}
             </span>
           </div>
-          <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">{t("investors.reportsTitle")}</h2>
+          <h2 className="text-3xl font-extrabold tracking-tight md:text-5xl">{cms.field("reports", "title", t("investors.reportsTitle"))}</h2>
         </div>
 
         <div className="mt-10 flex items-start gap-6">
@@ -298,7 +298,7 @@ function IRPage() {
 
       <section className="mx-auto max-w-3xl px-4 py-12">
 
-        <h2 className="mb-2 text-2xl font-bold">{t("investors.contact")}</h2>
+        <h2 className="mb-2 text-2xl font-bold">{cms.field("contact", "title", t("investors.contact"))}</h2>
         <p className="mb-6 text-sm text-muted-foreground">{t("investors.contactSub")}</p>
         <Card><CardContent className="p-8">
           {ref && <div className="mb-4 rounded-lg border border-accent/40 bg-accent/10 p-3 text-sm">{t("common.referenceSaved")} <span className="font-mono">{ref}</span></div>}

@@ -482,7 +482,7 @@ export const adminDeleteStation = createServerFn({ method: "POST" })
 const NewsInput = z.object({
   id: z.string().uuid().optional(),
   slug: z.string().min(1),
-  kind: z.enum(["news", "event", "press"]).default("news"),
+  kind: z.enum(["news", "event", "press", "video"]).default("news"),
   title_ar: z.string().min(1),
   title_en: z.string().min(1),
   excerpt_ar: z.string().optional().nullable(),
@@ -490,10 +490,16 @@ const NewsInput = z.object({
   body_ar: z.string().optional().nullable(),
   body_en: z.string().optional().nullable(),
   cover_url: z.string().optional().nullable(),
+  event_date: z.string().optional().nullable(),
+  event_location_en: z.string().optional().nullable(),
+  event_location_ar: z.string().optional().nullable(),
+  video_url: z.string().optional().nullable(),
+  duration_seconds: z.number().int().min(0).max(86400).optional().nullable(),
   is_published: z.boolean().default(false),
   is_featured: z.boolean().default(false),
   published_at: z.string().optional().nullable(),
 });
+
 
 export const adminListNews = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])

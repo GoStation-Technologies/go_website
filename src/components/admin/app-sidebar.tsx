@@ -15,6 +15,12 @@ import {
   FileText,
   HelpCircle,
   KeyRound,
+  Building2,
+  Handshake,
+  Landmark,
+  TrendingUp,
+  Home,
+  Quote,
 } from "lucide-react";
 
 import { isRtl } from "@/lib/i18n";
@@ -42,6 +48,12 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "audit", url: "/manage-portal-9f4c2ab7/audit", icon: ScrollText },
   { key: "notifications", url: "/manage-portal-9f4c2ab7/notifications", icon: BellRing },
   { key: "content", url: "/manage-portal-9f4c2ab7/content", icon: FileText },
+  { key: "pageHome", url: "/manage-portal-9f4c2ab7/pages/home", icon: Home },
+  { key: "pageAbout", url: "/manage-portal-9f4c2ab7/pages/about", icon: Building2 },
+  { key: "pageFranchise", url: "/manage-portal-9f4c2ab7/pages/franchise", icon: Handshake },
+  { key: "pageAcquisitions", url: "/manage-portal-9f4c2ab7/pages/acquisitions", icon: Landmark },
+  { key: "pageInvestors", url: "/manage-portal-9f4c2ab7/pages/investors", icon: TrendingUp },
+  { key: "testimonials", url: "/manage-portal-9f4c2ab7/testimonials", icon: Quote },
   { key: "faqs", url: "/manage-portal-9f4c2ab7/faqs", icon: HelpCircle },
   { key: "otpWhitelist", url: "/manage-portal-9f4c2ab7/otp-whitelist", icon: KeyRound },
   { key: "settings", url: "/manage-portal-9f4c2ab7/settings", icon: Settings },
