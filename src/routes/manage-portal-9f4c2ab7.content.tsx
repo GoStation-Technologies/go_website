@@ -126,7 +126,7 @@ function ContentPage() {
         </div>
         <Button size="sm" variant="outline" onClick={() => setNewRow(emptySection(activePage))}>
           <Plus className="me-1.5 h-4 w-4" />
-          {t("admin.cms.newSection", { defaultValue: "New section" })}
+          {t("admin.cms.newSection")}
         </Button>
       </div>
 
@@ -137,9 +137,8 @@ function ContentPage() {
             size="sm"
             variant={p === activePage ? "default" : "outline"}
             onClick={() => setPage(p)}
-            className="capitalize"
           >
-            {p}
+            {t(`admin.cms.pages.${p}`, { defaultValue: p })}
           </Button>
         ))}
       </div>
@@ -189,11 +188,11 @@ function SectionCard({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
         <CardTitle className="text-base">
-          {section.section_key || t("admin.cms.newSection", { defaultValue: "New section" })}
+          {section.section_key || t("admin.cms.newSection")}
         </CardTitle>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-xs text-muted-foreground">
-            {t("admin.cms.visible", { defaultValue: "Visible" })}
+            {t("admin.cms.visible")}
             <Switch
               checked={section.is_visible}
               onCheckedChange={(v) => onChange({ is_visible: v })}
@@ -215,7 +214,7 @@ function SectionCard({
             onChange={(e) => onChange({ section_key: e.target.value })}
           />
         </Labeled>
-        <Labeled label={t("admin.cms.sortOrder", { defaultValue: "Order" })}>
+        <Labeled label={t("admin.cms.sortOrder")}>
           <Input
             className={inputCls}
             type="number"
@@ -223,26 +222,26 @@ function SectionCard({
             onChange={(e) => onChange({ sort_order: Number(e.target.value) || 0 })}
           />
         </Labeled>
-        <Labeled label="Title (EN)">
+        <Labeled label={t("admin.cms.titleEn")}>
           <Input className={inputCls} dir="ltr" value={section.title_en ?? ""} onChange={(e) => onChange({ title_en: e.target.value })} />
         </Labeled>
-        <Labeled label="العنوان (AR)">
+        <Labeled label={t("admin.cms.titleAr")}>
           <Input className={inputCls} dir="rtl" value={section.title_ar ?? ""} onChange={(e) => onChange({ title_ar: e.target.value })} />
         </Labeled>
-        <Labeled label="Subtitle (EN)">
+        <Labeled label={t("admin.cms.subtitleEn")}>
           <Input className={inputCls} dir="ltr" value={section.subtitle_en ?? ""} onChange={(e) => onChange({ subtitle_en: e.target.value })} />
         </Labeled>
-        <Labeled label="العنوان الفرعي (AR)">
+        <Labeled label={t("admin.cms.subtitleAr")}>
           <Input className={inputCls} dir="rtl" value={section.subtitle_ar ?? ""} onChange={(e) => onChange({ subtitle_ar: e.target.value })} />
         </Labeled>
-        <Labeled label="Body (EN)">
+        <Labeled label={t("admin.cms.bodyEn")}>
           <Textarea rows={5} dir="ltr" value={section.content_en ?? ""} onChange={(e) => onChange({ content_en: e.target.value })} />
         </Labeled>
-        <Labeled label="النص (AR)">
+        <Labeled label={t("admin.cms.bodyAr")}>
           <Textarea rows={5} dir="rtl" value={section.content_ar ?? ""} onChange={(e) => onChange({ content_ar: e.target.value })} />
         </Labeled>
         <div className="md:col-span-2">
-          <Labeled label={t("admin.cms.media", { defaultValue: "Image / file" })}>
+          <Labeled label={t("admin.cms.media")}>
             <MediaUpload value={section.media_url} onChange={(url) => onChange({ media_url: url })} />
           </Labeled>
         </div>
