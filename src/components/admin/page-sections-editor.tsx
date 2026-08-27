@@ -199,41 +199,41 @@ export function PageSectionsEditor({ page }: { page: PageDef }) {
             <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
               <CardTitle className="text-base">{ar ? def.ar : def.en}</CardTitle>
               <label className="flex items-center gap-2 text-xs text-muted-foreground">
-                {t("admin.cms.visible", { defaultValue: "Visible" })}
+                {t("admin.cms.visible")}
                 <Switch checked={row.is_visible} onCheckedChange={(v) => patch({ is_visible: v })} />
               </label>
             </CardHeader>
             <CardContent>
               <FormGrid>
-                <Field label="Title (EN)" lang="en">
+                <Field label={t("admin.cms.titleEn")} lang="en">
                   <Input
                     className={inputCls}
                     value={row.title_en ?? ""}
                     onChange={(e) => patch({ title_en: e.target.value })}
                   />
                 </Field>
-                <Field label="العنوان (AR)" lang="ar">
+                <Field label={t("admin.cms.titleAr")} lang="ar">
                   <Input
                     className={inputCls}
                     value={row.title_ar ?? ""}
                     onChange={(e) => patch({ title_ar: e.target.value })}
                   />
                 </Field>
-                <Field label="Subtitle (EN)" lang="en">
+                <Field label={t("admin.cms.subtitleEn")} lang="en">
                   <Input
                     className={inputCls}
                     value={row.subtitle_en ?? ""}
                     onChange={(e) => patch({ subtitle_en: e.target.value })}
                   />
                 </Field>
-                <Field label="العنوان الفرعي (AR)" lang="ar">
+                <Field label={t("admin.cms.subtitleAr")} lang="ar">
                   <Input
                     className={inputCls}
                     value={row.subtitle_ar ?? ""}
                     onChange={(e) => patch({ subtitle_ar: e.target.value })}
                   />
                 </Field>
-                <Field label="Body (EN)" lang="en">
+                <Field label={t("admin.cms.bodyEn")} lang="en">
                   <Textarea
                     className={inputCls}
                     rows={5}
@@ -241,7 +241,7 @@ export function PageSectionsEditor({ page }: { page: PageDef }) {
                     onChange={(e) => patch({ content_en: e.target.value })}
                   />
                 </Field>
-                <Field label="النص (AR)" lang="ar">
+                <Field label={t("admin.cms.bodyAr")} lang="ar">
                   <Textarea
                     className={inputCls}
                     rows={5}
@@ -251,7 +251,7 @@ export function PageSectionsEditor({ page }: { page: PageDef }) {
                 </Field>
                 {def.media ? (
                   <div className="sm:col-span-2">
-                    <Field label={t("admin.cms.media", { defaultValue: "Image / file" })} lang="en">
+                    <Field label={t("admin.cms.media")} lang="en">
                       <MediaUpload value={row.media_url} onChange={(url) => patch({ media_url: url })} />
                     </Field>
                   </div>
