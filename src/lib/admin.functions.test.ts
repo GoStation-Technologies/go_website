@@ -21,9 +21,9 @@ type ErrorBody = {
 describe("validateChatsInput — 400 Response error body shape", () => {
   it("returns parsed data (no throw) for valid input", () => {
     expect(validateChatsInput({ page: 2, pageSize: 25, sort: "oldest" })).toEqual({
-      page: 2, pageSize: 25, sort: "oldest",
+      page: 2, pageSize: 25, sort: "oldest", q: "",
     });
-    expect(validateChatsInput({})).toEqual({ page: 1, pageSize: 10, sort: "newest" });
+    expect(validateChatsInput({})).toEqual({ page: 1, pageSize: 10, sort: "newest", q: "" });
   });
 
   const singleFieldCases: Array<{ label: string; input: unknown; field: "page" | "pageSize" | "sort" }> = [
@@ -110,7 +110,7 @@ describe("validateChatsInput — 400 Response error body shape", () => {
 });
 
 describe("validateChatsInput — missing / undefined / null / non-numeric handling", () => {
-  const DEFAULTS = { page: 1, pageSize: 10, sort: "newest" as const };
+  const DEFAULTS = { page: 1, pageSize: 10, sort: "newest" as const, q: "" };
 
   // Missing keys and `undefined` values must fall back to defaults, never 400.
   const defaultCases: Array<{ label: string; input: unknown }> = [
@@ -134,6 +134,7 @@ describe("validateChatsInput — missing / undefined / null / non-numeric handli
       page: rec.page === undefined ? DEFAULTS.page : rec.page,
       pageSize: rec.pageSize === undefined ? DEFAULTS.pageSize : rec.pageSize,
       sort: rec.sort === undefined ? DEFAULTS.sort : rec.sort,
+      q: DEFAULTS.q,
     };
     expect(parsed).toEqual(expected);
   });
@@ -194,13 +195,13 @@ describe("validateChatsInput — missing / undefined / null / non-numeric handli
 describe("adminListChats input validation (ChatsInput)", () => {
   it("applies defaults for empty input", () => {
     const parsed = ChatsInput.parse({});
-    expect(parsed).toEqual({ page: 1, pageSize: 10, sort: "newest" });
+    expect(parsed).toEqual({ page: 1, pageSize: 10, sort: "newest", q: "" });
   });
 
   it("accepts valid in-range values", () => {
     for (const sort of ["newest", "oldest", "messages"] as const) {
       const parsed = ChatsInput.parse({ page: 3, pageSize: 25, sort });
-      expect(parsed).toEqual({ page: 3, pageSize: 25, sort });
+      expect(parsed).toEqual({ page: 3, pageSize: 25, sort, q: "" });
     }
     expect(ChatsInput.parse({ pageSize: 1 }).pageSize).toBe(1);
     expect(ChatsInput.parse({ pageSize: 100 }).pageSize).toBe(100);
