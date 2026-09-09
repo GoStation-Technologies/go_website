@@ -15,8 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { CheckCircle2, Quote, Fuel, Handshake, Building2, Award, BarChart3, GraduationCap, Network, TrendingUp, Truck } from "lucide-react";
-import stationImg from "@/assets/station-canopy.jpg.asset.json";
-import heroStationImg from "@/assets/franchise-station.jpg.asset.json";
+const stationImg = { url: "/station-canopy.jpg" };
+const heroStationImg = { url: "/franchise-station.jpg" };
 
 
 

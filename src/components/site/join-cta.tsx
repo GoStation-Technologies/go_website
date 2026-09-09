@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { ArrowUpRight, Handshake } from "lucide-react";
-import stationAsset from "@/assets/station-canopy.jpg.asset.json";
+const stationAsset = { url: "/station-canopy.jpg" };
 
 export function JoinCta() {
   const { t, i18n } = useTranslation();

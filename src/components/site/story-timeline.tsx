@@ -2,11 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStationStats } from "@/hooks/use-station-stats";
 import { ChevronLeft, ChevronRight, Flag, Fuel, MapPin, Smartphone, Rocket, Trophy } from "lucide-react";
-import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
-import pylon from "@/assets/gostation-pylon.jpg.asset.json";
-import franchiseStation from "@/assets/franchise-station.jpg.asset.json";
-import appDownload from "@/assets/go-app-download.jpg.asset.json";
-import heroCinematic from "@/assets/hero-cinematic.jpg.asset.json";
+const stationCanopy = { url: "/station-canopy.jpg" };
+const pylon = { url: "/gostation-pylon.jpg" };
+const franchiseStation = { url: "/franchise-station.jpg" };
+const appDownload = { url: "/go-app-download.jpg" };
+const heroCinematic = { url: "/hero-cinematic.jpg" };
 
 const MILESTONES = [
   { key: "m1", year: "2016", icon: Flag, img: pylon.url },

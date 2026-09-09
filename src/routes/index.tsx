@@ -27,15 +27,15 @@ import {
   QrCode,
   Wallet,
 } from "lucide-react";
-import heroAsset from "@/assets/hero-cinematic.jpg.asset.json";
-import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
-import logoAsset from "@/assets/gostation-logo.png.asset.json";
-import chairmanCutoutAsset from "@/assets/chairman-cutout.png.asset.json";
+const heroAsset = { url: "/hero-cinematic.jpg" };
+const stationCanopy = { url: "/station-canopy.jpg" };
+const logoAsset = { url: "/gostation-logo.png" };
+const chairmanCutoutAsset = { url: "/chairman-cutout.png" };
 
-import appPoints from "@/assets/go-app-points.jpg.asset.json";
-import appReports from "@/assets/go-app-reports.jpg.asset.json";
-import goQr from "@/assets/gostation-qr.png.asset.json";
-import partnerLogo from "@/assets/gostation-logo.png.asset.json";
+const appPoints = { url: "/go-app-points.jpg" };
+const appReports = { url: "/go-app-reports.jpg" };
+const goQr = { url: "/gostation-qr.png" };
+const partnerLogo = { url: "/gostation-logo.png" };
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { CheckCircle2, Building2, Info, Clock, FileText, Handshake } from "lucide-react";
-import stationImg from "@/assets/station-canopy.jpg.asset.json";
+const stationImg = { url: "/station-canopy.jpg" };
 
 export const Route = createFileRoute("/acquisitions")({
   component: AcqPage,

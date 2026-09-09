@@ -9,7 +9,7 @@ import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { StoryTimeline } from "@/components/site/story-timeline";
 import { FutureRoadmap } from "@/components/site/future-roadmap";
-import canopyImg from "@/assets/station-canopy.jpg.asset.json";
+const canopyImg = { url: "/station-canopy.jpg" };
 
 
 import { useState } from "react";
