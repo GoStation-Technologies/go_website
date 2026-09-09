@@ -71,7 +71,7 @@ export function CoverageMap() {
     <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-elegant">
       <div className="flex flex-wrap items-center gap-3 border-b border-border p-4">
         <Select value={region} onValueChange={setRegion}>
-          <SelectTrigger className="w-[190px]">
+          <SelectTrigger className="w-[190px]" aria-label={ar ? "المنطقة" : "Region"}>
             <SelectValue placeholder={ar ? "المنطقة" : "Region"} />
           </SelectTrigger>
           <SelectContent className="z-[2000]">
@@ -85,7 +85,7 @@ export function CoverageMap() {
           </SelectContent>
         </Select>
         <Select value={fuel} onValueChange={setFuel}>
-          <SelectTrigger className="w-[170px]">
+          <SelectTrigger className="w-[170px]" aria-label={ar ? "نوع الوقود" : "Fuel type"}>
             <SelectValue placeholder={ar ? "نوع الوقود" : "Fuel type"} />
           </SelectTrigger>
           <SelectContent className="z-[2000]">
