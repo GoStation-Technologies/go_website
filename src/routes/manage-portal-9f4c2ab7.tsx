@@ -15,7 +15,17 @@ import { getContentLanguage } from "@/lib/i18n";
 
 async function waitForSession() {
   const { data } = await supabase.auth.getSession();
-  if (data.session) return data.session;
+  if (data.session) {
+    // An expired (or nearly expired) access token still looks like a session
+    // locally but is rejected by the database, so refresh it up front.
+    const expiresAt = (data.session.expires_at ?? 0) * 1000;
+    if (expiresAt && expiresAt - Date.now() < 60_000) {
+      const refreshed = await supabase.auth.refreshSession();
+      return refreshed.data.session ?? null;
+    }
+    return data.session;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // Give the client one tick to finish restoring from storage / an OAuth hash.
   return await new Promise<any>((resolve) => {
