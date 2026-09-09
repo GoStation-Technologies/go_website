@@ -34,11 +34,26 @@ export const getMyAdminAccess = createServerFn({ method: "GET" })
         .eq("user_id", context.userId)
         .maybeSingle(),
     ]);
+    // A failed lookup is NOT the same as "not staff" — e.g. an expired or
+    // rotated token still passes local claim checks but is rejected by the
+    // database. Surface it so the caller can re-authenticate instead of
+    // silently bouncing a real admin to the public site.
+    if (rolesRes.error || profileRes.error) {
+      return {
+        roles: [] as string[],
+        isActive: false,
+        failed: true,
+        message: rolesRes.error?.message ?? profileRes.error?.message ?? "lookup_failed",
+      };
+    }
     return {
       roles: (rolesRes.data ?? []).map((r) => r.role as string),
       isActive: Boolean(profileRes.data?.is_active),
+      failed: false,
+      message: null as string | null,
     };
   });
+
 
 const OverviewInput = z.object({
   days: z.number().int().min(1).max(90).default(14),
