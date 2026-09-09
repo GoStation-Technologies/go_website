@@ -65,9 +65,24 @@ jobs:
       - run: bun install --frozen-lockfile
       - name: Production build
         run: bun run build
+      - name: Locate wrangler config
+        run: |
+          set -euo pipefail
+          for path in dist/server/wrangler.json .output/server/wrangler.json .output/public/wrangler.json; do
+            if [ -f "$path" ]; then
+              echo "Found wrangler config at $path"
+              echo "WRANGLER_CONFIG=$path" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done
+          echo "ERROR: No wrangler.json found. Build output:"
+          ls -la dist/ 2>/dev/null || true
+          ls -la .output/ 2>/dev/null || true
+          exit 1
       - name: Start production worker (wrangler)
         run: |
-          bunx wrangler dev --config dist/server/wrangler.json --port 8181 --ip 127.0.0.1 > wrangler.log 2>&1 &
+          set -euo pipefail
+          bunx wrangler dev --config "$WRANGLER_CONFIG" --port 8181 --ip 127.0.0.1 > wrangler.log 2>&1 &
           echo $! > wrangler.pid
           for i in $(seq 1 60); do
             if curl -sf http://127.0.0.1:8181/ > /dev/null; then
