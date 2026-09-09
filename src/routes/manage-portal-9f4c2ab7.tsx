@@ -15,7 +15,17 @@ import { getContentLanguage } from "@/lib/i18n";
 
 async function waitForSession() {
   const { data } = await supabase.auth.getSession();
-  if (data.session) return data.session;
+  if (data.session) {
+    // An expired (or nearly expired) access token still looks like a session
+    // locally but is rejected by the database, so refresh it up front.
+    const expiresAt = (data.session.expires_at ?? 0) * 1000;
+    if (expiresAt && expiresAt - Date.now() < 60_000) {
+      const refreshed = await supabase.auth.refreshSession();
+      return refreshed.data.session ?? null;
+    }
+    return data.session;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // Give the client one tick to finish restoring from storage / an OAuth hash.
   return await new Promise<any>((resolve) => {
@@ -48,12 +58,22 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7")({
       });
     }
   },
-  loader: async () => {
+  loader: async ({ location }) => {
     const res = await getMyAdminAccess();
+    // Token expired / rejected by the database: send back to sign-in, not to
+    // the public site, so a real admin can simply log in again.
+    if (res.failed) {
+      await supabase.auth.signOut().catch(() => undefined);
+      throw redirect({
+        to: "/manage-portal-9f4c2ab7/login",
+        search: { redirect: location.href },
+      });
+    }
     // Authenticated but not staff, or admin profile disabled: no portal, no hints.
     if (!res.roles.length || !res.isActive) throw redirect({ to: "/" });
     return { roles: res.roles };
   },
+
   component: AdminLayout,
   head: () => ({ meta: [{ title: "Admin — GoStation" }, { name: "robots", content: "noindex" }] }),
 });
