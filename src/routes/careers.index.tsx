@@ -9,7 +9,7 @@ import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud, Network, Users, BadgeCheck, TrendingUp, Send } from "lucide-react";
-import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
+const stationCanopy = { url: "/station-canopy.jpg" };
 
 
 export const Route = createFileRoute("/careers/")({

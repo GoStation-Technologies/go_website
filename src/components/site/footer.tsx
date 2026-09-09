@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail, Phone } from "lucide-react";
-import logoAsset from "@/assets/gostation-logo-white.png.asset.json";
-import isoLogo from "@/assets/iso-logo.png.asset.json";
+const logoAsset = { url: "/gostation-logo-white.png" };
+const isoLogo = { url: "/iso-logo.png" };
 import { useSiteSettings } from "@/hooks/use-cms";
 import { getContentLanguage } from "@/lib/i18n";
 

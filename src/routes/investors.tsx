@@ -18,8 +18,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
 import { ArrowLeft, ArrowRight, CircleDollarSign, Eye, FileDown, MapPinned, TrendingUp } from "lucide-react";
-import stationCanopy from "@/assets/station-canopy.jpg.asset.json";
-import logoWhite from "@/assets/gostation-logo-white.png.asset.json";
+const stationCanopy = { url: "/station-canopy.jpg" };
+const logoWhite = { url: "/gostation-logo-white.png" };
 
 
 

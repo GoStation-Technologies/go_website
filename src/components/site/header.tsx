@@ -11,8 +11,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import logoAsset from "@/assets/gostation-logo.png.asset.json";
-import logoWhiteAsset from "@/assets/gostation-logo-white.png.asset.json";
+const logoAsset = { url: "/gostation-logo.png" };
+const logoWhiteAsset = { url: "/gostation-logo-white.png" };
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AccessibilityMenu } from "@/components/site/accessibility-menu";

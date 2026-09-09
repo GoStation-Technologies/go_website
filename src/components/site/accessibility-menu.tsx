@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getContentLanguage } from "@/lib/i18n";
-import a11yIconAsset from "@/assets/accessibility-icon.png.asset.json";
+const a11yIconAsset = { url: "/accessibility-icon.png" };
 
 const STORAGE_KEY = "gs_a11y";
 
