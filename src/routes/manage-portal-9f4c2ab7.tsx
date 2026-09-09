@@ -48,12 +48,22 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7")({
       });
     }
   },
-  loader: async () => {
+  loader: async ({ location }) => {
     const res = await getMyAdminAccess();
+    // Token expired / rejected by the database: send back to sign-in, not to
+    // the public site, so a real admin can simply log in again.
+    if (res.failed) {
+      await supabase.auth.signOut().catch(() => undefined);
+      throw redirect({
+        to: "/manage-portal-9f4c2ab7/login",
+        search: { redirect: location.href },
+      });
+    }
     // Authenticated but not staff, or admin profile disabled: no portal, no hints.
     if (!res.roles.length || !res.isActive) throw redirect({ to: "/" });
     return { roles: res.roles };
   },
+
   component: AdminLayout,
   head: () => ({ meta: [{ title: "Admin — GoStation" }, { name: "robots", content: "noindex" }] }),
 });
