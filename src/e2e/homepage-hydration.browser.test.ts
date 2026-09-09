@@ -16,7 +16,7 @@ describe("Arabic homepage hydration", () => {
     }).then((r) => r.text());
     expect(ssr).toMatch(/<html[^>]*\bdir="rtl"/i);
     expect(ssr).toContain("قوستيشن");
-    expect(ssr).toContain("من نحن");
+    expect(ssr).toContain("عن قوستيشن");
 
     // 2. Load the same page in a real browser with the same cookie so
     //    per-request lang detection picks Arabic on the SSR pass, then
@@ -47,7 +47,7 @@ describe("Arabic homepage hydration", () => {
 
     const bodyText = await page.locator("body").innerText();
     expect(bodyText).toContain("قوستيشن");
-    expect(bodyText).toContain("من نحن");
+    expect(bodyText).toContain("عن قوستيشن");
 
     // 4. No hydration mismatches or React errors in the console.
     const hydrationErrors = consoleErrors.filter((e) =>

@@ -67,7 +67,7 @@ describe("SSR homepage smoke", () => {
 
     // Brand + key nav labels from the ar locale render server-side.
     expect(html).toContain("قوستيشن"); // brand.name
-    expect(html).toContain("من نحن"); // nav.about
+    expect(html).toContain("عن قوستيشن"); // nav.about
     expect(html).toContain("المحطات"); // nav.stations
     expect(html).toContain("تواصل معنا"); // nav.contact
 
