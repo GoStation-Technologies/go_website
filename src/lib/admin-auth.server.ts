@@ -123,11 +123,12 @@ export async function verifyPassword(
 }
 
 export async function requireActiveAdminProfile(db: Db, userId: string) {
-  const { data } = await db
+  const { data, error: profErr } = await db
     .from("admin_profiles")
     .select("user_id, phone, is_active")
     .eq("user_id", userId)
     .maybeSingle();
+  if (profErr) console.error("[admin-profile] lookup failed:", profErr.message, profErr.code);
   if (!data || !data.is_active || !data.phone?.trim()) {
     throw new AuthError(403, "This account is not enabled for admin access.");
   }
