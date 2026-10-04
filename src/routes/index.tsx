@@ -718,8 +718,8 @@ function HomePage() {
             {/* store badges */}
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <a
-                href={setting("go_app", "android_url", "#")}
-                target={setting("go_app", "android_url") ? "_blank" : undefined}
+                href={setting("go_app", "android_url", "https://play.google.com/store/apps/details?id=sa.gostation.loyalty")}
+                target="_blank"
                 rel="noreferrer"
                 className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
               >
@@ -730,8 +730,8 @@ function HomePage() {
                 </span>
               </a>
               <a
-                href={setting("go_app", "ios_url", "#")}
-                target={setting("go_app", "ios_url") ? "_blank" : undefined}
+                href={setting("go_app", "ios_url", "https://apps.apple.com/sa/app/gostation-fuel-rewards-wallet/id6755926221")}
+                target="_blank"
                 rel="noreferrer"
                 className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
               >
