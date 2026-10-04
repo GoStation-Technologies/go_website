@@ -120,7 +120,7 @@ export function SiteFooter() {
         </FooterColumn>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 pb-10 sm:px-6 md:-mt-32 lg:-mt-36">
+      <div className="pointer-events-none relative mx-auto max-w-7xl px-4 pb-10 sm:px-6 md:-mt-32 lg:-mt-36 [&>*>*]:pointer-events-auto">
         <div className="flex flex-wrap items-start justify-center gap-x-8 gap-y-6 md:justify-end">
           {[
             { code: "9001:2015", label: t("footer.cert9001") },
