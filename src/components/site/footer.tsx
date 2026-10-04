@@ -38,12 +38,12 @@ export function SiteFooter() {
     `© ${new Date().getFullYear()} ${t("brand.name")} — ${t("footer.rights")}`,
   );
   const socials: { Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; label: string; href: string }[] = [
-    { Icon: XIcon, label: "X", href: setting("social_links", "x") },
-    { Icon: Instagram, label: "Instagram", href: setting("social_links", "instagram") },
-    { Icon: Linkedin, label: "LinkedIn", href: setting("social_links", "linkedin") },
-    { Icon: Youtube, label: "YouTube", href: setting("social_links", "youtube") },
-    { Icon: TikTokIcon, label: "TikTok", href: setting("social_links", "tiktok") },
-    { Icon: Facebook, label: "Facebook", href: setting("social_links", "facebook") },
+    { Icon: XIcon, label: "X", href: setting("social_links", "x", "https://x.com/GoStationSA") },
+    { Icon: Instagram, label: "Instagram", href: setting("social_links", "instagram", "https://www.instagram.com/gostationsa") },
+    { Icon: Linkedin, label: "LinkedIn", href: setting("social_links", "linkedin", "https://www.linkedin.com/company/gostationsa") },
+    { Icon: Youtube, label: "YouTube", href: setting("social_links", "youtube", "https://www.youtube.com/@gostationsa") },
+    { Icon: TikTokIcon, label: "TikTok", href: setting("social_links", "tiktok", "https://www.tiktok.com/@gotationsa") },
+    { Icon: Facebook, label: "Facebook", href: setting("social_links", "facebook", "https://www.facebook.com/gotationsa") },
   ];
 
   return (
