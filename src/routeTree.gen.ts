@@ -9,88 +9,48 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as FranchiseRouteImport } from './routes/franchise'
-import { Route as InvestorsRouteImport } from './routes/investors'
-import { Route as LeasingRouteImport } from './routes/leasing'
-import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StationsRouteImport } from './routes/stations'
-import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as CareersIndexRouteImport } from './routes/careers.index'
-import { Route as CareersSlugRouteImport } from './routes/careers.$slug'
-import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-portal-9f4c2ab7.index'
-import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
-import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
-import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
-import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage-portal-9f4c2ab7.careers'
-import { Route as ManagePortal9f4c2ab7ChatsRouteImport } from './routes/manage-portal-9f4c2ab7.chats'
-import { Route as ManagePortal9f4c2ab7ContentRouteImport } from './routes/manage-portal-9f4c2ab7.content'
-import { Route as ManagePortal9f4c2ab7FaqsRouteImport } from './routes/manage-portal-9f4c2ab7.faqs'
-import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-portal-9f4c2ab7.news'
-import { Route as ManagePortal9f4c2ab7NotificationsRouteImport } from './routes/manage-portal-9f4c2ab7.notifications'
-import { Route as ManagePortal9f4c2ab7OtpWhitelistRouteImport } from './routes/manage-portal-9f4c2ab7.otp-whitelist'
-import { Route as ManagePortal9f4c2ab7SettingsRouteImport } from './routes/manage-portal-9f4c2ab7.settings'
-import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
-import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
-import { Route as ManagePortal9f4c2ab7TestimonialsRouteImport } from './routes/manage-portal-9f4c2ab7.testimonials'
-import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
+import { Route as LeasingRouteImport } from './routes/leasing'
+import { Route as InvestorsRouteImport } from './routes/investors'
+import { Route as FranchiseRouteImport } from './routes/franchise'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AcquisitionsRouteImport } from './routes/acquisitions'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as MediaIndexRouteImport } from './routes/media.index'
+import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-portal-9f4c2ab7.index'
+import { Route as CareersIndexRouteImport } from './routes/careers.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
-import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
+import { Route as ManagePortal9f4c2ab7TestimonialsRouteImport } from './routes/manage-portal-9f4c2ab7.testimonials'
+import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
+import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
+import { Route as ManagePortal9f4c2ab7SettingsRouteImport } from './routes/manage-portal-9f4c2ab7.settings'
+import { Route as ManagePortal9f4c2ab7OtpWhitelistRouteImport } from './routes/manage-portal-9f4c2ab7.otp-whitelist'
+import { Route as ManagePortal9f4c2ab7NotificationsRouteImport } from './routes/manage-portal-9f4c2ab7.notifications'
+import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-portal-9f4c2ab7.news'
+import { Route as ManagePortal9f4c2ab7FaqsRouteImport } from './routes/manage-portal-9f4c2ab7.faqs'
+import { Route as ManagePortal9f4c2ab7ContentRouteImport } from './routes/manage-portal-9f4c2ab7.content'
+import { Route as ManagePortal9f4c2ab7ChatsRouteImport } from './routes/manage-portal-9f4c2ab7.chats'
+import { Route as ManagePortal9f4c2ab7CareersRouteImport } from './routes/manage-portal-9f4c2ab7.careers'
+import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
+import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
+import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
+import { Route as CareersSlugRouteImport } from './routes/careers.$slug'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ManagePortal9f4c2ab7PagesSlugRouteImport } from './routes/manage-portal-9f4c2ab7.pages.$slug'
-import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksSyncDataverseLocationsRouteImport } from './routes/api/public/hooks/sync-dataverse-locations'
+import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AcquisitionsRoute = AcquisitionsRouteImport.update({
-  id: '/acquisitions',
-  path: '/acquisitions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FranchiseRoute = FranchiseRouteImport.update({
-  id: '/franchise',
-  path: '/franchise',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestorsRoute = InvestorsRouteImport.update({
-  id: '/investors',
-  path: '/investors',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LeasingRoute = LeasingRouteImport.update({
-  id: '/leasing',
-  path: '/leasing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
-  id: '/manage-portal-9f4c2ab7',
-  path: '/manage-portal-9f4c2ab7',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
+const StationsRoute = StationsRouteImport.update({
+  id: '/stations',
+  path: '/stations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -98,31 +58,54 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StationsRoute = StationsRouteImport.update({
-  id: '/stations',
-  path: '/stations',
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const CareersIndexRoute = CareersIndexRouteImport.update({
-  id: '/careers/',
-  path: '/careers/',
+const ManagePortal9f4c2ab7Route = ManagePortal9f4c2ab7RouteImport.update({
+  id: '/manage-portal-9f4c2ab7',
+  path: '/manage-portal-9f4c2ab7',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CareersSlugRoute = CareersSlugRouteImport.update({
-  id: '/careers/$slug',
-  path: '/careers/$slug',
+const LeasingRoute = LeasingRouteImport.update({
+  id: '/leasing',
+  path: '/leasing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestorsRoute = InvestorsRouteImport.update({
+  id: '/investors',
+  path: '/investors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FranchiseRoute = FranchiseRouteImport.update({
+  id: '/franchise',
+  path: '/franchise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcquisitionsRoute = AcquisitionsRouteImport.update({
+  id: '/acquisitions',
+  path: '/acquisitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaIndexRoute = MediaIndexRouteImport.update({
+  id: '/media/',
+  path: '/media/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManagePortal9f4c2ab7IndexRoute =
@@ -131,76 +114,26 @@ const ManagePortal9f4c2ab7IndexRoute =
     path: '/',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
-const ManagePortal9f4c2ab7AbuseRoute =
-  ManagePortal9f4c2ab7AbuseRouteImport.update({
-    id: '/abuse',
-    path: '/abuse',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
+const CareersIndexRoute = CareersIndexRouteImport.update({
+  id: '/careers/',
+  path: '/careers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaSlugRoute = MediaSlugRouteImport.update({
+  id: '/media/$slug',
+  path: '/media/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagePortal9f4c2ab7LoginRoute =
+  ManagePortal9f4c2ab7LoginRouteImport.update({
+    id: '/manage-portal-9f4c2ab7_/login',
+    path: '/manage-portal-9f4c2ab7/login',
+    getParentRoute: () => rootRouteImport,
   } as any)
-const ManagePortal9f4c2ab7ApplicationsRoute =
-  ManagePortal9f4c2ab7ApplicationsRouteImport.update({
-    id: '/applications',
-    path: '/applications',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7AuditRoute =
-  ManagePortal9f4c2ab7AuditRouteImport.update({
-    id: '/audit',
-    path: '/audit',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7CareersRoute =
-  ManagePortal9f4c2ab7CareersRouteImport.update({
-    id: '/careers',
-    path: '/careers',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7ChatsRoute =
-  ManagePortal9f4c2ab7ChatsRouteImport.update({
-    id: '/chats',
-    path: '/chats',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7ContentRoute =
-  ManagePortal9f4c2ab7ContentRouteImport.update({
-    id: '/content',
-    path: '/content',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7FaqsRoute =
-  ManagePortal9f4c2ab7FaqsRouteImport.update({
-    id: '/faqs',
-    path: '/faqs',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7NewsRoute =
-  ManagePortal9f4c2ab7NewsRouteImport.update({
-    id: '/news',
-    path: '/news',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7NotificationsRoute =
-  ManagePortal9f4c2ab7NotificationsRouteImport.update({
-    id: '/notifications',
-    path: '/notifications',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7OtpWhitelistRoute =
-  ManagePortal9f4c2ab7OtpWhitelistRouteImport.update({
-    id: '/otp-whitelist',
-    path: '/otp-whitelist',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7SettingsRoute =
-  ManagePortal9f4c2ab7SettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => ManagePortal9f4c2ab7Route,
-  } as any)
-const ManagePortal9f4c2ab7StationsRoute =
-  ManagePortal9f4c2ab7StationsRouteImport.update({
-    id: '/stations',
-    path: '/stations',
+const ManagePortal9f4c2ab7TestimonialsRoute =
+  ManagePortal9f4c2ab7TestimonialsRouteImport.update({
+    id: '/testimonials',
+    path: '/testimonials',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
 const ManagePortal9f4c2ab7SubmissionsRoute =
@@ -209,37 +142,93 @@ const ManagePortal9f4c2ab7SubmissionsRoute =
     path: '/submissions',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
-const ManagePortal9f4c2ab7TestimonialsRoute =
-  ManagePortal9f4c2ab7TestimonialsRouteImport.update({
-    id: '/testimonials',
-    path: '/testimonials',
+const ManagePortal9f4c2ab7StationsRoute =
+  ManagePortal9f4c2ab7StationsRouteImport.update({
+    id: '/stations',
+    path: '/stations',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
-const ManagePortal9f4c2ab7LoginRoute =
-  ManagePortal9f4c2ab7LoginRouteImport.update({
-    id: '/manage-portal-9f4c2ab7_/login',
-    path: '/manage-portal-9f4c2ab7/login',
+const ManagePortal9f4c2ab7SettingsRoute =
+  ManagePortal9f4c2ab7SettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7OtpWhitelistRoute =
+  ManagePortal9f4c2ab7OtpWhitelistRouteImport.update({
+    id: '/otp-whitelist',
+    path: '/otp-whitelist',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7NotificationsRoute =
+  ManagePortal9f4c2ab7NotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7NewsRoute =
+  ManagePortal9f4c2ab7NewsRouteImport.update({
+    id: '/news',
+    path: '/news',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7FaqsRoute =
+  ManagePortal9f4c2ab7FaqsRouteImport.update({
+    id: '/faqs',
+    path: '/faqs',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7ContentRoute =
+  ManagePortal9f4c2ab7ContentRouteImport.update({
+    id: '/content',
+    path: '/content',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7ChatsRoute =
+  ManagePortal9f4c2ab7ChatsRouteImport.update({
+    id: '/chats',
+    path: '/chats',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7CareersRoute =
+  ManagePortal9f4c2ab7CareersRouteImport.update({
+    id: '/careers',
+    path: '/careers',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7AuditRoute =
+  ManagePortal9f4c2ab7AuditRouteImport.update({
+    id: '/audit',
+    path: '/audit',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7ApplicationsRoute =
+  ManagePortal9f4c2ab7ApplicationsRouteImport.update({
+    id: '/applications',
+    path: '/applications',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7AbuseRoute =
+  ManagePortal9f4c2ab7AbuseRouteImport.update({
+    id: '/abuse',
+    path: '/abuse',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const CareersSlugRoute = CareersSlugRouteImport.update({
+  id: '/careers/$slug',
+  path: '/careers/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
-const MediaIndexRoute = MediaIndexRouteImport.update({
-  id: '/media/',
-  path: '/media/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MediaSlugRoute = MediaSlugRouteImport.update({
-  id: '/media/$slug',
-  path: '/media/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Char91DotmcpChar93InvokeToolToolRoute =
-  Char91DotmcpChar93InvokeToolToolRouteImport.update({
-    id: '/.mcp/invoke-tool/$tool',
-    path: '/.mcp/invoke-tool/$tool',
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ManagePortal9f4c2ab7PagesSlugRoute =
@@ -248,16 +237,27 @@ const ManagePortal9f4c2ab7PagesSlugRoute =
     path: '/pages/$slug',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
-const ApiPublicHooksProcessExportsRoute =
-  ApiPublicHooksProcessExportsRouteImport.update({
-    id: '/api/public/hooks/process-exports',
-    path: '/api/public/hooks/process-exports',
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksSyncDataverseLocationsRoute =
   ApiPublicHooksSyncDataverseLocationsRouteImport.update({
     id: '/api/public/hooks/sync-dataverse-locations',
     path: '/api/public/hooks/sync-dataverse-locations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksProcessExportsRoute =
+  ApiPublicHooksProcessExportsRouteImport.update({
+    id: '/api/public/hooks/process-exports',
+    path: '/api/public/hooks/process-exports',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -530,67 +530,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/acquisitions': {
-      id: '/acquisitions'
-      path: '/acquisitions'
-      fullPath: '/acquisitions'
-      preLoaderRoute: typeof AcquisitionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/franchise': {
-      id: '/franchise'
-      path: '/franchise'
-      fullPath: '/franchise'
-      preLoaderRoute: typeof FranchiseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/investors': {
-      id: '/investors'
-      path: '/investors'
-      fullPath: '/investors'
-      preLoaderRoute: typeof InvestorsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/leasing': {
-      id: '/leasing'
-      path: '/leasing'
-      fullPath: '/leasing'
-      preLoaderRoute: typeof LeasingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/manage-portal-9f4c2ab7': {
-      id: '/manage-portal-9f4c2ab7'
-      path: '/manage-portal-9f4c2ab7'
-      fullPath: '/manage-portal-9f4c2ab7'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
+    '/stations': {
+      id: '/stations'
+      path: '/stations'
+      fullPath: '/stations'
+      preLoaderRoute: typeof StationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -600,151 +544,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/stations': {
-      id: '/stations'
-      path: '/stations'
-      fullPath: '/stations'
-      preLoaderRoute: typeof StationsRouteImport
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.mcp/list-tools': {
-      id: '/.mcp/list-tools'
-      path: '/.mcp/list-tools'
-      fullPath: '/.mcp/list-tools'
-      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+    '/manage-portal-9f4c2ab7': {
+      id: '/manage-portal-9f4c2ab7'
+      path: '/manage-portal-9f4c2ab7'
+      fullPath: '/manage-portal-9f4c2ab7'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/leasing': {
+      id: '/leasing'
+      path: '/leasing'
+      fullPath: '/leasing'
+      preLoaderRoute: typeof LeasingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/careers/': {
-      id: '/careers/'
-      path: '/careers'
-      fullPath: '/careers/'
-      preLoaderRoute: typeof CareersIndexRouteImport
+    '/investors': {
+      id: '/investors'
+      path: '/investors'
+      fullPath: '/investors'
+      preLoaderRoute: typeof InvestorsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/careers/$slug': {
-      id: '/careers/$slug'
-      path: '/careers/$slug'
-      fullPath: '/careers/$slug'
-      preLoaderRoute: typeof CareersSlugRouteImport
+    '/franchise': {
+      id: '/franchise'
+      path: '/franchise'
+      fullPath: '/franchise'
+      preLoaderRoute: typeof FranchiseRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/manage-portal-9f4c2ab7/': {
-      id: '/manage-portal-9f4c2ab7/'
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acquisitions': {
+      id: '/acquisitions'
+      path: '/acquisitions'
+      fullPath: '/acquisitions'
+      preLoaderRoute: typeof AcquisitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
       path: '/'
-      fullPath: '/manage-portal-9f4c2ab7/'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7IndexRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/abuse': {
-      id: '/manage-portal-9f4c2ab7/abuse'
-      path: '/abuse'
-      fullPath: '/manage-portal-9f4c2ab7/abuse'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7AbuseRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/applications': {
-      id: '/manage-portal-9f4c2ab7/applications'
-      path: '/applications'
-      fullPath: '/manage-portal-9f4c2ab7/applications'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7ApplicationsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/audit': {
-      id: '/manage-portal-9f4c2ab7/audit'
-      path: '/audit'
-      fullPath: '/manage-portal-9f4c2ab7/audit'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7AuditRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/careers': {
-      id: '/manage-portal-9f4c2ab7/careers'
-      path: '/careers'
-      fullPath: '/manage-portal-9f4c2ab7/careers'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7CareersRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/chats': {
-      id: '/manage-portal-9f4c2ab7/chats'
-      path: '/chats'
-      fullPath: '/manage-portal-9f4c2ab7/chats'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7ChatsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/content': {
-      id: '/manage-portal-9f4c2ab7/content'
-      path: '/content'
-      fullPath: '/manage-portal-9f4c2ab7/content'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7ContentRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/faqs': {
-      id: '/manage-portal-9f4c2ab7/faqs'
-      path: '/faqs'
-      fullPath: '/manage-portal-9f4c2ab7/faqs'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7FaqsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/news': {
-      id: '/manage-portal-9f4c2ab7/news'
-      path: '/news'
-      fullPath: '/manage-portal-9f4c2ab7/news'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7NewsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/notifications': {
-      id: '/manage-portal-9f4c2ab7/notifications'
-      path: '/notifications'
-      fullPath: '/manage-portal-9f4c2ab7/notifications'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7NotificationsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/otp-whitelist': {
-      id: '/manage-portal-9f4c2ab7/otp-whitelist'
-      path: '/otp-whitelist'
-      fullPath: '/manage-portal-9f4c2ab7/otp-whitelist'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7OtpWhitelistRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/settings': {
-      id: '/manage-portal-9f4c2ab7/settings'
-      path: '/settings'
-      fullPath: '/manage-portal-9f4c2ab7/settings'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7SettingsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/stations': {
-      id: '/manage-portal-9f4c2ab7/stations'
-      path: '/stations'
-      fullPath: '/manage-portal-9f4c2ab7/stations'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7StationsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/submissions': {
-      id: '/manage-portal-9f4c2ab7/submissions'
-      path: '/submissions'
-      fullPath: '/manage-portal-9f4c2ab7/submissions'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7SubmissionsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7/testimonials': {
-      id: '/manage-portal-9f4c2ab7/testimonials'
-      path: '/testimonials'
-      fullPath: '/manage-portal-9f4c2ab7/testimonials'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7TestimonialsRouteImport
-      parentRoute: typeof ManagePortal9f4c2ab7Route
-    }
-    '/manage-portal-9f4c2ab7_/login': {
-      id: '/manage-portal-9f4c2ab7_/login'
-      path: '/manage-portal-9f4c2ab7/login'
-      fullPath: '/manage-portal-9f4c2ab7/login'
-      preLoaderRoute: typeof ManagePortal9f4c2ab7LoginRouteImport
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/media/': {
@@ -754,6 +614,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manage-portal-9f4c2ab7/': {
+      id: '/manage-portal-9f4c2ab7/'
+      path: '/'
+      fullPath: '/manage-portal-9f4c2ab7/'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7IndexRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/careers/': {
+      id: '/careers/'
+      path: '/careers'
+      fullPath: '/careers/'
+      preLoaderRoute: typeof CareersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/media/$slug': {
       id: '/media/$slug'
       path: '/media/$slug'
@@ -761,18 +635,130 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+    '/manage-portal-9f4c2ab7_/login': {
+      id: '/manage-portal-9f4c2ab7_/login'
+      path: '/manage-portal-9f4c2ab7/login'
+      fullPath: '/manage-portal-9f4c2ab7/login'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+    '/manage-portal-9f4c2ab7/testimonials': {
+      id: '/manage-portal-9f4c2ab7/testimonials'
+      path: '/testimonials'
+      fullPath: '/manage-portal-9f4c2ab7/testimonials'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7TestimonialsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/submissions': {
+      id: '/manage-portal-9f4c2ab7/submissions'
+      path: '/submissions'
+      fullPath: '/manage-portal-9f4c2ab7/submissions'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7SubmissionsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/stations': {
+      id: '/manage-portal-9f4c2ab7/stations'
+      path: '/stations'
+      fullPath: '/manage-portal-9f4c2ab7/stations'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7StationsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/settings': {
+      id: '/manage-portal-9f4c2ab7/settings'
+      path: '/settings'
+      fullPath: '/manage-portal-9f4c2ab7/settings'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7SettingsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/otp-whitelist': {
+      id: '/manage-portal-9f4c2ab7/otp-whitelist'
+      path: '/otp-whitelist'
+      fullPath: '/manage-portal-9f4c2ab7/otp-whitelist'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7OtpWhitelistRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/notifications': {
+      id: '/manage-portal-9f4c2ab7/notifications'
+      path: '/notifications'
+      fullPath: '/manage-portal-9f4c2ab7/notifications'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7NotificationsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/news': {
+      id: '/manage-portal-9f4c2ab7/news'
+      path: '/news'
+      fullPath: '/manage-portal-9f4c2ab7/news'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7NewsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/faqs': {
+      id: '/manage-portal-9f4c2ab7/faqs'
+      path: '/faqs'
+      fullPath: '/manage-portal-9f4c2ab7/faqs'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7FaqsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/content': {
+      id: '/manage-portal-9f4c2ab7/content'
+      path: '/content'
+      fullPath: '/manage-portal-9f4c2ab7/content'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7ContentRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/chats': {
+      id: '/manage-portal-9f4c2ab7/chats'
+      path: '/chats'
+      fullPath: '/manage-portal-9f4c2ab7/chats'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7ChatsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/careers': {
+      id: '/manage-portal-9f4c2ab7/careers'
+      path: '/careers'
+      fullPath: '/manage-portal-9f4c2ab7/careers'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7CareersRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/audit': {
+      id: '/manage-portal-9f4c2ab7/audit'
+      path: '/audit'
+      fullPath: '/manage-portal-9f4c2ab7/audit'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7AuditRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/applications': {
+      id: '/manage-portal-9f4c2ab7/applications'
+      path: '/applications'
+      fullPath: '/manage-portal-9f4c2ab7/applications'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7ApplicationsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/abuse': {
+      id: '/manage-portal-9f4c2ab7/abuse'
+      path: '/abuse'
+      fullPath: '/manage-portal-9f4c2ab7/abuse'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7AbuseRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/careers/$slug': {
+      id: '/careers/$slug'
+      path: '/careers/$slug'
+      fullPath: '/careers/$slug'
+      preLoaderRoute: typeof CareersSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage-portal-9f4c2ab7/pages/$slug': {
@@ -782,11 +768,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7PagesSlugRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
-    '/api/public/hooks/process-exports': {
-      id: '/api/public/hooks/process-exports'
-      path: '/api/public/hooks/process-exports'
-      fullPath: '/api/public/hooks/process-exports'
-      preLoaderRoute: typeof ApiPublicHooksProcessExportsRouteImport
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/sync-dataverse-locations': {
@@ -794,6 +787,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/hooks/sync-dataverse-locations'
       fullPath: '/api/public/hooks/sync-dataverse-locations'
       preLoaderRoute: typeof ApiPublicHooksSyncDataverseLocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/process-exports': {
+      id: '/api/public/hooks/process-exports'
+      path: '/api/public/hooks/process-exports'
+      fullPath: '/api/public/hooks/process-exports'
+      preLoaderRoute: typeof ApiPublicHooksProcessExportsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
