@@ -50,7 +50,7 @@ export const Route = createFileRoute("/manage-portal-9f4c2ab7/audit")({
     ],
   }),
   component: AuditPage,
-  errorComponent: ({ error }) => <div className="p-6 text-destructive" role="alert">{error.message}</div>,
+  errorComponent: ({ error }) => <div className="p-6 text-destructive" role="alert">{error instanceof Error ? error.message : String(error)}</div>,
   notFoundComponent: () => <div className="p-6">Not found.</div>,
 });
 
