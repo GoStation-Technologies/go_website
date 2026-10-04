@@ -1,4 +1,4 @@
-export const SITE_URL = "https://org-story-weaver.lovable.app";
+export const SITE_URL = "https://gostation.sa";
 
 type PageHeadInput = {
   /** Route path, e.g. "/about". */
