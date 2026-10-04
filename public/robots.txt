@@ -3,4 +3,4 @@ Allow: /
 Disallow: /manage-portal-9f4c2ab7
 Disallow: /api/
 
-Sitemap: https://org-story-weaver.lovable.app/sitemap.xml
+Sitemap: https://gostation.sa/sitemap.xml

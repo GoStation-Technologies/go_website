@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { chromium, type Browser, type Page } from "playwright";
 
 const BASE_URL = process.env.E2E_URL ?? "http://localhost:8080";
-const SITE_URL = "https://org-story-weaver.lovable.app";
+const SITE_URL = "https://gostation.sa";
 
 const ROUTES = [
   "/",

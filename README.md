@@ -4,7 +4,7 @@ i want to build website for my orgnization read this files ...
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://org-story-weaver.lovable.app
+**Live app**: https://gostation.sa
 
 ## Build with Lovable
 

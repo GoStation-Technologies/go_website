@@ -64,9 +64,9 @@ export const Route = createFileRoute("/")({
           "193+ stations. 56 areas. One brand redefining the Saudi station experience.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://org-story-weaver.lovable.app/" },
+      { property: "og:url", content: "https://gostation.sa/" },
     ],
-    links: [{ rel: "canonical", href: "https://org-story-weaver.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://gostation.sa/" }],
   }),
 });
 

@@ -112,7 +112,7 @@ export const Route = createRootRouteWithContext<{
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "GoStation",
-          url: "https://org-story-weaver.lovable.app",
+          url: "https://gostation.sa",
           description:
             "The fastest-growing fuel station network in Saudi Arabia — fuel, retail, fleet services and franchise opportunities.",
           areaServed: "SA",
