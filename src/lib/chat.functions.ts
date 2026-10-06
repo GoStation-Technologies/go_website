@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { resolveAiConfig } from "./ai-provider.server";
+import { getServerSupabase } from "./supabase-server.server";
 import { retrieveGrounding, formatGrounding } from "./chat.grounding";
 import {
   LIMITS,
@@ -37,15 +39,46 @@ const SYSTEM_AR = `أنت المساعد ثنائي اللغة لخدمة عمل
 - لا تخترع محطات أو أسعاراً أو وظائف.
 - أجب بنفس لغة رسالة المستخدم الأخيرة.`;
 
+// Chainable no-op DB used when no Supabase client can be built at all.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const NULL_DB: any = new Proxy(function () {}, {
+  get: (_t, prop) =>
+    prop === "then"
+      ? (resolve: (v: unknown) => void) => resolve({ data: null, error: { message: "db unavailable" } })
+      : NULL_DB,
+  apply: () => NULL_DB,
+});
+
+// In-memory per-session limiter used when the service-role key is missing
+// (persistent Postgres limits need it). Per-process only.
+const memHits = new Map<string, number[]>();
+function memoryRateOk(sessionId: string): boolean {
+  const now = Date.now();
+  const hits = (memHits.get(sessionId) ?? []).filter((t) => t > now - 60_000);
+  if (hits.length >= LIMITS.perSessionPerMinute) return false;
+  hits.push(now);
+  memHits.set(sessionId, hits);
+  if (memHits.size > 5000) memHits.clear();
+  return true;
+}
+
 export const sendChatMessage = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => Input.parse(raw))
   .handler(async ({ data }) => {
-    const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) {
+    const ai = resolveAiConfig();
+    if (!ai) {
+      console.warn("[chat] No AI key set. Define OPENAI_API_KEY or GEMINI_API_KEY.");
       return { ok: false as const, error: "AI is not configured yet." };
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    // Admin client when SUPABASE_SERVICE_ROLE_KEY is set; otherwise the public
+    // client (RLS applies: persistence/abuse logging are skipped, public reads work).
+    const { client, isAdmin } = await getServerSupabase();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const supabaseAdmin: any = client ?? NULL_DB;
+    if (!isAdmin && !memoryRateOk(data.sessionId)) {
+      return { ok: false as const, error: errorMessage("session_minute", data.lang) };
+    }
 
     // Resolve IP + hash early so every abuse event can be attributed.
     let ip = "";
@@ -150,7 +183,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
 
 
     // Load recent history (last 20).
-    const { data: history } = await supabaseAdmin
+    const { data: history } = !isAdmin ? { data: [] as { role: string; content: string }[] } : await supabaseAdmin
       .from("chatbot_messages")
       .select("role, content")
       .eq("session_id", data.sessionId)
@@ -158,15 +191,20 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       .limit(20);
 
     // Persist user message.
-    await supabaseAdmin.from("chatbot_messages").insert({
+    if (isAdmin) await supabaseAdmin.from("chatbot_messages").insert({
       session_id: data.sessionId,
       role: "user",
       content: data.message,
     });
 
     // Retrieve grounding context from stations, news, jobs
-    const grounding = await retrieveGrounding(supabaseAdmin, data.message, data.lang);
-    const groundingBlock = formatGrounding(grounding, data.lang);
+    const grounding = client
+      ? await retrieveGrounding(client, data.message, data.lang).catch((e) => {
+          console.warn("[chat] grounding failed", e);
+          return null;
+        })
+      : null;
+    const groundingBlock = grounding ? formatGrounding(grounding, data.lang) : "";
 
     const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (groundingBlock ? `\n\n${groundingBlock}` : "");
 
@@ -178,14 +216,14 @@ export const sendChatMessage = createServerFn({ method: "POST" })
 
     let reply = "";
     try {
-      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const res = await fetch(ai.url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${ai.key}`,
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
+          model: ai.model,
           messages,
         }),
       });
@@ -197,7 +235,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         return { ok: false as const, error: data.lang === "ar" ? "الرصيد غير كافٍ حالياً." : "AI credits exhausted. Please try later." };
       }
       if (!res.ok) {
-        console.error("AI gateway error", res.status, await res.text().catch(() => ""));
+        console.error(`AI provider (${ai.name}) error`, res.status, await res.text().catch(() => ""));
         return { ok: false as const, error: data.lang === "ar" ? "حدث خطأ." : "Something went wrong." };
       }
 
@@ -214,7 +252,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       reply = data.lang === "ar" ? "عذراً، لم أستطع الرد الآن." : "Sorry, I couldn't answer just now.";
     }
 
-    await supabaseAdmin.from("chatbot_messages").insert({
+    if (isAdmin) await supabaseAdmin.from("chatbot_messages").insert({
       session_id: data.sessionId,
       role: "assistant",
       content: reply,
