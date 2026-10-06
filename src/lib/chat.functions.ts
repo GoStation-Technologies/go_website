@@ -143,7 +143,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     // Session-based rate limits + duplicate/flood detection.
     const now = Date.now();
     const dayAgo = new Date(now - 24 * 3_600_000).toISOString();
-    const { data: recent } = await supabaseAdmin
+    const { data: recent }: { data: { content: string; created_at: string }[] | null } = await supabaseAdmin
       .from("chatbot_messages")
       .select("content, created_at")
       .eq("session_id", data.sessionId)
@@ -183,7 +183,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
 
 
     // Load recent history (last 20).
-    const { data: history } = !isAdmin ? { data: [] as { role: string; content: string }[] } : await supabaseAdmin
+    const { data: history }: { data: { role: string; content: string }[] | null } = !isAdmin ? { data: [] as { role: string; content: string }[] } : await supabaseAdmin
       .from("chatbot_messages")
       .select("role, content")
       .eq("session_id", data.sessionId)
