@@ -29,8 +29,10 @@ export const Route = createFileRoute("/sitemap.xml")({
         const entries: SitemapEntry[] = [...STATIC_ENTRIES];
 
         try {
-          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { data } = await (supabaseAdmin.from("news_articles") as any)
+          const { getServerSupabase } = await import("@/lib/supabase-server.server");
+          const { client } = await getServerSupabase();
+          if (!client) throw new Error("Supabase not configured");
+          const { data } = await (client.from("news_articles") as any)
             .select("slug,updated_at")
             .eq("is_published", true)
             .order("published_at", { ascending: false })
