@@ -17,7 +17,7 @@ export function resolveAiConfig(): AiConfig | null {
   const gemini = process.env.GEMINI_API_KEY;
   if (gemini) {
     // Strip a redundant "models/" (or "models:") prefix if someone set it in GEMINI_MODEL.
-    const sanitizedModel = (process.env.GEMINI_MODEL || "gemini-1.5-flash").replace(/^models[/:]/, "");
+    const sanitizedModel = (process.env.GEMINI_MODEL || "gemini-3.8-flash").replace(/^models[/:]/, "");
     return {
       name: "gemini",
       // Native GenerateContent endpoint (key goes in the query string, not a Bearer header).
@@ -32,7 +32,7 @@ export function resolveAiConfig(): AiConfig | null {
       name: "lovable",
       url: "https://ai.gateway.lovable.dev/v1/chat/completions",
       key: lovable,
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3.8-flash",
     };
   }
   return null;
