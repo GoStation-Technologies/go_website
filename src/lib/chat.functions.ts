@@ -218,7 +218,9 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     try {
       const isGemini = ai.name === "gemini";
       // Gemini native API takes the key as a query param and never a Bearer header.
-      const url = isGemini ? `${ai.url}?key=${encodeURIComponent(ai.key)}` : ai.url;
+      // The provider URL may already carry ?key=... — only append it when missing.
+      const url =
+        isGemini && !ai.url.includes("key=") ? `${ai.url}?key=${encodeURIComponent(ai.key)}` : ai.url;
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       let body: string;
       if (isGemini) {
