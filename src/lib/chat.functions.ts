@@ -242,14 +242,29 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         });
       }
 
+      // Single attempt only — no automatic retries (an immediate retry loop
+      // against a busy provider just doubles the wait). AbortSignal.timeout
+      // caps the whole call at 15s so slow responses fail cleanly.
       const res = await fetch(url, {
         method: "POST",
         headers,
         body,
+        signal: AbortSignal.timeout(15_000),
       });
 
       if (res.status === 429) {
         return { ok: false as const, error: data.lang === "ar" ? "الخدمة مشغولة، حاول لاحقاً." : "Service busy, try later." };
+      }
+      // 503 / UNAVAILABLE — provider capacity (e.g. Gemini high demand).
+      // Terminal: return a friendly message instead of an unhandled exception.
+      if (res.status === 503) {
+        return {
+          ok: false as const,
+          error:
+            data.lang === "ar"
+              ? "مساعد الدعم يتلقى طلبات كثيرة حالياً. يرجى المحاولة بعد قليل."
+              : "Our support AI is currently receiving high traffic. Please try again in a moment.",
+        };
       }
       if (res.status === 402) {
         return { ok: false as const, error: data.lang === "ar" ? "الرصيد غير كافٍ حالياً." : "AI credits exhausted. Please try later." };
