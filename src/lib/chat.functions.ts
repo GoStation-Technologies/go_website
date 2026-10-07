@@ -216,16 +216,34 @@ export const sendChatMessage = createServerFn({ method: "POST" })
 
     let reply = "";
     try {
-      const res = await fetch(ai.url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${ai.key}`,
-        },
-        body: JSON.stringify({
+      const isGemini = ai.name === "gemini";
+      // Gemini native API takes the key as a query param and never a Bearer header.
+      const url = isGemini ? `${ai.url}?key=${encodeURIComponent(ai.key)}` : ai.url;
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      let body: string;
+      if (isGemini) {
+        body = JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents: [
+            ...(history ?? []).map((m) => ({
+              role: m.role === "assistant" ? "model" : "user",
+              parts: [{ text: m.content }],
+            })),
+            { role: "user", parts: [{ text: data.message }] },
+          ],
+        });
+      } else {
+        headers.Authorization = `Bearer ${ai.key}`;
+        body = JSON.stringify({
           model: ai.model,
           messages,
-        }),
+        });
+      }
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers,
+        body,
       });
 
       if (res.status === 429) {
@@ -239,10 +257,20 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         return { ok: false as const, error: data.lang === "ar" ? "حدث خطأ." : "Something went wrong." };
       }
 
-      const json = (await res.json()) as {
-        choices?: Array<{ message?: { content?: string } }>;
-      };
-      reply = json.choices?.[0]?.message?.content?.trim() ?? "";
+      if (isGemini) {
+        const json = (await res.json()) as {
+          candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+        };
+        reply = (json.candidates?.[0]?.content?.parts ?? [])
+          .map((p) => p.text ?? "")
+          .join("")
+          .trim();
+      } else {
+        const json = (await res.json()) as {
+          choices?: Array<{ message?: { content?: string } }>;
+        };
+        reply = json.choices?.[0]?.message?.content?.trim() ?? "";
+      }
     } catch (err) {
       console.error(err);
       return { ok: false as const, error: data.lang === "ar" ? "خطأ في الاتصال." : "Network error." };

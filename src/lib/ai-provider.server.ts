@@ -16,11 +16,13 @@ export function resolveAiConfig(): AiConfig | null {
   }
   const gemini = process.env.GEMINI_API_KEY;
   if (gemini) {
+    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
     return {
       name: "gemini",
-      url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+      // Native GenerateContent endpoint (key goes in the query string, not a Bearer header).
+      url: `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
       key: gemini,
-      model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+      model,
     };
   }
   const lovable = process.env.LOVABLE_API_KEY;
