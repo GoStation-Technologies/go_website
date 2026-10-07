@@ -215,6 +215,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     ];
 
     let reply = "";
+    const timeoutMs = Math.max(10_000, Number(process.env["AI_TIMEOUT_MS"]) || 60_000);
     try {
       const isGemini = ai.name === "gemini";
       // Gemini native API takes the key as a query param and never a Bearer header.
@@ -233,6 +234,12 @@ export const sendChatMessage = createServerFn({ method: "POST" })
             })),
             { role: "user", parts: [{ text: data.message }] },
           ],
+          // Gemini 3 models "think" before answering by default, which can take
+          // 20s+ even for "hi". A support chat needs quick replies, so keep
+          // thinking light. Override with GEMINI_THINKING_LEVEL (low|high).
+          generationConfig: {
+            thinkingConfig: { thinkingLevel: process.env["GEMINI_THINKING_LEVEL"] || "low" },
+          },
         });
       } else {
         headers.Authorization = `Bearer ${ai.key}`;
@@ -243,13 +250,14 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       }
 
       // Single attempt only — no automatic retries (an immediate retry loop
-      // against a busy provider just doubles the wait). AbortSignal.timeout
-      // caps the whole call at 15s so slow responses fail cleanly.
+      // against a busy provider just doubles the wait). The timeout is a
+      // generous safety net (default 60s, override with AI_TIMEOUT_MS) —
+      // model replies routinely take longer than 15s.
       const res = await fetch(url, {
         method: "POST",
         headers,
         body,
-        signal: AbortSignal.timeout(15_000),
+        signal: AbortSignal.timeout(timeoutMs),
       });
 
       if (res.status === 429) {
@@ -294,7 +302,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       // request was already aborted, so a retry here would be another full call.
       const name = (err as { name?: string })?.name ?? "";
       if (name === "TimeoutError" || name === "AbortError") {
-        console.warn(`AI provider (${ai.name}) timed out after 15s`);
+        console.warn(`AI provider (${ai.name}) timed out after ${Math.round(timeoutMs / 1000)}s`);
         return {
           ok: false as const,
           error:
