@@ -242,14 +242,29 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         });
       }
 
+      // Single attempt only — no automatic retries (an immediate retry loop
+      // against a busy provider just doubles the wait). AbortSignal.timeout
+      // caps the whole call at 15s so slow responses fail cleanly.
       const res = await fetch(url, {
         method: "POST",
         headers,
         body,
+        signal: AbortSignal.timeout(15_000),
       });
 
       if (res.status === 429) {
         return { ok: false as const, error: data.lang === "ar" ? "الخدمة مشغولة، حاول لاحقاً." : "Service busy, try later." };
+      }
+      // 503 / UNAVAILABLE — provider capacity (e.g. Gemini high demand).
+      // Terminal: return a friendly message instead of an unhandled exception.
+      if (res.status === 503) {
+        return {
+          ok: false as const,
+          error:
+            data.lang === "ar"
+              ? "مساعد الدعم يتلقى طلبات كثيرة حالياً. يرجى المحاولة بعد قليل."
+              : "Our support AI is currently receiving high traffic. Please try again in a moment.",
+        };
       }
       if (res.status === 402) {
         return { ok: false as const, error: data.lang === "ar" ? "الرصيد غير كافٍ حالياً." : "AI credits exhausted. Please try later." };
@@ -274,6 +289,20 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         reply = json.choices?.[0]?.message?.content?.trim() ?? "";
       }
     } catch (err) {
+      // AbortSignal.timeout throws a DOMException named "TimeoutError" (older
+      // runtimes: "AbortError"). Surface a clean message, never rethrow — the
+      // request was already aborted, so a retry here would be another full call.
+      const name = (err as { name?: string })?.name ?? "";
+      if (name === "TimeoutError" || name === "AbortError") {
+        console.warn(`AI provider (${ai.name}) timed out after 15s`);
+        return {
+          ok: false as const,
+          error:
+            data.lang === "ar"
+              ? "استغرق الرد وقتاً أطول من المعتاد. يرجى المحاولة بعد قليل."
+              : "The assistant took too long to respond. Please try again in a moment.",
+        };
+      }
       console.error(err);
       return { ok: false as const, error: data.lang === "ar" ? "خطأ في الاتصال." : "Network error." };
     }
