@@ -16,13 +16,14 @@ export function resolveAiConfig(): AiConfig | null {
   }
   const gemini = process.env.GEMINI_API_KEY;
   if (gemini) {
-    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+    // Strip a redundant "models/" (or "models:") prefix if someone set it in GEMINI_MODEL.
+    const sanitizedModel = (process.env.GEMINI_MODEL || "gemini-1.5-flash").replace(/^models[/:]/, "");
     return {
       name: "gemini",
       // Native GenerateContent endpoint (key goes in the query string, not a Bearer header).
-      url: `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      url: `https://generativelanguage.googleapis.com/v1beta/models/${sanitizedModel}:generateContent?key=${gemini}`,
       key: gemini,
-      model,
+      model: sanitizedModel,
     };
   }
   const lovable = process.env.LOVABLE_API_KEY;
