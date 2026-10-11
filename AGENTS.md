@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Public marketing links are stored in `site_settings` so Admin Settings remains the single editable source of truth.
+- Public station queries include every station under SELECT-only RLS; shared labels preserve source operational states so inactive stations are not advertised as open.

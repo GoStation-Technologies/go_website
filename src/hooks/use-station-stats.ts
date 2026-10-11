@@ -11,7 +11,7 @@ import {
 const FIVE_MIN = 5 * 60_000;
 
 /**
- * Site-wide live network numbers: total stations and distinct active regions.
+ * Site-wide live numbers: all stations and official Saudi provinces.
  * Always returns usable values (falls back while loading).
  */
 export function useStationStats(): StationStats & { isLoading: boolean } {

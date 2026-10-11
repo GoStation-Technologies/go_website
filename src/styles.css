@@ -23,6 +23,7 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-station-inactive: var(--station-inactive);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
@@ -72,6 +73,7 @@
   --secondary-foreground: oklch(0.251 0.109 278.6);
   --muted: oklch(0.963 0.008 279);
   --muted-foreground: oklch(0.5 0.045 279);
+  --station-inactive: oklch(0.55 0 0);
   --accent: oklch(0.698 0.174 44);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.6 0.24 27);
@@ -445,6 +447,14 @@ html[dir="rtl"] .animate-wave-flow-slow {
   border-radius: 9999px;
   background: color-mix(in oklab, var(--ember) 45%, transparent);
   animation: pulse-glow 2.2s ease-in-out infinite;
+}
+.gs-marker-inactive .gs-marker-dot {
+  background: var(--station-inactive);
+}
+.gs-popup-status {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
 }
 .gs-user-dot {
   position: absolute;
