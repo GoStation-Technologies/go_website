@@ -30,7 +30,7 @@ export const Route = createFileRoute("/stations")({
       path: "/stations",
       title: "Find a GoStation — Station Locator & Live Fuel Prices",
       description:
-        "Search 193+ GoStation fuel stations across Saudi Arabia. Filter by region, fuel type and services, and get directions from the live map.",
+        "Explore all GoStation locations across Saudi Arabia, including operating and inactive stations. Filter by region and fuel type, view station status, and get map directions.",
     }),
 });
 

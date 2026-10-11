@@ -13,7 +13,7 @@ export type RegionRow = {
 export type StationStats = { stationsCount: number; activeRegionsCount: number };
 
 /** Fallback used while loading or if the backend is unreachable. */
-export const STATION_STATS_FALLBACK: StationStats = { stationsCount: 193, activeRegionsCount: 13 };
+export const STATION_STATS_FALLBACK: StationStats = { stationsCount: 224, activeRegionsCount: 13 };
 
 function publicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
@@ -30,7 +30,7 @@ function publicClient() {
   });
 }
 
-/** Total stations + number of distinct areas that have stations. */
+/** All stations (including inactive) + official Saudi provinces. */
 export const getStationStats = createServerFn({ method: "GET" }).handler(
   async (): Promise<StationStats> => {
     try {

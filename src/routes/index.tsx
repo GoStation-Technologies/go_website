@@ -55,15 +55,16 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "GoStation — the fastest-growing fuel network in Saudi Arabia. 193+ stations across 56 areas, and a full station experience: fuel, retail, fleet, and franchise.",
+          "GoStation’s complete Saudi station network, including operating and upcoming locations across 13 official provinces: fuel, retail, fleet, and franchise.",
       },
       { property: "og:title", content: "GoStation — A station and more" },
       {
         property: "og:description",
         content:
-          "193+ stations. 56 areas. One brand redefining the Saudi station experience.",
+          "Explore GoStation’s complete network across 13 official Saudi provinces, including operating and upcoming stations.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://gostation.sa/" },
     ],
     links: [{ rel: "canonical", href: "https://gostation.sa/" }],
