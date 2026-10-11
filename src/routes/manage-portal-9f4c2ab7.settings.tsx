@@ -52,6 +52,17 @@ const GROUPS: GroupDef[] = [
     ],
   },
   {
+    key: "fuel_prices",
+    title: "Fuel prices — أسعار الوقود",
+    hint: "Prices shown in the fuel ticker (SAR per liter). Update them when Aramco announces new monthly prices.",
+    fields: [
+      { name: "91", label: "Petrol 91 (SAR/L)", dir: "ltr" },
+      { name: "95", label: "Petrol 95 (SAR/L)", dir: "ltr" },
+      { name: "98", label: "Petrol 98 (SAR/L)", dir: "ltr" },
+      { name: "diesel", label: "Diesel (SAR/L)", dir: "ltr" },
+    ],
+  },
+  {
     key: "go_app",
     title: "Go App promo — قسم تطبيق جو",
     hint: "Headline, description, promo image and store links for the Go App banner.",
