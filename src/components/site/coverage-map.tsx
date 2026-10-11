@@ -8,6 +8,7 @@ import { getContentLanguage } from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fuelLabel } from "@/lib/regions";
 import { useActiveStationRegions } from "@/hooks/use-station-stats";
+import { stationStatusLabel } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -24,9 +25,10 @@ export function CoverageMap() {
   const { data: regions = [] } = useActiveStationRegions();
 
   const { data = [] } = useQuery({
-    queryKey: ["stations"],
+    queryKey: ["stations", "all"],
     queryFn: async () => {
-      const { data } = await supabase.from("stations").select("*").eq("is_active", true);
+      const { data, error } = await supabase.from("stations").select("*");
+      if (error) throw error;
       return data ?? [];
     },
   });
@@ -49,6 +51,8 @@ export function CoverageMap() {
         .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
         .map((s) => ({
           id: s.id,
+          inactive: !s.is_active,
+          statusLabel: stationStatusLabel(s, ar),
           lat: s.lat as number,
           lng: s.lng as number,
           title: (ar ? s.name_ar : s.name_en) ?? "GoStation",
@@ -98,6 +102,8 @@ export function CoverageMap() {
           </SelectContent>
         </Select>
         <span className="ms-auto text-sm text-muted-foreground">
+          <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-accent" />{ar ? "تعمل الآن" : "Operating"}</span>
+          <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-station-inactive" />{ar ? "غير مشغّلة حالياً" : "Not operating"}</span>
           {points.length} {ar ? "محطة" : "stations"}
         </span>
       </div>

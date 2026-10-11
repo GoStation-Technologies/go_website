@@ -16,6 +16,7 @@ import { fuelLabel } from "@/lib/regions";
 import { useActiveStationRegions } from "@/hooks/use-station-stats";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { haversineKm, formatDistance } from "@/lib/geo";
+import { stationStatusLabel } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -40,9 +41,10 @@ function StationsPage() {
   const [region, setRegion] = useState("all");
   const [fuel, setFuel] = useState("all");
   const { data = [] } = useQuery({
-    queryKey: ["stations"],
+    queryKey: ["stations", "all"],
     queryFn: async () => {
-      const { data } = await supabase.from("stations").select("*").eq("is_active", true);
+      const { data, error } = await supabase.from("stations").select("*");
+      if (error) throw error;
       return data ?? [];
     },
   });
@@ -93,6 +95,8 @@ function StationsPage() {
         .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
         .map((s) => ({
           id: s.id,
+          inactive: !s.is_active,
+          statusLabel: stationStatusLabel(s, ar),
           lat: s.lat as number,
           lng: s.lng as number,
           title: (lng === "ar" ? s.name_ar : s.name_en) ?? "Station",
@@ -158,6 +162,10 @@ function StationsPage() {
           )}
           <div className="text-sm text-muted-foreground">{filtered.length} / {data.length}</div>
         </div>
+        <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+          <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-accent" />{ar ? "تعمل الآن" : "Operating"}</span>
+          <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-station-inactive" />{ar ? "غير مشغّلة حالياً" : "Not operating"}</span>
+        </div>
 
         {(geoStatus === "denied" || geoStatus === "unavailable") && (
           <p className="mb-4 text-sm text-muted-foreground">
@@ -209,6 +217,7 @@ function StationsPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <h3 className="font-semibold">{lng === "ar" ? s.name_ar : s.name_en}</h3>
+                      <p className={`mt-1 text-xs font-semibold ${s.is_active ? "text-accent" : "text-muted-foreground"}`}>{stationStatusLabel(s, ar)}</p>
                       <p className="text-xs text-muted-foreground">{lng === "ar" ? `${s.city_ar} · ${s.district_ar ?? ""}` : `${s.city_en} · ${s.district_en ?? ""}`}</p>
                       {s.distanceKm != null && (
                         <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-accent">
@@ -217,7 +226,7 @@ function StationsPage() {
                         </p>
                       )}
                     </div>
-                    {s.is_24h && <Badge className="bg-accent text-accent-foreground"><Clock className="me-1 h-3 w-3" />{t("stations.open24")}</Badge>}
+                    {s.is_active && s.is_24h && <Badge className="bg-accent text-accent-foreground"><Clock className="me-1 h-3 w-3" />{t("stations.open24")}</Badge>}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-1">
                     {(s.fuel_types ?? []).map((f: string) => (
