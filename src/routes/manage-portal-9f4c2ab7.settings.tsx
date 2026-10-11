@@ -112,6 +112,21 @@ function SettingsPage() {
 
   const save = useMutation({
     mutationFn: async (key: string) => {
+      if (key === "fuel_prices") {
+        const raw = draft[key] ?? {};
+        const prices: Record<string, number> = {};
+        for (const [k, v] of Object.entries(raw)) {
+          const n = Number(v);
+          if (v.trim() !== "" && Number.isFinite(n) && n >= 0) prices[k] = n;
+        }
+        await adminSaveSetting({
+          data: {
+            key,
+            value: { prices, currency: "SAR", updated_at: new Date().toISOString() },
+          },
+        });
+        return;
+      }
       const value: Record<string, unknown> = {};
       for (const [k, v] of Object.entries(draft[key] ?? {})) {
         const trimmed = v.trim();
