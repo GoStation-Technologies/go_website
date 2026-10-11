@@ -8,7 +8,7 @@ type Prices = FuelPrices;
 
 export function FuelTicker() {
   const { t, i18n } = useTranslation();
-  const { data } = useQuery({ queryKey: ["fuel-prices"], queryFn: fetchPrices, staleTime: 60_000 });
+  const { data } = useQuery({ queryKey: ["fuel-prices"], queryFn: () => getFuelPrices(), staleTime: 60_000 });
   const items = data ? Object.entries(data.prices) : [];
   const labels: Record<string, { en: string; ar: string }> = {
     "91": { en: "Petrol 91", ar: "بنزين 91" },
