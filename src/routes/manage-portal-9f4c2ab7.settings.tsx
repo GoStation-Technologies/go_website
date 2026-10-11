@@ -100,6 +100,13 @@ function SettingsPage() {
     if (!data) return;
     const next: Record<string, Record<string, string>> = {};
     for (const row of data.rows as Row[]) {
+      if (row.key === "fuel_prices") {
+        const prices = (row.value as { prices?: Record<string, number> } | null)?.prices ?? {};
+        next[row.key] = Object.fromEntries(
+          Object.entries(prices).map(([k, v]) => [k, String(v)]),
+        );
+        continue;
+      }
       next[row.key] = Object.fromEntries(
         Object.entries(row.value ?? {}).map(([k, v]) => [
           k,
