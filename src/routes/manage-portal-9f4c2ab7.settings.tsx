@@ -52,6 +52,17 @@ const GROUPS: GroupDef[] = [
     ],
   },
   {
+    key: "fuel_prices",
+    title: "Fuel prices — أسعار الوقود",
+    hint: "Prices shown in the fuel ticker (SAR per liter). Update them when Aramco announces new monthly prices.",
+    fields: [
+      { name: "91", label: "Petrol 91 (SAR/L)", dir: "ltr" },
+      { name: "95", label: "Petrol 95 (SAR/L)", dir: "ltr" },
+      { name: "98", label: "Petrol 98 (SAR/L)", dir: "ltr" },
+      { name: "diesel", label: "Diesel (SAR/L)", dir: "ltr" },
+    ],
+  },
+  {
     key: "go_app",
     title: "Go App promo — قسم تطبيق جو",
     hint: "Headline, description, promo image and store links for the Go App banner.",
@@ -89,6 +100,13 @@ function SettingsPage() {
     if (!data) return;
     const next: Record<string, Record<string, string>> = {};
     for (const row of data.rows as Row[]) {
+      if (row.key === "fuel_prices") {
+        const prices = (row.value as { prices?: Record<string, number> } | null)?.prices ?? {};
+        next[row.key] = Object.fromEntries(
+          Object.entries(prices).map(([k, v]) => [k, String(v)]),
+        );
+        continue;
+      }
       next[row.key] = Object.fromEntries(
         Object.entries(row.value ?? {}).map(([k, v]) => [
           k,
@@ -101,6 +119,21 @@ function SettingsPage() {
 
   const save = useMutation({
     mutationFn: async (key: string) => {
+      if (key === "fuel_prices") {
+        const raw = draft[key] ?? {};
+        const prices: Record<string, number> = {};
+        for (const [k, v] of Object.entries(raw)) {
+          const n = Number(v);
+          if (v.trim() !== "" && Number.isFinite(n) && n >= 0) prices[k] = n;
+        }
+        await adminSaveSetting({
+          data: {
+            key,
+            value: { prices, currency: "SAR", updated_at: new Date().toISOString() },
+          },
+        });
+        return;
+      }
       const value: Record<string, unknown> = {};
       for (const [k, v] of Object.entries(draft[key] ?? {})) {
         const trimmed = v.trim();

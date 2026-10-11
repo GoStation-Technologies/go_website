@@ -6,9 +6,17 @@ import { getContentLanguage } from "@/lib/i18n";
 
 type Prices = { prices: Record<string, number>; currency: string; updated_at: string };
 
+const FALLBACK: Prices = { prices: { "91": 2.33, "95": 2.66, "98": 3.05, diesel: 1.15 }, currency: "SAR", updated_at: "" };
+
 async function fetchPrices(): Promise<Prices> {
-  const { data } = await supabase.from("system_cache").select("value").eq("key", "aramco_fuel_prices").maybeSingle();
-  return (data?.value as Prices) ?? { prices: { "91": 2.33, "95": 2.66, "98": 3.05, diesel: 1.15 }, currency: "SAR", updated_at: "" };
+  // Prices are edited in Admin → Settings (site_settings.fuel_prices); Aramco
+  // publishes monthly updates and has no public live-prices API.
+  const { data } = await supabase.from("site_settings").select("value").eq("key", "fuel_prices").maybeSingle();
+  const value = data?.value as Partial<Prices> | undefined;
+  if (value?.prices && Object.keys(value.prices).length > 0) {
+    return { prices: value.prices, currency: value.currency ?? "SAR", updated_at: value.updated_at ?? "" };
+  }
+  return FALLBACK;
 }
 
 export function FuelTicker() {
