@@ -69,7 +69,7 @@ async function fetchLive(): Promise<Record<string, number> | null> {
 
 export const getFuelPrices = createServerFn({ method: "GET" }).handler(
   async (): Promise<FuelPrices> => {
-    const supabase = await getServerSupabase();
+    const { client: supabase } = await getServerSupabase();
     const now = new Date();
 
     // 1. Fresh cache?
