@@ -160,7 +160,11 @@ function StationsPage() {
               {ar ? "مسح" : "Clear"}
             </Button>
           )}
-          <div className="text-sm text-muted-foreground">{filtered.length} / {data.length}</div>
+          <div className="text-sm font-medium text-foreground">
+            {filtered.length === data.length
+              ? ar ? `إجمالي المحطات: ${data.length}` : `Total stations: ${data.length}`
+              : ar ? `${filtered.length} من ${data.length} محطة` : `${filtered.length} of ${data.length} stations`}
+          </div>
         </div>
         <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-accent" />{ar ? "تعمل الآن" : "Operating"}</span>
