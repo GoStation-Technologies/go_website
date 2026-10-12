@@ -29,8 +29,12 @@ function requireEnv(name: string): string {
 
 /** Service-role client — all reads/writes for this flow. Bypasses RLS. */
 export function adminDb() {
-  const url = requireEnv("SUPABASE_URL");
-  const key = requireEnv("SUPABASE_SERVICE_ROLE_KEY");
+  const url = process.env["SUPABASE_URL"];
+  const key = process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!url || !key) {
+    console.error("[admin-auth] SUPABASE_SERVICE_ROLE_KEY / SUPABASE_URL missing — admin sign-in disabled on this server");
+    throw new AuthError(503, "Admin sign-in is not available on this server (server key missing). Use the official admin URL.");
+  }
   return createClient<Database>(url, key, {
     global: {
       fetch: (input, init) => {
