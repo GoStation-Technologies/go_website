@@ -26,7 +26,6 @@ export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => LoginInput.parse(data))
   .handler(async ({ data }): Promise<ChallengeResult> => {
     const mod = await import("./admin-auth.server");
-    const db = mod.adminDb();
     const email = data.email.trim().toLowerCase();
     let ip: string | null = null;
     try {
@@ -35,6 +34,7 @@ export const adminLogin = createServerFn({ method: "POST" })
       ip = null;
     }
     try {
+      const db = mod.adminDb();
       await mod.throttleLoginAttempts(db, email, ip);
       const userId = await mod.verifyPassword(db, email, data.password, ip);
       const { phone } = await mod.requireActiveAdminProfile(db, userId);
@@ -52,8 +52,8 @@ export const adminResendOtp = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => ResendInput.parse(data))
   .handler(async ({ data }): Promise<ChallengeResult> => {
     const mod = await import("./admin-auth.server");
-    const db = mod.adminDb();
     try {
+      const db = mod.adminDb();
       const row = await mod.loadResendableChallenge(db, data.challengeId);
       await mod.throttleOtpRequests(db, row.user_id);
       const { phone } = await mod.requireActiveAdminProfile(db, row.user_id);
@@ -71,7 +71,13 @@ export const adminVerifyOtp = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => VerifyInput.parse(data))
   .handler(async ({ data }): Promise<VerifyResult> => {
     const mod = await import("./admin-auth.server");
-    const db = mod.adminDb();
+    let db: ReturnType<typeof mod.adminDb>;
+    try {
+      db = mod.adminDb();
+    } catch (err) {
+      if (err instanceof mod.AuthError) return { ok: false, status: err.status, error: err.message };
+      throw err;
+    }
     const invalid = { ok: false as const, status: 400, error: "Invalid or expired code." };
 
     const { data: row } = await db
