@@ -14,7 +14,6 @@ import {
   Truck,
   Store,
   Building2,
-  Star,
   Droplet,
   Sparkles,
   ShieldCheck,
@@ -96,20 +95,6 @@ function HomePage() {
 
   const [mediaTab, setMediaTab] = useState<"all" | "news" | "event" | "video">("all");
   const homeMedia = (news.data ?? []).filter((n) => mediaTab === "all" || n.kind === mediaTab);
-
-  const reviews = useQuery({
-    queryKey: ["home-reviews"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("system_cache")
-        .select("value")
-        .eq("key", "google_reviews")
-        .maybeSingle();
-      return (
-        (data?.value as { reviews: Array<{ author: string; rating: number; text: string; lang: string }> })?.reviews ?? []
-      );
-    },
-  });
 
   const { stationsCount: liveStations, activeRegionsCount: liveRegions, isLoading: statsLoading } =
     useStationStats();
@@ -606,43 +591,6 @@ function HomePage() {
         </div>
 
       </section>
-
-      {/* ============ REVIEWS ============ */}
-      {(reviews.data?.length ?? 0) > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
-          <div className="max-w-2xl">
-            <div className="eyebrow">{t("home.reviewsEyebrow")}</div>
-            <h2 className="mt-4 text-4xl font-bold md:text-5xl">{t("home.reviewsTitle")}</h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-              {t("home.reviewsSub")}
-            </p>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {(reviews.data ?? []).slice(0, 3).map((r, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-border/60 bg-card p-8 transition hover:-translate-y-1 hover:shadow-card"
-              >
-                <div className="flex items-center gap-0.5 text-ember">
-                  {Array.from({ length: r.rating }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-                <p className="mt-4 text-[15px] leading-relaxed text-foreground/90">"{r.text}"</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="grid h-10 w-10 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-                    {r.author?.[0] ?? "G"}
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold">{r.author}</div>
-                    <div className="text-xs text-muted-foreground">Google review</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
 
 
