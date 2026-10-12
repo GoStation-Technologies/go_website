@@ -1,11 +1,31 @@
 import { Quote, Star } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useTestimonials } from "@/hooks/use-cms";
+import { getPublicGoogleReviews } from "@/lib/google-reviews.functions";
 
-/** Customer reviews carousel-free grid, fully CMS driven. */
+/** Customer reviews grid: admin-selected Google Maps reviews (live) + CMS testimonials. */
 export function Testimonials({ title, subtitle }: { title: string; subtitle?: string }) {
-  const { items, isLoading } = useTestimonials();
+  const { items: cms, isLoading } = useTestimonials();
+  const { i18n } = useTranslation();
+  const lang = (i18n.resolvedLanguage ?? i18n.language).startsWith("ar") ? "ar" : "en";
+  const g = useQuery({
+    queryKey: ["public", "google-reviews", lang],
+    queryFn: () => getPublicGoogleReviews({ data: { lang } }),
+    staleTime: 30 * 60_000,
+  });
+  const google = (g.data?.reviews ?? []).map((r) => ({
+    id: r.id,
+    author: r.author,
+    role: lang === "ar" ? "تقييم على Google Maps" : "Google Maps review",
+    quote: r.text,
+    avatar_url: r.authorPhoto,
+    rating: Math.round(r.rating),
+  }));
+  const items = [...google, ...cms];
 
-  if (isLoading || items.length === 0) return null;
+  if ((isLoading && g.isLoading) || items.length === 0) return null;
+
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 md:py-28">

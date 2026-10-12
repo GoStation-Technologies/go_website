@@ -11,6 +11,7 @@ import {
   adminUpsertTestimonial,
 } from "@/lib/cms.functions";
 import { MediaUpload } from "@/components/admin/media-upload";
+import { GoogleReviewsManager } from "@/components/admin/google-reviews-manager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -116,6 +117,8 @@ function TestimonialsPage() {
           {t("admin.common.new", { defaultValue: "New" })}
         </Button>
       </div>
+
+      <GoogleReviewsManager />
 
       {isLoading ? (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
