@@ -35,7 +35,7 @@ export const adminAbuseMetrics = createServerFn({ method: "POST" })
       throw new Response("Forbidden", { status: 403 });
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const supabaseAdmin = context.supabase;
     const sinceMs = Date.now() - data.windowHours * 3600_000;
     const since = new Date(sinceMs).toISOString();
 
@@ -130,7 +130,7 @@ export const adminAbuseExport = createServerFn({ method: "POST" })
       throw new Response("Forbidden", { status: 403 });
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const supabaseAdmin = context.supabase;
     const since = new Date(Date.now() - data.windowHours * 3600_000).toISOString();
 
     let q = supabaseAdmin
@@ -166,7 +166,7 @@ export const adminAbuseExportSubmit = createServerFn({ method: "POST" })
       throw new Response("Forbidden", { status: 403 });
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const supabaseAdmin = context.supabase;
     const since = new Date(Date.now() - data.windowHours * 3600_000).toISOString();
 
     let countQ = supabaseAdmin

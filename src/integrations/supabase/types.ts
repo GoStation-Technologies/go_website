@@ -1562,6 +1562,18 @@ export type Database = {
         }
       }
       generate_reference: { Args: { prefix: string }; Returns: string }
+      log_abuse_event: {
+        Args: {
+          _current_count: number
+          _ip_hash: string
+          _key: string
+          _lang: string
+          _metadata: Json
+          _reason: string
+          _session_id: string
+        }
+        Returns: undefined
+      }
       rate_limit_hit: {
         Args: { _key: string; _limit: number; _window_seconds: number }
         Returns: {

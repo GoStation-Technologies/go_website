@@ -155,14 +155,14 @@ export async function recordAbuseEvent(
     // ignore
   }
   try {
-    await supabase.from("abuse_events").insert({
-      reason: ev.reason,
-      key: ev.key ?? null,
-      session_id: ev.sessionId ?? null,
-      ip_hash: ev.ipHash ?? null,
-      lang: ev.lang ?? null,
-      current_count: ev.currentCount ?? null,
-      metadata: ev.metadata ?? {},
+    await supabase.rpc("log_abuse_event", {
+      _reason: ev.reason,
+      _key: ev.key ?? null,
+      _session_id: ev.sessionId ?? null,
+      _ip_hash: ev.ipHash ?? null,
+      _lang: ev.lang ?? null,
+      _current_count: ev.currentCount ?? null,
+      _metadata: ev.metadata ?? {},
     });
   } catch {
     // Never fail the request on logging.
