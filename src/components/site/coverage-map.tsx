@@ -8,7 +8,7 @@ import { getContentLanguage } from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fuelLabel } from "@/lib/regions";
 import { useActiveStationRegions } from "@/hooks/use-station-stats";
-import { stationStatusLabel } from "@/lib/station-status";
+import { stationDisplayName, stationStatusLabel } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),

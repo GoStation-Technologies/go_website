@@ -16,7 +16,7 @@ import { fuelLabel } from "@/lib/regions";
 import { useActiveStationRegions } from "@/hooks/use-station-stats";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { haversineKm, formatDistance } from "@/lib/geo";
-import { stationStatusLabel } from "@/lib/station-status";
+import { stationDisplayName, stationNumber, stationStatusLabel } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
