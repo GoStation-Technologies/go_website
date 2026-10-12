@@ -16,7 +16,7 @@ import { fuelLabel } from "@/lib/regions";
 import { useActiveStationRegions } from "@/hooks/use-station-stats";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { haversineKm, formatDistance } from "@/lib/geo";
-import { stationStatusLabel } from "@/lib/station-status";
+import { stationDisplayName, stationNumber, stationStatusLabel } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -84,7 +84,7 @@ function StationsPage() {
       );
     }
     return list.sort((a, b) =>
-      ((ar ? a.name_ar : a.name_en) ?? "").localeCompare((ar ? b.name_ar : b.name_en) ?? "", ar ? "ar" : "en"),
+      stationNumber(a) - stationNumber(b) || stationDisplayName(a, ar).localeCompare(stationDisplayName(b, ar), ar ? "ar" : "en"),
     );
   }, [data, region, fuel, coords, ar]);
 
@@ -99,7 +99,7 @@ function StationsPage() {
           statusLabel: stationStatusLabel(s, ar),
           lat: s.lat as number,
           lng: s.lng as number,
-          title: (lng === "ar" ? s.name_ar : s.name_en) ?? "Station",
+          title: stationDisplayName(s, lng === "ar"),
           subtitle: lng === "ar"
             ? [s.city_ar, s.district_ar].filter(Boolean).join(" · ")
             : [s.city_en, s.district_en].filter(Boolean).join(" · "),
@@ -160,7 +160,11 @@ function StationsPage() {
               {ar ? "مسح" : "Clear"}
             </Button>
           )}
-          <div className="text-sm text-muted-foreground">{filtered.length} / {data.length}</div>
+          <div className="text-sm font-medium text-foreground">
+            {filtered.length === data.length
+              ? ar ? `إجمالي المحطات: ${data.length}` : `Total stations: ${data.length}`
+              : ar ? `${filtered.length} من ${data.length} محطة` : `${filtered.length} of ${data.length} stations`}
+          </div>
         </div>
         <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-accent" />{ar ? "تعمل الآن" : "Operating"}</span>
@@ -216,7 +220,7 @@ function StationsPage() {
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-semibold">{lng === "ar" ? s.name_ar : s.name_en}</h3>
+                      <h3 className="font-semibold">{stationDisplayName(s, lng === "ar")}</h3>
                       <p className={`mt-1 text-xs font-semibold ${s.is_active ? "text-accent" : "text-muted-foreground"}`}>{stationStatusLabel(s, ar)}</p>
                       <p className="text-xs text-muted-foreground">{lng === "ar" ? `${s.city_ar} · ${s.district_ar ?? ""}` : `${s.city_en} · ${s.district_en ?? ""}`}</p>
                       {s.distanceKm != null && (
