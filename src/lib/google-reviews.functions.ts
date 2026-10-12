@@ -109,6 +109,39 @@ async function assertCmsAdmin(supabase: any, userId: string) {
 
 const Lang = z.enum(["ar", "en"]);
 
+/** Admin: search Google listings by name/address so admins don't need raw Place IDs. */
+export const adminSearchGooglePlaces = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ query: z.string().trim().min(2).max(200), lang: Lang }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertCmsAdmin(context.supabase, context.userId);
+    const lovableKey = process.env["LOVABLE_API_KEY"];
+    const mapsKey = process.env["GOOGLE_MAPS_API_KEY"];
+    if (!lovableKey || !mapsKey) throw new Error("Google Maps is not connected");
+    const res = await fetch(`${GATEWAY_URL}/places/v1/places:searchText`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": mapsKey,
+        "Content-Type": "application/json",
+        "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.userRatingCount",
+      },
+      body: JSON.stringify({ textQuery: data.query, languageCode: data.lang, regionCode: "SA", pageSize: 10 }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) {
+      console.error(`Google place search failed [${res.status}]: ${await res.text()}`);
+      throw new Error(`Google search failed [${res.status}]`);
+    }
+    const j = (await res.json()) as any;
+    return ((j.places ?? []) as any[]).map((p) => ({
+      id: String(p.id),
+      name: p.displayName?.text ?? "",
+      address: p.formattedAddress ?? "",
+      reviews: Number(p.userRatingCount ?? 0),
+    }));
+  });
+
 /** Admin: all reviews from every configured listing, with show/hide state. */
 export const adminListGoogleReviews = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
