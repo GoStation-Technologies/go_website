@@ -55,7 +55,7 @@ export function CoverageMap() {
           statusLabel: stationStatusLabel(s, ar),
           lat: s.lat as number,
           lng: s.lng as number,
-          title: (ar ? s.name_ar : s.name_en) ?? "GoStation",
+          title: stationDisplayName(s, ar),
           subtitle: ar
             ? [s.city_ar, s.district_ar].filter(Boolean).join(" · ")
             : [s.city_en, s.district_en].filter(Boolean).join(" · "),
