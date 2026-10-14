@@ -23,6 +23,7 @@ import {
   Quote,
   Sparkles,
   UserRound,
+  Award,
 } from "lucide-react";
 
 import { isRtl } from "@/lib/i18n";
@@ -59,6 +60,7 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "aboutStory", url: "/manage-portal-9f4c2ab7/about-story", icon: Sparkles },
   { key: "leaders", url: "/manage-portal-9f4c2ab7/leaders", icon: UserRound },
   { key: "partners", url: "/manage-portal-9f4c2ab7/partners", icon: Handshake },
+  { key: "awards", url: "/manage-portal-9f4c2ab7/awards", icon: Award },
   { key: "testimonials", url: "/manage-portal-9f4c2ab7/testimonials", icon: Quote },
   { key: "faqs", url: "/manage-portal-9f4c2ab7/faqs", icon: HelpCircle },
   { key: "otpWhitelist", url: "/manage-portal-9f4c2ab7/otp-whitelist", icon: KeyRound },
