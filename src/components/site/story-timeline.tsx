@@ -1,25 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStationStats } from "@/hooks/use-station-stats";
+import { useAboutStory } from "@/lib/about-story";
 import { ChevronLeft, ChevronRight, Flag, Fuel, MapPin, Smartphone, Rocket, Trophy } from "lucide-react";
-const stationCanopy = { url: "/station-canopy.jpg" };
-const pylon = { url: "/gostation-pylon.jpg" };
-const franchiseStation = { url: "/franchise-station.jpg" };
-const appDownload = { url: "/go-app-download.jpg" };
-const heroCinematic = { url: "/hero-cinematic.jpg" };
-
-const MILESTONES = [
-  { key: "m1", year: "2016", icon: Flag, img: pylon.url },
-  { key: "m2", year: "2018", icon: Fuel, img: stationCanopy.url },
-  { key: "m3", year: "2020", icon: MapPin, img: franchiseStation.url },
-  { key: "m4", year: "2022", icon: Smartphone, img: appDownload.url },
-  { key: "m5", year: "2024", icon: Rocket, img: heroCinematic.url },
-  { key: "m6", year: "2026", icon: Trophy, img: stationCanopy.url },
-] as const;
+const ICONS = [Flag, Fuel, MapPin, Smartphone, Rocket, Trophy];
 
 export function StoryTimeline() {
   const { t } = useTranslation();
   const { stationsCount, activeRegionsCount } = useStationStats();
+  const { story, L } = useAboutStory();
+  const MILESTONES = story.journey.items;
+  const fill = (x: string) => x.replace(/\{\{\s*stations\s*\}\}/g, String(stationsCount)).replace(/\{\{\s*regions\s*\}\}/g, String(activeRegionsCount));
   const railRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [active, setActive] = useState(0);
@@ -33,7 +24,7 @@ export function StoryTimeline() {
     const card = el.clientWidth / Math.max(1, MILESTONES.length);
     setActive(Math.round((pos / Math.max(1, max)) * (MILESTONES.length - 1)));
     void card;
-  }, []);
+  }, [MILESTONES.length]);
 
   useEffect(() => {
     onScroll();
@@ -56,10 +47,10 @@ export function StoryTimeline() {
       <div className="relative flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
-            {t("about.journey.eyebrow")}
+            {L(story.journey.eyebrow)}
           </p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight md:text-4xl">{t("about.journey.title")}</h2>
-          <p className="mt-3 max-w-2xl text-muted-foreground">{t("about.journey.lead")}</p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight md:text-4xl">{L(story.journey.title)}</h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">{L(story.journey.lead)}</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -97,18 +88,18 @@ export function StoryTimeline() {
         className="relative -mx-2 mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-2 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {MILESTONES.map((m, i) => {
-          const Icon = m.icon;
+          const Icon = ICONS[i % ICONS.length];
           const isActive = i === active;
           return (
             <article
-              key={m.key}
+              key={i}
               className={`group relative w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl border bg-background transition-all duration-300 sm:w-[300px] ${
                 isActive ? "border-accent/60 shadow-elegant" : "hover:border-accent/40"
               }`}
             >
               <div className="relative h-36 overflow-hidden">
                 <img
-                  src={m.img}
+                  src={m.image || "/station-canopy.jpg"}
                   alt=""
                   aria-hidden
                   loading="lazy"
@@ -129,9 +120,9 @@ export function StoryTimeline() {
                     isActive ? "bg-accent" : "bg-border"
                   }`}
                 />
-                <h3 className="font-bold">{t(`about.journey.${m.key}.title`)}</h3>
+                <h3 className="font-bold">{L(m.title)}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {t(`about.journey.${m.key}.body`, { stations: stationsCount, regions: activeRegionsCount })}
+                  {fill(L(m.body))}
                 </p>
               </div>
             </article>
