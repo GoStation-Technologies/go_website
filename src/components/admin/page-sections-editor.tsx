@@ -97,6 +97,40 @@ export const PAGE_CMS: PageDef[] = [
       { key: "vision", en: "Vision", ar: "الرؤية" },
       { key: "mission", en: "Mission", ar: "الرسالة" },
       { key: "values", en: "Core values", ar: "القيم الأساسية" },
+      {
+        key: "esg",
+        en: "Sustainability — title & intro",
+        ar: "الاستدامة — العنوان والمقدمة",
+        labels: {
+          title: { en: "Title", ar: "العنوان" },
+          subtitle: { en: "Small label above the title", ar: "العنوان الصغير" },
+          content: { en: "Intro (blank line between paragraphs)", ar: "المقدمة (سطر فارغ بين الفقرات)" },
+        },
+      },
+      ...([
+        ["esg_env", "Environment", "البيئة"],
+        ["esg_social", "Society", "المجتمع"],
+        ["esg_gov", "Governance", "الحوكمة"],
+      ] as const).map(([key, en, ar]) => ({
+        key,
+        en: `Sustainability pillar — ${en}`,
+        ar: `محور الاستدامة — ${ar}`,
+        fields: ["title", "content"] as ("title" | "content")[],
+        labels: { title: { en: "Pillar title", ar: "عنوان المحور" }, content: { en: "Pillar text", ar: "نص المحور" } },
+      })),
+      ...([
+        ["esg_env_detail", "Environment details", "تفاصيل البيئة"],
+        ["esg_soc_detail", "Society details", "تفاصيل المجتمع"],
+      ] as const).map(([key, en, ar]) => ({
+        key,
+        en: `Sustainability — ${en}`,
+        ar: `الاستدامة — ${ar}`,
+        labels: {
+          title: { en: "Section heading", ar: "عنوان القسم" },
+          subtitle: { en: "Quote", ar: "العبارة المميزة" },
+          content: { en: "Focus areas (one per line)", ar: "المحاور (محور في كل سطر)" },
+        },
+      })),
       { key: "leadership", en: "Governance", ar: "الحوكمة" },
       { key: "awards", en: "Accreditations & awards", ar: "الاعتمادات والجوائز" },
     ],

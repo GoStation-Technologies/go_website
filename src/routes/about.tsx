@@ -104,7 +104,7 @@ function AboutPage() {
             <TabsTrigger value="vision">{cms.field("vision", "title", t("about.vision"))}</TabsTrigger>
             <TabsTrigger value="mission">{cms.field("mission", "title", t("about.mission"))}</TabsTrigger>
             <TabsTrigger value="values">{cms.field("values", "title", t("about.values"))}</TabsTrigger>
-            <TabsTrigger value="esg">{t("about.esg")}</TabsTrigger>
+            <TabsTrigger value="esg">{cms.field("esg", "title", t("about.esg"))}</TabsTrigger>
             <TabsTrigger value="governance">{cms.field("leadership", "title", t("about.governance"))}</TabsTrigger>
             <TabsTrigger value="leaders">{t("about.leaders")}</TabsTrigger>
             <TabsTrigger value="awards">{t("about.awards")}</TabsTrigger>
@@ -184,36 +184,39 @@ function AboutPage() {
           <TabsContent value="esg" className="mt-8 space-y-8">
             <Card className="overflow-hidden">
               <div className="border-b bg-muted/40 px-8 py-4">
-                <h2 className="font-display text-xl font-bold">{t("about.esg")}</h2>
+                <h2 className="font-display text-xl font-bold">{cms.field("esg", "title", t("about.esg"))}</h2>
               </div>
               <CardContent className="p-8">
                 <span className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
                   <Leaf className="h-4 w-4" />
-                  {t("about.sustain.eyebrow")}
+                  {cms.field("esg", "subtitle", t("about.sustain.eyebrow"))}
                 </span>
                 <h3 className="mt-5 text-balance font-display text-2xl font-extrabold tracking-tight md:text-3xl">
-                  {t("about.sustain.title")}
+                  {cms.field("esg", "title", t("about.sustain.title"))}
                 </h3>
                 <div className="mt-4 space-y-4 leading-relaxed text-muted-foreground">
-                  <p>{t("about.sustain.body")}</p>
-                  <p>{t("about.sustain.body2")}</p>
-                  <p>{t("about.sustain.body3")}</p>
-                  {get("esg") ? <p>{get("esg")}</p> : null}
+                  {(cms.field("esg", "content", "")
+                    ? cms.field("esg", "content", "").split(/\n\s*\n/)
+                    : [t("about.sustain.body"), t("about.sustain.body2"), t("about.sustain.body3"), get("esg")]
+                  ).filter((x) => x && x.trim()).map((para, i) => (
+                    <p key={i} className="whitespace-pre-line">{para}</p>
+                  ))}
                 </div>
 
                 <h4 className="mt-8 font-display text-lg font-bold">{t("about.sustain.pillarsTitle")}</h4>
-                <div className="mt-5 grid gap-5 md:grid-cols-2">
+                <div className="mt-5 grid gap-5 md:grid-cols-3">
                   {([
-                    { k: "env", icon: Leaf },
-                    { k: "social", icon: Users },
-                  ] as const).map(({ k, icon: Icon }) => (
+                    { k: "env", icon: Leaf, s: "esg_env" },
+                    { k: "social", icon: Users, s: "esg_social" },
+                    { k: "gov", icon: ShieldCheck, s: "esg_gov" },
+                  ] as const).filter(({ s }) => cms.visible(s)).map(({ k, icon: Icon, s }) => (
                     <div key={k} className="rounded-2xl border bg-card p-6 transition-colors hover:border-accent/50">
                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
                         <Icon className="h-6 w-6" />
                       </div>
-                      <h5 className="mt-4 font-display text-lg font-bold">{t(`about.sustain.pillars.${k}.title`)}</h5>
+                      <h5 className="mt-4 font-display text-lg font-bold">{cms.field(s, "title", t(`about.sustain.pillars.${k}.title`))}</h5>
                       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                        {t(`about.sustain.pillars.${k}.body`)}
+                        {cms.field(s, "content", t(`about.sustain.pillars.${k}.body`))}
                       </p>
                     </div>
                   ))}
@@ -227,11 +230,11 @@ function AboutPage() {
 
             <Card className="overflow-hidden">
               <div className="border-b bg-muted/40 px-8 py-4">
-                <h2 className="font-display text-xl font-bold text-accent">{t("about.sustain.envLabel")}</h2>
+                <h2 className="font-display text-xl font-bold text-accent">{cms.field("esg_env_detail", "title", t("about.sustain.envLabel"))}</h2>
               </div>
               <CardContent className="grid gap-10 p-8 lg:grid-cols-2">
                 <div>
-                  <p className="font-display text-xl font-bold text-accent">“{t("about.sustain.envQuote")}”</p>
+                  <p className="font-display text-xl font-bold text-accent">“{cms.field("esg_env_detail", "subtitle", t("about.sustain.envQuote"))}”</p>
                   <p className="mt-4 leading-relaxed text-muted-foreground">{t("about.sustain.envIntro")}</p>
                   <div className="mt-6 rounded-2xl border bg-muted/40 p-6">
                     <h4 className="font-display text-lg font-bold">{t("about.sustain.envGoalTitle")}</h4>
@@ -241,15 +244,18 @@ function AboutPage() {
                 <div>
                   <h4 className="font-display text-xl font-bold">{t("about.sustain.envAxesTitle")}</h4>
                   <ol className="mt-5 space-y-4">
-                    {["envA1", "envA2", "envA3"].map((k, i) => (
+                    {(cms.field("esg_env_detail", "content", "").split("\n").map((x) => x.trim()).filter(Boolean).length
+                      ? cms.field("esg_env_detail", "content", "").split("\n").map((x) => x.trim()).filter(Boolean)
+                      : ["envA1", "envA2", "envA3"].map((k) => t(`about.sustain.${k}`))
+                    ).map((text, i) => (
                       <li
-                        key={k}
+                        key={i}
                         className="flex items-start gap-4 rounded-2xl border bg-card p-5 transition-colors hover:border-accent/50"
                       >
                         <span className="font-display text-lg font-extrabold text-accent tabular-nums">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className="text-sm leading-relaxed text-muted-foreground">{t(`about.sustain.${k}`)}</span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">{text}</span>
                       </li>
                     ))}
                   </ol>
@@ -259,11 +265,11 @@ function AboutPage() {
 
             <Card className="overflow-hidden">
               <div className="border-b bg-muted/40 px-8 py-4">
-                <h2 className="font-display text-xl font-bold text-accent">{t("about.sustain.socLabel")}</h2>
+                <h2 className="font-display text-xl font-bold text-accent">{cms.field("esg_soc_detail", "title", t("about.sustain.socLabel"))}</h2>
               </div>
               <CardContent className="grid gap-10 p-8 lg:grid-cols-2">
                 <div>
-                  <p className="font-display text-xl font-bold text-accent">“{t("about.sustain.socQuote")}”</p>
+                  <p className="font-display text-xl font-bold text-accent">“{cms.field("esg_soc_detail", "subtitle", t("about.sustain.socQuote"))}”</p>
                   <p className="mt-4 leading-relaxed text-muted-foreground">{t("about.sustain.socIntro")}</p>
                   <div className="mt-6 rounded-2xl border bg-muted/40 p-6">
                     <h4 className="font-display text-lg font-bold">{t("about.sustain.socGoalTitle")}</h4>
@@ -273,15 +279,18 @@ function AboutPage() {
                 <div>
                   <h4 className="font-display text-xl font-bold">{t("about.sustain.socAxesTitle")}</h4>
                   <ol className="mt-5 space-y-4">
-                    {["socA1", "socA2", "socA3"].map((k, i) => (
+                    {(cms.field("esg_soc_detail", "content", "").split("\n").map((x) => x.trim()).filter(Boolean).length
+                      ? cms.field("esg_soc_detail", "content", "").split("\n").map((x) => x.trim()).filter(Boolean)
+                      : ["socA1", "socA2", "socA3"].map((k) => t(`about.sustain.${k}`))
+                    ).map((text, i) => (
                       <li
-                        key={k}
+                        key={i}
                         className="flex items-start gap-4 rounded-2xl border bg-card p-5 transition-colors hover:border-accent/50"
                       >
                         <span className="font-display text-lg font-extrabold text-accent tabular-nums">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className="text-sm leading-relaxed text-muted-foreground">{t(`about.sustain.${k}`)}</span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">{text}</span>
                       </li>
                     ))}
                   </ol>
