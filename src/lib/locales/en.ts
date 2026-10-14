@@ -139,7 +139,7 @@ export const en = {
         rating: 5,
       },
     ],
-    pricesTitle: "Today's fuel prices (Aramco)",
+    pricesTitle: "Fuel prices",
     ctaBannerEyebrow: "Acquisitions",
     ctaBanner: "Strategic acquisition opportunities",
     ctaBannerText: "Do you own an existing fuel station or qualified land for a new station? Share the details and our team will evaluate your opportunity.",
