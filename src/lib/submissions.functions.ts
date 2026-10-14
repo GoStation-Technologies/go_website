@@ -31,11 +31,9 @@ const AcquisitionInput = z.object({
 
 const FranchiseInput = z.object({
   full_name: str(200).min(1),
-  national_id: str(50).min(1),
   phone: str(50).min(1),
   email: str(255).email(),
   city: str(120).min(1),
-  cr_number: str(60).optional().default(""),
   proposed_city: str(120).optional().default(""),
   proposed_district: str(120).optional().default(""),
   land_area_sqm: str(30).optional().default(""),
@@ -47,10 +45,12 @@ const FranchiseInput = z.object({
 async function callSubmit(
   fn: string,
   payload: Record<string, string>,
-  notify: { category: "franchise" | "acquisition" | "contact"; title: string },
+  notify: { category: "franchise" | "acquisition" | "contact" | "ir"; title: string },
 ) {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await (supabaseAdmin.rpc as any)(fn, { payload });
+  const { getServerSupabase } = await import("./supabase-server.server");
+  const { client } = await getServerSupabase();
+  if (!client) throw new Error("submission_unavailable");
+  const { data, error } = await (client.rpc as any)(fn, { payload });
   if (error) {
     console.error(`[submissions] ${fn} failed`, error);
     throw new Error("submission_failed");
@@ -58,13 +58,17 @@ async function callSubmit(
   const reference = data as string;
 
   // Route the notification using the per-category settings in the admin panel.
-  const { notifySubmission } = await import("./notify.server");
-  await notifySubmission({
-    category: notify.category,
-    title: notify.title,
-    reference,
-    fields: payload,
-  });
+  try {
+    const { notifySubmission } = await import("./notify.server");
+    await notifySubmission({
+      category: notify.category,
+      title: notify.title,
+      reference,
+      fields: payload,
+    });
+  } catch (e) {
+    console.warn("[submissions] notification skipped", e);
+  }
 
   return { reference };
 }
@@ -93,3 +97,18 @@ export const submitFranchiseApplication = createServerFn({ method: "POST" })
     }),
   );
 
+
+const IrInput = z.object({
+  full_name: str(200).min(1),
+  email: str(255).email(),
+  phone: str(50).optional().default(""),
+  organization: str(200).optional().default(""),
+  inquiry_type: str(40).optional().default("general"),
+  message: str(4000).min(1),
+});
+
+export const submitIrInquiry = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => IrInput.parse(raw))
+  .handler(async ({ data }) =>
+    callSubmit("submit_ir_inquiry", data, { category: "ir", title: "New investor relations inquiry" }),
+  );

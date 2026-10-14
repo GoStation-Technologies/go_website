@@ -43,16 +43,20 @@ function FranchisePage() {
   const upd = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = async () => {
+    const missing = ["full_name", "phone", "email", "city"].some((k) => !(form[k] ?? "").trim());
+    if (missing || !/^\S+@\S+\.\S+$/.test((form.email ?? "").trim())) {
+      setStep(0);
+      toast.error(t("common.requiredFields", "Please fill in your name, phone, a valid email and city."));
+      return;
+    }
     setBusy(true);
     try {
       const res = await submitFranchiseApplication({
         data: {
           full_name: form.full_name ?? "",
-          national_id: form.national_id ?? "",
           phone: form.phone ?? "",
           email: form.email ?? "",
           city: form.city ?? "",
-          cr_number: form.cr_number ?? "",
           proposed_city: form.proposed_city ?? "",
           proposed_district: form.proposed_district ?? "",
           land_area_sqm: form.land_area_sqm ?? "",
@@ -232,11 +236,9 @@ function FranchisePage() {
             {step === 0 && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <F label={t("common.fullName")}><Input value={form.full_name ?? ""} onChange={(e) => upd("full_name", e.target.value)} /></F>
-                <F label={t("franchise.f.nationalId")}><Input value={form.national_id ?? ""} onChange={(e) => upd("national_id", e.target.value)} /></F>
                 <F label={t("common.phone")}><Input value={form.phone ?? ""} onChange={(e) => upd("phone", e.target.value)} /></F>
                 <F label={t("common.email")}><Input type="email" value={form.email ?? ""} onChange={(e) => upd("email", e.target.value)} /></F>
                 <F label={t("common.city")}><CitySelect value={form.city} onChange={(v) => upd("city", v)} /></F>
-                <F label={t("franchise.f.crNumber")}><Input value={form.cr_number ?? ""} onChange={(e) => upd("cr_number", e.target.value)} /></F>
               </div>
             )}
             {step === 1 && (
