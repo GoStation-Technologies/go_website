@@ -57,6 +57,7 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "pageInvestors", url: "/manage-portal-9f4c2ab7/pages/investors", icon: TrendingUp },
   { key: "pageValues", url: "/manage-portal-9f4c2ab7/pages/values", icon: Sparkles },
   { key: "leaders", url: "/manage-portal-9f4c2ab7/leaders", icon: UserRound },
+  { key: "partners", url: "/manage-portal-9f4c2ab7/partners", icon: Handshake },
   { key: "testimonials", url: "/manage-portal-9f4c2ab7/testimonials", icon: Quote },
   { key: "faqs", url: "/manage-portal-9f4c2ab7/faqs", icon: HelpCircle },
   { key: "otpWhitelist", url: "/manage-portal-9f4c2ab7/otp-whitelist", icon: KeyRound },
