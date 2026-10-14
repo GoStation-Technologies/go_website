@@ -113,21 +113,23 @@ function AboutPage() {
           <TabsContent value="story" className="mt-8 space-y-10">
             <Card className="overflow-hidden">
               <div className="border-b bg-muted/40 px-8 py-4">
-                <h2 className="font-display text-xl font-bold text-accent">{t("about.founding.title")}</h2>
+                <h2 className="font-display text-xl font-bold text-accent">{cms.field("story", "title", t("about.founding.title"))}</h2>
               </div>
               <CardContent className="p-8">
-                <p className="max-w-4xl leading-relaxed text-muted-foreground">{t("about.founding.body")}</p>
+                <p className="max-w-4xl whitespace-pre-line leading-relaxed text-muted-foreground">{cms.field("story", "content", t("about.founding.body"))}</p>
               </CardContent>
             </Card>
 
             <Card className="overflow-hidden">
               <div className="border-b bg-muted/40 px-8 py-4">
-                <h2 className="font-display text-xl font-bold text-accent">{t("about.activities.title")}</h2>
+                <h2 className="font-display text-xl font-bold text-accent">{cms.field("activities", "title", t("about.activities.title"))}</h2>
               </div>
               <CardContent className="p-8">
-                <p className="font-semibold">{t("about.activities.lead")}</p>
+                <p className="font-semibold">{cms.field("activities", "subtitle", t("about.activities.lead"))}</p>
                 <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {(t("about.activities.items", { returnObjects: true }) as string[]).map((item, i) => (
+                  {(cms.field("activities", "content", "").split("\n").map((x) => x.trim()).filter(Boolean).length
+                    ? cms.field("activities", "content", "").split("\n").map((x) => x.trim()).filter(Boolean)
+                    : (t("about.activities.items", { returnObjects: true }) as string[])).map((item, i) => (
                     <li
                       key={item}
                       className="flex items-start gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-accent/40"
@@ -150,10 +152,10 @@ function AboutPage() {
 
 
           <TabsContent value="vision" className="mt-8">
-            <IconBlock icon={Eye} title={t("about.vision")} body={get("vision")} />
+            <IconBlock icon={Eye} title={cms.field("vision", "title", t("about.vision"))} body={cms.field("vision", "content", get("vision"))} />
           </TabsContent>
           <TabsContent value="mission" className="mt-8">
-            <IconBlock icon={Target} title={t("about.mission")} body={get("mission")} />
+            <IconBlock icon={Target} title={cms.field("mission", "title", t("about.mission"))} body={cms.field("mission", "content", get("mission"))} />
           </TabsContent>
           <TabsContent value="values" className="mt-8">
             <Card>
