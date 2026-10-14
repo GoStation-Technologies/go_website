@@ -56,18 +56,26 @@ function parseConfig(v: unknown): Config {
 async function fetchPlaceReviews(placeId: string, lang: string): Promise<GoogleReview[]> {
   const lovableKey = process.env["LOVABLE_API_KEY"];
   const mapsKey = process.env["GOOGLE_MAPS_API_KEY"];
-  if (!lovableKey || !mapsKey) throw new Error("Google Maps is not connected");
-  const res = await fetch(
-    `${GATEWAY_URL}/places/v1/places/${encodeURIComponent(placeId)}?languageCode=${lang}`,
-    {
-      headers: {
-        Authorization: `Bearer ${lovableKey}`,
-        "X-Connection-Api-Key": mapsKey,
-        "X-Goog-FieldMask": "id,displayName,reviews,googleMapsUri",
-      },
-      signal: AbortSignal.timeout(10000),
-    },
-  );
+  if (!mapsKey) throw new Error("Google Maps is not connected");
+  // Lovable hosting: route through the connector gateway. Self-hosted servers
+  // have no LOVABLE_API_KEY, so call the Places API directly with their own key.
+  const fieldMask = "id,displayName,reviews,googleMapsUri";
+  const res = lovableKey
+    ? await fetch(
+        `${GATEWAY_URL}/places/v1/places/${encodeURIComponent(placeId)}?languageCode=${lang}`,
+        {
+          headers: {
+            Authorization: `Bearer ${lovableKey}`,
+            "X-Connection-Api-Key": mapsKey,
+            "X-Goog-FieldMask": fieldMask,
+          },
+          signal: AbortSignal.timeout(10000),
+        },
+      )
+    : await fetch(
+        `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=${lang}&key=${encodeURIComponent(mapsKey)}`,
+        { headers: { "X-Goog-FieldMask": fieldMask }, signal: AbortSignal.timeout(10000) },
+      );
   if (!res.ok) {
     const body = await res.text();
     console.error(`Google reviews request failed [${res.status}]: ${body}`);
