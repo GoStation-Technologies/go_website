@@ -131,7 +131,37 @@ export const PAGE_CMS: PageDef[] = [
           content: { en: "Focus areas (one per line)", ar: "المحاور (محور في كل سطر)" },
         },
       })),
-      { key: "leadership", en: "Governance", ar: "الحوكمة" },
+      {
+        key: "governance",
+        en: "Governance — title & intro",
+        ar: "الحوكمة — العنوان والمقدمة",
+        labels: {
+          title: { en: "Title", ar: "العنوان" },
+          subtitle: { en: "Small label above the title", ar: "العنوان الصغير" },
+          content: { en: "Intro paragraph", ar: "نص المقدمة" },
+        },
+      },
+      {
+        key: "gov_goal",
+        en: "Governance — strategic goal",
+        ar: "الحوكمة — الهدف الاستراتيجي",
+        fields: ["title", "content"],
+        labels: {
+          title: { en: "Goal heading", ar: "عنوان الهدف" },
+          content: { en: "Goal text", ar: "نص الهدف" },
+        },
+      },
+      {
+        key: "gov_pillars",
+        en: "Governance — numbered pillars (one per line)",
+        ar: "الحوكمة — المحاور المرقمة (محور في كل سطر)",
+        fields: ["title", "content"],
+        labels: {
+          title: { en: "Pillars heading", ar: "عنوان المحاور" },
+          content: { en: "Pillars (one per line)", ar: "المحاور (محور في كل سطر)" },
+        },
+      },
+      { key: "leadership", en: "Senior management tab", ar: "تبويب الإدارة العليا" },
       { key: "awards", en: "Accreditations & awards", ar: "الاعتمادات والجوائز" },
     ],
   },

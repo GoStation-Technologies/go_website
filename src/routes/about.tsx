@@ -305,33 +305,40 @@ function AboutPage() {
           <TabsContent value="governance" className="mt-8">
             <Card className="overflow-hidden">
               <div className="border-b bg-muted/40 px-8 py-4">
-                <h2 className="font-display text-xl font-bold">{t("about.governance")}</h2>
+                <h2 className="font-display text-xl font-bold">{cms.field("governance", "title", t("about.governance"))}</h2>
               </div>
               <CardContent className="grid gap-10 p-8 lg:grid-cols-2">
                 <div>
                   <span className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
                     <ShieldCheck className="h-4 w-4" />
-                    {t("investors.govEyebrow")}
+                    {cms.field("governance", "subtitle", t("investors.govEyebrow"))}
                   </span>
                   <h3 className="mt-5 text-balance font-display text-2xl font-extrabold tracking-tight md:text-3xl">
-                    {t("investors.govTitle")}
+                    {cms.field("governance", "title", t("investors.govTitle"))}
                   </h3>
-                  <p className="mt-4 leading-relaxed text-muted-foreground">{t("investors.govBody")}</p>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">
+                    {cms.field("governance", "content", t("investors.govBody"))}
+                  </p>
                   <div className="mt-6 rounded-2xl border bg-muted/40 p-6">
-                    <h4 className="font-display text-lg font-bold">{t("investors.govGoalTitle")}</h4>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("investors.govGoalBody")}</p>
+                    <h4 className="font-display text-lg font-bold">{cms.field("gov_goal", "title", t("investors.govGoalTitle"))}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {cms.field("gov_goal", "content", t("investors.govGoalBody"))}
+                    </p>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-display text-xl font-bold">{t("investors.govPillarsTitle")}</h4>
+                  <h4 className="font-display text-xl font-bold">{cms.field("gov_pillars", "title", t("investors.govPillarsTitle"))}</h4>
                   <ol className="mt-5 space-y-4">
-                    {["govP1", "govP2", "govP3"].map((k, i) => (
-                      <li key={k} className="flex items-start gap-4 rounded-2xl border bg-card p-5 transition-colors hover:border-accent/50">
+                    {(cms.field("gov_pillars", "content", "").split("\n").map((x) => x.trim()).filter(Boolean).length
+                      ? cms.field("gov_pillars", "content", "").split("\n").map((x) => x.trim()).filter(Boolean)
+                      : ["govP1", "govP2", "govP3"].map((k) => t(`investors.${k}`))
+                    ).map((text, i) => (
+                      <li key={i} className="flex items-start gap-4 rounded-2xl border bg-card p-5 transition-colors hover:border-accent/50">
                         <span className="font-display text-lg font-extrabold text-accent tabular-nums">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className="text-sm leading-relaxed text-muted-foreground">{t(`investors.${k}`)}</span>
+                        <span className="text-sm leading-relaxed text-muted-foreground">{text}</span>
                       </li>
                     ))}
                   </ol>
