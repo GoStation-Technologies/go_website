@@ -847,6 +847,8 @@ export const en = {
       pageFranchise: "Franchise page",
       pageAcquisitions: "Acquisitions page",
       pageInvestors: "Investor Relations page",
+      pageValues: "Company values",
+      leaders: "Senior Management",
       settings: "Site settings",
     },
     applications: {
