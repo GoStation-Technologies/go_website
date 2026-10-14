@@ -479,6 +479,9 @@ html[dir="rtl"] .animate-wave-flow-slow {
   animation: pulse-glow 2.2s ease-in-out infinite;
 }
 .leaflet-container {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
   font-family: var(--font-sans);
   border-radius: 12px;
 }

@@ -110,5 +110,5 @@ const IrInput = z.object({
 export const submitIrInquiry = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => IrInput.parse(raw))
   .handler(async ({ data }) =>
-    callSubmit("submit_ir_inquiry", data, { category: "ir", title: "New investor relations inquiry" }),
+    callSubmit("submit_ir_inquiry", data, { category: "contact", title: "New investor relations inquiry" }),
   );

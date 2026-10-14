@@ -64,7 +64,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
   return (
     <header
-      className={`z-40 w-full transition-all duration-300 ${
+      className={`z-[1100] w-full transition-all duration-300 ${
         overlay ? "fixed top-0 start-0" : "sticky top-0"
       } ${
         overlayTop
