@@ -119,6 +119,26 @@ export const en = {
     reviewsTitle: "What customers say",
     reviewsSub:
       "At GoStation we listen closely to every customer's opinion, and we turn it into a professional service that lives up to their expectations — every visit, at every station.",
+    reviewsFallback: [
+      {
+        author: "Abdullah Al-Mutairi",
+        role: "Regular customer",
+        quote: "Fast service and clean, well-organized stations. GoStation has become my first stop on every trip.",
+        rating: 5,
+      },
+      {
+        author: "Sara Al-Otaibi",
+        role: "Customer",
+        quote: "Courteous staff and clear prices. A comfortable experience on every visit.",
+        rating: 5,
+      },
+      {
+        author: "Mohammed Al-Shehri",
+        role: "Truck driver",
+        quote: "I pass by GoStation stations daily on my routes, and the quality is consistent across every branch.",
+        rating: 5,
+      },
+    ],
     pricesTitle: "Today's fuel prices (Aramco)",
     ctaBannerEyebrow: "Acquisitions",
     ctaBanner: "Strategic acquisition opportunities",

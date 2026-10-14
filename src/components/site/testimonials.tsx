@@ -7,13 +7,14 @@ import { getPublicGoogleReviews } from "@/lib/google-reviews.functions";
 /** Customer reviews grid: admin-selected Google Maps reviews (live) + CMS testimonials. */
 export function Testimonials({ title, subtitle }: { title: string; subtitle?: string }) {
   const { items: cms, isLoading } = useTestimonials();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = (i18n.resolvedLanguage ?? i18n.language).startsWith("ar") ? "ar" : "en";
   const g = useQuery({
     queryKey: ["public", "google-reviews", lang],
     queryFn: () => getPublicGoogleReviews({ data: { lang } }),
     staleTime: 60_000,
     refetchOnWindowFocus: true,
+    retry: 1,
   });
   const google = (g.data?.reviews ?? []).map((r) => ({
     id: r.id,
@@ -23,9 +24,21 @@ export function Testimonials({ title, subtitle }: { title: string; subtitle?: st
     avatar_url: r.authorPhoto,
     rating: Math.round(r.rating),
   }));
-  const items = [...google, ...cms];
+  const live = [...google, ...cms];
 
-  if ((isLoading && g.isLoading) || items.length === 0) return null;
+  if (isLoading && g.isLoading) return null;
+
+  // Never hide the section: fall back to static reviews when the fetch
+  // fails or no reviews are published yet.
+  const fallback = (
+    t("home.reviewsFallback", { returnObjects: true }) as {
+      author: string;
+      role: string;
+      quote: string;
+      rating: number;
+    }[]
+  ).map((r, i) => ({ ...r, id: `fallback-${i}`, avatar_url: null as string | null }));
+  const items = live.length > 0 ? live : fallback;
 
 
   return (
