@@ -1111,6 +1111,8 @@ export type Database = {
           logo_url: string | null
           name_ar: string
           name_en: string
+          sort_order: number
+          website_url: string | null
         }
         Insert: {
           created_at?: string
@@ -1121,6 +1123,8 @@ export type Database = {
           logo_url?: string | null
           name_ar: string
           name_en: string
+          sort_order?: number
+          website_url?: string | null
         }
         Update: {
           created_at?: string
@@ -1131,6 +1135,8 @@ export type Database = {
           logo_url?: string | null
           name_ar?: string
           name_en?: string
+          sort_order?: number
+          website_url?: string | null
         }
         Relationships: []
       }
