@@ -45,7 +45,7 @@ const FranchiseInput = z.object({
 async function callSubmit(
   fn: string,
   payload: Record<string, string>,
-  notify: { category: "franchise" | "acquisition" | "contact" | "ir"; title: string },
+  notify: { category: "franchise" | "acquisition" | "contact"; title: string },
 ) {
   const { getServerSupabase } = await import("./supabase-server.server");
   const { client } = await getServerSupabase();
