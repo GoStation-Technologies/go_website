@@ -79,7 +79,18 @@ async function fetchPlaceReviews(placeId: string, lang: string): Promise<GoogleR
   if (!res.ok) {
     const body = await res.text();
     console.error(`Google reviews request failed [${res.status}]: ${body}`);
-    throw new Error(`Google request failed [${res.status}]`);
+    let reason = "";
+    try {
+      const details: Array<{ reason?: string }> = JSON.parse(body)?.error?.details ?? [];
+      reason = details.find((d) => d.reason)?.reason ?? "";
+    } catch {
+      /* not JSON */
+    }
+    if (reason === "API_KEY_HTTP_REFERRER_BLOCKED")
+      throw new Error('Google key is website-restricted. In Google Cloud, set its application restriction to "None" or "IP addresses".');
+    if (reason === "API_KEY_SERVICE_BLOCKED" || reason === "SERVICE_DISABLED")
+      throw new Error('Google key cannot use "Places API (New)". Enable it in Google Cloud and allow it on the key.');
+    throw new Error(`Google request failed [${res.status}]${reason ? ` ${reason}` : ""}`);
   }
   const j = (await res.json()) as any;
   return ((j.reviews ?? []) as any[]).map((r) => ({
@@ -107,6 +118,20 @@ async function fetchAll(places: string[], lang: string) {
     else errors.push(`${places[i]}: ${(r.reason as Error).message}`);
   });
   return { reviews, errors };
+}
+
+/**
+ * Google returns a different set of 5 reviews per language, so a review chosen
+ * while browsing in one language may be missing in the other. Fetch the
+ * requested language first, then the other one, and merge (deduped by id).
+ */
+async function fetchBothLangs(places: string[], lang: "ar" | "en", needed?: Set<string>) {
+  const first = await fetchAll(places, lang);
+  const have = new Set(first.reviews.map((r) => r.id));
+  if (needed && [...needed].every((id) => have.has(id))) return first;
+  const other = await fetchAll(places, lang === "ar" ? "en" : "ar");
+  const reviews = [...first.reviews, ...other.reviews.filter((r) => !have.has(r.id))];
+  return { reviews, errors: [...first.errors, ...other.errors] };
 }
 
 async function assertCmsAdmin(supabase: any, userId: string) {
@@ -159,7 +184,7 @@ export const adminListGoogleReviews = createServerFn({ method: "GET" })
     const { data: row } = await context.supabase
       .from("site_settings").select("value").eq("key", SETTING_KEY).maybeSingle();
     const config = parseConfig(row?.value);
-    const { reviews, errors } = await fetchAll(config.places, data.lang);
+    const { reviews, errors } = await fetchBothLangs(config.places, data.lang);
     return { config, reviews, errors };
   });
 
@@ -192,7 +217,8 @@ export const getPublicGoogleReviews = createServerFn({ method: "GET" })
       if (config.shown.length === 0) return { reviews: [] as GoogleReview[] };
       const shown = new Set(config.shown);
       const placeIds = config.places.filter((p) => config.shown.some((s) => s.startsWith(`places/${p}/`)));
-      const { reviews } = await fetchAll(placeIds, data.lang);
+      const { reviews, errors } = await fetchBothLangs(placeIds, data.lang, shown);
+      if (errors.length) console.error("Public Google reviews errors:", errors.join(" | "));
       return { reviews: reviews.filter((r) => shown.has(r.id)) };
     } catch (e) {
       console.error("Public Google reviews failed", e);
