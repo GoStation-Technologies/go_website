@@ -14,7 +14,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FormGrid, FormRow, inputCls } from "@/components/admin/form-kit";
 import { getContentLanguage } from "@/lib/i18n";
 
-export type SectionDef = { key: string; en: string; ar: string; media?: boolean };
+export type SectionDef = {
+  key: string;
+  en: string;
+  ar: string;
+  media?: boolean;
+  /** Which text fields to show; defaults to all three. */
+  fields?: ("title" | "subtitle" | "content")[];
+  /** Optional per-field label overrides, e.g. chairman "name". */
+  labels?: Partial<Record<"title" | "subtitle" | "content", { en: string; ar: string }>>;
+};
 
 export type PageDef = {
   slug: string;
@@ -34,7 +43,38 @@ export const PAGE_CMS: PageDef[] = [
     descEn: "Hero, services, network, franchise, acquisitions, Go App and reviews headings.",
     descAr: "عناوين البطل والخدمات والشبكة والامتياز والاستحواذ وتطبيق جو والآراء.",
     sections: [
-      { key: "hero", en: "Hero", ar: "البانر الرئيسي", media: true },
+      {
+        key: "hero",
+        en: "Hero",
+        ar: "البانر الرئيسي",
+        media: true,
+        labels: {
+          title: { en: "Headline line 1", ar: "السطر الأول من العنوان" },
+          subtitle: { en: "Headline line 2 (highlighted)", ar: "السطر الثاني من العنوان (مميز)" },
+          content: { en: "Intro paragraph", ar: "الفقرة التعريفية" },
+        },
+      },
+      {
+        key: "chairman",
+        en: "Chairman's message",
+        ar: "كلمة رئيس مجلس الإدارة",
+        media: true,
+        labels: {
+          title: { en: "Chairman name", ar: "اسم رئيس مجلس الإدارة" },
+          subtitle: { en: "Position", ar: "المنصب" },
+          content: { en: "Message text", ar: "نص الكلمة" },
+        },
+      },
+      {
+        key: "values",
+        en: "Company values heading",
+        ar: "عنوان قسم القيم",
+        labels: {
+          title: { en: "Heading", ar: "العنوان" },
+          subtitle: { en: "Small label above heading", ar: "التسمية الصغيرة فوق العنوان" },
+          content: { en: "Description", ar: "الوصف" },
+        },
+      },
       { key: "services", en: "Services", ar: "الخدمات" },
       { key: "network", en: "Station network", ar: "شبكة المحطات" },
       { key: "franchise", en: "Franchise banner", ar: "بانر الامتياز", media: true },
@@ -56,9 +96,26 @@ export const PAGE_CMS: PageDef[] = [
       { key: "vision", en: "Vision", ar: "الرؤية" },
       { key: "mission", en: "Mission", ar: "الرسالة" },
       { key: "values", en: "Core values", ar: "القيم الأساسية" },
-      { key: "leadership", en: "Leadership", ar: "القيادة" },
+      { key: "leadership", en: "Governance", ar: "الحوكمة" },
       { key: "awards", en: "Accreditations & awards", ar: "الاعتمادات والجوائز" },
     ],
+  },
+  {
+    slug: "values",
+    en: "Company values",
+    ar: "قيم الشركة",
+    descEn: "Each value appears as its own card on the homepage and the About page.",
+    descAr: "تظهر كل قيمة في بطاقة مستقلة في الصفحة الرئيسية وصفحة عن الشركة.",
+    sections: [1, 2, 3, 4].map((n) => ({
+      key: `value_${n}`,
+      en: `Value ${n}`,
+      ar: `القيمة ${n}`,
+      fields: ["title", "content"] as ("title" | "content")[],
+      labels: {
+        title: { en: "Value title", ar: "عنوان القيمة" },
+        content: { en: "Value description", ar: "وصف القيمة" },
+      },
+    })),
   },
   {
     slug: "franchise",
@@ -164,10 +221,14 @@ export function PageSectionsEditor({ page }: { page: PageDef }) {
         },
       });
     },
-    onSuccess: () => {
+    onSuccess: (_r, vars) => {
       toast.success(t("admin.common.saved"));
       void qc.invalidateQueries({ queryKey: ["admin", "page_sections"] });
       void qc.invalidateQueries({ queryKey: ["cms"] });
+      setDrafts((d) => {
+        const { [vars.section_key]: _drop, ...rest } = d;
+        return rest;
+      });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -205,50 +266,32 @@ export function PageSectionsEditor({ page }: { page: PageDef }) {
             </CardHeader>
             <CardContent>
               <FormGrid>
-                <Field label={t("admin.cms.titleEn")} lang="en">
-                  <Input
-                    className={inputCls}
-                    value={row.title_en ?? ""}
-                    onChange={(e) => patch({ title_en: e.target.value })}
-                  />
-                </Field>
-                <Field label={t("admin.cms.titleAr")} lang="ar">
-                  <Input
-                    className={inputCls}
-                    value={row.title_ar ?? ""}
-                    onChange={(e) => patch({ title_ar: e.target.value })}
-                  />
-                </Field>
-                <Field label={t("admin.cms.subtitleEn")} lang="en">
-                  <Input
-                    className={inputCls}
-                    value={row.subtitle_en ?? ""}
-                    onChange={(e) => patch({ subtitle_en: e.target.value })}
-                  />
-                </Field>
-                <Field label={t("admin.cms.subtitleAr")} lang="ar">
-                  <Input
-                    className={inputCls}
-                    value={row.subtitle_ar ?? ""}
-                    onChange={(e) => patch({ subtitle_ar: e.target.value })}
-                  />
-                </Field>
-                <Field label={t("admin.cms.bodyEn")} lang="en">
-                  <Textarea
-                    className={inputCls}
-                    rows={5}
-                    value={row.content_en ?? ""}
-                    onChange={(e) => patch({ content_en: e.target.value })}
-                  />
-                </Field>
-                <Field label={t("admin.cms.bodyAr")} lang="ar">
-                  <Textarea
-                    className={inputCls}
-                    rows={5}
-                    value={row.content_ar ?? ""}
-                    onChange={(e) => patch({ content_ar: e.target.value })}
-                  />
-                </Field>
+                {(def.fields ?? ["title", "subtitle", "content"]).flatMap((f) =>
+                  (["en", "ar"] as const).map((lng) => {
+                    const k = `${f}_${lng}` as keyof Row;
+                    const custom = def.labels?.[f];
+                    const base =
+                      f === "title"
+                        ? t(lng === "en" ? "admin.cms.titleEn" : "admin.cms.titleAr")
+                        : f === "subtitle"
+                          ? t(lng === "en" ? "admin.cms.subtitleEn" : "admin.cms.subtitleAr")
+                          : t(lng === "en" ? "admin.cms.bodyEn" : "admin.cms.bodyAr");
+                    const label = custom
+                      ? `${ar ? custom.ar : custom.en} (${lng === "en" ? "English" : "العربية"})`
+                      : base;
+                    const val = (row[k] as string | null) ?? "";
+                    const on = (v: string) => patch({ [k]: v } as Partial<Row>);
+                    return (
+                      <Field key={k} label={label} lang={lng}>
+                        {f === "content" ? (
+                          <Textarea className={inputCls} rows={5} value={val} onChange={(e) => on(e.target.value)} />
+                        ) : (
+                          <Input className={inputCls} value={val} onChange={(e) => on(e.target.value)} />
+                        )}
+                      </Field>
+                    );
+                  }),
+                )}
                 {def.media ? (
                   <div className="sm:col-span-2">
                     <Field label={t("admin.cms.media")} lang="en">
