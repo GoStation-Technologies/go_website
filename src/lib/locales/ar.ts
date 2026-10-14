@@ -872,6 +872,7 @@ export const ar = {
       pageInvestors: "صفحة علاقات المستثمرين",
       pageValues: "قيم الشركة",
       partners: "شعارات الشركاء",
+      awards: "الاعتمادات والجوائز",
       aboutStory: "مسيرة النمو والخطة",
       leaders: "الإدارة العليا",
       settings: "إعدادات الموقع",

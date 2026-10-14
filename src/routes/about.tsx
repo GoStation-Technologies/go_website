@@ -60,6 +60,8 @@ function AboutPage() {
 
   const awards = useQuery({
     queryKey: ["awards"],
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     queryFn: async () => {
       const { data } = await supabase.from("awards").select("*").order("sort_order");
       return data ?? [];
