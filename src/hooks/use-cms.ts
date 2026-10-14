@@ -29,7 +29,8 @@ export type PageSection = {
 export function useSiteSettings() {
   const q = useQuery({
     queryKey: ["cms", "site_settings"],
-    staleTime: 5 * 60_000,
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
     queryFn: async (): Promise<SiteSettings> => {
       const { data, error } = await supabase.from("site_settings").select("key, value");
       if (error) throw error;
@@ -56,7 +57,8 @@ export function usePageContent(pageSlug: string) {
 
   const q = useQuery({
     queryKey: ["cms", "page_sections", pageSlug],
-    staleTime: 5 * 60_000,
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
     queryFn: async (): Promise<PageSection[]> => {
       const { data, error } = await supabase
         .from("page_sections")
@@ -115,7 +117,8 @@ export function useFaqs(category?: string) {
 
   const q = useQuery({
     queryKey: ["cms", "faqs", category ?? "all"],
-    staleTime: 5 * 60_000,
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
     queryFn: async (): Promise<Faq[]> => {
       let query = supabase.from("faqs").select("*").eq("status", "published").order("sort_order");
       if (category) query = query.eq("category", category);
@@ -151,7 +154,8 @@ export function useTestimonials() {
 
   const q = useQuery({
     queryKey: ["cms", "testimonials"],
-    staleTime: 5 * 60_000,
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("testimonials")
@@ -173,4 +177,26 @@ export function useTestimonials() {
   }));
 
   return { items, isLoading: q.isLoading };
+}
+
+const VALUE_KEYS = ["excellence", "integrity", "community", "innovation"] as const;
+export type CompanyValueKey = (typeof VALUE_KEYS)[number];
+
+/**
+ * Company values shared by the homepage and the About page. Each card is its
+ * own CMS record (page "values", sections value_1..value_4) and falls back
+ * to the bundled translations when empty.
+ */
+export function useCompanyValues() {
+  const { t } = useTranslation();
+  const cms = usePageContent("values");
+  return VALUE_KEYS.map((k, i) => {
+    const key = `value_${i + 1}`;
+    return {
+      k,
+      visible: cms.visible(key),
+      title: cms.field(key, "title", t(`home.values.${k}.title`)),
+      body: cms.field(key, "content", t(`home.values.${k}.body`)),
+    };
+  }).filter((v) => v.visible);
 }

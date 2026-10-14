@@ -96,6 +96,7 @@ function ContentPage() {
       toast.success(t("admin.common.saved"));
       setNewRow(null);
       void qc.invalidateQueries({ queryKey: ["admin", "page_sections"] });
+      void qc.invalidateQueries({ queryKey: ["cms"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -105,6 +106,7 @@ function ContentPage() {
     onSuccess: () => {
       toast.success(t("admin.common.deleted"));
       void qc.invalidateQueries({ queryKey: ["admin", "page_sections"] });
+      void qc.invalidateQueries({ queryKey: ["cms"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });

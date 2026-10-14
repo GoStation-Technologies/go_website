@@ -184,7 +184,7 @@ export const ar = {
 
 
     governance: "الحوكمة",
-    leaders: "القيادة",
+    leaders: "الإدارة العليا",
     awards: "الاعتمادات والجوائز",
     viewAward: "عرض الشهادة",
     awardNoImage: "لا تتوفر صورة لهذه الشهادة حالياً.",

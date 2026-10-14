@@ -181,7 +181,7 @@ export const en = {
 
 
     governance: "Governance",
-    leaders: "Leadership",
+    leaders: "Senior Management",
     awards: "Accreditations & Awards",
     viewAward: "View certificate",
     awardNoImage: "No image available for this certificate yet.",

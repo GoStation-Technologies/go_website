@@ -42,7 +42,7 @@ import { VideoCard } from "@/components/site/video-card";
 import { JoinCta } from "@/components/site/join-cta";
 import { CoverageMap } from "@/components/site/coverage-map";
 import { useStationStats } from "@/hooks/use-station-stats";
-import { usePageContent, useSiteSettings } from "@/hooks/use-cms";
+import { useCompanyValues, usePageContent, useSiteSettings } from "@/hooks/use-cms";
 import { Testimonials } from "@/components/site/testimonials";
 
 
@@ -114,19 +114,15 @@ function HomePage() {
     { icon: Building2, k: "invest", href: "/investors" },
   ] as const;
 
-  const values = [
-    { icon: Sparkles, k: "excellence" },
-    { icon: ShieldCheck, k: "integrity" },
-    { icon: Leaf, k: "community" },
-    { icon: Handshake, k: "innovation" },
-  ] as const;
+  const valueIcons = { excellence: Sparkles, integrity: ShieldCheck, community: Leaf, innovation: Handshake } as const;
+  const values = useCompanyValues().map((v) => ({ ...v, icon: valueIcons[v.k] }));
 
   return (
     <SiteLayout overlayHeader>
       {/* ============ HERO — full-bleed cinematic ============ */}
       <section className="relative isolate flex min-h-[100vh] flex-col overflow-hidden border-b border-border/60">
         {/* Interactive background: ken-burns zoom + pointer & scroll parallax */}
-        <HeroBackdrop src={heroAsset.url} alt="GoStation flagship canopy in Saudi Arabia" />
+        <HeroBackdrop src={cms.media("hero", heroAsset.url)} alt="GoStation flagship canopy in Saudi Arabia" />
 
 
         <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-6 pb-16 pt-24 md:px-14 lg:px-20">
@@ -140,12 +136,12 @@ function HomePage() {
             </div>
 
             <h1 className="text-balance font-display text-[clamp(2.75rem,6vw,5.5rem)] font-extrabold leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.35)]">
-              <span className="block">{t("home.heroLine1")}</span>
-              <span className="block text-accent">{t("home.heroLine2")}</span>
+              <span className="block">{cms.field("hero", "title", t("home.heroLine1"))}</span>
+              <span className="block text-accent">{cms.field("hero", "subtitle", t("home.heroLine2"))}</span>
             </h1>
 
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/80">
-              {t("home.heroSub", { stations: liveStations, regions: liveRegions })}
+              {cms.field("hero", "content", t("home.heroSub", { stations: liveStations, regions: liveRegions }))}
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
@@ -239,20 +235,20 @@ function HomePage() {
             <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-accent via-accent/60 to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-40" aria-hidden />
             <div className="relative h-full w-full overflow-hidden rounded-full transition-transform duration-700 ease-out group-hover:scale-105 group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
               <img
-                src={chairmanCutoutAsset.url}
-                alt={t("home.quoteAuthor")}
+                src={cms.media("chairman", chairmanCutoutAsset.url)}
+                alt={cms.field("chairman", "title", t("home.quoteAuthor"))}
                 className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)] transition-transform duration-700 ease-out group-hover:scale-110"
               />
             </div>
           </div>
 
           <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            {t("home.quote")}
+            {cms.field("chairman", "content", t("home.quote"))}
           </blockquote>
           <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent transition-transform duration-500 hover:scale-105">
-            {t("home.quoteAuthor")}
+            {cms.field("chairman", "title", t("home.quoteAuthor"))}
           </div>
-          <div className="mt-1.5 text-sm text-muted-foreground">{t("home.quoteRole")}</div>
+          <div className="mt-1.5 text-sm text-muted-foreground">{cms.field("chairman", "subtitle", t("home.quoteRole"))}</div>
 
         </div>
       </section>
@@ -282,12 +278,12 @@ function HomePage() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="max-w-3xl">
-            <div className="eyebrow text-accent">{t("home.valuesEyebrow")}</div>
+            <div className="eyebrow text-accent">{cms.field("values", "subtitle", t("home.valuesEyebrow"))}</div>
             <h2 className="mt-4 text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl">
-              {t("home.valuesTitle")}
+              {cms.field("values", "title", t("home.valuesTitle"))}
             </h2>
             <p className="mt-6 max-w-2xl whitespace-pre-line text-base leading-relaxed text-white/70 md:text-lg">
-              {t("home.valuesSub")}
+              {cms.field("values", "content", t("home.valuesSub"))}
             </p>
             <div className="mt-8 h-px w-40 bg-gradient-to-r from-accent via-accent/40 to-transparent" />
           </div>
@@ -296,7 +292,7 @@ function HomePage() {
 
 
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map(({ icon: Icon, k }) => (
+            {values.map(({ icon: Icon, k, title, body }) => (
               <article
                 key={k}
                 className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/40 hover:bg-white/[0.07] hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--accent)_60%,transparent)]"
@@ -308,10 +304,10 @@ function HomePage() {
                 </div>
 
                 <h3 className="relative font-display text-xl font-bold tracking-tight text-white">
-                  {t(`home.values.${k}.title`)}
+                  {title}
                 </h3>
                 <p className="relative mt-3 text-sm leading-relaxed text-white/65">
-                  {t(`home.values.${k}.body`)}
+                  {body}
                 </p>
 
                 <div
