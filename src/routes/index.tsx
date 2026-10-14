@@ -38,6 +38,14 @@ const partnerLogo = { url: "/gostation-logo.png" };
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { VideoCard } from "@/components/site/video-card";
 import { JoinCta } from "@/components/site/join-cta";
 import { CoverageMap } from "@/components/site/coverage-map";
