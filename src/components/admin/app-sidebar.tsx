@@ -56,6 +56,7 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "pageAcquisitions", url: "/manage-portal-9f4c2ab7/pages/acquisitions", icon: Landmark },
   { key: "pageInvestors", url: "/manage-portal-9f4c2ab7/pages/investors", icon: TrendingUp },
   { key: "pageValues", url: "/manage-portal-9f4c2ab7/pages/values", icon: Sparkles },
+  { key: "aboutStory", url: "/manage-portal-9f4c2ab7/about-story", icon: Sparkles },
   { key: "leaders", url: "/manage-portal-9f4c2ab7/leaders", icon: UserRound },
   { key: "partners", url: "/manage-portal-9f4c2ab7/partners", icon: Handshake },
   { key: "testimonials", url: "/manage-portal-9f4c2ab7/testimonials", icon: Quote },
