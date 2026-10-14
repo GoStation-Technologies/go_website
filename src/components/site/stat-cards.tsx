@@ -3,19 +3,35 @@ import type { LucideIcon } from "lucide-react";
 
 type Stat = { key: string; val: string; label: string; icon: LucideIcon; loading?: boolean };
 
-/** Parses "180+" / "3,500,000+" / "50k+" into numeric part + prefix/suffix. */
+const ARABIC = /[\u0600-\u06FF]/;
+
+/**
+ * Splits a stat value into the numeric run (prefix + digits + symbols such as "+" or "k+")
+ * and any trailing words (e.g. "مليون لتر"). Each part is then rendered with its own text
+ * direction, so the bidi algorithm never reorders the number against the Arabic words.
+ */
 function parse(val: string) {
-  const m = val.match(/^([^\d]*)([\d.,]+)(.*)$/);
+  const m = val.match(/^([^\d]*)([\d.,]+)([\s\S]*)$/);
   if (!m) return null;
   const num = Number(m[2].replace(/,/g, ""));
   if (!Number.isFinite(num)) return null;
-  return { pre: m[1], num, suf: m[3], decimals: (m[2].split(".")[1] ?? "").length };
+  const cut = m[3].search(ARABIC);
+  const suf = (cut === -1 ? m[3] : m[3].slice(0, cut)).trim();
+  const words = cut === -1 ? "" : m[3].slice(cut).trim();
+  return {
+    pre: m[1],
+    num,
+    suf,
+    words,
+    raw: m[1] + m[2] + suf,
+    decimals: (m[2].split(".")[1] ?? "").length,
+  };
 }
 
 function CountUp({ value }: { value: string }) {
   const parsed = parse(value);
   const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState(value);
+  const [display, setDisplay] = useState(() => (parsed ? parsed.raw : value));
 
   useEffect(() => {
     const el = ref.current;
@@ -61,8 +77,11 @@ function CountUp({ value }: { value: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} dir="ltr" className="tabular-nums">
-      {display}
+    <span ref={ref} className="inline-flex items-center justify-center gap-1.5">
+      <bdi dir="ltr" className="tabular-nums whitespace-nowrap">
+        {display}
+      </bdi>
+      {parsed?.words ? <span className="whitespace-nowrap">{parsed.words}</span> : null}
     </span>
   );
 }
