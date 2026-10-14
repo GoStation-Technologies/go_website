@@ -23,6 +23,7 @@ import {
   Quote,
   Sparkles,
   UserRound,
+  Award,
 } from "lucide-react";
 
 import { isRtl } from "@/lib/i18n";

@@ -873,6 +873,7 @@ export const ar = {
       pageValues: "قيم الشركة",
       partners: "شعارات الشركاء",
       awards: "الاعتمادات والجوائز",
+      awards: "الاعتمادات والجوائز",
       aboutStory: "مسيرة النمو والخطة",
       leaders: "الإدارة العليا",
       settings: "إعدادات الموقع",

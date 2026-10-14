@@ -870,6 +870,7 @@ export const en = {
       pageValues: "Company values",
       partners: "Partner logos",
       awards: "Accreditations & awards",
+      awards: "Accreditations & awards",
       aboutStory: "Growth & roadmap",
       leaders: "Senior Management",
       settings: "Site settings",
