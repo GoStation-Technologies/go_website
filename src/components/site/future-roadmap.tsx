@@ -5,8 +5,8 @@ import { useAboutStory } from "@/lib/about-story";
 export function FutureRoadmap() {
   const { story, L } = useAboutStory();
   const PHASES = story.roadmap.items;
-  if (PHASES.length === 0) return null;
   const [active, setActive] = useState(0);
+  if (PHASES.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden rounded-3xl border bg-card p-6 md:p-10">
@@ -34,7 +34,7 @@ export function FutureRoadmap() {
             aria-hidden
           />
 
-          <ol className="relative grid gap-8 sm:grid-cols-3">
+          <ol className="relative grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {PHASES.map((k, i) => {
               const isActive = i <= active;
               return (
