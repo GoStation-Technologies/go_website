@@ -101,8 +101,8 @@ function AboutPage() {
         <Tabs defaultValue="story">
           <TabsList className="flex flex-wrap justify-center">
             <TabsTrigger value="story">{t("about.story")}</TabsTrigger>
-            <TabsTrigger value="vision">{t("about.vision")}</TabsTrigger>
-            <TabsTrigger value="mission">{t("about.mission")}</TabsTrigger>
+            <TabsTrigger value="vision">{cms.field("vision", "title", t("about.vision"))}</TabsTrigger>
+            <TabsTrigger value="mission">{cms.field("mission", "title", t("about.mission"))}</TabsTrigger>
             <TabsTrigger value="values">{cms.field("values", "title", t("about.values"))}</TabsTrigger>
             <TabsTrigger value="esg">{t("about.esg")}</TabsTrigger>
             <TabsTrigger value="governance">{cms.field("leadership", "title", t("about.governance"))}</TabsTrigger>
@@ -376,7 +376,7 @@ function IconBlock({ icon: Icon, title, body }: { icon: React.ComponentType<{ cl
           <Icon className="h-6 w-6" />
         </div>
         <h2 className="mt-4 text-2xl font-bold">{title}</h2>
-        <p className="mt-2 text-muted-foreground">{body}</p>
+        <p className="mt-2 whitespace-pre-line text-muted-foreground">{body}</p>
       </CardContent>
     </Card>
   );

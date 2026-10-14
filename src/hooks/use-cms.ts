@@ -57,7 +57,8 @@ export function usePageContent(pageSlug: string) {
 
   const q = useQuery({
     queryKey: ["cms", "page_sections", pageSlug],
-    staleTime: 30_000,
+    staleTime: 0,
+    refetchOnMount: "always",
     refetchOnWindowFocus: true,
     queryFn: async (): Promise<PageSection[]> => {
       const { data, error } = await supabase
@@ -88,7 +89,8 @@ export function usePageContent(pageSlug: string) {
     const secondary = s[`${name}_${lang === "ar" ? "en" : "ar"}` as keyof PageSection] as
       | string
       | null;
-    return (primary?.trim() || secondary?.trim() || fallback) as string;
+    // NFKC turns PDF-pasted Arabic presentation forms into normal letters.
+    return ((primary?.trim() || secondary?.trim() || fallback) as string).normalize("NFKC");
   };
 
   /** Section image with static fallback. */
