@@ -25,6 +25,7 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
 import { Route as CareersSlugRouteImport } from './routes/careers.$slug'
 import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-portal-9f4c2ab7.index'
+import { Route as ManagePortal9f4c2ab7AboutStoryRouteImport } from './routes/manage-portal-9f4c2ab7.about-story'
 import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
 import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
 import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
@@ -132,6 +133,12 @@ const ManagePortal9f4c2ab7IndexRoute =
   ManagePortal9f4c2ab7IndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
+const ManagePortal9f4c2ab7AboutStoryRoute =
+  ManagePortal9f4c2ab7AboutStoryRouteImport.update({
+    id: '/about-story',
+    path: '/about-story',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
 const ManagePortal9f4c2ab7AbuseRoute =
@@ -296,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/careers/$slug': typeof CareersSlugRoute
+  '/manage-portal-9f4c2ab7/about-story': typeof ManagePortal9f4c2ab7AboutStoryRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -338,6 +346,7 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/careers/$slug': typeof CareersSlugRoute
+  '/manage-portal-9f4c2ab7/about-story': typeof ManagePortal9f4c2ab7AboutStoryRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -382,6 +391,7 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/careers/$slug': typeof CareersSlugRoute
+  '/manage-portal-9f4c2ab7/about-story': typeof ManagePortal9f4c2ab7AboutStoryRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
@@ -427,6 +437,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/careers/$slug'
+    | '/manage-portal-9f4c2ab7/about-story'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -469,6 +480,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/careers/$slug'
+    | '/manage-portal-9f4c2ab7/about-story'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -512,6 +524,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/careers/$slug'
+    | '/manage-portal-9f4c2ab7/about-story'
     | '/manage-portal-9f4c2ab7/abuse'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
@@ -679,6 +692,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/manage-portal-9f4c2ab7/'
       preLoaderRoute: typeof ManagePortal9f4c2ab7IndexRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
+    '/manage-portal-9f4c2ab7/about-story': {
+      id: '/manage-portal-9f4c2ab7/about-story'
+      path: '/about-story'
+      fullPath: '/manage-portal-9f4c2ab7/about-story'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7AboutStoryRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
     '/manage-portal-9f4c2ab7/abuse': {
@@ -860,6 +880,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ManagePortal9f4c2ab7RouteChildren {
+  ManagePortal9f4c2ab7AboutStoryRoute: typeof ManagePortal9f4c2ab7AboutStoryRoute
   ManagePortal9f4c2ab7AbuseRoute: typeof ManagePortal9f4c2ab7AbuseRoute
   ManagePortal9f4c2ab7ApplicationsRoute: typeof ManagePortal9f4c2ab7ApplicationsRoute
   ManagePortal9f4c2ab7AuditRoute: typeof ManagePortal9f4c2ab7AuditRoute
@@ -881,6 +902,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
 }
 
 const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
+  ManagePortal9f4c2ab7AboutStoryRoute: ManagePortal9f4c2ab7AboutStoryRoute,
   ManagePortal9f4c2ab7AbuseRoute: ManagePortal9f4c2ab7AbuseRoute,
   ManagePortal9f4c2ab7ApplicationsRoute: ManagePortal9f4c2ab7ApplicationsRoute,
   ManagePortal9f4c2ab7AuditRoute: ManagePortal9f4c2ab7AuditRoute,

@@ -92,7 +92,8 @@ export const PAGE_CMS: PageDef[] = [
     descAr: "قصة الشركة والرؤية والرسالة والقيم والقيادة والجوائز.",
     sections: [
       { key: "hero", en: "Hero", ar: "البانر الرئيسي", media: true },
-      { key: "story", en: "Our story", ar: "قصتنا", media: true },
+      { key: "story", en: "Our story — founding", ar: "قصتنا — التأسيس" },
+      { key: "activities", en: "Our story — activities (one per line)", ar: "قصتنا — النشاط (نشاط في كل سطر)" },
       { key: "vision", en: "Vision", ar: "الرؤية" },
       { key: "mission", en: "Mission", ar: "الرسالة" },
       { key: "values", en: "Core values", ar: "القيم الأساسية" },

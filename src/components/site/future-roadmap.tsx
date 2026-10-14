@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useAboutStory } from "@/lib/about-story";
 
-const PHASES = ["p1", "p2", "p3"] as const;
 
 export function FutureRoadmap() {
-  const { t } = useTranslation();
+  const { story, L } = useAboutStory();
+  const PHASES = story.roadmap.items;
   const [active, setActive] = useState(0);
+  if (PHASES.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden rounded-3xl border bg-card p-6 md:p-10">
@@ -16,10 +17,10 @@ export function FutureRoadmap() {
 
       <div className="relative">
         <p className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-accent">
-          {t("about.roadmap.eyebrow")}
+          {L(story.roadmap.eyebrow)}
         </p>
-        <h2 className="mt-2 text-3xl font-extrabold tracking-tight md:text-4xl">{t("about.roadmap.title")}</h2>
-        <p className="mt-3 max-w-2xl text-muted-foreground">{t("about.roadmap.lead")}</p>
+        <h2 className="mt-2 text-3xl font-extrabold tracking-tight md:text-4xl">{L(story.roadmap.title)}</h2>
+        <p className="mt-3 max-w-2xl text-muted-foreground">{L(story.roadmap.lead)}</p>
 
         {/* Rail */}
         <div className="relative mt-10">
@@ -33,19 +34,19 @@ export function FutureRoadmap() {
             aria-hidden
           />
 
-          <ol className="relative grid gap-8 sm:grid-cols-3">
+          <ol className="relative grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {PHASES.map((k, i) => {
               const isActive = i <= active;
               return (
-                <li key={k} className="flex flex-col items-center text-center">
+                <li key={i} className="flex flex-col items-center text-center">
                   <span className="font-display text-sm font-extrabold tabular-nums text-accent">
-                    {t(`about.roadmap.${k}.range`)}
+                    {k.range}
                   </span>
                   <button
                     type="button"
                     onClick={() => setActive(i)}
                     aria-current={i === active}
-                    aria-label={t(`about.roadmap.${k}.title`)}
+                    aria-label={L(k.title)}
                     className={`mt-3 grid h-7 w-7 place-items-center rounded-full ring-4 transition ${
                       isActive
                         ? "bg-accent ring-accent/25"
@@ -60,12 +61,12 @@ export function FutureRoadmap() {
                       i === active ? "border-accent/50 bg-accent/5 shadow-sm" : "bg-background/60"
                     }`}
                   >
-                    <h3 className="font-display text-lg font-bold">{t(`about.roadmap.${k}.title`)}</h3>
+                    <h3 className="font-display text-lg font-bold">{L(k.title)}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      {t(`about.roadmap.${k}.body`)}
+                      {L(k.body)}
                     </p>
                     <ul className="mt-4 space-y-2">
-                      {(t(`about.roadmap.${k}.items`, { returnObjects: true }) as string[]).map((item) => (
+                      {L(k.points).split("\n").map((x) => x.trim()).filter(Boolean).map((item) => (
                         <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
                           <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                           <span>{item}</span>
