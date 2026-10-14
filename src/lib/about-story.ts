@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useSiteSettings } from "@/hooks/use-cms";
 import { getContentLanguage } from "@/lib/i18n";
-import ar from "@/lib/locales/ar";
-import en from "@/lib/locales/en";
+import { ar } from "@/lib/locales/ar";
+import { en } from "@/lib/locales/en";
 
 /** Editable "Growth journey" + "Future roadmap" content (site_settings.about_story). */
 export type Bi = { ar: string; en: string };
@@ -20,8 +20,8 @@ const YEARS = ["2016", "2018", "2020", "2022", "2024", "2026"];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Any = any;
-const A = (ar as Any).about ?? (ar as Any).translation?.about;
-const E = (en as Any).about ?? (en as Any).translation?.about;
+const A = (ar as Any).about;
+const E = (en as Any).about;
 const bi = (pick: (x: Any) => unknown): Bi => ({ ar: String(pick(A) ?? ""), en: String(pick(E) ?? "") });
 
 export function defaultAboutStory(): AboutStory {
