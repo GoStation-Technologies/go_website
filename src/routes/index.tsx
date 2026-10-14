@@ -763,30 +763,55 @@ function HomePage() {
             {t("home.partnersSub")}
           </p>
 
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {(partners.data && partners.data.length > 0
+          {(() => {
+            const items = (partners.data && partners.data.length > 0
               ? partners.data.map((p) => ({ id: p.id, name: lng === "ar" ? p.name_ar : p.name_en, logo: p.logo_url, href: p.website_url }))
               : ["Aramco", "Saudia", "Panda", "Almarai", "SABIC", "Tamimi Markets", "Bidaya", "Nesto"].map((n) => ({ id: n, name: n, logo: null as string | null, href: null as string | null }))
-            ).map(({ id, name, logo, href }) => (
-              <a
-                key={id}
-                href={href ?? undefined}
-                target={href ? "_blank" : undefined}
-                rel={href ? "noopener noreferrer" : undefined}
-                className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
+            );
+            const slides: typeof items[] = [];
+            for (let i = 0; i < items.length; i += 12) slides.push(items.slice(i, i + 12));
+            return (
+              <Carousel
+                opts={{ align: "start", loop: slides.length > 1, direction: lng === "ar" ? "rtl" : "ltr" }}
+                plugins={slides.length > 1 ? [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })] : []}
+                className="mt-12"
               >
-                <img
-                  src={logo || partnerLogo.url}
-                  alt={name}
-                  loading="lazy"
-                  className={`${logo ? "h-12 max-w-[140px] object-contain" : "h-10 w-10"} opacity-70 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0`}
-                />
-                <span className="font-display text-sm font-semibold tracking-tight text-muted-foreground transition duration-300 group-hover:text-foreground md:text-base">
-                  {name}
-                </span>
-              </a>
-            ))}
-          </div>
+                <CarouselContent>
+                  {slides.map((slide, slideIdx) => (
+                    <CarouselItem key={slideIdx}>
+                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                        {slide.map(({ id, name, logo, href }) => (
+                          <a
+                            key={id}
+                            href={href ?? undefined}
+                            target={href ? "_blank" : undefined}
+                            rel={href ? "noopener noreferrer" : undefined}
+                            className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
+                          >
+                            <img
+                              src={logo || partnerLogo.url}
+                              alt={name}
+                              loading="lazy"
+                              className={`${logo ? "h-12 max-w-[140px] object-contain" : "h-10 w-10"} opacity-70 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0`}
+                            />
+                            <span className="font-display text-sm font-semibold tracking-tight text-muted-foreground transition duration-300 group-hover:text-foreground md:text-base">
+                              {name}
+                            </span>
+                          </a>
+                        ))}
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {slides.length > 1 && (
+                  <div className="mt-6 flex items-center justify-center gap-3">
+                    <CarouselPrevious className="static translate-y-0" />
+                    <CarouselNext className="static translate-y-0" />
+                  </div>
+                )}
+              </Carousel>
+            );
+          })()}
 
 
 
