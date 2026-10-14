@@ -48,6 +48,7 @@ import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[
 import { Route as ManagePortal9f4c2ab7PagesSlugRouteImport } from './routes/manage-portal-9f4c2ab7.pages.$slug'
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 import { Route as ApiPublicHooksSyncDataverseLocationsRouteImport } from './routes/api/public/hooks/sync-dataverse-locations'
+import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -267,6 +268,11 @@ const ApiPublicHooksSyncDataverseLocationsRoute =
     path: '/api/public/hooks/sync-dataverse-locations',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
+  id: '/api/public/media/$',
+  path: '/api/public/media/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -308,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -348,6 +355,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -390,6 +398,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -433,6 +442,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
+    | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -473,6 +483,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
+    | '/api/public/media/$'
   id:
     | '__root__'
     | '/'
@@ -514,6 +525,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
+    | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -539,6 +551,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
   ApiPublicHooksSyncDataverseLocationsRoute: typeof ApiPublicHooksSyncDataverseLocationsRoute
+  ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -816,6 +829,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSyncDataverseLocationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/media/$': {
+      id: '/api/public/media/$'
+      path: '/api/public/media/$'
+      fullPath: '/api/public/media/$'
+      preLoaderRoute: typeof ApiPublicMediaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -888,6 +908,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksProcessExportsRoute: ApiPublicHooksProcessExportsRoute,
   ApiPublicHooksSyncDataverseLocationsRoute:
     ApiPublicHooksSyncDataverseLocationsRoute,
+  ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

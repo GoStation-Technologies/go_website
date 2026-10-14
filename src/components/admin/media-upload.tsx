@@ -7,11 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { inputCls } from "@/components/admin/form-kit";
 
-const TEN_YEARS = 60 * 60 * 24 * 365 * 10;
 
 /**
- * Uploads an image / PDF to the private `cms` storage bucket and hands back a
- * long-lived signed URL that can be stored on a CMS record.
+ * Uploads an image / video / PDF to the `cms` storage bucket and hands back a
+ * permanent public URL (served by /api/public/media) to store on the record.
  */
 export function MediaUpload({
   value,
@@ -31,15 +30,13 @@ export function MediaUpload({
   const upload = async (file: File) => {
     setBusy(true);
     try {
+      if (file.size > 100 * 1024 * 1024) throw new Error("Max 100MB");
       const ext = file.name.split(".").pop()?.toLowerCase() ?? "bin";
       const path = `${folder}/${crypto.randomUUID()}.${ext}`;
       const { error } = await supabase.storage.from("cms").upload(path, file, { upsert: false });
       if (error) throw error;
-      const { data, error: signErr } = await supabase.storage
-        .from("cms")
-        .createSignedUrl(path, TEN_YEARS);
-      if (signErr || !data?.signedUrl) throw signErr ?? new Error("sign failed");
-      onChange(data.signedUrl);
+      // Permanent public address served by /api/public/media (never a blob: or expiring link).
+      onChange(`${window.location.origin}/api/public/media/${path}`);
       toast.success(t("admin.cms.uploaded", { defaultValue: "File uploaded" }));
     } catch (e) {
       toast.error((e as Error).message);
@@ -68,6 +65,9 @@ export function MediaUpload({
           </Button>
         ) : null}
       </div>
+      {value && accept.startsWith("image") ? (
+        <img src={value} alt="" className="h-24 w-auto rounded-md border object-contain" />
+      ) : null}
       <input
         ref={inputRef}
         type="file"
