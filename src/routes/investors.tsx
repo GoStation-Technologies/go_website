@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { logReportDownload } from "@/lib/reports.functions";
 import { SiteLayout } from "@/components/site/site-layout";
-import { RoiCalculator } from "@/components/site/roi-calculator";
+import { submitIrInquiry } from "@/lib/submissions.functions";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -62,19 +62,28 @@ function IRPage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     setBusy(true);
-    const { data, error } = await supabase.from("ir_inquiries").insert({
-      full_name: String(fd.get("name")),
-      email: String(fd.get("email")),
-      phone: String(fd.get("phone") ?? "") || null,
-      organization: String(fd.get("org") ?? "") || null,
-      inquiry_type: String(fd.get("type")),
-      message: String(fd.get("message")),
-    }).select("reference").single();
+    const form = e.currentTarget;
+    let reference: string;
+    try {
+      const res = await submitIrInquiry({
+        data: {
+          full_name: String(fd.get("name") ?? ""),
+          email: String(fd.get("email") ?? ""),
+          phone: String(fd.get("phone") ?? ""),
+          organization: String(fd.get("org") ?? ""),
+          inquiry_type: String(fd.get("type") ?? "general"),
+          message: String(fd.get("message") ?? ""),
+        },
+      });
+      reference = res.reference;
+    } catch {
+      setBusy(false);
+      return toast.error(t("common.error"));
+    }
     setBusy(false);
-    if (error) return toast.error(t("common.error"));
-    setRef(data.reference);
+    setRef(reference);
     toast.success(t("common.thanks"));
-    (e.target as HTMLFormElement).reset();
+    form.reset();
   };
 
   const kpis: KpiConfig[] = [
@@ -279,22 +288,8 @@ function IRPage() {
         </div>
       </section>
 
-      <RoiCalculator />
+      {/* ROI calculator hidden until its policy is approved. */}
 
-      <section className="mx-auto max-w-4xl px-4 py-12 md:py-16">
-        <div className="rounded-3xl border border-border/60 bg-card p-8 shadow-elegant md:p-10">
-          <h2 className="mb-4 text-2xl font-bold">{t("investors.roi.howItWorksTitle")}</h2>
-          <p className="leading-relaxed text-muted-foreground">{t("investors.roi.howItWorksIntro")}</p>
-          <h3 className="mt-6 mb-3 font-semibold">{t("investors.roi.howItWorksInputsTitle")}</h3>
-          <ol className="list-decimal space-y-3 ps-5 leading-relaxed text-muted-foreground">
-            <li>{t("investors.roi.howItWorksInput1")}</li>
-            <li>{t("investors.roi.howItWorksInput2")}</li>
-            <li>{t("investors.roi.howItWorksInput3")}</li>
-            <li>{t("investors.roi.howItWorksInput4")}</li>
-          </ol>
-          <p className="mt-5 leading-relaxed text-muted-foreground">{t("investors.roi.howItWorksResult")}</p>
-        </div>
-      </section>
 
       <section className="mx-auto max-w-3xl px-4 py-12">
 

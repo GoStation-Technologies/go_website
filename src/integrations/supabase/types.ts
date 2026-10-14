@@ -516,7 +516,7 @@ export type Database = {
           location_lat?: number | null
           location_lng?: number | null
           location_map_url?: string | null
-          national_id: string
+          national_id?: string
           notes?: string | null
           ownership_doc_url?: string | null
           ownership_status?: string | null
@@ -1602,6 +1602,8 @@ export type Database = {
       submit_acquisition_request: { Args: { payload: Json }; Returns: string }
       submit_contact_message: { Args: { payload: Json }; Returns: string }
       submit_franchise_application: { Args: { payload: Json }; Returns: string }
+      submit_ir_inquiry: { Args: { payload: Json }; Returns: string }
+      submit_job_application: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
       app_role: "super_admin" | "bd" | "hr" | "media" | "ir" | "ops" | "support"

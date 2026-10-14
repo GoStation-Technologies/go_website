@@ -45,7 +45,9 @@ function decodeBase64(b64: string): Uint8Array {
 export const submitJobApplication = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => ApplyInput.parse(raw))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getServerSupabase } = await import("./supabase-server.server");
+    const { client } = await getServerSupabase();
+    if (!client) throw new Error("submission_unavailable");
 
     let cvPath: string | null = null;
     if (data.cv) {
@@ -53,7 +55,7 @@ export const submitJobApplication = createServerFn({ method: "POST" })
       if (bytes.byteLength > MAX_CV_BYTES) throw new Error("cv_too_large");
       const ext = (data.cv.name.split(".").pop() ?? "pdf").toLowerCase().replace(/[^a-z0-9]/g, "");
       cvPath = `${data.job_id}/${crypto.randomUUID()}.${ext || "pdf"}`;
-      const { error: upErr } = await supabaseAdmin.storage
+      const { error: upErr } = await client.storage
         .from("cvs")
         .upload(cvPath, bytes, { contentType: data.cv.type || "application/octet-stream" });
       if (upErr) {
@@ -62,37 +64,40 @@ export const submitJobApplication = createServerFn({ method: "POST" })
       }
     }
 
-    const { data: row, error } = await (supabaseAdmin.from("job_applications") as any)
-      .insert({
+    const { data: reference, error } = await (client.rpc as any)("submit_job_application", {
+      payload: {
         job_id: data.job_id,
         full_name: data.full_name,
         email: data.email,
         phone: data.phone,
-        linkedin_url: data.linkedin_url || null,
-        cover_letter: data.cover_letter || null,
-        cv_path: cvPath,
-        status: "new",
-      })
-      .select("id, reference")
-      .single();
+        linkedin_url: data.linkedin_url,
+        cover_letter: data.cover_letter,
+        cv_path: cvPath ?? "",
+      },
+    });
     if (error) {
       console.error("[careers] application insert failed", error);
       throw new Error("submission_failed");
     }
+    const row = { reference: reference as string };
 
-    const { notifySubmission } = await import("./notify.server");
-    await notifySubmission({
-      category: "careers",
-      title: "New job application",
-      reference: row.reference,
-      fields: {
-        full_name: data.full_name,
-        email: data.email,
-        phone: data.phone,
-        linkedin_url: data.linkedin_url,
-        cv_attached: cvPath ? "yes" : "no",
-      },
-    });
+    try {
+      const { notifySubmission } = await import("./notify.server");
+      await notifySubmission({
+        category: "careers",
+        title: "New job application",
+        reference: row.reference,
+        fields: {
+          full_name: data.full_name,
+          email: data.email,
+          phone: data.phone,
+          linkedin_url: data.linkedin_url,
+          cv_attached: cvPath ? "yes" : "no",
+        },
+      });
+    } catch (e) {
+      console.warn("[careers] notification skipped", e);
+    }
 
     return { reference: row.reference as string };
   });

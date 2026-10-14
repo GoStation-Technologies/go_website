@@ -12,7 +12,8 @@ export function Testimonials({ title, subtitle }: { title: string; subtitle?: st
   const g = useQuery({
     queryKey: ["public", "google-reviews", lang],
     queryFn: () => getPublicGoogleReviews({ data: { lang } }),
-    staleTime: 30 * 60_000,
+    staleTime: 60_000,
+    refetchOnWindowFocus: true,
   });
   const google = (g.data?.reviews ?? []).map((r) => ({
     id: r.id,
