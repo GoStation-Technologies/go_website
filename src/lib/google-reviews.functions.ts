@@ -79,7 +79,18 @@ async function fetchPlaceReviews(placeId: string, lang: string): Promise<GoogleR
   if (!res.ok) {
     const body = await res.text();
     console.error(`Google reviews request failed [${res.status}]: ${body}`);
-    throw new Error(`Google request failed [${res.status}]`);
+    let reason = "";
+    try {
+      const details: Array<{ reason?: string }> = JSON.parse(body)?.error?.details ?? [];
+      reason = details.find((d) => d.reason)?.reason ?? "";
+    } catch {
+      /* not JSON */
+    }
+    if (reason === "API_KEY_HTTP_REFERRER_BLOCKED")
+      throw new Error('Google key is website-restricted. In Google Cloud, set its application restriction to "None" or "IP addresses".');
+    if (reason === "API_KEY_SERVICE_BLOCKED" || reason === "SERVICE_DISABLED")
+      throw new Error('Google key cannot use "Places API (New)". Enable it in Google Cloud and allow it on the key.');
+    throw new Error(`Google request failed [${res.status}]${reason ? ` ${reason}` : ""}`);
   }
   const j = (await res.json()) as any;
   return ((j.reviews ?? []) as any[]).map((r) => ({
