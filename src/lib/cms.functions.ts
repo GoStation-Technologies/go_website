@@ -174,3 +174,48 @@ export const adminDeleteTestimonial = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/* ---------------------------------------------------------------- senior management */
+
+const LeaderInput = z.object({
+  id: z.string().uuid().optional(),
+  name_en: z.string().min(1).max(200),
+  name_ar: z.string().min(1).max(200),
+  title_en: z.string().min(1).max(200),
+  title_ar: z.string().min(1).max(200),
+  bio_en: z.string().max(4000).nullish(),
+  bio_ar: z.string().max(4000).nullish(),
+  photo_url: z.string().max(1000).nullish(),
+  sort_order: z.number().int().min(0).max(9999).default(0),
+  is_active: z.boolean().default(true),
+});
+
+export const adminListLeaders = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("leaders")
+      .select("*")
+      .order("sort_order")
+      .order("created_at");
+    if (error) throw new Error(error.message);
+    return { rows: data ?? [] };
+  });
+
+export const adminUpsertLeader = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => LeaderInput.parse(d))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("leaders").upsert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminDeleteLeader = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("leaders").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

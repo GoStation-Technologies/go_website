@@ -184,7 +184,7 @@ export const ar = {
 
 
     governance: "الحوكمة",
-    leaders: "القيادة",
+    leaders: "الإدارة العليا",
     awards: "الاعتمادات والجوائز",
     viewAward: "عرض الشهادة",
     awardNoImage: "لا تتوفر صورة لهذه الشهادة حالياً.",
@@ -850,6 +850,8 @@ export const ar = {
       pageFranchise: "صفحة الامتياز",
       pageAcquisitions: "صفحة الاستحواذ",
       pageInvestors: "صفحة علاقات المستثمرين",
+      pageValues: "قيم الشركة",
+      leaders: "الإدارة العليا",
       settings: "إعدادات الموقع",
     },
     applications: {

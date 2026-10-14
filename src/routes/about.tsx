@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
-import { usePageContent } from "@/hooks/use-cms";
+import { useCompanyValues, usePageContent } from "@/hooks/use-cms";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
@@ -18,12 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Award, Eye, Target, Sparkles, Leaf, Users, Quote, ShieldCheck, Handshake } from "lucide-react";
 
-const aboutValues = [
-  { icon: Sparkles, k: "excellence" },
-  { icon: ShieldCheck, k: "integrity" },
-  { icon: Leaf, k: "community" },
-  { icon: Handshake, k: "innovation" },
-] as const;
+const valueIcons = { excellence: Sparkles, integrity: ShieldCheck, community: Leaf, innovation: Handshake } as const;
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -39,6 +34,9 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   const { t, i18n } = useTranslation();
   const cms = usePageContent("about");
+  const homeCms = usePageContent("home");
+  const aboutValues = useCompanyValues();
+  const chairmanQuote = homeCms.field("chairman", "content", t("home.quote"));
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
   const pages = useQuery({
@@ -52,7 +50,8 @@ function AboutPage() {
   });
 
   const leaders = useQuery({
-    queryKey: ["leaders"],
+    queryKey: ["cms", "leaders"],
+    staleTime: 30_000,
     queryFn: async () => {
       const { data } = await supabase.from("leaders").select("*").eq("is_active", true).order("sort_order");
       return data ?? [];
@@ -75,7 +74,7 @@ function AboutPage() {
         {/* Cropped canopy detail, sitting under a full navy filter */}
         <div className="pointer-events-none absolute inset-y-0 end-0 hidden w-[62%] overflow-hidden md:block">
           <img
-            src={canopyImg.url}
+            src={cms.media("hero", canopyImg.url)}
             alt={lng === "ar" ? "مظلة محطة قوستيشن" : "GoStation station canopy"}
             className="h-full w-full scale-125 object-cover object-[50%_38%] opacity-45"
             style={{
@@ -93,7 +92,7 @@ function AboutPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{cms.field("hero", "title", t("about.title"))}</h1>
-          <p className="mt-4 max-w-2xl text-white/80 md:max-w-xl">{get("story_body")}</p>
+          <p className="mt-4 max-w-2xl text-white/80 md:max-w-xl">{cms.field("hero", "content", get("story_body"))}</p>
         </div>
       </section>
 
@@ -159,19 +158,22 @@ function AboutPage() {
           <TabsContent value="values" className="mt-8">
             <Card>
               <div className="border-b bg-muted/40 px-8 py-4">
-                <h2 className="font-display text-xl font-bold">{t("about.values")}</h2>
+                <h2 className="font-display text-xl font-bold">{cms.field("values", "title", t("about.values"))}</h2>
               </div>
               <CardContent className="p-8">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {aboutValues.map(({ icon: Icon, k }) => (
-                    <div key={k} className="flex flex-col">
+                  {aboutValues.map(({ k, title, body }) => {
+                    const Icon = valueIcons[k];
+                    return (
+                    <div key={k} className="flex flex-col rounded-xl border bg-card p-6">
                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
                         <Icon className="h-6 w-6" />
                       </div>
-                      <h3 className="mt-4 font-display text-lg font-bold">{t(`home.values.${k}.title`)}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{t(`home.values.${k}.body`)}</p>
+                      <h3 className="mt-4 font-display text-lg font-bold">{title}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground">{body}</p>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -338,7 +340,7 @@ function AboutPage() {
               const team = chairman ? all.filter((l) => l.id !== chairman.id) : all;
               return (
                 <>
-                  {chairman && <ChairmanCard leader={chairman} lng={lng} />}
+                  {chairman && <ChairmanCard leader={chairman} lng={lng} quote={chairmanQuote} />}
                   <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {team.map((l) => (
                       <LeadershipCard key={l.id} leader={l} lng={lng} />
@@ -378,7 +380,7 @@ function IconBlock({ icon: Icon, title, body }: { icon: React.ComponentType<{ cl
   );
 }
 
-function ChairmanCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
+function ChairmanCard({ leader, lng, quote }: { leader: Leader; lng: "ar" | "en"; quote: string }) {
   const { t } = useTranslation();
   const name = lng === "ar" ? leader.name_ar : leader.name_en;
   const title = lng === "ar" ? leader.title_ar : leader.title_en;
@@ -401,7 +403,7 @@ function ChairmanCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
           <blockquote className="relative">
             <p className="text-2xl font-semibold leading-relaxed text-primary-foreground md:text-3xl lg:text-4xl">
               <span className="text-accent/80">{openQuote}</span>
-              {t("home.quote")}
+              {quote}
               <span className="text-accent/80">{closeQuote}</span>
             </p>
           </blockquote>
