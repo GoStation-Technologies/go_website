@@ -848,6 +848,7 @@ export const en = {
       pageAcquisitions: "Acquisitions page",
       pageInvestors: "Investor Relations page",
       pageValues: "Company values",
+      partners: "Partner logos",
       leaders: "Senior Management",
       settings: "Site settings",
     },

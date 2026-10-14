@@ -148,7 +148,15 @@ function MediaPage() {
                   params={{ slug: e.slug }}
                   className="group w-[320px] shrink-0 snap-start sm:w-[420px]"
                 >
-                  <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl">
+                  <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl">
+                    <div className="relative aspect-[16/9] overflow-hidden bg-muted">
+                      {e.cover_url ? (
+                        <img src={e.cover_url} alt={lng === "ar" ? e.title_ar : e.title_en} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-primary to-accent/60" />
+                      )}
+                    </div>
+                    <div className="flex flex-1 flex-col p-6">
                     <Badge variant="outline" className="w-fit border-accent/40 text-accent">
                       {t("media.events")}
                     </Badge>
@@ -174,6 +182,7 @@ function MediaPage() {
                       {t("media.readMore")}
                       <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" />
                     </span>
+                    </div>
                   </article>
                 </Link>
               ))}

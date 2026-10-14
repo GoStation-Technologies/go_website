@@ -219,3 +219,56 @@ export const adminDeleteLeader = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/* ---------------------------------------------------------------- partner logos */
+
+const PartnerInput = z.object({
+  id: z.string().uuid().optional(),
+  name_en: z.string().min(1).max(200),
+  name_ar: z.string().min(1).max(200),
+  logo_url: z.string().max(1000).nullish(),
+  website_url: z.string().max(1000).nullish(),
+  sort_order: z.number().int().min(0).max(9999).default(0),
+  is_active: z.boolean().default(true),
+});
+
+export const adminListPartners = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("partner_offers")
+      .select("id, name_en, name_ar, logo_url, website_url, sort_order, is_active")
+      .order("sort_order")
+      .order("created_at");
+    if (error) throw new Error(error.message);
+    return { rows: data ?? [] };
+  });
+
+export const adminUpsertPartner = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => PartnerInput.parse(d))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("partner_offers").upsert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminReorderPartners = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ ids: z.array(z.string().uuid()).max(200) }).parse(d))
+  .handler(async ({ data, context }) => {
+    for (const [i, id] of data.ids.entries()) {
+      const { error } = await context.supabase.from("partner_offers").update({ sort_order: i + 1 }).eq("id", id);
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
+  });
+
+export const adminDeletePartner = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("partner_offers").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

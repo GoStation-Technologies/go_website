@@ -93,6 +93,19 @@ function HomePage() {
   });
 
 
+  const partners = useQuery({
+    queryKey: ["cms", "partners"],
+    staleTime: 30_000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("partner_offers")
+        .select("id, name_en, name_ar, logo_url, website_url")
+        .eq("is_active", true)
+        .order("sort_order");
+      return data ?? [];
+    },
+  });
+
   const [mediaTab, setMediaTab] = useState<"all" | "news" | "event" | "video">("all");
   const homeMedia = (news.data ?? []).filter((n) => mediaTab === "all" || n.kind === mediaTab);
 
@@ -743,30 +756,27 @@ function HomePage() {
           </p>
 
           <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {[
-              "Aramco",
-              "Saudia",
-              "Panda",
-              "Almarai",
-              "SABIC",
-              "Tamimi Markets",
-              "Bidaya",
-              "Nesto",
-            ].map((name) => (
-              <div
-                key={name}
+            {(partners.data && partners.data.length > 0
+              ? partners.data.map((p) => ({ id: p.id, name: lng === "ar" ? p.name_ar : p.name_en, logo: p.logo_url, href: p.website_url }))
+              : ["Aramco", "Saudia", "Panda", "Almarai", "SABIC", "Tamimi Markets", "Bidaya", "Nesto"].map((n) => ({ id: n, name: n, logo: null as string | null, href: null as string | null }))
+            ).map(({ id, name, logo, href }) => (
+              <a
+                key={id}
+                href={href ?? undefined}
+                target={href ? "_blank" : undefined}
+                rel={href ? "noopener noreferrer" : undefined}
                 className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
               >
                 <img
-                  src={partnerLogo.url}
+                  src={logo || partnerLogo.url}
                   alt={name}
                   loading="lazy"
-                  className="h-10 w-10 opacity-60 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                  className={`${logo ? "h-12 max-w-[140px] object-contain" : "h-10 w-10"} opacity-70 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0`}
                 />
                 <span className="font-display text-sm font-semibold tracking-tight text-muted-foreground transition duration-300 group-hover:text-foreground md:text-base">
                   {name}
                 </span>
-              </div>
+              </a>
             ))}
           </div>
 

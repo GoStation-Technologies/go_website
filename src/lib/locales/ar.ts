@@ -851,6 +851,7 @@ export const ar = {
       pageAcquisitions: "صفحة الاستحواذ",
       pageInvestors: "صفحة علاقات المستثمرين",
       pageValues: "قيم الشركة",
+      partners: "شعارات الشركاء",
       leaders: "الإدارة العليا",
       settings: "إعدادات الموقع",
     },

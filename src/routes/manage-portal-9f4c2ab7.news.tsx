@@ -1,3 +1,8 @@
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { MediaUpload } from "@/components/admin/media-upload";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -70,7 +75,7 @@ function NewsPage() {
           duration_seconds: n.duration_seconds ? Number(n.duration_seconds) : null,
         },
       }),
-    onSuccess: () => { toast.success(t("admin.common.saved")); setOpen(false); qc.invalidateQueries({ queryKey: ["admin", "news"] }); },
+    onSuccess: () => { toast.success(t("admin.common.saved")); setOpen(false); qc.invalidateQueries({ queryKey: ["admin", "news"] }); qc.invalidateQueries({ queryKey: ["media"] }); qc.invalidateQueries({ queryKey: ["home-news"] }); qc.invalidateQueries({ queryKey: ["article"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
   const del = useMutation({
@@ -136,7 +141,7 @@ function NewsPage() {
               {form.kind === "video" ? (
                 <>
                   <Field label={t("admin.news.f.videoUrl", { defaultValue: "Video URL (YouTube / Vimeo / direct)" })} lang="en">
-                    <Input dir="ltr" className={inputCls} value={form.video_url ?? ""} onChange={(e) => setForm({ ...form, video_url: e.target.value })} />
+                    <MediaUpload folder="videos" accept="video/mp4,video/webm,video/*" value={form.video_url} onChange={(url) => setForm({ ...form, video_url: url })} />
                   </Field>
                   <Field label={t("admin.news.f.duration", { defaultValue: "Duration (seconds)" })} lang="en">
                     <Input
@@ -149,7 +154,15 @@ function NewsPage() {
                   </Field>
                 </>
               ) : null}
-              <Field label={t("admin.news.f.coverUrl")} lang="en"><Input dir="ltr" className={inputCls} value={form.cover_url ?? ""} onChange={(e) => setForm({ ...form, cover_url: e.target.value })} /></Field>
+              <Field label={t("admin.news.f.publishDate", { defaultValue: "Publish date" })} lang="en">
+                <DatePick
+                  value={form.published_at ? new Date(form.published_at) : undefined}
+                  onChange={(d) => setForm({ ...form, published_at: d ? d.toISOString() : null })}
+                />
+              </Field>
+              <Field label={t("admin.news.f.coverUrl")} lang="en">
+                <MediaUpload folder="news" value={form.cover_url} onChange={(url) => setForm({ ...form, cover_url: url })} />
+              </Field>
               <FormRow>
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_published} onCheckedChange={(v) => setForm({ ...form, is_published: v })} />{t("admin.common.published")}</label>
                 <label className="flex items-center gap-2 text-sm"><Switch checked={form.is_featured} onCheckedChange={(v) => setForm({ ...form, is_featured: v })} />{t("admin.common.featured")}</label>
@@ -217,3 +230,19 @@ function NewsPage() {
   );
 }
 
+
+function DatePick({ value, onChange }: { value?: Date; onChange: (d?: Date) => void }) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-full justify-start font-normal" dir="ltr">
+          <CalendarIcon className="me-2 h-4 w-4" />
+          {value ? format(value, "PPP") : <span className="text-muted-foreground">Pick a date (default: today)</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar mode="single" selected={value} onSelect={onChange} initialFocus className="p-3 pointer-events-auto" />
+      </PopoverContent>
+    </Popover>
+  );
+}
