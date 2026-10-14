@@ -36,6 +36,7 @@ import { Route as ManagePortal9f4c2ab7LeadersRouteImport } from './routes/manage
 import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-portal-9f4c2ab7.news'
 import { Route as ManagePortal9f4c2ab7NotificationsRouteImport } from './routes/manage-portal-9f4c2ab7.notifications'
 import { Route as ManagePortal9f4c2ab7OtpWhitelistRouteImport } from './routes/manage-portal-9f4c2ab7.otp-whitelist'
+import { Route as ManagePortal9f4c2ab7PartnersRouteImport } from './routes/manage-portal-9f4c2ab7.partners'
 import { Route as ManagePortal9f4c2ab7SettingsRouteImport } from './routes/manage-portal-9f4c2ab7.settings'
 import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
 import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
@@ -199,6 +200,12 @@ const ManagePortal9f4c2ab7OtpWhitelistRoute =
     path: '/otp-whitelist',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const ManagePortal9f4c2ab7PartnersRoute =
+  ManagePortal9f4c2ab7PartnersRouteImport.update({
+    id: '/partners',
+    path: '/partners',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ManagePortal9f4c2ab7SettingsRoute =
   ManagePortal9f4c2ab7SettingsRouteImport.update({
     id: '/settings',
@@ -300,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
+  '/manage-portal-9f4c2ab7/partners': typeof ManagePortal9f4c2ab7PartnersRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -341,6 +349,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
+  '/manage-portal-9f4c2ab7/partners': typeof ManagePortal9f4c2ab7PartnersRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -384,6 +393,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/news': typeof ManagePortal9f4c2ab7NewsRoute
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
+  '/manage-portal-9f4c2ab7/partners': typeof ManagePortal9f4c2ab7PartnersRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -428,6 +438,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/news'
     | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/otp-whitelist'
+    | '/manage-portal-9f4c2ab7/partners'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -469,6 +480,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/news'
     | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/otp-whitelist'
+    | '/manage-portal-9f4c2ab7/partners'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -511,6 +523,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/news'
     | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/otp-whitelist'
+    | '/manage-portal-9f4c2ab7/partners'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -745,6 +758,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7OtpWhitelistRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/partners': {
+      id: '/manage-portal-9f4c2ab7/partners'
+      path: '/partners'
+      fullPath: '/manage-portal-9f4c2ab7/partners'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7PartnersRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/settings': {
       id: '/manage-portal-9f4c2ab7/settings'
       path: '/settings'
@@ -851,6 +871,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7NewsRoute: typeof ManagePortal9f4c2ab7NewsRoute
   ManagePortal9f4c2ab7NotificationsRoute: typeof ManagePortal9f4c2ab7NotificationsRoute
   ManagePortal9f4c2ab7OtpWhitelistRoute: typeof ManagePortal9f4c2ab7OtpWhitelistRoute
+  ManagePortal9f4c2ab7PartnersRoute: typeof ManagePortal9f4c2ab7PartnersRoute
   ManagePortal9f4c2ab7SettingsRoute: typeof ManagePortal9f4c2ab7SettingsRoute
   ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
   ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -872,6 +893,7 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7NotificationsRoute:
     ManagePortal9f4c2ab7NotificationsRoute,
   ManagePortal9f4c2ab7OtpWhitelistRoute: ManagePortal9f4c2ab7OtpWhitelistRoute,
+  ManagePortal9f4c2ab7PartnersRoute: ManagePortal9f4c2ab7PartnersRoute,
   ManagePortal9f4c2ab7SettingsRoute: ManagePortal9f4c2ab7SettingsRoute,
   ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
   ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
