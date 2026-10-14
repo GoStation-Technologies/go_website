@@ -777,6 +777,7 @@ function HomePage() {
                   {name}
                 </span>
               </a>
+            ))}
           </div>
 
 
