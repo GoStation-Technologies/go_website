@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { publicSupabaseEnv } from "@/lib/public-supabase-env";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -16,8 +17,8 @@ export type StationStats = { stationsCount: number; activeRegionsCount: number }
 export const STATION_STATS_FALLBACK: StationStats = { stationsCount: 224, activeRegionsCount: 13 };
 
 function publicClient() {
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-  return createClient<Database>(process.env["SUPABASE_URL"]!, key, {
+  const { url, key } = publicSupabaseEnv();
+  return createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {
       fetch: (input, init) => {

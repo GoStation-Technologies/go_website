@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { publicSupabaseEnv } from "@/lib/public-supabase-env";
 
 /**
  * Permanent public address for files uploaded from the dashboard.
@@ -14,8 +15,7 @@ export const Route = createFileRoute("/api/public/media/$")({
         if (!path || path.includes("..") || !/^[\w\-./]+$/.test(path)) {
           return new Response("Not found", { status: 404 });
         }
-        const base = process.env["SUPABASE_URL"];
-        const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
+        const { url: base, key } = publicSupabaseEnv();
         if (!base || !key) return new Response("Storage not configured", { status: 503 });
 
         const headers: Record<string, string> = { apikey: key };
