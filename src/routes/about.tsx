@@ -427,21 +427,11 @@ function ChairmanCard({ leader, lng, quote }: { leader: Leader; lng: "ar" | "en"
               <span className="text-accent/80">{closeQuote}</span>
             </p>
           </blockquote>
-          <div className="mt-8 flex items-center gap-4">
-            <div className="h-14 w-14 overflow-hidden rounded-full border-2 border-accent/30 bg-primary-foreground/10">
-              {leader.photo_url ? (
-                <img src={leader.photo_url} alt={name} className="h-full w-full object-cover" />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center text-primary-foreground/40">
-                  <Users className="h-6 w-6" />
-                </div>
-              )}
-            </div>
-            <div>
-              <p className="font-bold text-primary-foreground">{name}</p>
-              <p className="text-sm font-medium text-accent">{title}</p>
-            </div>
+          <div className="mt-8">
+            <p className="font-bold text-primary-foreground">{name}</p>
+            <p className="text-sm font-medium text-accent">{title}</p>
           </div>
+
         </div>
 
         {/* Image side */}
