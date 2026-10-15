@@ -78,9 +78,6 @@ export function MediaUpload({
           if (f) void upload(f);
         }}
       />
-      {value && accept.startsWith("image") ? (
-        <img src={value} alt="" className="h-24 w-auto rounded-md border object-cover" />
-      ) : null}
     </div>
   );
 }
