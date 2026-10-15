@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { publicSupabaseEnv } from "@/lib/public-supabase-env";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
@@ -32,8 +33,8 @@ export type GoogleReview = {
 type Config = { places: string[]; shown: string[] };
 
 function publicClient() {
-  const url = process.env["SUPABASE_URL"]!;
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  const { url, key } = publicSupabaseEnv();
+  if (!url || !key) throw new Error("SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY not set on this server");
   return createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {

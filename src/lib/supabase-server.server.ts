@@ -4,6 +4,7 @@
 //   SUPABASE_URL + SUPABASE_PUBLISHABLE_KEY (RLS applies, public reads only).
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { publicSupabaseEnv } from "@/lib/public-supabase-env";
 
 let warned = false;
 let publicClient: SupabaseClient<Database> | null = null;
@@ -13,8 +14,7 @@ export function hasServiceRoleKey(): boolean {
 }
 
 function createPublicServerClient(): SupabaseClient<Database> | null {
-  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const { url, key } = publicSupabaseEnv();
   if (!url || !key) {
     console.warn("[supabase] SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY not set — database features disabled.");
     return null;
