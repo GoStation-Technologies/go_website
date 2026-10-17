@@ -1,5 +1,5 @@
-import markAsset from "@/assets/gostation-brand-mark.png.asset.json";
-import whiteMarkAsset from "@/assets/gostation-brand-mark-white.png.asset.json";
+import markAsset from "@/assets/gostation-brand-mark.png";
+import whiteMarkAsset from "@/assets/gostation-brand-mark-white.png";
 
 /** Supplied brand symbol, paired with the bilingual legal company name. */
 export function CompanyLogo({
