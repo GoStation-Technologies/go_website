@@ -205,6 +205,52 @@
   }
 }
 
+/* Horizontal legal-name lockup; inverse artwork follows its actual surface. */
+.company-logo {
+  --company-logo-ink: var(--brand-navy);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 270px;
+  max-width: 100%;
+  color: var(--company-logo-ink);
+  text-align: start;
+  letter-spacing: 0;
+}
+.company-logo-mark {
+  display: grid;
+  flex: 0 0 46px;
+  width: 46px;
+  aspect-ratio: 868 / 829;
+}
+.company-logo-mark img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.company-logo-white { visibility: hidden; }
+.company-logo-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+  white-space: nowrap;
+}
+.company-logo-brand { font-size: 14px; font-weight: 700; line-height: 1.1; }
+.company-logo-ar { font-size: 11px; font-weight: 600; line-height: 1.5; }
+.company-logo-en { font-size: 10px; font-weight: 600; line-height: 1.3; }
+.company-logo-footer { width: 290px; }
+.company-logo-footer .company-logo-mark { flex-basis: 50px; width: 50px; }
+.company-logo-footer .company-logo-ar { font-size: 12px; }
+.company-logo-footer .company-logo-en { font-size: 11px; }
+.company-logo-inverse,
+.dark .company-logo { --company-logo-ink: var(--foreground); }
+.company-logo-inverse .company-logo-color,
+.dark .company-logo .company-logo-color { visibility: hidden; }
+.company-logo-inverse .company-logo-white,
+.dark .company-logo .company-logo-white { visibility: visible; }
+
 /* Marquee ticker */
 @keyframes marquee {
   0% {

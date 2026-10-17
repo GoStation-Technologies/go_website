@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail, Phone } from "lucide-react";
-const logoAsset = { url: "/gostation-logo-white.png" };
+import { CompanyLogo } from "@/components/site/company-logo";
 const isoLogo = { url: "/iso-logo.png" };
 import { useSiteSettings } from "@/hooks/use-cms";
 import { getContentLanguage } from "@/lib/i18n";
@@ -57,17 +57,11 @@ export function SiteFooter() {
 
 
 
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
-          <div className="flex items-center gap-2.5">
-            <img src={logoAsset.url} alt="GoStation" className="h-11 w-11 object-contain" />
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-lg font-bold">{t("brand.name")}</span>
-              <span className="mt-1 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/75">
-                {t("brand.tagline")}
-              </span>
-            </div>
-          </div>
+          <Link to="/" className="inline-flex max-w-full" aria-label={t("brand.name")}>
+            <CompanyLogo inverse footer />
+          </Link>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-foreground/85">
             {t("footer.tagline")}
           </p>
@@ -120,7 +114,7 @@ export function SiteFooter() {
         </FooterColumn>
       </div>
 
-      <div className="pointer-events-none relative mx-auto max-w-7xl px-4 pb-10 sm:px-6 md:-mt-32 lg:-mt-36 [&>*>*]:pointer-events-auto">
+      <div className="pointer-events-none relative mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:-mt-36 [&>*>*]:pointer-events-auto">
         <div className="flex flex-wrap items-start justify-center gap-x-8 gap-y-6 md:justify-end">
           {[
             { code: "9001:2015", label: t("footer.cert9001") },
