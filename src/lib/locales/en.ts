@@ -501,6 +501,9 @@ export const en = {
     contactSub:
       "Get in touch with the GoStation investor relations team and receive the support and information you need.",
     download: "Download PDF",
+    org: "Organization / Company",
+    inquiryType: "Inquiry type",
+    inquiryTypes: { general: "General", analyst: "Financial analyst", press: "Press", investor: "Investor" },
     heroTitle: "Why invest in GoStation",
     heroBody:
       "Built on a disciplined growth model, GoStation keeps creating long-term value for its shareholders through network expansion, resilient fuel and retail margins, and transparent governance across every station we operate.",
