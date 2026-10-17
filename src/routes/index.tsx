@@ -263,7 +263,7 @@ function HomePage() {
             </div>
           </div>
 
-          <blockquote className="mx-auto mt-8 max-w-4xl text-balance font-display text-3xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-4xl lg:text-5xl">
+          <blockquote className="mx-auto mt-8 max-w-3xl text-pretty font-display text-lg font-medium leading-[1.85] text-foreground sm:text-xl md:max-w-4xl md:text-2xl md:leading-[1.8] lg:text-[1.75rem]">
             {cms.field("chairman", "content", t("home.quote"))}
           </blockquote>
           <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent transition-transform duration-500 hover:scale-105">
