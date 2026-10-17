@@ -1,3 +1,8 @@
+# Footer legal pages
+- [ ] Add bilingual privacy and terms pages and footer links.
+- [ ] Add dedicated admin legal-page editing using the existing CMS.
+- [ ] Verify public navigation, RTL layout, and authenticated editing/readback.
+
 # Company branding
 - [x] Pair the supplied official mark with the full bilingual legal name in header, drawer, and footer.
 - [x] Verify intact mark aspect ratio, loaded artwork, light/dark variants, and branding fit at 320–1920px in Arabic and English; no runtime errors.
