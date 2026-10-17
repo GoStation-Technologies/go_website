@@ -16,6 +16,7 @@ export type AuditEntity =
   | "franchise_applications"
   | "acquisition_requests"
   | "contact_messages"
+  | "ir_inquiries"
   | "stations"
   | "news_articles"
   | "job_openings"

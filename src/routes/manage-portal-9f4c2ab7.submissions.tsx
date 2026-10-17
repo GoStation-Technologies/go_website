@@ -34,9 +34,10 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { fmtDateTime } from "@/lib/format";
 import { cityLabel } from "@/lib/cities";
+import { pageHead } from "@/lib/seo";
 
-type Kind = "franchise" | "acquisitions" | "contact";
-const TAB_KEYS: Kind[] = ["franchise", "acquisitions", "contact"];
+type Kind = "franchise" | "acquisitions" | "contact" | "ir";
+const TAB_KEYS: Kind[] = ["franchise", "acquisitions", "contact", "ir"];
 const STATUSES = ["new", "reviewing", "approved", "closed"] as const;
 type Status = (typeof STATUSES)[number];
 const STATUS_DOT: Record<Status, string> = {
@@ -49,7 +50,7 @@ const SORTS = [{ v: "newest" }, { v: "oldest" }, { v: "relevance" }] as const;
 type Sort = (typeof SORTS)[number]["v"];
 
 const searchSchema = z.object({
-  kind: fallback(z.enum(["franchise", "acquisitions", "contact"]), "franchise").default("franchise"),
+  kind: fallback(z.enum(["franchise", "acquisitions", "contact", "ir"]), "franchise").default("franchise"),
   status: fallback(z.string(), "").default(""),
   days: z.number().int().min(1).max(365).optional(),
   page: fallback(z.number().int().min(1), 1).default(1),
@@ -68,6 +69,7 @@ const DAY_RANGES = [
 export const Route = createFileRoute("/manage-portal-9f4c2ab7/submissions")({
   validateSearch: zodValidator(searchSchema),
   component: SubmissionsPage,
+  head: () => pageHead({ path: "/manage-portal-9f4c2ab7/submissions", title: "Submission Management — GoStation Admin", description: "Review and manage GoStation franchise, acquisition, contact and investor inquiries." }),
 });
 
 function SubmissionsPage() {
@@ -87,7 +89,7 @@ function SubmissionsPage() {
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, page: p }) });
   const qc = useQueryClient();
 
-  const { data, isFetching } = useQuery({
+  const { data, isFetching, error } = useQuery({
     queryKey: ["admin", "submissions", kind, status, days ?? "all", page, sort],
     queryFn: () =>
       adminListSubmissions({
@@ -338,9 +340,10 @@ function SubmissionsPage() {
 
 
       <div className="flex flex-wrap items-end justify-between gap-3 border-b">
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1">
           {TAB_KEYS.map((k) => (
-            <button
+            <Button
+              variant="ghost"
               key={k}
               onClick={() => setKind(k)}
               className={`border-b-2 px-3 py-2 text-sm font-medium transition ${
@@ -348,7 +351,7 @@ function SubmissionsPage() {
               }`}
             >
               {t(`admin.subs.tabs.${k}`)}
-            </button>
+            </Button>
           ))}
         </div>
         {selected.size > 0 && (
@@ -416,7 +419,9 @@ function SubmissionsPage() {
       </div>
 
       <div className="overflow-x-auto rounded-lg border bg-background">
-        {isFetching && !rows.length ? (
+        {error ? (
+          <p role="alert" className="p-6 text-sm text-destructive">{t("common.error")}</p>
+        ) : isFetching && !rows.length ? (
           <p className="p-6 text-sm text-muted-foreground">{t("admin.common.loading")}</p>
         ) : rows.length === 0 ? (
           <p className="p-6 text-sm text-muted-foreground">{t("admin.subs.empty")}</p>
@@ -475,7 +480,13 @@ function SubmissionsPage() {
                       <div className="text-xs text-muted-foreground">{String(r.phone ?? "")}</div>
                     </td>
                     <td className="max-w-md px-3 py-2 text-xs text-muted-foreground">
-                      {String(r.message ?? cityLabel(r.city, i18n.language) ?? r.subject ?? "").slice(0, 200)}
+                      {kind === "ir" ? (
+                        <div className="space-y-2">
+                          <div><span className="font-medium">{t("investors.org")}: </span>{String(r.organization || "—")}</div>
+                          <div><span className="font-medium">{t("investors.inquiryType")}: </span>{t(`investors.inquiryTypes.${String(r.inquiry_type)}`, { defaultValue: String(r.inquiry_type ?? "—") })}</div>
+                          <p className="max-h-60 overflow-y-auto whitespace-pre-wrap break-words">{String(r.message ?? "")}</p>
+                        </div>
+                      ) : String(r.message ?? cityLabel(r.city, i18n.language) ?? r.subject ?? "").slice(0, 200)}
                     </td>
                     <td className="px-3 py-2 text-xs text-muted-foreground">
                       {fmtDateTime(String(r.created_at))}

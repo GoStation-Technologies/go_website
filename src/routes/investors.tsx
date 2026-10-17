@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { inquiryFromForm } from "@/lib/investor-inquiry";
 import { pageHead } from "@/lib/seo";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -58,24 +60,19 @@ function IRPage() {
 
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
+  const [inquiryType, setInquiryType] = useState("general");
+  const submitInquiry = useServerFn(submitIrInquiry);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (busy) return;
     const fd = new FormData(e.currentTarget);
     setBusy(true);
     const form = e.currentTarget;
     let reference: string;
     try {
-      const res = await submitIrInquiry({
-        data: {
-          full_name: String(fd.get("name") ?? ""),
-          email: String(fd.get("email") ?? ""),
-          phone: String(fd.get("phone") ?? ""),
-          organization: String(fd.get("org") ?? ""),
-          inquiry_type: String(fd.get("type") ?? "general"),
-          message: String(fd.get("message") ?? ""),
-        },
-      });
+      const res = await submitInquiry({ data: inquiryFromForm(fd) });
+      if (!res.reference) throw new Error("submission_failed");
       reference = res.reference;
     } catch {
       setBusy(false);
@@ -83,8 +80,9 @@ function IRPage() {
     }
     setBusy(false);
     setRef(reference);
-    toast.success(t("common.thanks"));
+    toast.success(t("investors.submitted"), { description: `${t("common.referenceSaved")} ${reference}` });
     form.reset();
+    setInquiryType("general");
   };
 
   const kpis: KpiConfig[] = [
@@ -297,14 +295,14 @@ function IRPage() {
         <h2 className="mb-2 text-2xl font-bold">{cms.field("contact", "title", t("investors.contact"))}</h2>
         <p className="mb-6 text-sm text-muted-foreground">{t("investors.contactSub")}</p>
         <Card><CardContent className="p-8">
-          {ref && <div className="mb-4 rounded-lg border border-accent/40 bg-accent/10 p-3 text-sm">{t("common.referenceSaved")} <span className="font-mono">{ref}</span></div>}
+          {ref && <div role="status" className="mb-4 rounded-lg border border-accent/40 bg-accent/10 p-3 text-sm">{t("investors.submitted")} {t("common.referenceSaved")} <bdi className="font-mono">{ref}</bdi></div>}
           <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
-            <F label={t("common.fullName")}><Input name="name" required /></F>
-            <F label={t("common.email")}><Input type="email" name="email" required /></F>
-            <F label={t("common.phone")}><Input name="phone" /></F>
-            <F label={t("investors.org")}><Input name="org" placeholder={t("investors.org")} /></F>
+            <F label={t("common.fullName")}><Input name="name" maxLength={200} required /></F>
+            <F label={t("common.email")}><Input type="email" name="email" maxLength={255} required /></F>
+            <F label={t("common.phone")}><Input name="phone" maxLength={50} /></F>
+            <F label={t("investors.org")}><Input name="org" maxLength={200} placeholder={t("investors.org")} /></F>
             <F label={t("investors.inquiryType")} className="sm:col-span-2">
-              <Select name="type" defaultValue="general" required>
+              <Select name="type" value={inquiryType} onValueChange={setInquiryType} required>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="general">{t("investors.inquiryTypes.general")}</SelectItem>
@@ -314,7 +312,7 @@ function IRPage() {
                 </SelectContent>
               </Select>
             </F>
-            <F label={t("common.message")} className="sm:col-span-2"><Textarea rows={5} name="message" required /></F>
+            <F label={t("common.message")} className="sm:col-span-2"><Textarea rows={5} name="message" maxLength={4000} required /></F>
             <div className="sm:col-span-2">
               <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
                 {busy ? t("common.submitting") : t("common.submit")}
