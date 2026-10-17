@@ -20,6 +20,7 @@ export const en = {
     learnMore: "Learn more",
     readMore: "Read more",
     viewAll: "View all",
+    viewAllNews: "View All News",
     submit: "Submit",
     submitting: "Submitting…",
     thanks: "Thank you!",

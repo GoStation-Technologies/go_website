@@ -537,6 +537,19 @@ function HomePage() {
             </MediaCarousel>
           )}
         </div>
+
+        <div className="mt-10 flex justify-center">
+          <Button
+            asChild
+            size="lg"
+            className="h-12 w-full rounded-full bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90 sm:w-auto"
+          >
+            <Link to="/media">
+              {t("common.viewAllNews")}
+              <ArrowUpRight className="ms-1 h-4 w-4 rtl:-scale-x-100" />
+            </Link>
+          </Button>
+        </div>
       </section>
 
 
