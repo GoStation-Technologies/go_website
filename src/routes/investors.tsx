@@ -17,7 +17,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, CircleDollarSign, Eye, FileDown, MapPinned, TrendingUp } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, FileDown, MapPinned, TrendingUp } from "lucide-react";
+import { SaudiRiyal } from "@/components/icons/saudi-riyal";
 const stationCanopy = { url: "/station-canopy.jpg" };
 const logoWhite = { url: "/gostation-logo-white.png" };
 
@@ -334,7 +335,7 @@ type KpiConfig = {
 };
 
 function KpiCard({ kpi }: { kpi: KpiConfig }) {
-  const Icon = kpi.icon === "revenue" ? CircleDollarSign : kpi.icon === "growth" ? TrendingUp : MapPinned;
+  const Icon = kpi.icon === "revenue" ? SaudiRiyal : kpi.icon === "growth" ? TrendingUp : MapPinned;
   const iconLabel = kpi.icon === "revenue" ? "Revenue" : kpi.icon === "growth" ? "Growth" : "Stations";
 
   return (
