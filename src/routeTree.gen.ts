@@ -18,8 +18,10 @@ import { Route as InvestorsRouteImport } from './routes/investors'
 import { Route as LeasingRouteImport } from './routes/leasing'
 import { Route as ManagePortal9f4c2ab7RouteImport } from './routes/manage-portal-9f4c2ab7'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StationsRouteImport } from './routes/stations'
+import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
@@ -98,6 +100,11 @@ const McpRoute = McpRouteImport.update({
   path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -106,6 +113,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
   path: '/stations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
+  id: '/terms-and-conditions',
+  path: '/terms-and-conditions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93ListToolsRoute =
@@ -305,8 +317,10 @@ export interface FileRoutesByFullPath {
   '/leasing': typeof LeasingRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
   '/mcp': typeof McpRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/careers/$slug': typeof CareersSlugRoute
@@ -349,8 +363,10 @@ export interface FileRoutesByTo {
   '/investors': typeof InvestorsRoute
   '/leasing': typeof LeasingRoute
   '/mcp': typeof McpRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/careers/$slug': typeof CareersSlugRoute
@@ -395,8 +411,10 @@ export interface FileRoutesById {
   '/leasing': typeof LeasingRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7RouteWithChildren
   '/mcp': typeof McpRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stations': typeof StationsRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/careers/$slug': typeof CareersSlugRoute
@@ -442,8 +460,10 @@ export interface FileRouteTypes {
     | '/leasing'
     | '/manage-portal-9f4c2ab7'
     | '/mcp'
+    | '/privacy-policy'
     | '/sitemap.xml'
     | '/stations'
+    | '/terms-and-conditions'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/careers/$slug'
@@ -486,8 +506,10 @@ export interface FileRouteTypes {
     | '/investors'
     | '/leasing'
     | '/mcp'
+    | '/privacy-policy'
     | '/sitemap.xml'
     | '/stations'
+    | '/terms-and-conditions'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/careers/$slug'
@@ -531,8 +553,10 @@ export interface FileRouteTypes {
     | '/leasing'
     | '/manage-portal-9f4c2ab7'
     | '/mcp'
+    | '/privacy-policy'
     | '/sitemap.xml'
     | '/stations'
+    | '/terms-and-conditions'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/careers/$slug'
@@ -577,8 +601,10 @@ export interface RootRouteChildren {
   LeasingRoute: typeof LeasingRoute
   ManagePortal9f4c2ab7Route: typeof ManagePortal9f4c2ab7RouteWithChildren
   McpRoute: typeof McpRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StationsRoute: typeof StationsRoute
+  TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CareersSlugRoute: typeof CareersSlugRoute
@@ -658,6 +684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -670,6 +703,13 @@ declare module '@tanstack/react-router' {
       path: '/stations'
       fullPath: '/stations'
       preLoaderRoute: typeof StationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms-and-conditions': {
+      id: '/terms-and-conditions'
+      path: '/terms-and-conditions'
+      fullPath: '/terms-and-conditions'
+      preLoaderRoute: typeof TermsAndConditionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/list-tools': {
@@ -959,8 +999,10 @@ const rootRouteChildren: RootRouteChildren = {
   LeasingRoute: LeasingRoute,
   ManagePortal9f4c2ab7Route: ManagePortal9f4c2ab7RouteWithChildren,
   McpRoute: McpRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StationsRoute: StationsRoute,
+  TermsAndConditionsRoute: TermsAndConditionsRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
