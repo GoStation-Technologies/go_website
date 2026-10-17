@@ -503,6 +503,7 @@ export const en = {
     download: "Download PDF",
     org: "Organization / Company",
     inquiryType: "Inquiry type",
+    submitted: "Your inquiry has been sent to the investor relations team successfully.",
     inquiryTypes: { general: "General", analyst: "Financial analyst", press: "Press", investor: "Investor" },
     heroTitle: "Why invest in GoStation",
     heroBody:
@@ -746,7 +747,7 @@ export const en = {
     },
     subs: {
       title: "Submissions",
-      tabs: { franchise: "Franchise", acquisitions: "Acquisitions", contact: "Contact" },
+      tabs: { franchise: "Franchise", acquisitions: "Acquisitions", contact: "Contact", ir: "Investor inquiries" },
       all: "All",
       timeRange: "Time range",
       sort: "Sort",

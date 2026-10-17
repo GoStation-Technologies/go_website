@@ -506,6 +506,7 @@ export const ar = {
     download: "تحميل PDF",
     org: "المنشأة / الشركة",
     inquiryType: "نوع الاستفسار",
+    submitted: "تم إرسال استفسارك إلى فريق علاقات المستثمرين بنجاح.",
     inquiryTypes: { general: "عام", analyst: "محلل مالي", press: "إعلامي", investor: "مستثمر" },
     heroTitle: "لماذا تستثمرون في قوستيشن",
     heroBody:
@@ -749,7 +750,7 @@ export const ar = {
     },
     subs: {
       title: "الطلبات",
-      tabs: { franchise: "الامتياز", acquisitions: "الاستحواذ", contact: "التواصل" },
+      tabs: { franchise: "الامتياز", acquisitions: "الاستحواذ", contact: "التواصل", ir: "استفسارات المستثمرين" },
       all: "الكل",
       timeRange: "النطاق الزمني",
       sort: "الترتيب",

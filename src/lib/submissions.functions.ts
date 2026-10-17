@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { IrInput } from "./investor-inquiry";
 
 // Public form submissions are handled server-side. The underlying
 // SECURITY DEFINER database functions are no longer callable by anon /
@@ -97,15 +98,6 @@ export const submitFranchiseApplication = createServerFn({ method: "POST" })
     }),
   );
 
-
-const IrInput = z.object({
-  full_name: str(200).min(1),
-  email: str(255).email(),
-  phone: str(50).optional().default(""),
-  organization: str(200).optional().default(""),
-  inquiry_type: str(40).optional().default("general"),
-  message: str(4000).min(1),
-});
 
 export const submitIrInquiry = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => IrInput.parse(raw))
