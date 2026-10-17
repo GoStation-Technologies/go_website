@@ -8,7 +8,7 @@ export const ar = {
     franchise: "الامتياز التجاري",
     acquisitions: "الاستحواذ",
     leasing: "التأجير العقاري",
-    careers: "الوظائف",
+    careers: "التوظيف",
     investors: "علاقات المستثمرين",
     contact: "تواصل معنا",
     signin: "تسجيل الدخول",
