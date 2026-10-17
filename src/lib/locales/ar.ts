@@ -20,6 +20,7 @@ export const ar = {
     learnMore: "اعرف المزيد",
     readMore: "اقرأ المزيد",
     viewAll: "عرض الكل",
+    viewAllNews: "عرض كل الأخبار",
     submit: "إرسال",
     submitting: "جارٍ الإرسال…",
     thanks: "شكراً لك!",
