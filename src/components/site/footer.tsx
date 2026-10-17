@@ -108,8 +108,8 @@ export function SiteFooter() {
           <FooterLink to="/contact">{t("nav.contact")}</FooterLink>
         </FooterColumn>
         <FooterColumn title={t("footer.legal")}>
-          <li className="text-foreground/80">{t("footer.privacy")}</li>
-          <li className="text-foreground/80">{t("footer.terms")}</li>
+          <FooterLink to="/privacy-policy">{t("footer.privacy")}</FooterLink>
+          <FooterLink to="/terms-and-conditions">{t("footer.terms")}</FooterLink>
           <li className="text-foreground/80">{hours}</li>
         </FooterColumn>
       </div>

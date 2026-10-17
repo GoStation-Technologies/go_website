@@ -1,3 +1,9 @@
+# Footer legal pages
+- [x] Add bilingual privacy and terms pages and footer links; Arabic/English desktop and phone navigation verified with no runtime errors.
+- [x] Add dedicated admin legal-page editing using the existing CMS and publication controls; 12 relevant tests pass and build OK.
+- [ ] Publish approved legal text: awaiting company-provided Arabic and English policies.
+- [ ] Verify authenticated editing/readback: requesting user has no matching admin account/session; requires admin sign-in in preview.
+
 # Company branding
 - [x] Pair the supplied official mark with the full bilingual legal name in header, drawer, and footer.
 - [x] Verify intact mark aspect ratio, loaded artwork, light/dark variants, and branding fit at 320–1920px in Arabic and English; no runtime errors.

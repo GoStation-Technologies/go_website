@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FormGrid, FormRow, inputCls } from "@/components/admin/form-kit";
 import { getContentLanguage } from "@/lib/i18n";
+import { LEGAL_PAGES } from "@/lib/legal-pages";
 
 export type SectionDef = {
   key: string;
@@ -36,6 +37,10 @@ export type PageDef = {
 
 /** Editable sections per public page, in the order they appear on the site. */
 export const PAGE_CMS: PageDef[] = [
+  ...LEGAL_PAGES.map((page) => ({
+    ...page,
+    sections: [{ key: "document", en: page.en, ar: page.ar, fields: ["title", "content"] as ("title" | "content")[] }],
+  })),
   {
     slug: "home",
     en: "Homepage",
