@@ -11,8 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-const logoAsset = { url: "/gostation-logo.png" };
-const logoWhiteAsset = { url: "/gostation-logo-white.png" };
+import { CompanyLogo } from "@/components/site/company-logo";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AccessibilityMenu } from "@/components/site/accessibility-menu";
@@ -64,7 +63,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
   return (
     <header
-      className={`z-[1100] w-full transition-all duration-300 ${
+      className={`${open ? "z-40" : "z-[1100]"} w-full transition-all duration-300 ${
         overlay ? "fixed top-0 start-0" : "sticky top-0"
       } ${
         overlayTop
@@ -74,25 +73,13 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             : "border-b border-transparent bg-background/40 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link to="/" className="group flex items-center gap-2.5">
-          <img
-            src={overlay ? logoWhiteAsset.url : logoAsset.url}
-            alt="GoStation"
-            className="h-9 w-9 object-contain transition-transform duration-500 group-hover:rotate-[8deg]"
-          />
-          <div className="flex flex-col leading-none">
-            <span className="font-display text-[1.05rem] font-bold tracking-tight text-primary">
-              {t("brand.name")}
-            </span>
-            <span className="mt-0.5 hidden text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:block">
-              {t("brand.tagline")}
-            </span>
-          </div>
+      <div className="mx-auto flex min-h-[72px] max-w-[1440px] flex-col items-center justify-between gap-2 px-4 py-3 sm:flex-row sm:gap-3 sm:px-6 sm:py-0">
+        <Link to="/" className="max-w-full shrink-0" aria-label={t("brand.name")}>
+          <CompanyLogo inverse={overlay} />
         </Link>
 
 
-        <nav className="hidden flex-1 items-center justify-center gap-0.5 lg:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-0.5 min-[1440px]:flex">
           {NAV.map((n) => (
             <Link
               key={n.key}
@@ -108,7 +95,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         </nav>
 
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex shrink-0 items-center gap-1.5">
           <ThemeToggle />
           <AccessibilityMenu />
           <Button
@@ -123,7 +110,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           <Button
             asChild
             size="sm"
-            className="hidden h-9 rounded-full bg-accent px-4 text-xs font-semibold text-accent-foreground shadow-glow transition-all hover:scale-[1.02] hover:bg-accent/90 sm:inline-flex"
+            className="hidden h-9 rounded-full bg-accent px-4 text-xs font-semibold text-accent-foreground shadow-glow transition-all hover:scale-[1.02] hover:bg-accent/90 min-[1100px]:inline-flex"
           >
             <Link to="/franchise">
               {t("nav.franchiseCta")}
@@ -135,17 +122,16 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 rounded-full lg:hidden"
+                className="h-9 w-9 rounded-full min-[1440px]:hidden"
                 aria-label="Menu"
               >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80 border-l">
+            <SheetContent side="right" className="w-[360px] max-w-full border-l p-4 sm:p-6">
               <SheetHeader className="text-start">
-                <SheetTitle className="flex items-center gap-2">
-                  <img src={logoAsset.url} alt="" className="h-7 w-7 object-contain" />
-                  {t("brand.name")}
+                <SheetTitle className="pt-6">
+                  <CompanyLogo />
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-0.5">

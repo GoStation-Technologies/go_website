@@ -1,3 +1,7 @@
+# Company branding
+- [x] Pair the supplied official mark with the full bilingual legal name in header, drawer, and footer.
+- [x] Verify intact mark aspect ratio, loaded artwork, light/dark variants, and branding fit at 320–1920px in Arabic and English; no runtime errors.
+
 # Investor inquiries
 - [x] Repair submission and confirmation/reset for all inquiry fields (live inquiry GS-IR-2026-00031 saved all six fields).
 - [x] Add investor inquiries to admin submissions with full details and status management; preserve IR/super-admin RLS restrictions.
