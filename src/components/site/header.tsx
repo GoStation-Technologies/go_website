@@ -63,7 +63,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
   return (
     <header
-      className={`z-[1100] w-full transition-all duration-300 ${
+      className={`${open ? "z-40" : "z-[1100]"} w-full transition-all duration-300 ${
         overlay ? "fixed top-0 start-0" : "sticky top-0"
       } ${
         overlayTop
@@ -128,7 +128,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80 border-l">
+            <SheetContent side="right" className="w-[360px] max-w-full border-l p-4 sm:p-6">
               <SheetHeader className="text-start">
                 <SheetTitle className="pt-6">
                   <CompanyLogo />
