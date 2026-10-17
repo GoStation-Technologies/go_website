@@ -302,15 +302,15 @@ function IRPage() {
             <F label={t("common.fullName")}><Input name="name" required /></F>
             <F label={t("common.email")}><Input type="email" name="email" required /></F>
             <F label={t("common.phone")}><Input name="phone" /></F>
-            <F label="Organization"><Input name="org" /></F>
-            <F label="Inquiry type" className="sm:col-span-2">
+            <F label={t("investors.org")}><Input name="org" placeholder={t("investors.org")} /></F>
+            <F label={t("investors.inquiryType")} className="sm:col-span-2">
               <Select name="type" defaultValue="general" required>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="general">General</SelectItem>
-                  <SelectItem value="analyst">Analyst</SelectItem>
-                  <SelectItem value="press">Press</SelectItem>
-                  <SelectItem value="investor">Investor</SelectItem>
+                  <SelectItem value="general">{t("investors.inquiryTypes.general")}</SelectItem>
+                  <SelectItem value="analyst">{t("investors.inquiryTypes.analyst")}</SelectItem>
+                  <SelectItem value="press">{t("investors.inquiryTypes.press")}</SelectItem>
+                  <SelectItem value="investor">{t("investors.inquiryTypes.investor")}</SelectItem>
                 </SelectContent>
               </Select>
             </F>
