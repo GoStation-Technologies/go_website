@@ -17,8 +17,8 @@ export function CompanyLogo({
       aria-label="GOStation — شركة هلا السعودية للخدمات البترولية — Hala Saudi Petroleum Services"
     >
       <span className="company-logo-mark" aria-hidden="true">
-        <img src={markAsset.url} alt="" width={868} height={829} className="company-logo-color" />
-        <img src={whiteMarkAsset.url} alt="" width={868} height={829} className="company-logo-white" />
+        <img src={markAsset} alt="" width={868} height={829} className="company-logo-color" />
+        <img src={whiteMarkAsset} alt="" width={868} height={829} className="company-logo-white" />
       </span>
       <span className="company-logo-name" aria-hidden="true">
         <span className="company-logo-brand font-display">GOStation</span>
