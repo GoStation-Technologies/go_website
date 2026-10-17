@@ -31,6 +31,8 @@ const KEYS: Record<string, string> = {
   franchise: "admin.nav.pageFranchise",
   acquisitions: "admin.nav.pageAcquisitions",
   investors: "admin.nav.pageInvestors",
+  "privacy-policy": "admin.nav.pagePrivacy",
+  "terms-and-conditions": "admin.nav.pageTerms",
 };
 
 export function AdminBreadcrumbs() {

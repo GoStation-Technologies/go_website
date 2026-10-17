@@ -14,3 +14,4 @@
 - Render public customer testimonials through the shared CMS-driven Testimonials component, never a parallel system-cache grid, so publication controls govern every displayed review.
 - Public station queries include every station under SELECT-only RLS; shared labels preserve source operational states so inactive stations are not advertised as open.
 - Header, mobile drawer, and footer share CompanyLogo with paired source-mark variants and surface-aware styling so branding stays consistent without distorting artwork.
+- Legal pages store a bilingual `document` section in the existing `page_sections` CMS and reuse its admin editor; public SSR reads only visible documents and never substitutes another language's legal text.
