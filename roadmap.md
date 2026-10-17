@@ -1,4 +1,9 @@
 # Customer reviews
+# Investor inquiries
+- [ ] Repair submission and confirmation/reset for all inquiry fields.
+- [ ] Add investor inquiries to admin submissions with full details and status management.
+- [ ] Verify submission persistence and admin visibility; authenticated verification requires an available admin session.
+
 - [x] Consolidate duplicate public review sections; existing CMS visibility and order controls remain authoritative.
 - [x] Connect Google Maps.
 - [x] List live Google Maps reviews in admin with per-review show/hide; only IDs stored.

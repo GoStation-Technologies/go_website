@@ -10,5 +10,6 @@
 <!-- LOVABLE:END -->
 
 - Public marketing links are stored in `site_settings` so Admin Settings remains the single editable source of truth.
+- Investor inquiry form and server validation share one schema; admin submission mappings include the same `ir_inquiries` table so public submissions and staff management stay aligned.
 - Render public customer testimonials through the shared CMS-driven Testimonials component, never a parallel system-cache grid, so publication controls govern every displayed review.
 - Public station queries include every station under SELECT-only RLS; shared labels preserve source operational states so inactive stations are not advertised as open.
