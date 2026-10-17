@@ -1,7 +1,8 @@
 # Footer legal pages
-- [ ] Add bilingual privacy and terms pages and footer links.
-- [ ] Add dedicated admin legal-page editing using the existing CMS.
-- [ ] Verify public navigation, RTL layout, and authenticated editing/readback.
+- [x] Add bilingual privacy and terms pages and footer links; Arabic/English desktop and phone navigation verified with no runtime errors.
+- [x] Add dedicated admin legal-page editing using the existing CMS and publication controls; 12 relevant tests pass and build OK.
+- [ ] Publish approved legal text: awaiting company-provided Arabic and English policies.
+- [ ] Verify authenticated editing/readback: requesting user has no matching admin account/session; requires admin sign-in in preview.
 
 # Company branding
 - [x] Pair the supplied official mark with the full bilingual legal name in header, drawer, and footer.
