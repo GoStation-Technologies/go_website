@@ -335,7 +335,7 @@ type KpiConfig = {
 };
 
 function KpiCard({ kpi }: { kpi: KpiConfig }) {
-  const Icon = kpi.icon === "revenue" ? CircleDollarSign : kpi.icon === "growth" ? TrendingUp : MapPinned;
+  const Icon = kpi.icon === "revenue" ? SaudiRiyal : kpi.icon === "growth" ? TrendingUp : MapPinned;
   const iconLabel = kpi.icon === "revenue" ? "Revenue" : kpi.icon === "growth" ? "Growth" : "Stations";
 
   return (
