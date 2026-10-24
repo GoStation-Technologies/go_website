@@ -706,8 +706,8 @@ export const en = {
         // Home page
         ceo: "CEO statement",
         chairman: "Chairman statement",
-        acquisitions_section: "Acquisitions section",
-        franchise_section: "Franchise section",
+        acquisitions: "Acquisitions section",
+        franchise: "Franchise section",
         go_app: "Go app",
         join: "Join us",
         network: "Station network",

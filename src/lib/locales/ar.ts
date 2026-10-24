@@ -709,8 +709,8 @@ export const ar = {
         // Home page
         ceo: "كلمة الرئيس التنفيذي",
         chairman: "كلمة رئيس مجلس الإدارة",
-        acquisitions_section: "قسم الاستحواذ",
-        franchise_section: "قسم الامتياز",
+        acquisitions: "قسم الاستحواذ",
+        franchise: "قسم الامتياز",
         go_app: "تطبيق قو",
         join: "انضم إلينا",
         network: "شبكة المحطات",
