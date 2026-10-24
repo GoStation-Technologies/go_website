@@ -190,7 +190,9 @@ function SectionCard({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
         <CardTitle className="text-base">
-          {section.section_key || t("admin.cms.newSection")}
+          {section.section_key
+            ? t(`admin.cms.sections.${section.section_key}`, { defaultValue: section.section_key })
+            : t("admin.cms.newSection")}
         </CardTitle>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-xs text-muted-foreground">
