@@ -252,12 +252,12 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64 group cursor-default 
-            <div className="relative h-full w-full overflow-hidden rounded-full 
+          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64 group cursor-default">
+            <div className="relative h-full w-full overflow-hidden rounded-full">
               <img
                 src={cms.media("chairman", chairmanCutoutAsset.url)}
                 alt={cms.field("chairman", "title", t("home.quoteAuthor"))}
-                className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)] 
+                className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
               />
             </div>
           </div>
@@ -265,7 +265,7 @@ function HomePage() {
           <blockquote className="mx-auto mt-8 max-w-3xl text-pretty font-display text-lg font-medium leading-[1.85] text-foreground sm:text-xl md:max-w-4xl md:text-2xl md:leading-[1.8] lg:text-[1.75rem]">
             {cms.field("chairman", "content", t("home.quote"))}
           </blockquote>
-          <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent 
+          <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent">
             {cms.field("chairman", "title", t("home.quoteAuthor"))}
           </div>
           <div className="mt-1.5 text-sm text-muted-foreground">{cms.field("chairman", "subtitle", t("home.quoteRole"))}</div>
@@ -315,7 +315,7 @@ function HomePage() {
             {values.map(({ icon: Icon, k, title, body }) => (
               <article
                 key={k}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-8 backdrop-blur-sm transition-colors duration-200 hover:border-accent/40 hover:bg-white/[0.07]
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-8 backdrop-blur-sm transition-colors duration-200 hover:border-accent/40 hover:bg-white/[0.07]"
               >
 
 
@@ -490,13 +490,13 @@ function HomePage() {
                   params={{ slug: n.slug }}
                   className="group w-[300px] shrink-0 snap-start sm:w-[360px]"
                 >
-                  <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:border-accent/40
+                  <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:border-accent/40">
                     <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                       {n.cover_url ? (
                         <img
                           src={n.cover_url}
                           alt=""
-                          className="absolute inset-0 h-full w-full object-cover transition-colors duration-200
+                          className="absolute inset-0 h-full w-full object-cover transition-colors duration-200"
                           loading="lazy"
                         />
                       ) : (
@@ -504,7 +504,7 @@ function HomePage() {
                       )}
                       {n.kind === "video" && (
                         <span className="absolute inset-0 grid place-items-center">
-                          <span className="grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition
+                          <span className="grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition">
                             <Play className="h-5 w-5 translate-x-[1px] rtl:-scale-x-100" />
                           </span>
                         </span>
@@ -699,7 +699,7 @@ function HomePage() {
                 href={setting("go_app", "android_url", "https://play.google.com/store/apps/details?id=sa.gostation.loyalty")}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition
+                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition"
               >
                 <PlayIcon className="h-7 w-7" />
                 <span className="text-start leading-tight">
@@ -711,7 +711,7 @@ function HomePage() {
                 href={setting("go_app", "ios_url", "https://apps.apple.com/sa/app/gostation-fuel-rewards-wallet/id6755926221")}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition
+                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition"
               >
                 <AppleIcon className="h-7 w-7" />
                 <span className="text-start leading-tight">
@@ -798,7 +798,7 @@ function HomePage() {
                             href={href ?? undefined}
                             target={href ? "_blank" : undefined}
                             rel={href ? "noopener noreferrer" : undefined}
-                            className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:border-accent/40
+                            className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:border-accent/40"
                           >
                             <img
                               src={logo || partnerLogo.url}
@@ -883,7 +883,7 @@ function ServiceCard({
           alt=""
           aria-hidden
           loading="lazy"
-          className="absolute inset-0 h-full w-full scale-105 object-cover object-[50%_38%] 
+          className="absolute inset-0 h-full w-full scale-105 object-cover object-[50%_38%]"
         />
         {/* GoStation brand scrim — deep navy night + ember (keeps photo visible) */}
         <div
@@ -916,7 +916,7 @@ function ServiceCard({
 
           <div className="inline-flex items-center gap-2 text-sm font-semibold text-ember-glow">
             {cta}
-            <ArrowUpRight className="h-4 w-4 transition-transform />
+            <ArrowUpRight className="h-4 w-4 transition-transform" />
           </div>
         </div>
       </Link>
@@ -940,7 +940,7 @@ function ServiceCard({
       </div>
       <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-accent">
         {cta}
-        <ArrowUpRight className="h-3.5 w-3.5 transition-transform />
+        <ArrowUpRight className="h-3.5 w-3.5 transition-transform" />
       </div>
     </Link>
   );
