@@ -2,6 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { leasingContentQuery } from "@/lib/leasing-content.query";
+import { leasingContent } from "@/lib/leasing-content";
+import { getContentLanguage } from "@/lib/i18n";
+import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { submitContactMessage } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
@@ -15,7 +20,10 @@ import { CheckCircle2, Store, Info, Clock, FileText, Building2 } from "lucide-re
 const stationImg = { url: "/station-canopy.jpg" };
 
 export const Route = createFileRoute("/leasing")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(leasingContentQuery),
   component: LeasingPage,
+  errorComponent: () => <SiteLayout><div role="alert" className="mx-auto max-w-7xl px-4 py-16">تعذر تحميل الصفحة / Unable to load the leasing page.</div></SiteLayout>,
+  notFoundComponent: () => <SiteLayout><div className="mx-auto max-w-7xl px-4 py-16">الصفحة غير موجودة / Page not found.</div></SiteLayout>,
   head: () =>
     pageHead({
       path: "/leasing",
@@ -26,7 +34,10 @@ export const Route = createFileRoute("/leasing")({
 });
 
 function LeasingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { data: sections } = useSuspenseQuery(leasingContentQuery);
+  const cms = leasingContent(sections, getContentLanguage(i18n.resolvedLanguage ?? i18n.language));
+  const bannerImage = cms.media("hero", stationImg.url);
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
   const [city, setCity] = useState("");
@@ -67,29 +78,22 @@ function LeasingPage() {
   };
 
   const facts = [
-    { icon: Info, title: t("lease.facts.spaces"), body: t("lease.facts.spacesBody") },
-    { icon: Clock, title: t("lease.facts.timeline"), body: t("lease.facts.timelineBody") },
-    { icon: FileText, title: t("lease.facts.docs"), body: t("lease.facts.docsBody") },
+    { key: "spaces", icon: Info, title: cms.field("spaces", "title", t("lease.facts.spaces")), body: cms.field("spaces", "content", t("lease.facts.spacesBody")) },
+    { key: "timeline", icon: Clock, title: cms.field("timeline", "title", t("lease.facts.timeline")), body: cms.field("timeline", "content", t("lease.facts.timelineBody")) },
+    { key: "docs", icon: FileText, title: cms.field("docs", "title", t("lease.facts.docs")), body: cms.field("docs", "content", t("lease.facts.docsBody")) },
   ];
 
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden border-b bg-muted/30">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.07]"
-          style={{
-            background:
-              "radial-gradient(600px 300px at 8% 0%, var(--primary), transparent 65%), radial-gradient(500px 260px at 95% 100%, var(--accent), transparent 60%)",
-          }}
-        />
+      <section className="relative isolate overflow-hidden border-b bg-ink text-primary-foreground">
+        <HeroBackdrop src={bannerImage} alt={cms.field("hero", "title", t("lease.title"))} />
         <div className="mx-auto max-w-7xl px-4 py-12 md:py-16">
           <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-accent">
             <Store className="h-3.5 w-3.5" />
-            {t("lease.eyebrow")}
+            {cms.field("hero", "subtitle", t("lease.eyebrow"))}
           </span>
-          <h1 className="mt-4 text-3xl font-extrabold text-primary md:text-4xl">{t("lease.title")}</h1>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground">{t("lease.lead")}</p>
+          <h1 className="mt-4 text-3xl font-extrabold md:text-4xl">{cms.field("hero", "title", t("lease.title"))}</h1>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-primary-foreground/85">{cms.field("hero", "content", t("lease.lead"))}</p>
         </div>
       </section>
 
@@ -100,16 +104,16 @@ function LeasingPage() {
               <h2 className="text-lg font-bold">{t("lease.detailsTitle")}</h2>
               <div className="mt-4 overflow-hidden rounded-xl">
                 <img
-                  src={stationImg.url}
+                  src={bannerImage}
                   alt={t("lease.title")}
                   loading="lazy"
                   className="h-56 w-full object-cover md:h-64"
                 />
               </div>
               <ul className="mt-6 grid gap-3">
-                {facts.map(({ icon: Icon, title, body }) => (
+                {facts.map(({ key, icon: Icon, title, body }) => (
                   <li
-                    key={title}
+                    key={key}
                     className="flex items-start gap-3 rounded-xl border-b-2 border-b-primary bg-muted/40 px-4 py-3"
                   >
                     <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -117,7 +121,7 @@ function LeasingPage() {
                     </span>
                     <span className="text-sm leading-relaxed">
                       <span className="font-semibold">{title}</span>{" "}
-                      <span className="text-muted-foreground">{body}</span>
+                      <span className="whitespace-pre-line text-muted-foreground">{body}</span>
                     </span>
                   </li>
                 ))}
