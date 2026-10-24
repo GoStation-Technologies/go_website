@@ -35,9 +35,11 @@ import { useTranslation } from "react-i18next";
 import { fmtDateTime } from "@/lib/format";
 import { cityLabel } from "@/lib/cities";
 import { pageHead } from "@/lib/seo";
+import { LeasingRequestDetails } from "@/components/admin/leasing-request-details";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-type Kind = "franchise" | "acquisitions" | "contact" | "ir";
-const TAB_KEYS: Kind[] = ["franchise", "acquisitions", "contact", "ir"];
+type Kind = "franchise" | "acquisitions" | "contact" | "ir" | "leasing";
+const TAB_KEYS: Kind[] = ["franchise", "acquisitions", "ir", "leasing", "contact"];
 const STATUSES = ["new", "reviewing", "approved", "closed"] as const;
 type Status = (typeof STATUSES)[number];
 const STATUS_DOT: Record<Status, string> = {
@@ -50,7 +52,7 @@ const SORTS = [{ v: "newest" }, { v: "oldest" }, { v: "relevance" }] as const;
 type Sort = (typeof SORTS)[number]["v"];
 
 const searchSchema = z.object({
-  kind: fallback(z.enum(["franchise", "acquisitions", "contact", "ir"]), "franchise").default("franchise"),
+  kind: fallback(z.enum(["franchise", "acquisitions", "contact", "ir", "leasing"]), "franchise").default("franchise"),
   status: fallback(z.string(), "").default(""),
   days: z.number().int().min(1).max(365).optional(),
   page: fallback(z.number().int().min(1), 1).default(1),
@@ -88,6 +90,7 @@ function SubmissionsPage() {
   const setPage = (p: number) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, page: p }) });
   const qc = useQueryClient();
+  const [detail, setDetail] = useState<Record<string, unknown> | null>(null);
 
   const { data, isFetching, error } = useQuery({
     queryKey: ["admin", "submissions", kind, status, days ?? "all", page, sort],
@@ -480,7 +483,7 @@ function SubmissionsPage() {
                       <div className="text-xs text-muted-foreground">{String(r.phone ?? "")}</div>
                     </td>
                     <td className="max-w-md px-3 py-2 text-xs text-muted-foreground">
-                      {kind === "ir" ? (
+                      {kind === "leasing" ? <><LeasingRequestDetails row={r} /><Button variant="outline" size="sm" className="mt-3" onClick={() => setDetail(r)}>{t("admin.subs.viewDetails")}</Button></> : kind === "ir" ? (
                         <div className="space-y-2">
                           <div><span className="font-medium">{t("investors.org")}: </span>{String(r.organization || "—")}</div>
                           <div><span className="font-medium">{t("investors.inquiryType")}: </span>{t(`investors.inquiryTypes.${String(r.inquiry_type)}`, { defaultValue: String(r.inquiry_type ?? "—") })}</div>
@@ -548,6 +551,16 @@ function SubmissionsPage() {
           </Button>
         </div>
       </div>
+
+      <Dialog open={detail !== null} onOpenChange={(open) => { if (!open) setDetail(null); }}>
+        <DialogContent className="max-h-[85dvh] overflow-y-auto" dir={i18n.dir()}>
+          <DialogHeader><DialogTitle>{t("admin.subs.tabs.leasing")} — {String(detail?.reference ?? "")}</DialogTitle></DialogHeader>
+          {detail && <div className="space-y-4 text-sm">
+            <div><p className="font-semibold">{String(detail.full_name ?? "")}</p><p dir="ltr" className="text-start">{String(detail.email ?? "")}</p><p dir="ltr" className="text-start">{String(detail.phone ?? "")}</p></div>
+            <LeasingRequestDetails row={detail} />
+          </div>}
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog
         open={confirm !== null}

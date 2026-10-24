@@ -1,3 +1,8 @@
+# Leasing submissions
+- [x] Separate leasing requests from contact messages and preserve structured requirements and private documents; routing tests pass.
+- [x] Display leasing metadata in the table and detail dialog; public submission with PDF confirmed as GS-MSG-2026-00040.
+- [ ] Verify authenticated admin table/dialog and document download: requires admin sign-in in preview; requesting user has no matching app account.
+
 # Leasing CMS
 - [x] Add dedicated bilingual leasing editor and sidebar entry using the existing CMS.
 - [x] Load banner and leasing guidelines dynamically with localized defaults; public page returns 200, images load, five tests pass and build OK.

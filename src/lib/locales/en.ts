@@ -423,6 +423,7 @@ export const en = {
       district: "Preferred district",
       area: "Required area (m²)",
       duration: "Lease term (years)",
+      documents: "Attached documents",
     },
   },
   acq: {
@@ -797,7 +798,8 @@ export const en = {
     },
     subs: {
       title: "Submissions",
-      tabs: { franchise: "Franchise", acquisitions: "Acquisitions", contact: "Contact", ir: "Investor inquiries" },
+      tabs: { franchise: "Franchise", acquisitions: "Acquisitions", contact: "Contact", ir: "Investor inquiries", leasing: "Leasing" },
+      viewDetails: "View details",
       all: "All",
       timeRange: "Time range",
       sort: "Sort",

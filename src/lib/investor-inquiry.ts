@@ -24,5 +24,6 @@ export const submissionTables = {
   franchise: "franchise_applications",
   acquisitions: "acquisition_requests",
   contact: "contact_messages",
+  leasing: "contact_messages",
   ir: "ir_inquiries",
 } as const;

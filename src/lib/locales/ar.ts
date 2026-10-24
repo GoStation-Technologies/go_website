@@ -426,6 +426,7 @@ export const ar = {
       district: "الحي المفضل",
       area: "المساحة المطلوبة (م²)",
       duration: "مدة الإيجار (سنوات)",
+      documents: "المستندات المرفقة",
     },
   },
   acq: {
@@ -800,7 +801,8 @@ export const ar = {
     },
     subs: {
       title: "الطلبات",
-      tabs: { franchise: "الامتياز", acquisitions: "الاستحواذ", contact: "التواصل", ir: "استفسارات المستثمرين" },
+      tabs: { franchise: "الامتياز", acquisitions: "الاستحواذ", contact: "التواصل", ir: "استفسارات المستثمرين", leasing: "التأجير" },
+      viewDetails: "عرض التفاصيل",
       all: "الكل",
       timeRange: "النطاق الزمني",
       sort: "الترتيب",

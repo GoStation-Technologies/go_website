@@ -297,6 +297,7 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          leasing_metadata: Json
           message: string
           phone: string | null
           reference: string
@@ -310,6 +311,7 @@ export type Database = {
           email: string
           full_name: string
           id?: string
+          leasing_metadata?: Json
           message: string
           phone?: string | null
           reference?: string
@@ -323,6 +325,7 @@ export type Database = {
           email?: string
           full_name?: string
           id?: string
+          leasing_metadata?: Json
           message?: string
           phone?: string | null
           reference?: string
