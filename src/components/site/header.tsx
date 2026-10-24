@@ -63,13 +63,13 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
   return (
     <header
-      className={`${open ? "z-40" : "z-[1100]"} w-full transition-all duration-300 ${
+      className={`${open ? "z-40" : "z-[1100]"} w-full transition-colors duration-200 ${
         overlay ? "fixed top-0 start-0" : "sticky top-0"
       } ${
         overlayTop
-          ? "header-overlay border-b border-transparent bg-transparent"
+          ? "header-overlay border-b border-transparent bg-ink"
           : scrolled
-            ? `border-b ${overlay ? "header-overlay border-white/10 glass-ink" : "border-border/60 glass"} shadow-[0_1px_0_0_rgba(0,0,0,0.02)]`
+            ? `border-b ${overlay ? "header-overlay border-border bg-ink" : "border-border/60 glass"} shadow-[0_1px_0_0_rgba(0,0,0,0.02)]`
             : "border-b border-transparent bg-background/40 backdrop-blur-sm"
       }`}
     >
@@ -110,7 +110,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           <Button
             asChild
             size="sm"
-            className="hidden h-9 rounded-full bg-accent px-4 text-xs font-semibold text-accent-foreground shadow-glow transition-all hover:scale-[1.02] hover:bg-accent/90 min-[1100px]:inline-flex"
+            className="hidden h-9 rounded-full bg-accent px-4 text-xs font-semibold text-accent-foreground transition-colors hover:bg-accent/90 min-[1100px]:inline-flex"
           >
             <Link to="/franchise">
               {t("nav.franchiseCta")}
@@ -149,7 +149,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                 <Link
                   to="/franchise"
                   onClick={() => setOpen(false)}
-                  className="mt-4 inline-flex items-center justify-center gap-1 rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground shadow-glow"
+                  className="mt-4 inline-flex items-center justify-center gap-1 rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground"
                 >
                   {t("nav.franchiseCta")}
                   <ArrowUpRight className="h-4 w-4" />

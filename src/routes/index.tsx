@@ -142,7 +142,7 @@ function HomePage() {
     <SiteLayout overlayHeader>
       {/* ============ HERO — full-bleed cinematic ============ */}
       <section className="relative isolate flex min-h-[100vh] flex-col overflow-hidden border-b border-border/60">
-        {/* Interactive background: ken-burns zoom + pointer & scroll parallax */}
+        {/* Static station image with a fixed navy backdrop */}
         <HeroBackdrop src={cms.media("hero", heroAsset.url)} alt="GoStation flagship canopy in Saudi Arabia" />
 
 
@@ -169,7 +169,7 @@ function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
+                className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
               >
                 <Link to="/investors">
                   {t("home.ctaFranchise")}
@@ -252,13 +252,12 @@ function HomePage() {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64 group cursor-default transition-transform duration-700 ease-out hover:scale-105 focus-within:scale-105">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-accent via-accent/60 to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-40" aria-hidden />
-            <div className="relative h-full w-full overflow-hidden rounded-full transition-transform duration-700 ease-out group-hover:scale-105 group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
+          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64 group cursor-default 
+            <div className="relative h-full w-full overflow-hidden rounded-full 
               <img
                 src={cms.media("chairman", chairmanCutoutAsset.url)}
                 alt={cms.field("chairman", "title", t("home.quoteAuthor"))}
-                className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)] transition-transform duration-700 ease-out group-hover:scale-110"
+                className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)] 
               />
             </div>
           </div>
@@ -266,7 +265,7 @@ function HomePage() {
           <blockquote className="mx-auto mt-8 max-w-3xl text-pretty font-display text-lg font-medium leading-[1.85] text-foreground sm:text-xl md:max-w-4xl md:text-2xl md:leading-[1.8] lg:text-[1.75rem]">
             {cms.field("chairman", "content", t("home.quote"))}
           </blockquote>
-          <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent transition-transform duration-500 hover:scale-105">
+          <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent 
             {cms.field("chairman", "title", t("home.quoteAuthor"))}
           </div>
           <div className="mt-1.5 text-sm text-muted-foreground">{cms.field("chairman", "subtitle", t("home.quoteRole"))}</div>
@@ -316,11 +315,11 @@ function HomePage() {
             {values.map(({ icon: Icon, k, title, body }) => (
               <article
                 key={k}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/40 hover:bg-white/[0.07] hover:shadow-[0_24px_60px_-24px_color-mix(in_oklab,var(--accent)_60%,transparent)]"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-8 backdrop-blur-sm transition-colors duration-200 hover:border-accent/40 hover:bg-white/[0.07]
               >
 
 
-                <div className="relative mb-7 grid h-12 w-12 place-items-center rounded-xl border border-white/15 bg-white/[0.06] text-accent transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 group-hover:bg-accent group-hover:text-accent-foreground">
+                <div className="relative mb-7 grid h-12 w-12 place-items-center rounded-xl border border-white/15 bg-white/[0.06] text-accent transition-colors duration-200 group-hover:border-accent/50 group-hover:bg-accent group-hover:text-accent-foreground">
                   <Icon className="h-5 w-5" />
                 </div>
 
@@ -333,7 +332,7 @@ function HomePage() {
 
                 <div
                   aria-hidden
-                  className="mt-7 h-px w-10 bg-accent/60 transition-all duration-500 group-hover:w-full group-hover:bg-gradient-to-r group-hover:from-accent group-hover:to-transparent"
+                  className="mt-7 h-px w-10 bg-accent/60 transition-colors duration-200 group-hover:w-full group-hover:bg-gradient-to-r group-hover:from-accent group-hover:to-transparent"
                 />
               </article>
             ))}
@@ -491,13 +490,13 @@ function HomePage() {
                   params={{ slug: n.slug }}
                   className="group w-[300px] shrink-0 snap-start sm:w-[360px]"
                 >
-                  <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant">
+                  <article className="relative h-full overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-500 hover:border-accent/40
                     <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                       {n.cover_url ? (
                         <img
                           src={n.cover_url}
                           alt=""
-                          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          className="absolute inset-0 h-full w-full object-cover transition-colors duration-200
                           loading="lazy"
                         />
                       ) : (
@@ -505,7 +504,7 @@ function HomePage() {
                       )}
                       {n.kind === "video" && (
                         <span className="absolute inset-0 grid place-items-center">
-                          <span className="grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition group-hover:scale-110">
+                          <span className="grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition
                             <Play className="h-5 w-5 translate-x-[1px] rtl:-scale-x-100" />
                           </span>
                         </span>
@@ -542,7 +541,7 @@ function HomePage() {
           <Button
             asChild
             size="lg"
-            className="h-12 w-full rounded-full bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90 sm:w-auto"
+            className="h-12 w-full rounded-full bg-accent px-7 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90 sm:w-auto"
           >
             <Link to="/media">
               {t("common.viewAllNews")}
@@ -609,7 +608,7 @@ function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground shadow-glow transition hover:bg-accent/90"
+                className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
               >
                 <Link to="/acquisitions">
                   <MapPin className="me-2 h-4 w-4" /> {t("home.ctaRequestAcquisition")}
@@ -700,7 +699,7 @@ function HomePage() {
                 href={setting("go_app", "android_url", "https://play.google.com/store/apps/details?id=sa.gostation.loyalty")}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition
               >
                 <PlayIcon className="h-7 w-7" />
                 <span className="text-start leading-tight">
@@ -712,7 +711,7 @@ function HomePage() {
                 href={setting("go_app", "ios_url", "https://apps.apple.com/sa/app/gostation-fuel-rewards-wallet/id6755926221")}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition hover:-translate-y-0.5 hover:shadow-lg"
+                className="group inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-elegant transition
               >
                 <AppleIcon className="h-7 w-7" />
                 <span className="text-start leading-tight">
@@ -799,7 +798,7 @@ function HomePage() {
                             href={href ?? undefined}
                             target={href ? "_blank" : undefined}
                             rel={href ? "noopener noreferrer" : undefined}
-                            className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant"
+                            className="group flex h-28 flex-col items-center justify-center gap-2.5 rounded-2xl border border-border/70 bg-background px-4 shadow-card transition duration-300 hover:border-accent/40
                           >
                             <img
                               src={logo || partnerLogo.url}
@@ -877,14 +876,14 @@ function ServiceCard({
     return (
       <Link
         to={href as never}
-        className={`group relative overflow-hidden rounded-3xl bg-hero-ink p-10 text-primary-foreground shadow-elegant transition hover:-translate-y-1 ${className}`}
+        className={`group relative overflow-hidden rounded-3xl bg-hero-ink p-10 text-primary-foreground shadow-elegant transition ${className}`}
       >
         <img
           src={stationCanopy.url}
           alt=""
           aria-hidden
           loading="lazy"
-          className="absolute inset-0 h-full w-full scale-105 object-cover object-[50%_38%] transition-transform duration-[1400ms] ease-out group-hover:scale-110"
+          className="absolute inset-0 h-full w-full scale-105 object-cover object-[50%_38%] 
         />
         {/* GoStation brand scrim — deep navy night + ember (keeps photo visible) */}
         <div
@@ -901,10 +900,6 @@ function ServiceCard({
         />
         <div className="absolute inset-0 bg-grid-ink opacity-20" aria-hidden />
 
-        <div
-          className="pointer-events-none absolute -end-20 -bottom-20 h-72 w-72 rounded-full bg-ember opacity-30 blur-3xl transition-all duration-700 group-hover:scale-110 group-hover:opacity-45"
-          aria-hidden
-        />
         <div className="relative z-10 flex h-full flex-col justify-between gap-10">
 
           <div>
@@ -921,7 +916,7 @@ function ServiceCard({
 
           <div className="inline-flex items-center gap-2 text-sm font-semibold text-ember-glow">
             {cta}
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <ArrowUpRight className="h-4 w-4 transition-transform />
           </div>
         </div>
       </Link>
@@ -930,7 +925,7 @@ function ServiceCard({
   return (
     <Link
       to={href as never}
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-card transition hover:-translate-y-1 hover:border-accent/40 hover:shadow-elegant ${className}`}
+      className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-card transition hover:border-accent/40 ${className}`}
     >
       <div>
         <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/5 text-primary transition group-hover:bg-accent group-hover:text-accent-foreground">
@@ -945,7 +940,7 @@ function ServiceCard({
       </div>
       <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-accent">
         {cta}
-        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        <ArrowUpRight className="h-3.5 w-3.5 transition-transform />
       </div>
     </Link>
   );
