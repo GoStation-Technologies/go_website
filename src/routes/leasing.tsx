@@ -7,7 +7,9 @@ import { leasingContentQuery } from "@/lib/leasing-content.query";
 import { leasingContent } from "@/lib/leasing-content";
 import { getContentLanguage } from "@/lib/i18n";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
-import { submitContactMessage } from "@/lib/submissions.functions";
+import { submitLeasingRequest } from "@/lib/submissions.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { LeasingInput } from "@/lib/leasing-request";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,32 +43,30 @@ function LeasingPage() {
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
   const [city, setCity] = useState("");
+  const submit = useServerFn(submitLeasingRequest);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    const details = [
-      `${t("lease.f.company")}: ${String(fd.get("company") ?? "")}`,
-      `${t("lease.f.activity")}: ${String(fd.get("activity") ?? "")}`,
-      `${t("common.city")}: ${city}`,
-      `${t("lease.f.district")}: ${String(fd.get("district") ?? "")}`,
-      `${t("lease.f.area")}: ${String(fd.get("area") ?? "")}`,
-      `${t("lease.f.duration")}: ${String(fd.get("duration") ?? "")}`,
-      "",
-      String(fd.get("notes") ?? ""),
-    ].join("\n");
-
     setBusy(true);
     try {
-      const res = await submitContactMessage({
-        data: {
+      const files = fd.getAll("documents").filter((f): f is File => f instanceof File && f.size > 0);
+      if (files.length > 5 || files.some((f) => f.size > 5 * 1024 * 1024)) throw new Error("invalid_documents");
+      const documents = await Promise.all(files.map(async (file) => ({ name: file.name, type: file.type, data: await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(",")[1] ?? "");
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      }) })));
+      const res = await submit({
+        data: LeasingInput.parse({
           full_name: String(fd.get("name") ?? ""),
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
-          category: "leasing",
-          subject: t("lease.formTitle"),
-          message: details.slice(0, 4000),
-        },
+          notes: String(fd.get("notes") ?? ""),
+          requirements: { company: fd.get("company"), activity: fd.get("activity"), city, district: fd.get("district"), area_sqm: fd.get("area"), lease_years: fd.get("duration") },
+          documents,
+        }),
       });
       setRef(res.reference);
       toast.success(t("common.thanks"));
@@ -151,7 +151,7 @@ function LeasingPage() {
                     </div>
                   </div>
 
-                  <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <form onSubmit={onSubmit} onReset={() => setCity("")} className="mt-6 grid gap-4 sm:grid-cols-2">
                     <F label={t("common.fullName")}><Input name="name" required /></F>
                     <F label={t("common.phone")}><Input name="phone" required /></F>
                     <F label={t("common.email")} className="sm:col-span-2"><Input type="email" name="email" required /></F>
@@ -159,8 +159,9 @@ function LeasingPage() {
                     <F label={t("lease.f.activity")}><Input name="activity" /></F>
                     <F label={t("common.city")}><CitySelect value={city} onChange={setCity} /></F>
                     <F label={t("lease.f.district")}><Input name="district" /></F>
-                    <F label={t("lease.f.area")}><Input type="number" name="area" /></F>
-                    <F label={t("lease.f.duration")}><Input type="number" name="duration" /></F>
+                    <F label={t("lease.f.area")}><Input type="number" min="0.01" step="any" name="area" /></F>
+                    <F label={t("lease.f.duration")}><Input type="number" min="0.01" step="any" name="duration" /></F>
+                    <F label={t("lease.f.documents")} className="sm:col-span-2"><Input type="file" name="documents" multiple accept="application/pdf,image/jpeg,image/png" aria-label={t("lease.f.documents")} disabled={busy} /></F>
                     <F label={t("common.message")} className="sm:col-span-2"><Textarea rows={4} name="notes" /></F>
                     <div className="flex flex-wrap gap-3 sm:col-span-2">
                       <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">

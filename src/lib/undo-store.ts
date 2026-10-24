@@ -9,7 +9,7 @@
 
 export type UndoPayload = {
   kind: "submissions";
-  submissionKind: "franchise" | "acquisitions" | "contact" | "ir";
+  submissionKind: "franchise" | "acquisitions" | "contact" | "ir" | "leasing";
   rows: Array<{
     id: string;
     status: string;

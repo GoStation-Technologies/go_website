@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { submissionTables } from "./investor-inquiry";
+import { filterSubmissionCategory } from "./leasing-request";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { writeAudit, type AuditEntity } from "./audit";
 
@@ -118,7 +119,7 @@ export const adminOverviewStats = createServerFn({ method: "GET" })
   });
 
 const ListInput = z.object({
-  kind: z.enum(["franchise", "acquisitions", "contact", "ir"]),
+  kind: z.enum(["franchise", "acquisitions", "contact", "ir", "leasing"]),
   status: z.string().optional(),
   days: z.number().int().min(1).max(365).optional(),
   limit: z.number().int().min(1).max(200).default(25),
@@ -140,6 +141,7 @@ export const adminListSubmissions = createServerFn({ method: "POST" })
     const to = from + data.limit - 1;
 
     let q = context.supabase.from(table).select("*", { count: "exact" });
+    q = filterSubmissionCategory(q, data.kind);
     if (data.status) q = q.eq("status", data.status);
     if (data.days) {
       const since = new Date(Date.now() - data.days * 24 * 3600_000).toISOString();
@@ -189,7 +191,7 @@ const STAFF_ROLES = ["super_admin", "bd", "hr", "media", "ir", "ops", "support"]
 type StaffRole = (typeof STAFF_ROLES)[number];
 
 const StatusInput = z.object({
-  kind: z.enum(["franchise", "acquisitions", "contact", "ir"]),
+  kind: z.enum(["franchise", "acquisitions", "contact", "ir", "leasing"]),
   id: z.string().uuid(),
   status: z.enum(SUBMISSION_STATUSES),
 });
@@ -221,7 +223,7 @@ export const adminUpdateStatus = createServerFn({ method: "POST" })
 // Bulk apply status and/or assignee to many rows of the same kind at once.
 // `assigned_to: null` explicitly unassigns; omitting the key leaves it unchanged.
 const BulkInput = z.object({
-  kind: z.enum(["franchise", "acquisitions", "contact", "ir"]),
+  kind: z.enum(["franchise", "acquisitions", "contact", "ir", "leasing"]),
   ids: z.array(z.string().uuid()).min(1).max(200),
   patch: z
     .object({
@@ -270,7 +272,7 @@ export const adminBulkUpdateSubmissions = createServerFn({ method: "POST" })
 // Restore per-row status + assignee snapshots captured before a bulk update.
 // One UPDATE per row keeps it simple; ids are capped at 200 upstream.
 const RestoreInput = z.object({
-  kind: z.enum(["franchise", "acquisitions", "contact", "ir"]),
+  kind: z.enum(["franchise", "acquisitions", "contact", "ir", "leasing"]),
   rows: z
     .array(
       z.object({
