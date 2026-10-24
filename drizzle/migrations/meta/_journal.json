@@ -78,6 +78,13 @@
       "when": 1792241952044,
       "tag": "0010_enable_investor_inquiry_admin_management",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792852803860,
+      "tag": "0011_structured_leasing_requests",
+      "breakpoints": true
     }
   ]
 }
