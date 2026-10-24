@@ -1,3 +1,7 @@
+# Leasing submissions
+- [ ] Separate leasing requests from contact messages and preserve structured requirements and private documents.
+- [ ] Display leasing metadata in the table and detail dialog; verify submission and admin readback.
+
 # Leasing CMS
 - [x] Add dedicated bilingual leasing editor and sidebar entry using the existing CMS.
 - [x] Load banner and leasing guidelines dynamically with localized defaults; public page returns 200, images load, five tests pass and build OK.
