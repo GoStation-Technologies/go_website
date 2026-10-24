@@ -1,4 +1,10 @@
 # Footer legal pages
+# Leasing CMS
+- [ ] Add dedicated bilingual leasing editor and sidebar entry using the existing CMS.
+- [ ] Load banner and leasing guidelines dynamically with localized defaults; verify public rendering and tests.
+- [ ] Verify authenticated upload/save/readback: requires the requesting user's admin sign-in in preview.
+
+# Footer legal pages
 - [x] Add bilingual privacy and terms pages and footer links; Arabic/English desktop and phone navigation verified with no runtime errors.
 - [x] Add dedicated admin legal-page editing using the existing CMS and publication controls; 12 relevant tests pass and build OK.
 - [ ] Publish approved legal text: awaiting company-provided Arabic and English policies.
