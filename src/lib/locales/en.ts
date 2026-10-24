@@ -921,6 +921,7 @@ export const en = {
       pageAbout: "About page",
       pageFranchise: "Franchise page",
       pageAcquisitions: "Acquisitions page",
+      pageLeasing: "Real Estate Leasing page",
       pageInvestors: "Investor Relations page",
       pageValues: "Company values",
       pagePrivacy: "Privacy Policy",

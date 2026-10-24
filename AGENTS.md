@@ -15,5 +15,6 @@
 - Public station queries include every station under SELECT-only RLS; shared labels preserve source operational states so inactive stations are not advertised as open.
 - Header, mobile drawer, and footer share CompanyLogo with paired source-mark variants and surface-aware styling so branding stays consistent without distorting artwork.
 - Legal pages store a bilingual `document` section in the existing `page_sections` CMS and reuse its admin editor; public SSR reads only visible documents and never substitutes another language's legal text.
+- Leasing content uses the existing `page_sections` CMS and dedicated page editor, with loader-primed public reads and localized defaults, so copy and imagery have one editable source of truth.
 
 - HeroBackdrop is a static image with a fixed navy veil and no pointer/scroll listeners or motion variables, so pointer movement cannot change the hero lighting or geometry.

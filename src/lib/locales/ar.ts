@@ -924,6 +924,7 @@ export const ar = {
       pageAbout: "صفحة عن الشركة",
       pageFranchise: "صفحة الامتياز",
       pageAcquisitions: "صفحة الاستحواذ",
+      pageLeasing: "صفحة التأجير العقاري",
       pageInvestors: "صفحة علاقات المستثمرين",
       pageValues: "قيم الشركة",
       pagePrivacy: "سياسة الخصوصية",

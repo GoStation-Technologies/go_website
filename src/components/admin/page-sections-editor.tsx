@@ -215,6 +215,26 @@ export const PAGE_CMS: PageDef[] = [
     ],
   },
   {
+    slug: "leasing",
+    en: "Real Estate Leasing",
+    ar: "التأجير العقاري",
+    descEn: "Manage the leasing banner, available spaces, response time and required documents in Arabic and English.",
+    descAr: "إدارة بانر التأجير والمساحات المتاحة ومدة الرد والمستندات المطلوبة بالعربية والإنجليزية.",
+    sections: [
+      {
+        key: "hero", en: "Page banner", ar: "البانر الرئيسي", media: true,
+        labels: {
+          title: { en: "Page title", ar: "عنوان الصفحة" },
+          subtitle: { en: "Small heading", ar: "العنوان الصغير" },
+          content: { en: "Introduction", ar: "النص التعريفي" },
+        },
+      },
+      { key: "spaces", en: "Available spaces", ar: "المساحات المتاحة", fields: ["title", "content"] },
+      { key: "timeline", en: "Response time", ar: "مدة الرد", fields: ["title", "content"] },
+      { key: "docs", en: "Required documents", ar: "المستندات المطلوبة", fields: ["title", "content"] },
+    ],
+  },
+  {
     slug: "investors",
     en: "Investor Relations",
     ar: "علاقات المستثمرين",
