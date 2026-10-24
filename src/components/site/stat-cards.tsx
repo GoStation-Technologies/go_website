@@ -93,10 +93,10 @@ export function StatCards({ stats }: { stats: readonly Stat[] }) {
       {stats.map((s, i) => (
         <div
           key={s.key}
-          className="group relative rounded-2xl border border-border/60 bg-card px-4 pb-5 pt-8 text-center shadow-elegant transition-all duration-300 hover:-translate-y-1.5 hover:shadow-glow"
+          className="relative rounded-2xl border border-border/60 bg-card px-4 pb-5 pt-8 text-center shadow-elegant"
           style={{ animationDelay: `${i * 90}ms` }}
         >
-          <div className="absolute -top-5 start-1/2 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full bg-accent text-accent-foreground shadow-glow transition-transform duration-300 group-hover:scale-110 rtl:translate-x-1/2">
+          <div className="absolute -top-5 start-1/2 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full bg-accent text-accent-foreground rtl:translate-x-1/2">
             <s.icon className="h-4 w-4" />
           </div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">

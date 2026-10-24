@@ -25,4 +25,4 @@
 - [x] Verify counts and status displays (224 listed; 214 mapped, with 10 lacking coordinates; status tests pass).
 # Cursor-effect removal
 - [x] Remove hero cursor tracking, moving gradients, parallax and unused zoom animation; simplify header/home hover distortion.
-- [ ] Verify stable hero/header while moving the pointer and confirm no cursor-driven glow remains.
+- [x] Verify stable hero/header while moving the pointer; photo loads, no moving gradients or runtime errors, no phone overflow, build OK.
