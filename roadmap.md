@@ -23,3 +23,6 @@
 - [x] Include all stations in public totals, maps and region filters.
 - [x] Show gray inactive pins and bilingual source statuses.
 - [x] Verify counts and status displays (224 listed; 214 mapped, with 10 lacking coordinates; status tests pass).
+# Cursor-effect removal
+- [x] Remove hero cursor tracking, moving gradients, parallax and unused zoom animation; simplify header/home hover distortion.
+- [x] Verify stable hero/header while moving the pointer; photo loads, no moving gradients or runtime errors, no phone overflow, build OK.
