@@ -47,6 +47,7 @@ function IRPage() {
   const { data: investorContent } = useSuspenseQuery(investorContentQuery);
   const reports = investorContent.reports;
   const metric = (key: string) => investorContent.sections.find((section) => section.section_key === key);
+  const metricField = (key: string, field: "title" | "subtitle", fallback: string) => metric(key)?.[`${field}_${lng}`]?.trim() || fallback;
 
   const railRef = useRef<HTMLDivElement>(null);
   const scrollRail = (dir: number) => {
@@ -60,6 +61,7 @@ function IRPage() {
   const [ref, setRef] = useState<string | null>(null);
   const [inquiryType, setInquiryType] = useState("general");
   const submitInquiry = useServerFn(submitIrInquiry);
+  const recordDownload = useServerFn(logReportDownload);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -85,21 +87,21 @@ function IRPage() {
 
   const kpis: KpiConfig[] = [
     {
-      label: cms.field("metric_revenue", "title", t("investors.kpiRevenue")),
+      label: metricField("metric_revenue", "title", t("investors.kpiRevenue")),
       value: metricText(metric("metric_revenue"), lng, "3.2B"),
-      unit: cms.field("metric_revenue", "subtitle", lng === "ar" ? "ريال" : "SAR"),
+      unit: metricField("metric_revenue", "subtitle", lng === "ar" ? "ريال" : "SAR"),
       icon: "revenue",
     },
     {
-      label: cms.field("metric_growth", "title", t("investors.kpiGrowth")),
+      label: metricField("metric_growth", "title", t("investors.kpiGrowth")),
       value: metricText(metric("metric_growth"), lng, "+18%"),
-      unit: cms.field("metric_growth", "subtitle", ""),
+      unit: metricField("metric_growth", "subtitle", ""),
       icon: "growth",
     },
     {
-      label: cms.field("metric_stations", "title", t("investors.kpiStations")),
+      label: metricField("metric_stations", "title", t("investors.kpiStations")),
       value: metricText(metric("metric_stations"), lng, `${stationsCount}+`),
-      unit: cms.field("metric_stations", "subtitle", lng === "ar" ? "محطة" : "stations"),
+      unit: metricField("metric_stations", "subtitle", lng === "ar" ? "محطة" : "stations"),
       icon: "stations",
     },
   ];
@@ -270,7 +272,7 @@ function IRPage() {
                       href={`/api/public/reports/${r.id}?download=1`}
                       download={`gostation-report-${r.report_year}.pdf`}
                       onClick={() => {
-                        void logReportDownload({ data: { reportId: r.id } }).catch(() => {});
+                        void recordDownload({ data: { reportId: r.id } }).catch(() => {});
                       }}
                       className="inline-flex items-center gap-1.5 text-muted-foreground transition hover:text-accent"
                     >
