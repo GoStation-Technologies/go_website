@@ -11,7 +11,6 @@ export function CompanyLogo({
 }) {
   return (
     <span
-      dir="ltr"
       className={`company-logo ${inverse ? "company-logo-inverse" : ""} ${footer ? "company-logo-footer" : ""}`}
       role="img"
       aria-label="GOStation — شركة هلا السعودية للخدمات البترولية — Hala Saudi Petroleum Services"
@@ -21,7 +20,7 @@ export function CompanyLogo({
         <img src={whiteMarkAsset} alt="" width={868} height={829} className="company-logo-white" />
       </span>
       <span className="company-logo-name" aria-hidden="true">
-        <span className="company-logo-brand font-display">GOStation</span>
+        <span className="company-logo-brand font-display" lang="en" dir="ltr">GOStation</span>
         <span className="company-logo-ar font-arabic" lang="ar" dir="rtl">شركة هلا السعودية للخدمات البترولية</span>
         <span className="company-logo-en font-sans" lang="en">Hala Saudi Petroleum Services</span>
       </span>

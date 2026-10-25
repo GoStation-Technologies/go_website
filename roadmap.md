@@ -15,6 +15,7 @@
 - [ ] Verify authenticated editing/readback: requesting user has no matching admin account/session; requires admin sign-in in preview.
 
 # Company branding
+- [x] Verify Arabic header right alignment and unmirrored horizontal lockup at 320–1920px, both languages and light/dark surfaces; drawer checked, hydration test passed, no runtime errors.
 - [x] Pair the supplied official mark with the full bilingual legal name in header, drawer, and footer.
 - [x] Verify intact mark aspect ratio, loaded artwork, light/dark variants, and branding fit at 320–1920px in Arabic and English; no runtime errors.
 
