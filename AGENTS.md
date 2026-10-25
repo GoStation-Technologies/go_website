@@ -19,5 +19,6 @@
 - Leasing content uses the existing `page_sections` CMS and dedicated page editor, with loader-primed public reads and localized defaults, so copy and imagery have one editable source of truth.
 - Leasing submissions use contact_messages category isolation and structured leasing_metadata; documents stay in private leasing-documents storage with staff RLS access, so requirements are language-independent and never publicly exposed.
 - About Senior Management uses the existing leaders records for identities, portraits and role descriptions, grouped by role into a statement pair and executive grid; About statement overrides live in its own page_sections so homepage identities and messages remain independent.
+- Homepage and About leadership statements share LeadershipStatement and StatementPair for consistent presentation; executive profiles remain separate so statement styling does not change team cards.
 
 - No surface may track the pointer: components must not attach mousemove/pointermove listeners or write pointer-derived CSS variables, so cursor movement never changes any section's lighting or geometry. HeroBackdrop is a static image with a fixed navy veil, and the accessibility menu has no reading-guide band.

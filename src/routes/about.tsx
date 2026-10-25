@@ -10,6 +10,7 @@ import { SiteLayout } from "@/components/site/site-layout";
 import { StoryTimeline } from "@/components/site/story-timeline";
 import { FutureRoadmap } from "@/components/site/future-roadmap";
 import { ManagementProfile } from "@/components/site/management-profile";
+import { LeadershipStatement, StatementPair } from "@/components/site/leadership-statement";
 import { managementTeam } from "@/lib/management-team";
 const canopyImg = { url: "/station-canopy.jpg" };
 
@@ -357,18 +358,18 @@ function AboutPage() {
                 <>
                   <div>
                     <h2 className="mb-6 font-display text-2xl font-bold">{t("about.leaders")}</h2>
-                    <div className="grid items-stretch gap-6 md:grid-cols-2">
+                    <StatementPair>
                       {chairman && cms.visible("chairman") && (
-                        <ManagementProfile leader={chairman} language={lng}
+                        <LeadershipStatement name={lng === "ar" ? chairman.name_ar : chairman.name_en} role={lng === "ar" ? chairman.title_ar : chairman.title_en}
                           photo={cms.media("chairman", chairman.photo_url ?? "")}
-                          statement={cms.field("chairman", "content", homeCms.field("chairman", "content", t("home.chairmanQuote")))} />
+                          quote={cms.field("chairman", "content", homeCms.field("chairman", "content", t("home.chairmanQuote")))} />
                       )}
                       {ceo && cms.visible("ceo") && (
-                        <ManagementProfile leader={ceo} language={lng}
+                        <LeadershipStatement name={lng === "ar" ? ceo.name_ar : ceo.name_en} role={lng === "ar" ? ceo.title_ar : ceo.title_en}
                           photo={cms.media("ceo", ceo.photo_url ?? "")}
-                          statement={cms.field("ceo", "content", cms.field("leadership", "content", lng === "ar" ? ceo.bio_ar ?? "" : ceo.bio_en ?? ""))} />
+                          quote={cms.field("ceo", "content", cms.field("leadership", "content", lng === "ar" ? ceo.bio_ar ?? "" : ceo.bio_en ?? ""))} />
                       )}
-                    </div>
+                    </StatementPair>
                   </div>
                   <div className="border-t border-border pt-10">
                     <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "فريق الإدارة التنفيذية" : "Executive Management Team"}</h2>

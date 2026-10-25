@@ -52,6 +52,7 @@ import { CoverageMap } from "@/components/site/coverage-map";
 import { useStationStats } from "@/hooks/use-station-stats";
 import { useCompanyValues, usePageContent, useSiteSettings } from "@/hooks/use-cms";
 import { Testimonials } from "@/components/site/testimonials";
+import { LeadershipStatement, StatementPair } from "@/components/site/leadership-statement";
 
 
 export const Route = createFileRoute("/")({
@@ -254,79 +255,25 @@ function HomePage() {
       </section>
 
       {/* ============ LEADERSHIP MESSAGES ============ */}
-      <section className="relative overflow-hidden border-y border-border/60 bg-secondary/40 py-24 md:py-32">
-        {/* soft wavy line grid backdrop */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'><path d='M0 30 Q 15 10 30 30 T 60 30 T 90 30 T 120 30' fill='none' stroke='%23123b34' stroke-width='1.1'/><path d='M0 58 Q 15 38 30 58 T 60 58 T 90 58 T 120 58' fill='none' stroke='%23123b34' stroke-width='1.1'/></svg>\")",
-            backgroundSize: "120px 60px",
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-secondary/60 via-transparent to-secondary/60"
-        />
-
-        <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+      <section className="border-y border-border/60 bg-background py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-accent">
+            <p className="text-xs font-bold uppercase tracking-normal text-accent">
               {cms.field("leadership", "subtitle", t("home.leadershipKicker"))}
             </p>
-            <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mt-3 font-display text-3xl font-bold tracking-normal text-foreground sm:text-4xl">
               {cms.field("leadership", "title", t("home.leadershipTitle"))}
             </h2>
           </div>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-2 md:items-stretch md:gap-8">
-            {leadership.map((p) => (
-              <figure
-                key={p.key}
-                className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card/85 p-7 shadow-elegant transition-colors duration-200 hover:border-accent/40 sm:p-9"
-              >
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"
-                />
-                <div className="flex items-center gap-5">
-                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-secondary ring-1 ring-border/80 sm:h-24 sm:w-24">
-                    {p.photo ? (
-                      <img
-                        src={p.photo}
-                        alt={p.name}
-                        loading="lazy"
-                        className="h-full w-full object-cover object-top"
-                      />
-                    ) : (
-                      <span className="grid h-full w-full place-items-center font-display text-2xl font-semibold tracking-wide text-accent sm:text-3xl">
-                        {p.initials}
-                      </span>
-                    )}
-                  </div>
-                  <figcaption className="min-w-0">
-                    <div className="font-display text-lg font-semibold text-foreground sm:text-xl">
-                      {p.name}
-                    </div>
-                    <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
-                      {p.role}
-                    </div>
-                  </figcaption>
-                </div>
-
-                <blockquote className="mt-7 flex-1 text-pretty font-display text-[1.02rem] leading-[1.95] text-foreground/85 sm:text-[1.08rem]">
-                  <span aria-hidden className="me-1 text-2xl leading-none text-accent/50">{"\u201C"}</span>
-                  {p.quote}
-                  <span aria-hidden className="ms-1 text-2xl leading-none text-accent/50">{"\u201D"}</span>
-                </blockquote>
-              </figure>
-            ))}
+          <div className="mt-10">
+            <StatementPair>
+              {leadership.filter((person) => cms.visible(person.key)).map((person) => (
+                <LeadershipStatement key={person.key} name={person.name} role={person.role} quote={person.quote} photo={person.photo} initials={person.initials} />
+              ))}
+            </StatementPair>
           </div>
         </div>
       </section>
-
-
 
       {/* ============ VALUES ============ */}
       <section className="relative isolate overflow-hidden border-b border-white/10 bg-ink py-24 text-white md:py-32">
