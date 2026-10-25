@@ -1,3 +1,7 @@
+# Cursor-following glow removal
+- [x] Delete every pointer-tracking layer site-wide: the accessibility reading-guide band (mousemove listener, its styles, labels and menu tile) plus the breathing glow orbs and hover scale/glow effects on contact, footer, franchise CTA, video cards and the chat bubble.
+- [x] Verify with 120 tests, a clean build, and pixel diffs showing no change when the pointer moves on the homepage and contact hero; menu no longer offers the reading guide.
+
 # Investor statistics and reports
 - [x] Connect bilingual metric values, labels and units to investor CMS editing with loader-primed public reads.
 - [x] Add annual PDF report management, year/type editing and publication; PDF endpoint checks publication and sets view/download headers.
