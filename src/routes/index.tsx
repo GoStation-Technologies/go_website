@@ -84,6 +84,25 @@ function HomePage() {
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
+  const leadership = [
+    {
+      key: "chairman",
+      name: cms.field("chairman", "title", t("home.chairmanAuthor")),
+      role: cms.field("chairman", "subtitle", t("home.chairmanRole")),
+      quote: cms.field("chairman", "content", t("home.chairmanQuote")),
+      photo: cms.media("chairman", chairmanCutoutAsset.url),
+      initials: lng === "ar" ? "ع ن" : "AN",
+    },
+    {
+      key: "ceo",
+      name: cms.field("ceo", "title", t("home.ceoAuthor")),
+      role: cms.field("ceo", "subtitle", t("home.ceoRole")),
+      quote: cms.field("ceo", "content", t("home.ceoQuote")),
+      photo: cms.media("ceo", ""),
+      initials: lng === "ar" ? "ع ن" : "AN",
+    },
+  ];
+
   const news = useQuery({
     queryKey: ["home-news"],
     queryFn: async () => {
