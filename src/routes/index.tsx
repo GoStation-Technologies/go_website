@@ -316,13 +316,9 @@ function HomePage() {
                 </div>
 
                 <blockquote className="mt-7 flex-1 text-pretty font-display text-[1.02rem] leading-[1.95] text-foreground/85 sm:text-[1.08rem]">
-                  <span aria-hidden className="me-1 text-2xl leading-none text-accent/50">
-                    {""}
-                  </span>
+                  <span aria-hidden className="me-1 text-2xl leading-none text-accent/50">{"\u201C"}</span>
                   {p.quote}
-                  <span aria-hidden className="ms-1 text-2xl leading-none text-accent/50">
-                    {""}
-                  </span>
+                  <span aria-hidden className="ms-1 text-2xl leading-none text-accent/50">{"\u201D"}</span>
                 </blockquote>
               </figure>
             ))}
