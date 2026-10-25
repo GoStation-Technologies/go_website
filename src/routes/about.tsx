@@ -9,6 +9,8 @@ import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { StoryTimeline } from "@/components/site/story-timeline";
 import { FutureRoadmap } from "@/components/site/future-roadmap";
+import { ManagementProfile } from "@/components/site/management-profile";
+import { managementTeam } from "@/lib/management-team";
 const canopyImg = { url: "/station-canopy.jpg" };
 
 
@@ -16,7 +18,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Award, Eye, Target, Sparkles, Leaf, Users, Quote, ShieldCheck, Handshake } from "lucide-react";
+import { Award, Eye, Target, Sparkles, Leaf, Users, ShieldCheck, Handshake } from "lucide-react";
 
 const valueIcons = { excellence: Sparkles, integrity: ShieldCheck, community: Leaf, innovation: Handshake } as const;
 
@@ -36,7 +38,6 @@ function AboutPage() {
   const cms = usePageContent("about");
   const homeCms = usePageContent("home");
   const aboutValues = useCompanyValues();
-  const chairmanQuote = homeCms.field("chairman", "content", t("home.chairmanQuote"));
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
   const pages = useQuery({
@@ -107,8 +108,8 @@ function AboutPage() {
             <TabsTrigger value="mission">{cms.field("mission", "title", t("about.mission"))}</TabsTrigger>
             <TabsTrigger value="values">{cms.field("values", "title", t("about.values"))}</TabsTrigger>
             <TabsTrigger value="esg">{cms.field("esg", "title", t("about.esg"))}</TabsTrigger>
-            <TabsTrigger value="governance">{cms.field("leadership", "title", t("about.governance"))}</TabsTrigger>
-            <TabsTrigger value="leaders">{t("about.leaders")}</TabsTrigger>
+            <TabsTrigger value="governance">{cms.field("governance", "title", t("about.governance"))}</TabsTrigger>
+            <TabsTrigger value="leaders">{cms.field("leadership", "title", t("about.leaders"))}</TabsTrigger>
             <TabsTrigger value="awards">{t("about.awards")}</TabsTrigger>
           </TabsList>
 
@@ -349,22 +350,31 @@ function AboutPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="leaders" className="mt-8 space-y-8">
+          <TabsContent value="leaders" className="mt-10 space-y-12" dir={lng === "ar" ? "rtl" : "ltr"}>
             {(() => {
-              const all = (leaders.data ?? []) as Leader[];
-              const chairman = all.find(
-                (l) =>
-                  l.title_en?.toLowerCase().includes("chairman") ||
-                  l.title_ar?.includes("رئيس مجلس"),
-              );
-              const team = chairman ? all.filter((l) => l.id !== chairman.id) : all;
+              const { chairman, ceo, executives } = managementTeam(leaders.data ?? []);
               return (
                 <>
-                  {chairman && <ChairmanCard leader={chairman} lng={lng} quote={chairmanQuote} />}
-                  <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {team.map((l) => (
-                      <LeadershipCard key={l.id} leader={l} lng={lng} />
-                    ))}
+                  <div>
+                    <h2 className="mb-6 font-display text-2xl font-bold">{t("about.leaders")}</h2>
+                    <div className="grid items-stretch gap-6 md:grid-cols-2">
+                      {chairman && cms.visible("chairman") && (
+                        <ManagementProfile leader={chairman} language={lng}
+                          photo={cms.media("chairman", chairman.photo_url ?? "")}
+                          statement={cms.field("chairman", "content", homeCms.field("chairman", "content", t("home.chairmanQuote")))} />
+                      )}
+                      {ceo && cms.visible("ceo") && (
+                        <ManagementProfile leader={ceo} language={lng}
+                          photo={cms.media("ceo", ceo.photo_url ?? "")}
+                          statement={cms.field("ceo", "content", cms.field("leadership", "content", lng === "ar" ? ceo.bio_ar ?? "" : ceo.bio_en ?? ""))} />
+                      )}
+                    </div>
+                  </div>
+                  <div className="border-t border-border pt-10">
+                    <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "فريق الإدارة التنفيذية" : "Executive Management Team"}</h2>
+                    <div className="grid items-stretch gap-6 md:grid-cols-3">
+                      {executives.map((leader) => <ManagementProfile key={leader.id} leader={leader} language={lng} />)}
+                    </div>
                   </div>
                 </>
               );
@@ -384,8 +394,6 @@ function AboutPage() {
   );
 }
 
-type Leader = Database["public"]["Tables"]["leaders"]["Row"];
-
 function IconBlock({ icon: Icon, title, body }: { icon: React.ComponentType<{ className?: string }>; title: string; body: string }) {
   return (
     <Card>
@@ -395,88 +403,6 @@ function IconBlock({ icon: Icon, title, body }: { icon: React.ComponentType<{ cl
         </div>
         <h2 className="mt-4 text-2xl font-bold">{title}</h2>
         <p className="mt-2 whitespace-pre-line text-muted-foreground">{body}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-function ChairmanCard({ leader, lng, quote }: { leader: Leader; lng: "ar" | "en"; quote: string }) {
-  const { t } = useTranslation();
-  const name = lng === "ar" ? leader.name_ar : leader.name_en;
-  const title = lng === "ar" ? leader.title_ar : leader.title_en;
-  const openQuote = lng === "ar" ? "«" : "“";
-  const closeQuote = lng === "ar" ? "»" : "”";
-
-  return (
-    <Card className="overflow-hidden border-0 shadow-2xl">
-      <div className="relative flex min-h-[360px] flex-col-reverse items-stretch overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-accent/40 md:flex-row">
-        {/* ambient light */}
-        <div className="absolute -start-10 -top-10 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
-        <div className="absolute -end-10 -bottom-10 h-72 w-72 rounded-full bg-primary-foreground/10 blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary-foreground/10 via-transparent to-transparent opacity-40" />
-
-        {/* Quote / text side */}
-        <div className="relative z-10 flex flex-1 flex-col justify-center px-6 py-8 md:px-10 md:py-12 lg:px-14">
-          <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-accent">
-            <Quote className="h-5 w-5" />
-          </div>
-          <blockquote className="relative">
-            <p className="text-2xl font-semibold leading-relaxed text-primary-foreground md:text-3xl lg:text-4xl">
-              <span className="text-accent/80">{openQuote}</span>
-              {quote}
-              <span className="text-accent/80">{closeQuote}</span>
-            </p>
-          </blockquote>
-          <div className="mt-8">
-            <p className="font-bold text-primary-foreground">{name}</p>
-            <p className="text-sm font-medium text-accent">{title}</p>
-          </div>
-
-        </div>
-
-        {/* Image side */}
-        <div className="relative z-10 flex w-full items-end justify-end md:w-5/12 lg:w-1/3">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/20 via-transparent to-transparent opacity-60" />
-          {leader.photo_url ? (
-            <img
-              src={leader.photo_url}
-              alt={name}
-              className="relative z-10 max-h-72 w-auto max-w-full object-contain drop-shadow-2xl md:max-h-[320px]"
-            />
-          ) : (
-            <div className="aspect-[3/4] w-full max-w-sm rounded-t-2xl bg-gradient-to-br from-primary-foreground/20 to-transparent" />
-          )}
-        </div>
-      </div>
-    </Card>
-  );
-}
-
-function LeadershipCard({ leader, lng }: { leader: Leader; lng: "ar" | "en" }) {
-  const name = lng === "ar" ? leader.name_ar : leader.name_en;
-  const title = lng === "ar" ? leader.title_ar : leader.title_en;
-  const bio = lng === "ar" ? leader.bio_ar : leader.bio_en;
-  return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-accent/40">
-        {leader.photo_url ? (
-          <img
-            src={leader.photo_url}
-            alt={name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <Users className="h-16 w-16 text-white/40" />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/20 to-transparent" />
-      </div>
-      <CardContent className="p-5">
-        <h3 className="text-lg font-bold leading-tight">{name}</h3>
-        <p className="mt-1 text-sm font-medium text-accent">{title}</p>
-        <p className="mt-2 text-xs text-muted-foreground line-clamp-3">{bio}</p>
       </CardContent>
     </Card>
   );

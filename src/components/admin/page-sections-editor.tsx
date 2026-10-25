@@ -188,6 +188,8 @@ export const PAGE_CMS: PageDef[] = [
         },
       },
       { key: "leadership", en: "Senior management tab", ar: "تبويب الإدارة العليا" },
+      { key: "chairman", en: "Senior management — Chairman statement", ar: "الإدارة العليا — كلمة رئيس مجلس الإدارة", media: true, fields: ["content"], labels: { content: { en: "Statement", ar: "نص الكلمة" } } },
+      { key: "ceo", en: "Senior management — CEO / Board Member statement", ar: "الإدارة العليا — كلمة الرئيس التنفيذي / عضو مجلس الإدارة", media: true, fields: ["content"], labels: { content: { en: "Statement", ar: "نص الكلمة" } } },
       { key: "awards", en: "Accreditations & awards", ar: "الاعتمادات والجوائز" },
     ],
   },
