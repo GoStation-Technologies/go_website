@@ -19,4 +19,4 @@
 - Leasing content uses the existing `page_sections` CMS and dedicated page editor, with loader-primed public reads and localized defaults, so copy and imagery have one editable source of truth.
 - Leasing submissions use contact_messages category isolation and structured leasing_metadata; documents stay in private leasing-documents storage with staff RLS access, so requirements are language-independent and never publicly exposed.
 
-- HeroBackdrop is a static image with a fixed navy veil and no pointer/scroll listeners or motion variables, so pointer movement cannot change the hero lighting or geometry.
+- No surface may track the pointer: components must not attach mousemove/pointermove listeners or write pointer-derived CSS variables, so cursor movement never changes any section's lighting or geometry. HeroBackdrop is a static image with a fixed navy veil, and the accessibility menu has no reading-guide band.

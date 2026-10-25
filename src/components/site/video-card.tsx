@@ -62,7 +62,7 @@ export function VideoCard({ video, className = "" }: { video: VideoItem; classNa
 
           {/* play button */}
           <span className="absolute inset-0 grid place-items-center">
-            <span className="grid h-16 w-16 place-items-center rounded-full bg-accent/95 text-accent-foreground shadow-glow ring-4 ring-white/25 transition duration-300 group-hover:scale-110">
+            <span className="grid h-16 w-16 place-items-center rounded-full bg-accent/95 text-accent-foreground shadow-glow ring-4 ring-white/25">
               <Play className="h-6 w-6 translate-x-[2px] fill-current rtl:-scale-x-100" />
             </span>
           </span>

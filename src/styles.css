@@ -320,9 +320,6 @@ html[dir="rtl"] .marquee-track {
   animation: float-slow 8s ease-in-out infinite;
   animation-delay: 3s;
 }
-.animate-pulse-glow {
-  animation: pulse-glow 4s ease-in-out infinite;
-}
 .animate-rise-in {
   animation: rise-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
@@ -693,16 +690,4 @@ html.a11y-align-center body h2,
 html.a11y-align-center body h3,
 html.a11y-align-center body h4 {
   text-align: center !important;
-}
-html.a11y-reading-guide {
-  cursor: none;
-}
-.a11y-guide-bar {
-  position: fixed;
-  inset-inline: 0;
-  height: 2.25rem;
-  background: color-mix(in oklch, var(--accent) 25%, transparent);
-  border-block: 2px solid var(--accent);
-  pointer-events: none;
-  z-index: 9998;
 }
