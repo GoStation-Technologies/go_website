@@ -1,3 +1,8 @@
+# Investor statistics and reports
+- [ ] Connect bilingual metric values and labels to investor CMS editing.
+- [ ] Add annual PDF report management, publication and public view/download actions.
+- [ ] Verify tests, public rendering and authenticated save/upload/readback when an admin session is available.
+
 # Leasing submissions
 - [x] Separate leasing requests from contact messages and preserve structured requirements and private documents; routing tests pass.
 - [x] Display leasing metadata in the table and detail dialog; public submission with PDF confirmed as GS-MSG-2026-00040.
