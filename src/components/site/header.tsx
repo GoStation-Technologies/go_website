@@ -73,7 +73,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             : "border-b border-transparent bg-background/40 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex min-h-[72px] max-w-[1440px] flex-col items-center justify-between gap-2 px-4 py-3 rtl:items-end sm:flex-row sm:items-center sm:gap-3 sm:px-6 sm:py-0">
+      <div className="mx-auto flex min-h-[72px] max-w-[1440px] flex-col items-center justify-between gap-2 px-4 py-3 rtl:items-start sm:flex-row sm:items-center sm:rtl:items-center sm:gap-3 sm:px-6 sm:py-0">
         <Link to="/" className="max-w-full shrink-0" aria-label={t("brand.name")}>
           <CompanyLogo inverse={overlay} />
         </Link>
