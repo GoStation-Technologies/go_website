@@ -24,6 +24,7 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-station-inactive: var(--station-inactive);
+  --color-statement-quote-end: var(--statement-quote-end);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
@@ -74,6 +75,7 @@
   --muted: oklch(0.963 0.008 279);
   --muted-foreground: oklch(0.5 0.045 279);
   --station-inactive: oklch(0.55 0 0);
+  --statement-quote-end: oklch(0.7 0.1 225);
   --accent: oklch(0.698 0.174 44);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.6 0.24 27);
