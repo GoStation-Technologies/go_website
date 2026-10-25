@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { MediaCarousel } from "@/components/site/media-carousel";
+import { Button } from "@/components/ui/button";
+
 import { VideoCard } from "@/components/site/video-card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, ArrowUpRight } from "lucide-react";
