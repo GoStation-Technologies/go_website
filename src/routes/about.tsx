@@ -36,7 +36,7 @@ function AboutPage() {
   const cms = usePageContent("about");
   const homeCms = usePageContent("home");
   const aboutValues = useCompanyValues();
-  const chairmanQuote = homeCms.field("chairman", "content", t("home.quote"));
+  const chairmanQuote = homeCms.field("chairman", "content", t("home.chairmanQuote"));
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
   const pages = useQuery({
