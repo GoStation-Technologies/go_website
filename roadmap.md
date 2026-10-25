@@ -1,3 +1,7 @@
+# About Senior Management
+- [ ] Reorganize chairman and Salem Saleh Al-Nahdi CEO/Board Member statements into a balanced pair above the three requested executive profiles, with official portraits where available.
+- [ ] Verify Arabic/English desktop and mobile display; identify any missing official headshots.
+
 # Homepage leadership statements
 - [x] Rebuild the single chairman pull-quote as two balanced cards (chairman, CEO) with portrait, name, role and full quote; side-by-side on desktop, stacked on phone, in Arabic and English.
 - [x] Save the full approved statements in the CMS with Arabic versions, add CEO and section-heading editors, and verify 120 tests, clean build, no runtime errors or overflow.
