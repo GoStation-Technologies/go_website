@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { MediaCarousel } from "@/components/site/media-carousel";
+import { Button } from "@/components/ui/button";
+
 import { VideoCard } from "@/components/site/video-card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, ArrowUpRight } from "lucide-react";
@@ -97,13 +99,13 @@ function MediaPage() {
         {/* news rail */}
         {show("news") && news.length > 0 && (
           <Section title={t("media.latestNews")}>
-            <MediaCarousel>
-              {news.map((n) => (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {news.slice(0, 6).map((n) => (
                 <Link
                   key={n.id}
                   to="/media/$slug"
                   params={{ slug: n.slug }}
-                  className="group w-[300px] shrink-0 snap-start sm:w-[340px]"
+                  className="group"
                 >
                   <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition duration-300 hover:-translate-y-1 hover:shadow-xl">
                     <div className="relative aspect-[16/10] overflow-hidden bg-muted">
@@ -133,8 +135,21 @@ function MediaPage() {
                   </article>
                 </Link>
               ))}
-            </MediaCarousel>
+            </div>
+            <div className="mt-8 flex justify-center">
+              <Button
+                asChild
+                size="lg"
+                className="h-12 w-full rounded-full bg-accent px-7 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90 sm:w-auto"
+              >
+                <Link to="/media/news">
+                  {t("common.viewAllNews")}
+                  <ArrowUpRight className="ms-1 h-4 w-4 rtl:-scale-x-100" />
+                </Link>
+              </Button>
+            </div>
           </Section>
+
         )}
 
         {/* events rail */}

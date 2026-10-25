@@ -48,6 +48,7 @@ import { Route as ManagePortal9f4c2ab7TestimonialsRouteImport } from './routes/m
 import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
 import { Route as MediaIndexRouteImport } from './routes/media.index'
 import { Route as MediaSlugRouteImport } from './routes/media.$slug'
+import { Route as MediaNewsRouteImport } from './routes/media.news'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ManagePortal9f4c2ab7PagesSlugRouteImport } from './routes/manage-portal-9f4c2ab7.pages.$slug'
@@ -272,6 +273,11 @@ const MediaSlugRoute = MediaSlugRouteImport.update({
   path: '/media/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaNewsRoute = MediaNewsRouteImport.update({
+  id: '/media/news',
+  path: '/media/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   id: '/.lovable/oauth/consent',
   path: '/.lovable/oauth/consent',
@@ -344,6 +350,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/media/news': typeof MediaNewsRoute
   '/careers/': typeof CareersIndexRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/media/': typeof MediaIndexRoute
@@ -390,6 +397,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/media/news': typeof MediaNewsRoute
   '/careers': typeof CareersIndexRoute
   '/manage-portal-9f4c2ab7': typeof ManagePortal9f4c2ab7IndexRoute
   '/media': typeof MediaIndexRoute
@@ -438,6 +446,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7_/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
+  '/media/news': typeof MediaNewsRoute
   '/careers/': typeof CareersIndexRoute
   '/manage-portal-9f4c2ab7/': typeof ManagePortal9f4c2ab7IndexRoute
   '/media/': typeof MediaIndexRoute
@@ -487,6 +496,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
+    | '/media/news'
     | '/careers/'
     | '/manage-portal-9f4c2ab7/'
     | '/media/'
@@ -533,6 +543,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
+    | '/media/news'
     | '/careers'
     | '/manage-portal-9f4c2ab7'
     | '/media'
@@ -580,6 +591,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7_/login'
     | '/media/$slug'
+    | '/media/news'
     | '/careers/'
     | '/manage-portal-9f4c2ab7/'
     | '/media/'
@@ -610,6 +622,7 @@ export interface RootRouteChildren {
   CareersSlugRoute: typeof CareersSlugRoute
   ManagePortal9f4c2ab7LoginRoute: typeof ManagePortal9f4c2ab7LoginRoute
   MediaSlugRoute: typeof MediaSlugRoute
+  MediaNewsRoute: typeof MediaNewsRoute
   CareersIndexRoute: typeof CareersIndexRoute
   MediaIndexRoute: typeof MediaIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -894,6 +907,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/media/news': {
+      id: '/media/news'
+      path: '/media/news'
+      fullPath: '/media/news'
+      preLoaderRoute: typeof MediaNewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.lovable/oauth/consent': {
       id: '/.lovable/oauth/consent'
       path: '/.lovable/oauth/consent'
@@ -1009,6 +1029,7 @@ const rootRouteChildren: RootRouteChildren = {
   CareersSlugRoute: CareersSlugRoute,
   ManagePortal9f4c2ab7LoginRoute: ManagePortal9f4c2ab7LoginRoute,
   MediaSlugRoute: MediaSlugRoute,
+  MediaNewsRoute: MediaNewsRoute,
   CareersIndexRoute: CareersIndexRoute,
   MediaIndexRoute: MediaIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
