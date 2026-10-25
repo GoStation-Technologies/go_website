@@ -91,10 +91,16 @@ export const en = {
 
 
     },
-    quote:
-      "At GoStation, excellence is not an option — it is a daily commitment. We are engineering the future of Saudi mobility, one station at a time.",
-    quoteAuthor: "Aref Salem Al-Nahdi",
-    quoteRole: "Chairman of the Board",
+    leadershipKicker: "Our leadership",
+    leadershipTitle: "Messages from the chairman and the CEO",
+    chairmanQuote:
+      "Beyond geographic expansion, our ambition is to build an integrated national operating platform that adapts to economic shifts and captures investment opportunities…",
+    chairmanAuthor: "Aref Salem Al-Nahdi",
+    chairmanRole: "Chairman of the Board",
+    ceoQuote:
+      "Our focus is on driving sustainable growth, leveraging technology, and empowering our people to deliver excellence in every sector we operate.",
+    ceoAuthor: "Abdullah Salem Al-Nahdi",
+    ceoRole: "Chief Executive Officer",
     partnersTitle: "Trusted by leading businesses",
     partnersSub:
       "Strategic partners who rely on the GoStation network for fuel, fleet, and retail operations across the Kingdom.",
