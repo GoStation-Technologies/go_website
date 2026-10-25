@@ -41,6 +41,7 @@ import { Route as ManagePortal9f4c2ab7NewsRouteImport } from './routes/manage-po
 import { Route as ManagePortal9f4c2ab7NotificationsRouteImport } from './routes/manage-portal-9f4c2ab7.notifications'
 import { Route as ManagePortal9f4c2ab7OtpWhitelistRouteImport } from './routes/manage-portal-9f4c2ab7.otp-whitelist'
 import { Route as ManagePortal9f4c2ab7PartnersRouteImport } from './routes/manage-portal-9f4c2ab7.partners'
+import { Route as ManagePortal9f4c2ab7ReportsRouteImport } from './routes/manage-portal-9f4c2ab7.reports'
 import { Route as ManagePortal9f4c2ab7SettingsRouteImport } from './routes/manage-portal-9f4c2ab7.settings'
 import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
 import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
@@ -55,6 +56,7 @@ import { Route as ManagePortal9f4c2ab7PagesSlugRouteImport } from './routes/mana
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 import { Route as ApiPublicHooksSyncDataverseLocationsRouteImport } from './routes/api/public/hooks/sync-dataverse-locations'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
+import { Route as ApiPublicReportsIdRouteImport } from './routes/api/public/reports/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -233,6 +235,12 @@ const ManagePortal9f4c2ab7PartnersRoute =
     path: '/partners',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const ManagePortal9f4c2ab7ReportsRoute =
+  ManagePortal9f4c2ab7ReportsRouteImport.update({
+    id: '/reports',
+    path: '/reports',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ManagePortal9f4c2ab7SettingsRoute =
   ManagePortal9f4c2ab7SettingsRouteImport.update({
     id: '/settings',
@@ -312,6 +320,11 @@ const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   path: '/api/public/media/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicReportsIdRoute = ApiPublicReportsIdRouteImport.update({
+  id: '/api/public/reports/$id',
+  path: '/api/public/reports/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -344,6 +357,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   '/manage-portal-9f4c2ab7/partners': typeof ManagePortal9f4c2ab7PartnersRoute
+  '/manage-portal-9f4c2ab7/reports': typeof ManagePortal9f4c2ab7ReportsRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -360,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/reports/$id': typeof ApiPublicReportsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -391,6 +406,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   '/manage-portal-9f4c2ab7/partners': typeof ManagePortal9f4c2ab7PartnersRoute
+  '/manage-portal-9f4c2ab7/reports': typeof ManagePortal9f4c2ab7ReportsRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -407,6 +423,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/reports/$id': typeof ApiPublicReportsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -440,6 +457,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/notifications': typeof ManagePortal9f4c2ab7NotificationsRoute
   '/manage-portal-9f4c2ab7/otp-whitelist': typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   '/manage-portal-9f4c2ab7/partners': typeof ManagePortal9f4c2ab7PartnersRoute
+  '/manage-portal-9f4c2ab7/reports': typeof ManagePortal9f4c2ab7ReportsRoute
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -456,6 +474,7 @@ export interface FileRoutesById {
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/reports/$id': typeof ApiPublicReportsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -490,6 +509,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/otp-whitelist'
     | '/manage-portal-9f4c2ab7/partners'
+    | '/manage-portal-9f4c2ab7/reports'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -506,6 +526,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
     | '/api/public/media/$'
+    | '/api/public/reports/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -537,6 +558,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/otp-whitelist'
     | '/manage-portal-9f4c2ab7/partners'
+    | '/manage-portal-9f4c2ab7/reports'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -553,6 +575,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
     | '/api/public/media/$'
+    | '/api/public/reports/$id'
   id:
     | '__root__'
     | '/'
@@ -585,6 +608,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/notifications'
     | '/manage-portal-9f4c2ab7/otp-whitelist'
     | '/manage-portal-9f4c2ab7/partners'
+    | '/manage-portal-9f4c2ab7/reports'
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
@@ -601,6 +625,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
     | '/api/public/media/$'
+    | '/api/public/reports/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -630,6 +655,7 @@ export interface RootRouteChildren {
   ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
   ApiPublicHooksSyncDataverseLocationsRoute: typeof ApiPublicHooksSyncDataverseLocationsRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
+  ApiPublicReportsIdRoute: typeof ApiPublicReportsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -858,6 +884,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7PartnersRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/reports': {
+      id: '/manage-portal-9f4c2ab7/reports'
+      path: '/reports'
+      fullPath: '/manage-portal-9f4c2ab7/reports'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7ReportsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/settings': {
       id: '/manage-portal-9f4c2ab7/settings'
       path: '/settings'
@@ -956,6 +989,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMediaSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/reports/$id': {
+      id: '/api/public/reports/$id'
+      path: '/api/public/reports/$id'
+      fullPath: '/api/public/reports/$id'
+      preLoaderRoute: typeof ApiPublicReportsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -974,6 +1014,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7NotificationsRoute: typeof ManagePortal9f4c2ab7NotificationsRoute
   ManagePortal9f4c2ab7OtpWhitelistRoute: typeof ManagePortal9f4c2ab7OtpWhitelistRoute
   ManagePortal9f4c2ab7PartnersRoute: typeof ManagePortal9f4c2ab7PartnersRoute
+  ManagePortal9f4c2ab7ReportsRoute: typeof ManagePortal9f4c2ab7ReportsRoute
   ManagePortal9f4c2ab7SettingsRoute: typeof ManagePortal9f4c2ab7SettingsRoute
   ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
   ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
@@ -998,6 +1039,7 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
     ManagePortal9f4c2ab7NotificationsRoute,
   ManagePortal9f4c2ab7OtpWhitelistRoute: ManagePortal9f4c2ab7OtpWhitelistRoute,
   ManagePortal9f4c2ab7PartnersRoute: ManagePortal9f4c2ab7PartnersRoute,
+  ManagePortal9f4c2ab7ReportsRoute: ManagePortal9f4c2ab7ReportsRoute,
   ManagePortal9f4c2ab7SettingsRoute: ManagePortal9f4c2ab7SettingsRoute,
   ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
   ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
@@ -1038,6 +1080,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksSyncDataverseLocationsRoute:
     ApiPublicHooksSyncDataverseLocationsRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
+  ApiPublicReportsIdRoute: ApiPublicReportsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

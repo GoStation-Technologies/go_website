@@ -1,3 +1,9 @@
+# Investor statistics and reports
+- [x] Connect bilingual metric values, labels and units to investor CMS editing with loader-primed public reads.
+- [x] Add annual PDF report management, year/type editing and publication; PDF endpoint checks publication and sets view/download headers.
+- [x] Verify 11 tests, public metric rendering, unpublished report 404 and clean build.
+- [ ] Verify authenticated save/upload/readback and actual PDF actions: requesting user has no matching app account; needs admin sign-in and an official PDF (existing reports are unpublished sample placeholders).
+
 # Leasing submissions
 - [x] Separate leasing requests from contact messages and preserve structured requirements and private documents; routing tests pass.
 - [x] Display leasing metadata in the table and detail dialog; public submission with PDF confirmed as GS-MSG-2026-00040.

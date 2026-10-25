@@ -11,6 +11,7 @@
 
 - Public marketing links are stored in `site_settings` so Admin Settings remains the single editable source of truth.
 - Investor inquiry form and server validation share one schema; admin submission mappings include the same `ir_inquiries` table so public submissions and staff management stay aligned.
+- Investor metrics use bilingual `page_sections` records; annual PDFs use `financial_reports`, RLS-controlled admin management and loader-primed public reads, so edits and publication have one source of truth. Uploaded reports store relative CMS paths; the public report endpoint checks publication and sets inline/attachment headers for portable PDF actions.
 - Render public customer testimonials through the shared CMS-driven Testimonials component, never a parallel system-cache grid, so publication controls govern every displayed review.
 - Public station queries include every station under SELECT-only RLS; shared labels preserve source operational states so inactive stations are not advertised as open.
 - Header, mobile drawer, and footer share CompanyLogo with paired source-mark variants and surface-aware styling; the lockup inherits interface direction while each text line preserves its own language direction, so RTL places the unmirrored mark on the right without distorting artwork.

@@ -925,6 +925,7 @@ export const en = {
       pageAcquisitions: "Acquisitions page",
       pageLeasing: "Real Estate Leasing page",
       pageInvestors: "Investor Relations page",
+      reports: "Annual reports",
       pageValues: "Company values",
       pagePrivacy: "Privacy Policy",
       pageTerms: "Terms & Conditions",

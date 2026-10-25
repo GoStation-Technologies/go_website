@@ -928,6 +928,7 @@ export const ar = {
       pageAcquisitions: "صفحة الاستحواذ",
       pageLeasing: "صفحة التأجير العقاري",
       pageInvestors: "صفحة علاقات المستثمرين",
+      reports: "التقارير السنوية",
       pageValues: "قيم الشركة",
       pagePrivacy: "سياسة الخصوصية",
       pageTerms: "الشروط والأحكام",

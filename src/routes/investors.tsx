@@ -6,8 +6,9 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePageContent } from "@/hooks/use-cms";
 import { useStationStats } from "@/hooks/use-station-stats";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { investorContentQuery } from "@/lib/investor-content.query";
+import { metricText } from "@/lib/investor-content";
 import { getContentLanguage } from "@/lib/i18n";
 import { logReportDownload } from "@/lib/reports.functions";
 import { SiteLayout } from "@/components/site/site-layout";
@@ -27,6 +28,7 @@ const logoWhite = { url: "/gostation-logo-white.png" };
 
 
 export const Route = createFileRoute("/investors")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(investorContentQuery),
   component: IRPage,
   head: () =>
     pageHead({
@@ -42,13 +44,10 @@ function IRPage() {
   const cms = usePageContent("investors");
   const { stationsCount } = useStationStats();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
-  const { data: reports = [] } = useQuery({
-    queryKey: ["reports"],
-    queryFn: async () => {
-      const { data } = await supabase.from("financial_reports").select("*").eq("is_published", true).order("published_at", { ascending: false });
-      return data ?? [];
-    },
-  });
+  const { data: investorContent } = useSuspenseQuery(investorContentQuery);
+  const reports = investorContent.reports;
+  const metric = (key: string) => investorContent.sections.find((section) => section.section_key === key);
+  const metricField = (key: string, field: "title" | "subtitle", fallback: string) => metric(key)?.[`${field}_${lng}`]?.trim() || fallback;
 
   const railRef = useRef<HTMLDivElement>(null);
   const scrollRail = (dir: number) => {
@@ -62,6 +61,7 @@ function IRPage() {
   const [ref, setRef] = useState<string | null>(null);
   const [inquiryType, setInquiryType] = useState("general");
   const submitInquiry = useServerFn(submitIrInquiry);
+  const recordDownload = useServerFn(logReportDownload);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,21 +87,21 @@ function IRPage() {
 
   const kpis: KpiConfig[] = [
     {
-      label: t("investors.kpiRevenue"),
-      value: "3.2B",
-      unit: lng === "ar" ? "ريال" : "SAR",
+      label: metricField("metric_revenue", "title", t("investors.kpiRevenue")),
+      value: metricText(metric("metric_revenue"), lng, "3.2B"),
+      unit: metricField("metric_revenue", "subtitle", lng === "ar" ? "ريال" : "SAR"),
       icon: "revenue",
     },
     {
-      label: t("investors.kpiGrowth"),
-      value: "+18%",
-      unit: "",
+      label: metricField("metric_growth", "title", t("investors.kpiGrowth")),
+      value: metricText(metric("metric_growth"), lng, "+18%"),
+      unit: metricField("metric_growth", "subtitle", ""),
       icon: "growth",
     },
     {
-      label: t("investors.kpiStations"),
-      value: `${stationsCount}+`,
-      unit: lng === "ar" ? "محطة" : "stations",
+      label: metricField("metric_stations", "title", t("investors.kpiStations")),
+      value: metricText(metric("metric_stations"), lng, `${stationsCount}+`),
+      unit: metricField("metric_stations", "subtitle", lng === "ar" ? "محطة" : "stations"),
       icon: "stations",
     },
   ];
@@ -230,7 +230,7 @@ function IRPage() {
             {reports.map((r) => (
               <article key={r.id} className="w-[248px] shrink-0 snap-start md:w-[272px]">
                 <a
-                  href={r.file_url}
+                  href={`/api/public/reports/${r.id}`}
                   target="_blank"
                   rel="noreferrer"
                   className="group relative block aspect-square overflow-hidden rounded-[2rem] bg-ink shadow-elegant transition duration-500 hover:-translate-y-1"
@@ -260,7 +260,7 @@ function IRPage() {
                   <h3 className="text-base font-semibold leading-snug">{lng === "ar" ? r.title_ar : r.title_en}</h3>
                   <div className="flex items-center gap-5 pt-2 text-sm">
                     <a
-                      href={r.file_url}
+                      href={`/api/public/reports/${r.id}`}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-1.5 text-muted-foreground transition hover:text-accent"
@@ -269,10 +269,10 @@ function IRPage() {
                       {t("investors.view")}
                     </a>
                     <a
-                      href={r.file_url}
-                      download
+                      href={`/api/public/reports/${r.id}?download=1`}
+                      download={`gostation-report-${r.report_year}.pdf`}
                       onClick={() => {
-                        void logReportDownload({ data: { reportId: r.id } }).catch(() => {});
+                        void recordDownload({ data: { reportId: r.id } }).catch(() => {});
                       }}
                       className="inline-flex items-center gap-1.5 text-muted-foreground transition hover:text-accent"
                     >
@@ -340,7 +340,7 @@ function KpiCard({ kpi }: { kpi: KpiConfig }) {
     <div className="group relative flex items-center justify-between gap-4 px-6 py-8 sm:px-8 sm:py-10 md:py-12">
       <div>
         <div className="text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
-          {kpi.value}
+          <bdi>{kpi.value}</bdi>
           {kpi.unit && (
             <span className="ms-2 text-lg font-bold text-primary/80 md:text-xl">{kpi.unit}</span>
           )}

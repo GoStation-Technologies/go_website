@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FormGrid, FormRow, inputCls } from "@/components/admin/form-kit";
 import { getContentLanguage } from "@/lib/i18n";
 import { LEGAL_PAGES } from "@/lib/legal-pages";
+import { METRIC_DEFINITIONS } from "@/lib/investor-content";
 
 export type SectionDef = {
   key: string;
@@ -243,6 +244,15 @@ export const PAGE_CMS: PageDef[] = [
     sections: [
       { key: "hero", en: "Hero", ar: "البانر الرئيسي", media: true },
       { key: "highlights", en: "Highlights", ar: "أبرز المؤشرات" },
+      ...METRIC_DEFINITIONS.map((metric) => ({
+        ...metric,
+        fields: ["title", "subtitle", "content"] as ("title" | "subtitle" | "content")[],
+        labels: {
+          title: { en: "Metric label", ar: "اسم المؤشر" },
+          subtitle: { en: "Unit", ar: "الوحدة" },
+          content: { en: "Value", ar: "القيمة" },
+        },
+      })),
       { key: "reports", en: "Financial reports", ar: "التقارير المالية" },
       { key: "announcements", en: "Announcements", ar: "الإعلانات" },
       { key: "contact", en: "Investor contact", ar: "تواصل المستثمرين" },
