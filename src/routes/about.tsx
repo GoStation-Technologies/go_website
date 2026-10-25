@@ -108,8 +108,8 @@ function AboutPage() {
             <TabsTrigger value="mission">{cms.field("mission", "title", t("about.mission"))}</TabsTrigger>
             <TabsTrigger value="values">{cms.field("values", "title", t("about.values"))}</TabsTrigger>
             <TabsTrigger value="esg">{cms.field("esg", "title", t("about.esg"))}</TabsTrigger>
-            <TabsTrigger value="governance">{cms.field("leadership", "title", t("about.governance"))}</TabsTrigger>
-            <TabsTrigger value="leaders">{t("about.leaders")}</TabsTrigger>
+            <TabsTrigger value="governance">{cms.field("governance", "title", t("about.governance"))}</TabsTrigger>
+            <TabsTrigger value="leaders">{cms.field("leadership", "title", t("about.leaders"))}</TabsTrigger>
             <TabsTrigger value="awards">{t("about.awards")}</TabsTrigger>
           </TabsList>
 
