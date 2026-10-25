@@ -268,7 +268,7 @@ function HomePage() {
           <div className="mt-10">
             <StatementPair>
               {leadership.filter((person) => cms.visible(person.key)).map((person) => (
-                <LeadershipStatement key={person.key} {...person} />
+                <LeadershipStatement key={person.key} name={person.name} role={person.role} quote={person.quote} photo={person.photo} initials={person.initials} />
               ))}
             </StatementPair>
           </div>
