@@ -72,7 +72,6 @@ function ContactPage() {
       <section className="relative overflow-hidden bg-ink py-20 text-white md:py-28">
         {/* Layered navy → orange gradient background */}
         <div className="absolute inset-0 bg-hero-ink" />
-        <div className="absolute -top-1/4 right-0 h-[600px] w-[600px] rounded-full bg-ember/15 blur-[120px] animate-pulse-glow" />
         <div className="absolute -bottom-1/4 left-0 h-[500px] w-[500px] rounded-full bg-ember/10 blur-[100px]" />
         <div className="absolute inset-0 bg-grid-ink opacity-40" />
 
@@ -80,33 +79,33 @@ function ContactPage() {
         <div className="pointer-events-none absolute inset-0 hidden lg:block">
           <a
             href={`mailto:${email}`}
-            className="pointer-events-auto absolute top-[18%] right-[12%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow"
+            className="pointer-events-auto absolute top-[18%] right-[12%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-colors duration-200 hover:bg-ember/20 hover:border-ember/30 animate-float-slow"
             aria-label={t("common.email")}
           >
             <Mail className="h-6 w-6 text-white" />
           </a>
           <a
             href={`tel:${phone}`}
-            className="pointer-events-auto absolute top-[40%] left-[8%] flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow-delay"
+            className="pointer-events-auto absolute top-[40%] left-[8%] flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-colors duration-200 hover:bg-ember/20 hover:border-ember/30 animate-float-slow-delay"
             aria-label={t("contact.callCenter")}
           >
             <Phone className="h-7 w-7 text-white" />
           </a>
           <a
             href="#contact-form"
-            className="pointer-events-auto absolute bottom-[22%] right-[18%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow-delay-2"
+            className="pointer-events-auto absolute bottom-[22%] right-[18%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-colors duration-200 hover:bg-ember/20 hover:border-ember/30 animate-float-slow-delay-2"
             aria-label={t("common.message")}
           >
             <MessageCircle className="h-6 w-6 text-white" />
           </a>
           <a
             href="#hq-map"
-            className="pointer-events-auto absolute bottom-[30%] left-[14%] flex h-12 w-12 items-center justify-center rounded-xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-all duration-300 hover:scale-110 hover:bg-ember/20 hover:border-ember/30 hover:shadow-glow animate-float-slow"
+            className="pointer-events-auto absolute bottom-[30%] left-[14%] flex h-12 w-12 items-center justify-center rounded-xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-colors duration-200 hover:bg-ember/20 hover:border-ember/30 animate-float-slow"
             aria-label={t("contact.mapTitle")}
           >
             <MapPin className="h-5 w-5 text-white" />
           </a>
-          <div className="pointer-events-auto absolute top-[25%] left-[28%] flex h-10 w-10 items-center justify-center rounded-lg bg-ember/20 backdrop-blur-sm border border-ember/20 transition-all duration-300 hover:scale-110 hover:bg-ember/30 animate-float-slow-delay-2">
+          <div className="pointer-events-auto absolute top-[25%] left-[28%] flex h-10 w-10 items-center justify-center rounded-lg bg-ember/20 backdrop-blur-sm border border-ember/20 transition-colors duration-200 hover:bg-ember/30 animate-float-slow-delay-2">
             <Headphones className="h-4 w-4 text-white" />
           </div>
         </div>

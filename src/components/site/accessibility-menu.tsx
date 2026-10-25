@@ -14,7 +14,6 @@ import {
   AlignLeft,
   MoveVertical,
   Layers,
-  Ruler,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -36,7 +35,6 @@ type Settings = {
   saturation: number; // 0 off, 1 low, 2 grayscale
   lineHeight: boolean;
   align: number; // 0 off, 1 start, 2 center
-  readingGuide: boolean;
 };
 
 const DEFAULTS: Settings = {
@@ -51,7 +49,6 @@ const DEFAULTS: Settings = {
   saturation: 0,
   lineHeight: false,
   align: 0,
-  readingGuide: false,
 };
 
 function apply(s: Settings) {
@@ -69,7 +66,6 @@ function apply(s: Settings) {
   el.classList.toggle("a11y-line-height", s.lineHeight);
   el.classList.toggle("a11y-align-start", s.align === 1);
   el.classList.toggle("a11y-align-center", s.align === 2);
-  el.classList.toggle("a11y-reading-guide", s.readingGuide);
   el.style.setProperty("--a11y-text-scale", String(1 + s.textScale * 0.1));
 }
 
@@ -89,7 +85,6 @@ const LABELS = {
     lineHeight: "Line height",
     align: "Text align",
     structure: "Page structure",
-    guide: "Reading guide",
     reset: "Reset all accessibility settings",
     headings: "Headings",
     links_list: "Links",
@@ -113,7 +108,6 @@ const LABELS = {
     lineHeight: "ارتفاع خط",
     align: "محاذاة النص",
     structure: "هيكل الصفحة",
-    guide: "مسطرة القراءة",
     reset: "إعادة تعيين كافة إعدادات إمكانية الوصول",
     headings: "العناوين",
     links_list: "الروابط",
@@ -144,22 +138,6 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       /* ignore */
     }
   }, []);
-
-  // Reading guide bar follows the pointer
-  useEffect(() => {
-    if (!s.readingGuide) return;
-    const bar = document.createElement("div");
-    bar.className = "a11y-guide-bar";
-    document.body.appendChild(bar);
-    const onMove = (e: MouseEvent) => {
-      bar.style.top = `${e.clientY - 18}px`;
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      bar.remove();
-    };
-  }, [s.readingGuide]);
 
   const update = useCallback((patch: Partial<Settings>) => {
     setS((prev) => {
@@ -274,13 +252,6 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       icon: MoveVertical,
       active: s.lineHeight,
       onClick: () => update({ lineHeight: !s.lineHeight }),
-    },
-    {
-      key: "guide",
-      label: L.guide,
-      icon: Ruler,
-      active: s.readingGuide,
-      onClick: () => update({ readingGuide: !s.readingGuide }),
     },
   ];
 

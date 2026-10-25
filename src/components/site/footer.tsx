@@ -49,10 +49,6 @@ export function SiteFooter() {
   return (
     <footer className="relative mt-24 overflow-hidden bg-hero-ink text-foreground">
       <div className="absolute inset-0 bg-grid-ink opacity-40" aria-hidden />
-      <div
-        className="pointer-events-none absolute -top-40 end-0 h-96 w-96 rounded-full bg-ember opacity-20 blur-3xl animate-pulse-glow"
-        aria-hidden
-      />
 
 
 

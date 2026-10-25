@@ -73,7 +73,7 @@ export function ChatWidget() {
           type="button"
           onClick={() => setOpen(true)}
           aria-label={t("chat.open")}
-          className="fixed bottom-5 end-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-lg transition hover:scale-105"
+          className="fixed bottom-5 end-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-lg transition-colors"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
