@@ -1,3 +1,8 @@
+# Homepage leadership statements
+- [x] Rebuild the single chairman pull-quote as two balanced cards (chairman, CEO) with portrait, name, role and full quote; side-by-side on desktop, stacked on phone, in Arabic and English.
+- [x] Save the full approved statements in the CMS with Arabic versions, add CEO and section-heading editors, and verify 120 tests, clean build, no runtime errors or overflow.
+- [ ] Upload the CEO's official portrait: no real photo exists in the database or CMS, so his card shows an initials placeholder until Admin → Homepage → CEO message gets one.
+
 # Cursor-following glow removal
 - [x] Delete every pointer-tracking layer site-wide: the accessibility reading-guide band (mousemove listener, its styles, labels and menu tile) plus the breathing glow orbs and hover scale/glow effects on contact, footer, franchise CTA, video cards and the chat bubble.
 - [x] Verify with 120 tests, a clean build, and pixel diffs showing no change when the pointer moves on the homepage and contact hero; menu no longer offers the reading guide.

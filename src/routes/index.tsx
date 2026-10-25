@@ -84,6 +84,25 @@ function HomePage() {
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
+  const leadership = [
+    {
+      key: "chairman",
+      name: cms.field("chairman", "title", t("home.chairmanAuthor")),
+      role: cms.field("chairman", "subtitle", t("home.chairmanRole")),
+      quote: cms.field("chairman", "content", t("home.chairmanQuote")),
+      photo: cms.media("chairman", chairmanCutoutAsset.url),
+      initials: lng === "ar" ? "ع ن" : "AN",
+    },
+    {
+      key: "ceo",
+      name: cms.field("ceo", "title", t("home.ceoAuthor")),
+      role: cms.field("ceo", "subtitle", t("home.ceoRole")),
+      quote: cms.field("ceo", "content", t("home.ceoQuote")),
+      photo: cms.media("ceo", ""),
+      initials: lng === "ar" ? "ع ن" : "AN",
+    },
+  ];
+
   const news = useQuery({
     queryKey: ["home-news"],
     queryFn: async () => {
@@ -234,7 +253,7 @@ function HomePage() {
 
       </section>
 
-      {/* ============ PULL QUOTE ============ */}
+      {/* ============ LEADERSHIP MESSAGES ============ */}
       <section className="relative overflow-hidden border-y border-border/60 bg-secondary/40 py-24 md:py-32">
         {/* soft wavy line grid backdrop */}
         <div
@@ -251,25 +270,59 @@ function HomePage() {
           className="pointer-events-none absolute inset-0 bg-gradient-to-b from-secondary/60 via-transparent to-secondary/60"
         />
 
-        <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <div className="relative mx-auto h-44 w-44 md:h-64 md:w-64 group cursor-default">
-            <div className="relative h-full w-full overflow-hidden rounded-full">
-              <img
-                src={cms.media("chairman", chairmanCutoutAsset.url)}
-                alt={cms.field("chairman", "title", t("home.quoteAuthor"))}
-                className="h-full w-full object-contain object-center drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
-              />
-            </div>
+        <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-accent">
+              {cms.field("leadership", "subtitle", t("home.leadershipKicker"))}
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              {cms.field("leadership", "title", t("home.leadershipTitle"))}
+            </h2>
           </div>
 
-          <blockquote className="mx-auto mt-8 max-w-3xl text-pretty font-display text-lg font-medium leading-[1.85] text-foreground sm:text-xl md:max-w-4xl md:text-2xl md:leading-[1.8] lg:text-[1.75rem]">
-            {cms.field("chairman", "content", t("home.quote"))}
-          </blockquote>
-          <div className="mt-8 text-[13px] font-bold uppercase tracking-[0.22em] text-accent">
-            {cms.field("chairman", "title", t("home.quoteAuthor"))}
-          </div>
-          <div className="mt-1.5 text-sm text-muted-foreground">{cms.field("chairman", "subtitle", t("home.quoteRole"))}</div>
+          <div className="mt-14 grid gap-6 md:grid-cols-2 md:items-stretch md:gap-8">
+            {leadership.map((p) => (
+              <figure
+                key={p.key}
+                className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card/85 p-7 shadow-elegant transition-colors duration-200 hover:border-accent/40 sm:p-9"
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"
+                />
+                <div className="flex items-center gap-5">
+                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full bg-secondary ring-1 ring-border/80 sm:h-24 sm:w-24">
+                    {p.photo ? (
+                      <img
+                        src={p.photo}
+                        alt={p.name}
+                        loading="lazy"
+                        className="h-full w-full object-cover object-top"
+                      />
+                    ) : (
+                      <span className="grid h-full w-full place-items-center font-display text-2xl font-semibold tracking-wide text-accent sm:text-3xl">
+                        {p.initials}
+                      </span>
+                    )}
+                  </div>
+                  <figcaption className="min-w-0">
+                    <div className="font-display text-lg font-semibold text-foreground sm:text-xl">
+                      {p.name}
+                    </div>
+                    <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
+                      {p.role}
+                    </div>
+                  </figcaption>
+                </div>
 
+                <blockquote className="mt-7 flex-1 text-pretty font-display text-[1.02rem] leading-[1.95] text-foreground/85 sm:text-[1.08rem]">
+                  <span aria-hidden className="me-1 text-2xl leading-none text-accent/50">{"\u201C"}</span>
+                  {p.quote}
+                  <span aria-hidden className="ms-1 text-2xl leading-none text-accent/50">{"\u201D"}</span>
+                </blockquote>
+              </figure>
+            ))}
+          </div>
         </div>
       </section>
 

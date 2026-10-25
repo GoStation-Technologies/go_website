@@ -72,6 +72,26 @@ export const PAGE_CMS: PageDef[] = [
         },
       },
       {
+        key: "ceo",
+        en: "CEO message",
+        ar: "كلمة الرئيس التنفيذي",
+        media: true,
+        labels: {
+          title: { en: "CEO name", ar: "اسم الرئيس التنفيذي" },
+          subtitle: { en: "Position", ar: "المنصب" },
+          content: { en: "Message text", ar: "نص الكلمة" },
+        },
+      },
+      {
+        key: "leadership",
+        en: "Leadership section heading",
+        ar: "عنوان قسم كلمات الإدارة",
+        labels: {
+          title: { en: "Heading", ar: "العنوان" },
+          subtitle: { en: "Small label above heading", ar: "التسمية الصغيرة فوق العنوان" },
+        },
+      },
+      {
         key: "values",
         en: "Company values heading",
         ar: "عنوان قسم القيم",
