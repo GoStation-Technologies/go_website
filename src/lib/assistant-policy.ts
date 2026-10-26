@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import { normalizeSearch } from './chat-fallback';
+import { supportChannelsSchema, normalizeWhatsapp } from './support-channels';
 export const messageSchema = z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(6000) });
 export const agentSettingsSchema = z.object({
   prompt_ar: z.string().max(8000).default(''), prompt_en: z.string().max(8000).default(''),
   quick_actions: z.array(z.object({ ar: z.string().trim().min(1).max(100), en: z.string().trim().min(1).max(100) })).max(12),
   escalation_keywords: z.array(z.string().trim().min(1).max(100)).max(60),
+  channels: supportChannelsSchema.default(() => supportChannelsSchema.parse({})),
 });
 export const defaultAgentSettings = agentSettingsSchema.parse({
   quick_actions: [{ar:'أقرب محطة',en:'Nearest station'},{ar:'الامتياز التجاري',en:'Franchise'},{ar:'الاستفسار عن وظيفة',en:'Careers'},{ar:'التحدث مع موظف',en:'Speak to a person'}],
@@ -38,8 +40,7 @@ export function requestsHuman(message: string, keywords: string[]) {
 }
 export function mustEscalate(attempts: number, failed: boolean, human: boolean) { return human || failed || attempts >= 2; }
 export function officialWhatsapp(value: unknown) {
-  if (typeof value !== 'string') return '';
-  try { const url = new URL(value); return url.protocol === 'https:' && ['wa.me','api.whatsapp.com','www.whatsapp.com','whatsapp.com'].includes(url.hostname) ? url.href : ''; } catch { return ''; }
+  return normalizeWhatsapp(value);
 }
 export const supportInputSchema = z.object({sessionId:z.string().uuid(),full_name:z.string().trim().min(2).max(150),phone:z.string().trim().regex(/^\+?[\d\s()-]{8,20}$/),subject:z.string().trim().min(3).max(500),transcript:z.array(messageSchema).min(1).max(200)});
-export function handoverReply(lang:'ar'|'en') { return lang === 'ar' ? 'يسعد فريق خدمة العملاء مساعدتك. يمكنك الاتصال أو إرسال طلب متابعة مع المحادثة أدناه.' : 'Our customer-service team can help. Call us or send a follow-up request with your conversation below.'; }
+export function handoverReply(lang:'ar'|'en') { return lang === 'ar' ? 'يسعد فريق خدمة العملاء مساعدتك. تواصل معنا عبر الخيارات المتاحة أدناه أو صفحة التواصل /contact.' : 'Our customer-service team can help. Use the available options below or visit /contact.'; }

@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import { getAssistantPublic } from '@/lib/assistant.functions';
 import { defaultAgentSettings, matchPublishedFaq } from '@/lib/assistant-policy';
 import { SupportHandover } from './support-handover';
+import { useSupportChannels } from '@/hooks/use-cms';
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -21,6 +22,7 @@ function makeId() {
 }
 
 export function ChatWidget() {
+  const channels = useSupportChannels();
   const { t, i18n } = useTranslation();
   const lang = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const [open, setOpen] = useState(false);
@@ -131,7 +133,7 @@ export function ChatWidget() {
               </div>
             ))}
             {messages.length <= 1 && <div className="flex flex-wrap gap-2">{(knowledge?.quick_actions ?? defaultAgentSettings.quick_actions).map((action,i)=><Button key={i} size="sm" variant="outline" disabled={busy} className="h-auto whitespace-normal text-xs" onClick={()=>void sendText(action[lang])}>{action[lang]}</Button>)}</div>}
-            {escalate && <SupportHandover lang={lang} sessionId={sessionId} messages={messages} whatsapp={knowledge?.whatsapp ?? ''}/>}
+            {escalate && <SupportHandover lang={lang} sessionId={sessionId} messages={messages} channels={channels}/>}
             {busy && (
               <div className="flex justify-start">
                 <div className="rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground">

@@ -1,9 +1,14 @@
+# Modular customer-service channels
+- [x] Add independent phone, WhatsApp and support-form settings in assistant controls; synchronize chat, footer and contact displays. Missing settings disable all channels; legacy contact numbers are no longer displayed.
+- [x] Validate channel values, enforce disabled ticket submission and verify 63 focused tests plus existing chat browser regression. Live Arabic escalation shows only /contact with all channels absent; contact navigation and mobile layout checked without runtime errors; build OK.
+- [ ] Verify authenticated admin toggle/save/readback: no app account matches the requesting user; requires admin sign-in in preview.
+
 # Assistant knowledge and handover
 - [x] Prioritize published bilingual FAQs; add admin persona, quick-action and escalation controls.
 - [x] Add inline customer-service card, validated support form and transcript; expose tickets and status follow-up in admin, protected by existing support/super-admin RLS.
 - [x] Test escalation rules and FAQ precedence (37 tests); verify Arabic public submission/readback GS-TKT-2026-00041 with five transcript messages, English offline FAQ/handover and mobile form without overflow; preview build OK.
 - [ ] Verify authenticated settings save and ticket status readback: requesting user has no matching admin account; requires admin sign-in in preview.
-- [ ] Enable official WhatsApp action: contact settings contain no WhatsApp URL; awaiting company-approved support link.
+- [x] WhatsApp remains optional and hidden until staff enable it and supply an approved value.
 
 # Mobile homepage
 - [x] Simplify mobile header, refine hero typography and paired CTAs, compact readiness badge, and clear chat bubble; checked Arabic/English at 320–1440px, drawer tools, language switch, chat opening and both CTA destinations. Homepage hydration/accessibility test passed and preview build is clean.

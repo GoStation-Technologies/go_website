@@ -36,8 +36,8 @@ export function matchingStations(message: string, stations: FallbackStation[]) {
 }
 export function generalChatFallback(lang: "ar" | "en") {
   return lang === "ar"
-    ? "يسعدنا خدمتك! يمكنك تصفح محطاتنا وخدماتنا مباشرة من صفحة المحطات: /stations، أو التواصل مع فريق خدمة العملاء على الرقم 920007168."
-    : "We’re happy to help! Browse our stations and services at /stations, or contact customer service on 920007168.";
+    ? "يسعدنا خدمتك! يمكنك تصفح محطاتنا وخدماتنا مباشرة من صفحة المحطات: /stations، أو التواصل مع فريق خدمة العملاء عبر /contact."
+    : "We’re happy to help! Browse our stations and services at /stations, or contact customer service at /contact.";
 }
 export function localChatReply(message: string, lang: "ar" | "en", stations: FallbackStation[] = []) {
   const matches = matchingStations(message, stations);

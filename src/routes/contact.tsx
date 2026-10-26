@@ -13,7 +13,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { toast } from "sonner";
 import { Mail, MapPin, Clock, Phone, MessageCircle, Headphones } from "lucide-react";
 import { StationsMap } from "@/components/stations-map";
-import { useSiteSettings, usePageContent } from "@/hooks/use-cms";
+import { useSiteSettings, usePageContent, useSupportChannels } from "@/hooks/use-cms";
 
 const HQ = { lat: 24.8376898, lng: 46.6890245 };
 const HQ_DIRECTIONS_FALLBACK = "https://maps.app.goo.gl/vQJKG388rNJCXqaVA";
@@ -34,7 +34,7 @@ function ContactPage() {
   const { setting } = useSiteSettings();
   const cms = usePageContent("contact");
   const email = setting("contact", "email", "contact@gostation.net");
-  const phone = setting("contact", "phone", "920002168");
+  const {phone,whatsapp} = useSupportChannels();
   const HQ_DIRECTIONS = setting("contact", "maps_url", HQ_DIRECTIONS_FALLBACK);
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
@@ -84,13 +84,13 @@ function ContactPage() {
           >
             <Mail className="h-6 w-6 text-white" />
           </a>
-          <a
+          {phone && <a
             href={`tel:${phone}`}
             className="pointer-events-auto absolute top-[40%] left-[8%] flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-colors duration-200 hover:bg-ember/20 hover:border-ember/30 animate-float-slow-delay"
             aria-label={t("contact.callCenter")}
           >
             <Phone className="h-7 w-7 text-white" />
-          </a>
+          </a>}
           <a
             href="#contact-form"
             className="pointer-events-auto absolute bottom-[22%] right-[18%] flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8 backdrop-blur-sm border border-white/10 shadow-elegant transition-colors duration-200 hover:bg-ember/20 hover:border-ember/30 animate-float-slow-delay-2"
@@ -172,7 +172,7 @@ function ContactPage() {
               <div>
                 <div className="text-sm font-semibold text-accent">{t("contact.channelsTitle")}</div>
                 <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-                  {channels.map((c) => (
+                  {channels.filter((_,index) => index !== 0 || Boolean(phone)).map((c) => (
                     <li key={c} className="flex gap-2">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                       <span>{c}</span>
@@ -184,7 +184,8 @@ function ContactPage() {
           </Card>
           <InfoRow icon={Clock} title={t("contact.hours")} text={t("contact.address")} />
           <InfoRow icon={Mail} title="Email" text={email} />
-          <InfoRow icon={Phone} title={t("contact.callCenter")} text={setting("contact", "phone", t("contact.callNumber"))} tel />
+          {phone && <InfoRow icon={Phone} title={t("contact.callCenter")} text={phone} tel />}
+          {whatsapp && <InfoRow icon={MessageCircle} title="WhatsApp" text="WhatsApp" href={whatsapp} />}
         </div>
 
         <Card id="contact-form">
@@ -263,14 +264,14 @@ function ContactPage() {
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return <div className={"grid gap-1.5 " + className}><Label>{label}</Label>{children}</div>;
 }
-function InfoRow({ icon: Icon, title, text, tel }: { icon: React.ComponentType<{ className?: string }>; title: string; text: string; tel?: boolean }) {
+function InfoRow({ icon: Icon, title, text, tel, href }: { icon: React.ComponentType<{ className?: string }>; title: string; text: string; tel?: boolean; href?:string }) {
   return (
     <Card><CardContent className="flex items-start gap-3 p-5">
       <div className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 text-accent"><Icon className="h-4 w-4" /></div>
       <div>
         <div className="text-sm font-semibold">{title}</div>
-        {tel ? (
-          <a href={`tel:${text}`} className="text-sm text-muted-foreground hover:text-accent" dir="ltr">{text}</a>
+        {tel || href ? (
+          <a href={href ?? `tel:${text}`} target={href?'_blank':undefined} rel={href?'noopener noreferrer':undefined} className="text-sm text-muted-foreground hover:text-accent" dir="ltr">{text}</a>
         ) : (
           <div className="text-sm text-muted-foreground">{text}</div>
         )}

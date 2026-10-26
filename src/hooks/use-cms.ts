@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
+import { getSupportChannelsPublic } from '@/lib/assistant.functions';
 
 /**
  * Public CMS reads. Every hook returns plain data plus helpers that fall back
@@ -10,6 +11,10 @@ import { getContentLanguage } from "@/lib/i18n";
  */
 
 export type SiteSettings = Record<string, Record<string, unknown>>;
+export function useSupportChannels() {
+  const query = useQuery({queryKey:['cms','assistant-public'], queryFn:()=>getSupportChannelsPublic(), staleTime:0, refetchOnWindowFocus:true});
+  return query.data ?? {phone:'',whatsapp:'',ticket_enabled:false};
+}
 
 export type PageSection = {
   id: string;

@@ -320,7 +320,7 @@ export const en = {
     hours: "Sun–Thu, 8:00 AM – 5:00 PM",
     infoTitle: "Contact information",
     infoBody:
-      "We keep working to make your experience easier by making every channel available around the clock. For enquiries or suggestions, call our unified number:",
+      "For enquiries or suggestions, use the available contact options or send us a message below.",
     callCenter: "Unified call center",
     callNumber: "920002168",
     hqTitle: "Head office",

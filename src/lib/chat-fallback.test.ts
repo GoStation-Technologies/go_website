@@ -12,8 +12,9 @@ describe("local station knowledge", () => {
   it("applies city and service together", () => {
     expect(matchingStations("كافيه الرياض",[station,{...station,name_en:"GO2 - Jeddah",city_ar:"جدة",city_en:"Jeddah"}]).map(s=>s.name_en)).toEqual(["GO1 - Riyadh"]);
   });
-  it("provides the specified customer-service number without inventing station matches", () => {
-    expect(generalChatFallback("ar").includes("920007168")).toBe(true);
+  it("directs to the contact page without enforcing a phone channel or inventing matches", () => {
+    expect(generalChatFallback("ar").includes("/contact")).toBe(true);
+    expect(generalChatFallback("ar").includes("920007168")).toBe(false);
     expect(matchingStations("كافيه",[{...station,services:[]}])).toEqual([]);
   });
 });

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +15,7 @@ import { Field, FormGrid, FormRow, inputCls } from "@/components/admin/form-kit"
 
 export const Route = createFileRoute("/manage-portal-9f4c2ab7/settings")({
   component: SettingsPage,
+  head:()=>({meta:[{title:'Site settings — GoStation'},{name:'description',content:'Manage GoStation contact details and website settings.'},{property:'og:title',content:'GoStation site settings'},{property:'og:description',content:'Staff controls for GoStation contact details and website settings.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary'},{name:'robots',content:'noindex'}]}),
 });
 
 type Row = { key: string; value: Record<string, unknown> };
@@ -28,8 +29,6 @@ const GROUPS: GroupDef[] = [
     hint: "Phone numbers, emails, office address, coordinates and working hours used across the site.",
     fields: [
       { name: "email", label: "Email", dir: "ltr" },
-      { name: "phone", label: "Phone / call centre", dir: "ltr" },
-      { name: "whatsapp", label: "WhatsApp link", dir: "ltr" },
       { name: "address_en", label: "Address (EN)", dir: "ltr" },
       { name: "address_ar", label: "العنوان (AR)", dir: "rtl" },
       { name: "hours_en", label: "Working hours (EN)", dir: "ltr" },
@@ -186,6 +185,7 @@ function SettingsPage() {
               <p className="text-xs text-muted-foreground">{group.hint}</p>
             </CardHeader>
             <CardContent>
+              {group.key === 'contact' && <Button asChild variant="link" className="mb-4 px-0"><Link to="/manage-portal-9f4c2ab7/agent-settings">قنوات خدمة العملاء — Customer-service channels</Link></Button>}
               <FormGrid>
                 {group.fields.map((f) => (
                   <Field key={f.name} label={f.label} lang={f.dir === "rtl" ? "ar" : "en"}>
