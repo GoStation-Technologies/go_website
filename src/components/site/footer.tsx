@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail, Phone } from "lucide-react";
+import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
 import { CompanyLogo } from "@/components/site/company-logo";
 const isoLogo = { url: "/iso-logo.png" };
-import { useSiteSettings } from "@/hooks/use-cms";
+import { useSiteSettings, useSupportChannels } from "@/hooks/use-cms";
 import { getContentLanguage } from "@/lib/i18n";
 
 function XIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -29,7 +29,7 @@ export function SiteFooter() {
   const ar = getContentLanguage(i18n.resolvedLanguage ?? i18n.language) === "ar";
 
   const email = setting("contact", "email", "info@gostation.net");
-  const phone = setting("contact", "phone", "920002168");
+  const {phone,whatsapp} = useSupportChannels();
   const address = setting("contact", ar ? "address_ar" : "address_en", t("contact.address"));
   const hours = setting("contact", ar ? "hours_ar" : "hours_en", t("contact.hours"));
   const copyright = setting(
@@ -69,11 +69,12 @@ export function SiteFooter() {
             <Mail className="h-4 w-4 shrink-0 text-ember-glow" />
             <a href={`mailto:${email}`} className="hover:text-ember-glow">{email}</a>
           </div>
-          <div className="mt-2 flex items-center gap-2 text-sm text-foreground/90">
+          {phone && <div className="mt-2 flex items-center gap-2 text-sm text-foreground/90">
             <Phone className="h-4 w-4 shrink-0 text-ember-glow" />
             <a href={`tel:${phone}`} className="hover:text-ember-glow" dir="ltr">{phone}</a>
             <span className="text-foreground/70">— {t("footer.unifiedCallCenter")}</span>
-          </div>
+          </div>}
+          {whatsapp && <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="mt-2 flex items-center gap-2 text-sm text-foreground/90 hover:text-ember-glow"><MessageCircle className="h-4 w-4 shrink-0 text-ember-glow"/>{ar?'واتساب الدعم':'WhatsApp support'}</a>}
           <div className="mt-6 flex flex-wrap gap-2">
             {socials.map(({ Icon, label, href }) => (
               <a

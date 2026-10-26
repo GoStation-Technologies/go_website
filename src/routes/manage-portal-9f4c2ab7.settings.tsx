@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,8 +28,6 @@ const GROUPS: GroupDef[] = [
     hint: "Phone numbers, emails, office address, coordinates and working hours used across the site.",
     fields: [
       { name: "email", label: "Email", dir: "ltr" },
-      { name: "phone", label: "Phone / call centre", dir: "ltr" },
-      { name: "whatsapp", label: "WhatsApp link", dir: "ltr" },
       { name: "address_en", label: "Address (EN)", dir: "ltr" },
       { name: "address_ar", label: "العنوان (AR)", dir: "rtl" },
       { name: "hours_en", label: "Working hours (EN)", dir: "ltr" },
@@ -186,6 +184,7 @@ function SettingsPage() {
               <p className="text-xs text-muted-foreground">{group.hint}</p>
             </CardHeader>
             <CardContent>
+              {group.key === 'contact' && <Button asChild variant="link" className="mb-4 px-0"><Link to="/manage-portal-9f4c2ab7/agent-settings">قنوات خدمة العملاء — Customer-service channels</Link></Button>}
               <FormGrid>
                 {group.fields.map((f) => (
                   <Field key={f.name} label={f.label} lang={f.dir === "rtl" ? "ar" : "en"}>
