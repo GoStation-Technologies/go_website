@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { normalizeSearch } from './chat-fallback';
-import { supportChannelsSchema } from './support-channels';
+import { supportChannelsSchema, normalizeWhatsapp } from './support-channels';
 export const messageSchema = z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(6000) });
 export const agentSettingsSchema = z.object({
   prompt_ar: z.string().max(8000).default(''), prompt_en: z.string().max(8000).default(''),

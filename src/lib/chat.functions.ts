@@ -217,14 +217,14 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     const groundingBlock = grounding ? formatGrounding(grounding, data.lang) : "";
 
     const persona = data.lang === 'ar' ? knowledge?.settings.prompt_ar : knowledge?.settings.prompt_en;
-    const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (persona ? `\nCompany guidance:\n${persona}` : '') + '\nIf the question cannot be resolved from supplied information, return exactly [HANDOVER]. Never display technical credit, quota or token errors.' + (groundingBlock ? `\n\n${groundingBlock}` : "");
+    const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (persona ? `\nCompany guidance:\n${persona}` : '') + '\nIf the question cannot be resolved from supplied information, return exactly [HANDOVER]. Never display technical credit, quota or token errors. Never include phone numbers or WhatsApp links in replies; customer service channels are shown separately. Direct contact queries to /contact.' + (groundingBlock ? `\n\n${groundingBlock}` : "");
 
     const result = await requestChatReply(ai, systemPrompt, data.history.length ? data.history : history ?? [], data.message);
     if (result.kind === "denied") {
       // A refusal or access denial ends this request; never replay via fallback AI.
       return { ok: false as const, error: data.lang === "ar"
-        ? "لا يمكنني المساعدة في هذا الطلب. يمكنك التواصل مع خدمة العملاء على 920007168."
-        : "I cannot assist with this request. Contact customer service on 920007168." };
+        ? "لا يمكنني المساعدة في هذا الطلب. يمكنك التواصل مع خدمة العملاء عبر /contact."
+        : "I cannot assist with this request. Contact customer service at /contact." };
     }
     let reply: string;
     let unresolved = false;
