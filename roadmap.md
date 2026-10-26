@@ -1,6 +1,9 @@
 # Mobile homepage
 - [x] Simplify mobile header, refine hero typography and paired CTAs, compact readiness badge, and clear chat bubble; checked Arabic/English at 320–1440px, drawer tools, language switch, chat opening and both CTA destinations. Homepage hydration/accessibility test passed and preview build is clean.
 
+# Assistant fallback
+- [ ] Add deterministic bilingual station/service matching and general fallback, prevent paid provider fallback, protect credentials and abuse controls, and verify failure cases plus live chat.
+
 # About Senior Management
 - [x] Apply the image-204 circular-portrait and centered-statement reference to both homepage and Senior Management; verified desktop/mobile Arabic and English, loaded available portraits and no overflow or runtime errors. Homepage CEO official portrait remains awaiting upload as noted below.
 - [x] Reorganize chairman and Salem Saleh Al-Nahdi CEO/Board Member statements into a balanced pair above the three requested executive profiles; restore original supplied CEO and deputy portraits and keep homepage unchanged.
