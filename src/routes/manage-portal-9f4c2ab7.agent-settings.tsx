@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { getAgentSettings, saveAgentSettings } from '@/lib/assistant.functions';
 import { agentSettingsSchema } from '@/lib/assistant-policy';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 const options = {queryKey:['admin','agent-settings'],queryFn:()=>getAgentSettings()};
 export const Route = createFileRoute('/manage-portal-9f4c2ab7/agent-settings')({
  loader:({context})=>context.queryClient.ensureQueryData(options), component:AgentSettings,
@@ -37,8 +38,10 @@ function AgentSettings() {
  {draft.quick_actions.map((action,index)=><div key={index} className="flex items-center gap-2"><Input aria-label={ar?'النص العربي':'Arabic text'} dir="rtl" maxLength={100} value={action.ar} onChange={e=>setDraft({...draft,quick_actions:draft.quick_actions.map((a,i)=>i===index?{...a,ar:e.target.value}:a)})}/><Input aria-label={ar?'النص الإنجليزي':'English text'} dir="ltr" maxLength={100} value={action.en} onChange={e=>setDraft({...draft,quick_actions:draft.quick_actions.map((a,i)=>i===index?{...a,en:e.target.value}:a)})}/><Button variant="ghost" size="icon" aria-label={ar?'حذف':'Remove'} onClick={()=>setDraft({...draft,quick_actions:draft.quick_actions.filter((_,i)=>i!==index)})}><Trash2 className="h-4 w-4"/></Button></div>)}
  <Button variant="outline" disabled={draft.quick_actions.length>=12} onClick={()=>setDraft({...draft,quick_actions:[...draft.quick_actions,{ar:'',en:''}]})}><Plus className="h-4 w-4"/>{ar?'إضافة رد سريع':'Add quick action'}</Button>
  </section>
- <section className="space-y-3"><h2 className="text-lg font-semibold">{ar?'عبارات التصعيد':'Escalation phrases'}</h2>
- <Textarea aria-label={ar?'عبارات التصعيد، عبارة في كل سطر':'Escalation phrases, one per line'} rows={7} value={draft.escalation_keywords.join('\n')} onChange={e=>setDraft({...draft,escalation_keywords:e.target.value.split('\n')})}/></section>
+ <section className="space-y-5"><h2 className="text-lg font-semibold">{ar?'إجراءات التصعيد المبرمجة':'Automated Escalation Actions'}</h2>
+ <label className="flex items-center justify-between gap-4 text-sm"><span>{ar?'تصعيد تلقائي وفوري عند رصد الشكاوى':'Instant Escalation on Complaints'}</span><Switch checked={draft.actions.complaints_enabled} onCheckedChange={complaints_enabled=>setDraft({...draft,actions:{...draft.actions,complaints_enabled}})}/></label>
+ <label className="flex items-center justify-between gap-4 text-sm"><span>{ar?'عرض نموذج الدعم بعد محاولتين غير ناجحتين':'Auto-Handover after 2 Misses'}</span><Switch checked={draft.actions.misses_enabled} onCheckedChange={misses_enabled=>setDraft({...draft,actions:{...draft.actions,misses_enabled}})}/></label>
+ <div className="space-y-2 text-sm"><span>{ar?'إجراء التحويل الافتراضي':'Default handover action'}</span><Select value={draft.actions.default_action} onValueChange={value=>{if(value==='phone'||value==='whatsapp'||value==='ticket'||value==='all')setDraft({...draft,actions:{...draft.actions,default_action:value}});}}><SelectTrigger aria-label={ar?'إجراء التحويل الافتراضي':'Default handover action'}><SelectValue/></SelectTrigger><SelectContent>{(['phone','whatsapp','ticket','all'] as const).map((key,i)=><SelectItem key={key} value={key}>{(ar?['اتصال مباشر','واتساب','نموذج الدعم','جميع القنوات المفعلة']:['Direct Call','WhatsApp','In-Chat Ticket','All Active'])[i]}</SelectItem>)}</SelectContent></Select></div></section>
  <Button onClick={onSave} disabled={busy}><Save className="h-4 w-4"/>{ar?'حفظ الإعدادات':'Save settings'}</Button>
  </div>;
 }

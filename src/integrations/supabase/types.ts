@@ -218,6 +218,27 @@ export type Database = {
         }
         Relationships: []
       }
+      assistant_handover_events: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
       awards: {
         Row: {
           created_at: string
@@ -1409,6 +1430,7 @@ export type Database = {
           id: string
           internal_notes: string | null
           issue: string
+          priority: string
           reference: string
           session_id: string | null
           station_ref: string | null
@@ -1424,6 +1446,7 @@ export type Database = {
           id?: string
           internal_notes?: string | null
           issue: string
+          priority?: string
           reference?: string
           session_id?: string | null
           station_ref?: string | null
@@ -1439,6 +1462,7 @@ export type Database = {
           id?: string
           internal_notes?: string | null
           issue?: string
+          priority?: string
           reference?: string
           session_id?: string | null
           station_ref?: string | null
@@ -1511,6 +1535,33 @@ export type Database = {
           role_en?: string | null
           sort_order?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      unresolved_questions: {
+        Row: {
+          created_at: string
+          id: string
+          language: string
+          question: string
+          session_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          language: string
+          question: string
+          session_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          language?: string
+          question?: string
+          session_id?: string
+          status?: string
         }
         Relationships: []
       }
