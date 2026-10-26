@@ -37,6 +37,7 @@
   --color-brand-accent: var(--brand-accent);
   --color-brand-accent-foreground: var(--brand-accent-foreground);
   --color-ink: var(--ink);
+  --color-hero-foreground: var(--hero-foreground);
   --color-ink-2: var(--ink-2);
   --color-brand-navy: var(--brand-navy);
   --color-ember: var(--ember);
@@ -57,6 +58,7 @@
   /* GoStation brand guidelines — Dark Blue R26 G21 B84 (#1A1554) + Orange R243 G115 B53 (#F37335) */
   --brand-navy: oklch(0.251 0.109 278.6); /* #1A1554 — exact brand navy */
   --ink: oklch(0.3 0.115 279); /* lifted navy for large surfaces */
+  --hero-foreground: oklch(0.98 0.008 279);
   --ink-2: oklch(0.385 0.13 280); /* brighter navy for gradients */
   --ember: oklch(0.698 0.174 44); /* #F37335 — exact brand orange */
   --ember-glow: oklch(0.765 0.147 53.5);
@@ -255,6 +257,16 @@
 .dark .company-logo .company-logo-color { visibility: hidden; }
 .company-logo-inverse .company-logo-white,
 .dark .company-logo .company-logo-white { visibility: visible; }
+
+/* Keep the complete legal lockup legible beside the two mobile actions. */
+@media (width < 640px) {
+  .site-header-logo .company-logo { width: 200px; height: 38px; gap: 6px; }
+  .site-header-logo .company-logo-mark { flex-basis: 32px; width: 32px; }
+  .site-header-logo .company-logo-name { gap: 1px; }
+  .site-header-logo .company-logo-brand { font-size: 11px; line-height: 1.1; }
+  .site-header-logo .company-logo-ar { font-size: 8px; line-height: 1.4; }
+  .site-header-logo .company-logo-en { font-size: 7.5px; line-height: 1.3; }
+}
 
 /* Marquee ticker */
 @keyframes marquee {
