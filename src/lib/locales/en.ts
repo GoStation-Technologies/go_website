@@ -917,6 +917,8 @@ export const en = {
       careers: "Careers",
       submissions: "Submissions",
       chats: "Chat logs",
+      supportTickets: "Support tickets & conversations",
+      agentSettings: "AI Agent Settings",
       abuse: "Abuse events",
       audit: "Audit log",
       notifications: "Notifications",

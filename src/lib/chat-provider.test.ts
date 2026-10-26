@@ -10,6 +10,13 @@ describe("chat provider recovery", () => {
   it("handles network failure", async () => {
     expect(await requestChatReply(ai,"system",[],"hello",vi.fn().mockRejectedValue(new Error("offline")))).toEqual({kind:"fallback"});
   });
+  it('bounds unavailable AI requests and sends the full conversation', async () => {
+    const call = vi.fn().mockResolvedValue(new Response(null,{status:503}));
+    await requestChatReply(ai,'system',[{role:'user',content:'first'},{role:'assistant',content:'reply'}],'next',call);
+    const init = call.mock.calls[0]?.[1];
+    expect(init.signal).toBeInstanceOf(AbortSignal);
+    expect(JSON.parse(init.body).contents.map((m:{parts:{text:string}[]})=>m.parts[0]?.text)).toEqual(['first','reply','next']);
+  });
   it("never makes a paid call with no Gemini key", async () => {
     const call=vi.fn();
     expect(await requestChatReply(null,"system",[],"hello",call)).toEqual({kind:"fallback"});

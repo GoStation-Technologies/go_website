@@ -1410,8 +1410,10 @@ export type Database = {
           internal_notes: string | null
           issue: string
           reference: string
+          session_id: string | null
           station_ref: string | null
           status: string
+          transcript: Json
           updated_at: string
         }
         Insert: {
@@ -1423,8 +1425,10 @@ export type Database = {
           internal_notes?: string | null
           issue: string
           reference?: string
+          session_id?: string | null
           station_ref?: string | null
           status?: string
+          transcript?: Json
           updated_at?: string
         }
         Update: {
@@ -1436,8 +1440,10 @@ export type Database = {
           internal_notes?: string | null
           issue?: string
           reference?: string
+          session_id?: string | null
           station_ref?: string | null
           status?: string
+          transcript?: Json
           updated_at?: string
         }
         Relationships: []

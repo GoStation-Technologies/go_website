@@ -47,6 +47,8 @@ const items: { key: string; url: string; icon: typeof LayoutDashboard; exact?: b
   { key: "applications", url: "/manage-portal-9f4c2ab7/applications", icon: Users },
   { key: "submissions", url: "/manage-portal-9f4c2ab7/submissions", icon: Inbox },
   { key: "chats", url: "/manage-portal-9f4c2ab7/chats", icon: MessageSquare },
+  { key: "supportTickets", url: "/manage-portal-9f4c2ab7/support-tickets", icon: Inbox },
+  { key: "agentSettings", url: "/manage-portal-9f4c2ab7/agent-settings", icon: Sparkles },
   { key: "abuse", url: "/manage-portal-9f4c2ab7/abuse", icon: ShieldAlert },
   { key: "audit", url: "/manage-portal-9f4c2ab7/audit", icon: ScrollText },
   { key: "notifications", url: "/manage-portal-9f4c2ab7/notifications", icon: BellRing },

@@ -3,7 +3,8 @@ import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { resolveAiConfig } from "./ai-provider.server";
 import { requestChatReply } from "./chat-provider.server";
-import { localChatReply, type FallbackStation } from "./chat-fallback";
+import { localChatReply, matchingStations, type FallbackStation } from "./chat-fallback";
+import { messageSchema, matchPublishedFaq, requestsHuman, mustEscalate, handoverReply } from './assistant-policy';
 import { getServerSupabase } from "./supabase-server.server";
 import { retrieveGrounding, formatGrounding } from "./chat.grounding";
 import {
@@ -21,6 +22,8 @@ const Input = z.object({
   sessionId: z.string().uuid(),
   message: z.string().trim().min(1).max(2000),
   lang: z.enum(["en", "ar"]).default("en"),
+  history: z.array(messageSchema).max(200).default([]),
+  unresolvedAttempts: z.number().int().min(0).max(200).default(0),
 });
 
 const SYSTEM_EN = `You are GoStation's bilingual customer support assistant.
@@ -194,6 +197,16 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       content: data.message,
     });
 
+    const { loadAssistantData } = await import('./assistant-data.server');
+    const knowledge = await loadAssistantData().catch(() => null);
+    const human = requestsHuman(data.message, knowledge?.settings.escalation_keywords ?? []);
+    const faq = matchPublishedFaq(data.message, knowledge?.faqs ?? [], data.lang);
+    if (human || faq) {
+      const reply = human ? handoverReply(data.lang) : (faq ?? handoverReply(data.lang));
+      if (isAdmin) await supabaseAdmin.from('chatbot_messages').insert({session_id:data.sessionId,role:'assistant',content:reply});
+      return {ok:true as const,reply,escalate:human,unresolved:false};
+    }
+
     // Retrieve grounding context from stations, news, jobs
     const grounding = client
       ? await retrieveGrounding(client, data.message, data.lang).catch((e) => {
@@ -203,9 +216,10 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       : null;
     const groundingBlock = grounding ? formatGrounding(grounding, data.lang) : "";
 
-    const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (groundingBlock ? `\n\n${groundingBlock}` : "");
+    const persona = data.lang === 'ar' ? knowledge?.settings.prompt_ar : knowledge?.settings.prompt_en;
+    const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (persona ? `\nCompany guidance:\n${persona}` : '') + '\nIf the question cannot be resolved from supplied information, return exactly [HANDOVER]. Never display technical credit, quota or token errors.' + (groundingBlock ? `\n\n${groundingBlock}` : "");
 
-    const result = await requestChatReply(ai, systemPrompt, history ?? [], data.message);
+    const result = await requestChatReply(ai, systemPrompt, data.history.length ? data.history : history ?? [], data.message);
     if (result.kind === "denied") {
       // A refusal or access denial ends this request; never replay via fallback AI.
       return { ok: false as const, error: data.lang === "ar"
@@ -213,8 +227,14 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         : "I cannot assist with this request. Contact customer service on 920007168." };
     }
     let reply: string;
+    let unresolved = false;
+    let failed = result.kind === 'fallback';
     if (result.kind === "answer") {
-      reply = result.reply;
+      unresolved = result.reply.includes('[HANDOVER]');
+      reply = unresolved ? handoverReply(data.lang) : result.reply;
+      if (/RESOURCE_EXHAUSTED|insufficient.*(credit|balance)|token limit|quota exceeded|الرصيد غير كاف/i.test(reply)) {
+        reply = handoverReply(data.lang); unresolved = true; failed = true;
+      }
     } else {
       let stations: FallbackStation[] = [];
       try {
@@ -226,6 +246,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         }
       } catch { /* A database outage still gets safe static guidance. */ }
       reply = localChatReply(data.message, data.lang, stations);
+      unresolved = matchingStations(data.message, stations).length === 0;
     }
 
     if (isAdmin) await supabaseAdmin.from("chatbot_messages").insert({
@@ -234,5 +255,5 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       content: reply,
     });
 
-    return { ok: true as const, reply };
+    return { ok: true as const, reply, unresolved, escalate: mustEscalate(data.unresolvedAttempts + (unresolved ? 1 : 0), failed, false) };
   });

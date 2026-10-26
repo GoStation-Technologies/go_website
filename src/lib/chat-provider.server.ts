@@ -7,6 +7,7 @@ export async function requestChatReply(ai: AiConfig | null, systemPrompt: string
   try {
     const response = await fetcher(ai.url, {
       method: "POST",
+      signal: AbortSignal.timeout(15000),
       headers: { "Content-Type": "application/json", "x-goog-api-key": ai.key },
       body: JSON.stringify({
         system_instruction: { parts: [{ text: systemPrompt }] },

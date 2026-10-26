@@ -92,6 +92,20 @@
       "when": 1792918276458,
       "tag": "0012_complete_home_leadership_statements",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1793007102158,
+      "tag": "0013_support_conversation_transcripts",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1793007554124,
+      "tag": "0014_protect_support_ticket_submission",
+      "breakpoints": true
     }
   ]
 }
