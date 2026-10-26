@@ -1,6 +1,7 @@
 # Rule-based assistant actions
-- [ ] Implement complaint/human/two-miss actions, business navigation, priority tickets and staff-only unanswered question logging.
-- [ ] Replace escalation text inputs with action switches and selector; verify policy tests and public flows.
+- [x] Implement complaint/human/two-miss actions, business navigation, server-verified priority tickets and staff-only unanswered question logging; public complaint and two-miss events saved, unanswered rows confirmed.
+- [x] Replace escalation text inputs with action switches and selector; verify focused policy tests and live complaint, leasing and two-miss flows with no runtime errors.
+- [ ] Verify authenticated admin switches/save/readback and review list, plus enabled priority ticket submission: requesting user has no matching app account and all support channels are currently disabled; requires admin sign-in and enabled ticket channel.
 
 # Modular customer-service channels
 - [x] Add independent phone, WhatsApp and support-form settings in assistant controls; synchronize chat, footer and contact displays. Missing settings disable all channels; legacy contact numbers are no longer displayed.
