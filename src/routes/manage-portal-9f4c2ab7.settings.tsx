@@ -15,6 +15,7 @@ import { Field, FormGrid, FormRow, inputCls } from "@/components/admin/form-kit"
 
 export const Route = createFileRoute("/manage-portal-9f4c2ab7/settings")({
   component: SettingsPage,
+  head:()=>({meta:[{title:'Site settings — GoStation'},{name:'description',content:'Manage GoStation contact details and website settings.'},{property:'og:title',content:'GoStation site settings'},{property:'og:description',content:'Staff controls for GoStation contact details and website settings.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary'},{name:'robots',content:'noindex'}]}),
 });
 
 type Row = { key: string; value: Record<string, unknown> };

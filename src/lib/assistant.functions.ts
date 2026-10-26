@@ -3,6 +3,10 @@ import { getRequest } from '@tanstack/react-start/server';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import { agentSettingsSchema, parseAgentSettings, supportInputSchema } from './assistant-policy';
 import { z } from 'zod';
+export const getSupportChannelsPublic = createServerFn({method:'GET'}).handler(async () => {
+  const {loadAssistantData} = await import('./assistant-data.server');
+  return (await loadAssistantData()).channels;
+});
 export const getAssistantPublic = createServerFn({method:'GET'}).handler(async () => {
   const {loadAssistantData} = await import('./assistant-data.server');
   const data = await loadAssistantData();
