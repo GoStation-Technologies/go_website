@@ -1,0 +1,12 @@
+ALTER TABLE public.support_tickets ADD COLUMN IF NOT EXISTS priority text NOT NULL DEFAULT 'normal' CHECK (priority IN ('normal','priority'));
+CREATE TABLE public.unresolved_questions (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), session_id uuid NOT NULL, question text NOT NULL CHECK (char_length(question) BETWEEN 1 AND 2000), language text NOT NULL CHECK (language IN ('ar','en')), status text NOT NULL DEFAULT 'new' CHECK (status IN ('new','reviewed')), created_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT, UPDATE ON public.unresolved_questions TO authenticated;
+GRANT ALL ON public.unresolved_questions TO service_role;
+ALTER TABLE public.unresolved_questions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Support staff review unanswered questions" ON public.unresolved_questions FOR SELECT TO authenticated USING (private.has_role(auth.uid(), 'support'::public.app_role) OR private.has_role(auth.uid(), 'super_admin'::public.app_role));
+CREATE POLICY "Support staff update unanswered questions" ON public.unresolved_questions FOR UPDATE TO authenticated USING (private.has_role(auth.uid(), 'support'::public.app_role) OR private.has_role(auth.uid(), 'super_admin'::public.app_role)) WITH CHECK (private.has_role(auth.uid(), 'support'::public.app_role) OR private.has_role(auth.uid(), 'super_admin'::public.app_role));
+CREATE INDEX unresolved_questions_created_idx ON public.unresolved_questions(created_at DESC);
+CREATE TABLE public.assistant_handover_events (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), session_id uuid NOT NULL, reason text NOT NULL CHECK (reason IN ('complaint','human','misses','failure')), created_at timestamptz NOT NULL DEFAULT now());
+GRANT ALL ON public.assistant_handover_events TO service_role;
+ALTER TABLE public.assistant_handover_events ENABLE ROW LEVEL SECURITY;
+CREATE INDEX assistant_handover_session_idx ON public.assistant_handover_events(session_id,created_at DESC);
