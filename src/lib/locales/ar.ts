@@ -920,6 +920,8 @@ export const ar = {
       careers: "الوظائف",
       submissions: "الطلبات",
       chats: "سجل المحادثات",
+      supportTickets: "طلبات الدعم والمحادثات",
+      agentSettings: "إعدادات المساعد الذكي",
       abuse: "بلاغات الإساءة",
       audit: "سجل التدقيق",
       notifications: "الإشعارات",
