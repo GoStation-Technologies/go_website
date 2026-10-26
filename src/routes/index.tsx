@@ -161,49 +161,49 @@ function HomePage() {
   return (
     <SiteLayout overlayHeader>
       {/* ============ HERO — full-bleed cinematic ============ */}
-      <section className="relative isolate flex min-h-[100vh] flex-col overflow-hidden border-b border-border/60">
+      <section className="relative isolate flex flex-col overflow-hidden border-b border-border/60 md:min-h-screen">
         {/* Static station image with a fixed navy backdrop */}
         <HeroBackdrop src={cms.media("hero", heroAsset.url)} alt="GoStation flagship canopy in Saudi Arabia" />
 
 
-        <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-6 pb-16 pt-24 md:px-14 lg:px-20">
+        <div className="mx-auto flex min-h-[92svh] w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-10 pt-[84px] sm:px-6 md:min-h-0 md:px-14 md:pb-16 md:pt-24 lg:px-20">
 
-          <div className="max-w-2xl space-y-8 animate-rise-in">
-            <div className="inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 backdrop-blur">
+          <div className="min-w-0 max-w-2xl space-y-5 animate-rise-in md:space-y-8">
+            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-hero-foreground/25 bg-hero-foreground/10 px-3 py-1.5 backdrop-blur md:gap-3 md:px-4">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              <span className="font-display text-[11px] font-bold uppercase tracking-[0.22em] text-white/90">
+              <span className="font-display text-[10px] font-bold uppercase tracking-normal text-hero-foreground/90 md:text-[11px]">
                 {t("home.awardBadge")}
               </span>
             </div>
 
-            <h1 className="text-balance font-display text-[clamp(2.75rem,6vw,5.5rem)] font-extrabold leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.35)]">
+            <h1 className="text-balance font-display text-[1.85rem] font-extrabold leading-[1.18] tracking-normal text-hero-foreground sm:text-[2.2rem] md:text-6xl md:leading-[1.08] lg:text-7xl xl:text-[5.5rem]">
               <span className="block">{cms.field("hero", "title", t("home.heroLine1"))}</span>
               <span className="block text-accent">{cms.field("hero", "subtitle", t("home.heroLine2"))}</span>
             </h1>
 
-            <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/80">
+            <p className="max-w-[90%] text-pretty text-sm leading-relaxed text-hero-foreground/80 sm:text-base md:max-w-xl md:text-lg">
               {cms.field("hero", "content", t("home.heroSub", { stations: liveStations, regions: liveRegions }))}
             </p>
 
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="grid grid-cols-2 gap-2.5 pt-1 sm:flex sm:flex-wrap sm:gap-3 sm:pt-2">
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-lg bg-accent px-7 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+                className="h-auto min-h-11 min-w-0 gap-1.5 whitespace-normal rounded-lg bg-accent px-3 py-2.5 text-xs font-semibold leading-snug text-accent-foreground transition-colors hover:bg-accent/90 sm:h-12 sm:px-7 sm:text-sm"
               >
                 <Link to="/investors">
                   {t("home.ctaFranchise")}
-                  <ArrowUpRight className="ms-1 h-4 w-4" />
+                  <ArrowUpRight className="h-4 w-4 shrink-0" />
                 </Link>
               </Button>
               <Button
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-12 rounded-lg border-2 border-white/70 bg-white/5 px-7 text-sm font-semibold text-white backdrop-blur hover:bg-white hover:text-ink"
+                className="h-auto min-h-11 min-w-0 gap-1.5 whitespace-normal rounded-lg border border-hero-foreground/70 bg-hero-foreground/5 px-3 py-2.5 text-xs font-semibold leading-snug text-hero-foreground backdrop-blur hover:bg-hero-foreground hover:text-ink sm:h-12 sm:border-2 sm:px-7 sm:text-sm"
               >
                 <Link to="/stations">
-                  <MapPin className="me-2 h-4 w-4" />
+                  <MapPin className="h-4 w-4 shrink-0" />
                   {t("home.ctaStations")}
                 </Link>
               </Button>
@@ -212,16 +212,16 @@ function HomePage() {
           </div>
 
           {/* Floating KPI card */}
-          <div className="mt-8 max-w-[320px] rounded-2xl border border-white/25 bg-white/12 p-5 shadow-elegant backdrop-blur-md">
-            <div className="flex items-center gap-4">
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
-                <Zap className="h-5 w-5" />
+          <div className="mt-6 w-fit max-w-[calc(100%-4rem)] rounded-lg border border-hero-foreground/25 bg-hero-foreground/10 p-3 shadow-elegant backdrop-blur-md md:mt-8 md:max-w-[320px] md:rounded-2xl md:p-5">
+            <div className="flex items-center gap-2.5 md:gap-4">
+              <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground md:h-11 md:w-11">
+                <Zap className="h-4 w-4 md:h-5 md:w-5" />
               </div>
               <div className="min-w-0">
-                <div className="font-display text-base font-bold text-white">
+                <div className="font-display text-sm font-bold text-hero-foreground md:text-base">
                   {t("home.alwaysReady")}
                 </div>
-                <div className="text-xs text-white/70">{t("home.alwaysReadySub")}</div>
+                <div className="text-xs text-hero-foreground/70">{t("home.alwaysReadySub")}</div>
               </div>
             </div>
           </div>

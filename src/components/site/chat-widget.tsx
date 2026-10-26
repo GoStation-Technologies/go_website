@@ -69,17 +69,18 @@ export function ChatWidget() {
   return (
     <>
       {!open && (
-        <button
+        <Button
+          size="icon"
           type="button"
           onClick={() => setOpen(true)}
           aria-label={t("chat.open")}
-          className="fixed bottom-5 end-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-lg transition-colors"
+          className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] end-4 z-[60] h-12 w-12 rounded-full bg-accent text-accent-foreground shadow-lg transition-colors hover:bg-accent/90 sm:end-5 sm:h-14 sm:w-14"
         >
           <MessageCircle className="h-6 w-6" />
-        </button>
+        </Button>
       )}
       {open && (
-        <div className="fixed bottom-5 end-5 z-50 flex h-[32rem] w-[22rem] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border bg-background shadow-2xl">
+        <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] end-4 z-[60] flex h-[32rem] max-h-[calc(100dvh-6rem-env(safe-area-inset-bottom))] w-[22rem] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border bg-background shadow-2xl sm:end-5">
           <header className="flex items-center justify-between border-b bg-primary px-4 py-3 text-primary-foreground">
             <div>
               <p className="text-sm font-semibold">{t("chat.title")}</p>
@@ -124,7 +125,7 @@ export function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={t("chat.placeholder")}
-              className="flex-1 rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+              className="min-w-0 flex-1 rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
               maxLength={2000}
               disabled={busy}
             />

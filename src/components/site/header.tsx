@@ -73,8 +73,8 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             : "border-b border-transparent bg-background/40 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex min-h-[72px] max-w-[1440px] flex-col items-center justify-between gap-2 px-4 py-3 rtl:items-start sm:flex-row sm:items-center sm:rtl:items-center sm:gap-3 sm:px-6 sm:py-0">
-        <Link to="/" className="max-w-full shrink-0" aria-label={t("brand.name")}>
+      <div className="mx-auto grid min-h-[60px] max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-2 sm:flex sm:min-h-[72px] sm:justify-between sm:gap-3 sm:px-6 sm:py-0">
+        <Link to="/" className="site-header-logo min-w-0 max-w-full sm:shrink-0" aria-label={t("brand.name")}>
           <CompanyLogo inverse={overlay} />
         </Link>
 
@@ -96,15 +96,17 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <ThemeToggle />
-          <AccessibilityMenu />
+          <div className="hidden items-center gap-1.5 sm:flex">
+            <ThemeToggle />
+            <AccessibilityMenu />
+          </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={toggleLang}
-            className="h-9 gap-1.5 rounded-full text-xs font-semibold"
+            className="h-10 gap-1 rounded-full px-2 text-xs font-semibold sm:h-9 sm:gap-1.5"
           >
-            <Globe className="h-3.5 w-3.5" />
+            <Globe className="hidden h-3.5 w-3.5 sm:block" />
             <span>{t("common.lang")}</span>
           </Button>
           <Button
@@ -122,7 +124,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 rounded-full min-[1440px]:hidden"
+                className="h-10 w-10 rounded-full sm:h-9 sm:w-9 min-[1440px]:hidden"
                 aria-label="Menu"
               >
                 <Menu className="h-5 w-5" />
@@ -155,6 +157,10 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </nav>
+              <div className="mt-6 flex items-center gap-3 border-t pt-4 sm:hidden">
+                <ThemeToggle />
+                <AccessibilityMenu />
+              </div>
             </SheetContent>
           </Sheet>
         </div>
