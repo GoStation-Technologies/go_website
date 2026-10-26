@@ -67,7 +67,7 @@ export function ChatWidget() {
       const res = await send({ data: { sessionId, message: text, lang, history:messages, unresolvedAttempts:attempts } });
       if (res.ok) {
         setMessages((m) => [...m, { role: "assistant", content: res.reply }]);
-        setEscalate(Boolean(res.escalate));
+        if (res.escalate) setEscalate(true);
         setAttempts(res.unresolved ? attempts + 1 : 0);
       } else {
         setMessages((m) => [...m, { role: "assistant", content: res.error }]);

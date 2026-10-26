@@ -29,8 +29,8 @@ export const submitSupportTicket = createServerFn({method:'POST'}).inputValidato
   if (!limit.allowed) return {ok:false as const};
   const {data:ticket,error} = await db.from('support_tickets').insert({full_name:data.full_name,contact:data.phone,issue:data.subject,session_id:data.sessionId,transcript:data.transcript,status:'new',handoff_requested:true}).select('id,reference').single();
   if (error || !ticket) return {ok:false as const};
-  // Link persisted messages only; never replace a conversation with caller-supplied text.
-  await db.from('chatbot_messages').update({ticket_id:ticket.id}).eq('session_id',data.sessionId).is('ticket_id',null);
+  // A caller-supplied session ID does not authorize changing another conversation.
+  // The bounded transcript snapshot is the complete attachment for this ticket.
   return {ok:true as const,reference:ticket.reference};
 });
 export const supportTicketsQuery = { queryKey:['admin','support-tickets'], queryFn:()=>listSupportTickets() };

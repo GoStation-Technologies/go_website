@@ -156,7 +156,7 @@ function SettingsPage() {
     setDraft((d) => ({ ...d, [group]: { ...(d[group] ?? {}), [field]: val } }));
 
   const known = new Set(GROUPS.map((g) => g.key));
-  const extraKeys = Object.keys(draft).filter((k) => !known.has(k));
+  const extraKeys = Object.keys(draft).filter((k) => !known.has(k) && k !== 'ai_agent');
 
   return (
     <div className="space-y-6">
