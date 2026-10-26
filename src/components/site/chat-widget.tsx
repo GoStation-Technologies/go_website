@@ -69,6 +69,7 @@ export function ChatWidget() {
     setMessages((m) => [...m, { role: "user", content: text }]);
     setBusy(true);
     try {
+      await loadKnowledge().then(setKnowledge).catch(()=>undefined);
       const res = await send({ data: { sessionId, message: text, lang, history:messages, unresolvedAttempts:attempts } });
       if (res.ok) {
         setMessages((m) => [...m, { role: "assistant", content: res.reply, navigation:'navigation' in res?res.navigation:undefined }]);

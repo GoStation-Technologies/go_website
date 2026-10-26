@@ -227,6 +227,8 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       return {ok:true as const,reply,escalate:false,unresolved:false,navigation:service?{to:service.to,label:service.label}:undefined};
     }
 
+    if(data.unresolvedAttempts>0 && shouldHandoverAfterMiss(data.unresolvedAttempts+1,settings)) return handover('misses',true);
+
     // Retrieve grounding context from stations, news, jobs
     const grounding = client
       ? await retrieveGrounding(client, data.message, data.lang).catch((e) => {
