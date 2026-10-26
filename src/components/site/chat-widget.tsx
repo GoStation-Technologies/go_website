@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { sendChatMessage } from "@/lib/chat.functions";
 import { getContentLanguage } from "@/lib/i18n";
-import { generalChatFallback } from "@/lib/chat-fallback";
+import { localChatReply } from "@/lib/chat-fallback";
 import ReactMarkdown from 'react-markdown';
 import { getAssistantPublic } from '@/lib/assistant.functions';
 import { defaultAgentSettings, matchPublishedFaq } from '@/lib/assistant-policy';
@@ -74,7 +74,7 @@ export function ChatWidget() {
       }
     } catch {
       const faq = matchPublishedFaq(text,knowledge?.faqs ?? [],lang);
-      setMessages((m) => [...m, { role: "assistant", content: faq ?? generalChatFallback(lang) }]);
+      setMessages((m) => [...m, { role: "assistant", content: faq ?? localChatReply(text,lang,knowledge?.stations ?? []) }]);
       setEscalate(true);
     } finally {
       setBusy(false);

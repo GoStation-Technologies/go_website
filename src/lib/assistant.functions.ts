@@ -6,7 +6,10 @@ import { z } from 'zod';
 export const getAssistantPublic = createServerFn({method:'GET'}).handler(async () => {
   const {loadAssistantData} = await import('./assistant-data.server');
   const data = await loadAssistantData();
-  return {quick_actions:data.settings.quick_actions,faqs:data.faqs,whatsapp:data.whatsapp};
+  const {getServerSupabase} = await import('./supabase-server.server');
+  const {client} = await getServerSupabase();
+  const stations = client ? await client.from('stations').select('name_ar,name_en,city_ar,city_en,district_ar,district_en,services,is_active,status').order('name_en').limit(1000) : null;
+  return {quick_actions:data.settings.quick_actions,faqs:data.faqs,whatsapp:data.whatsapp,stations:stations?.data ?? []};
 });
 export const getAgentSettings = createServerFn({method:'GET'}).middleware([requireSupabaseAuth]).handler(async ({context}) => {
   const {data,error} = await context.supabase.from('site_settings').select('value').eq('key','ai_agent').maybeSingle();
