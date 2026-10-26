@@ -23,3 +23,4 @@
 - Homepage and About leadership statements share LeadershipStatement and StatementPair for consistent presentation; executive profiles remain separate so statement styling does not change team cards.
 
 - No surface may track the pointer: components must not attach mousemove/pointermove listeners or write pointer-derived CSS variables, so cursor movement never changes any section's lighting or geometry. HeroBackdrop is a static image with a fixed navy veil, and the accessibility menu has no reading-guide band.
+- Chat uses direct Google calls only when a private Gemini key exists, with no paid provider chain; recoverable failures use deterministic bilingual station matching and static guidance, while access denials/refusals and abuse protection remain terminal. Pure matching and provider-result helpers carry deterministic tests.

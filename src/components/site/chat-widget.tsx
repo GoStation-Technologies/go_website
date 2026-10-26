@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { sendChatMessage } from "@/lib/chat.functions";
 import { getContentLanguage } from "@/lib/i18n";
+import { generalChatFallback } from "@/lib/chat-fallback";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -60,7 +61,7 @@ export function ChatWidget() {
         setMessages((m) => [...m, { role: "assistant", content: res.error }]);
       }
     } catch {
-      setMessages((m) => [...m, { role: "assistant", content: t("chat.error") }]);
+      setMessages((m) => [...m, { role: "assistant", content: generalChatFallback(lang) }]);
     } finally {
       setBusy(false);
     }
