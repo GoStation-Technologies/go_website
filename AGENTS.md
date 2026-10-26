@@ -15,6 +15,7 @@
 - Render public customer testimonials through the shared CMS-driven Testimonials component, never a parallel system-cache grid, so publication controls govern every displayed review.
 - Public station queries include every station under SELECT-only RLS; shared labels preserve source operational states so inactive stations are not advertised as open.
 - Header, mobile drawer, and footer share CompanyLogo with paired source-mark variants and surface-aware styling; the lockup inherits interface direction while each text line preserves its own language direction, so RTL places the unmirrored mark on the right without distorting artwork.
+- Mobile header uses a constrained two-track grid with auxiliary controls relocated to the drawer; homepage image-content height uses stable small-viewport units separately from the stats strip, so mobile browser chrome and dynamic content cannot force a clipped fixed-height hero.
 - Legal pages store a bilingual `document` section in the existing `page_sections` CMS and reuse its admin editor; public SSR reads only visible documents and never substitutes another language's legal text.
 - Leasing content uses the existing `page_sections` CMS and dedicated page editor, with loader-primed public reads and localized defaults, so copy and imagery have one editable source of truth.
 - Leasing submissions use contact_messages category isolation and structured leasing_metadata; documents stay in private leasing-documents storage with staff RLS access, so requirements are language-independent and never publicly exposed.
