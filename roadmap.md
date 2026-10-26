@@ -1,6 +1,7 @@
 # Modular customer-service channels
-- [ ] Add independent phone, WhatsApp and support-form settings in assistant controls; synchronize chat, footer and contact displays.
-- [ ] Validate channel values, enforce disabled ticket submission, test optional-channel rules and verify public flows.
+- [x] Add independent phone, WhatsApp and support-form settings in assistant controls; synchronize chat, footer and contact displays. Missing settings disable all channels; legacy contact numbers are no longer displayed.
+- [x] Validate channel values, enforce disabled ticket submission and verify 63 focused tests plus existing chat browser regression. Live Arabic escalation shows only /contact with all channels absent; contact navigation and mobile layout checked without runtime errors; build OK.
+- [ ] Verify authenticated admin toggle/save/readback: no app account matches the requesting user; requires admin sign-in in preview.
 
 # Assistant knowledge and handover
 - [x] Prioritize published bilingual FAQs; add admin persona, quick-action and escalation controls.
