@@ -172,7 +172,7 @@ function ContactPage() {
               <div>
                 <div className="text-sm font-semibold text-accent">{t("contact.channelsTitle")}</div>
                 <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-                  {channels.filter(c => !/92000|call center|مركز الاتصال|الهاتف|واتساب|whatsapp/i.test(c)).map((c) => (
+                  {channels.filter((_,index) => index !== 0 || Boolean(phone)).map((c) => (
                     <li key={c} className="flex gap-2">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                       <span>{c}</span>
