@@ -1,3 +1,7 @@
+# Rule-based assistant actions
+- [ ] Implement complaint/human/two-miss actions, business navigation, priority tickets and staff-only unanswered question logging.
+- [ ] Replace escalation text inputs with action switches and selector; verify policy tests and public flows.
+
 # Modular customer-service channels
 - [x] Add independent phone, WhatsApp and support-form settings in assistant controls; synchronize chat, footer and contact displays. Missing settings disable all channels; legacy contact numbers are no longer displayed.
 - [x] Validate channel values, enforce disabled ticket submission and verify 63 focused tests plus existing chat browser regression. Live Arabic escalation shows only /contact with all channels absent; contact navigation and mobile layout checked without runtime errors; build OK.
