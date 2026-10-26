@@ -1,3 +1,8 @@
+# Assistant knowledge and handover
+- [ ] Prioritize published bilingual FAQs; add admin persona, quick-action and escalation controls.
+- [ ] Add inline customer-service card, validated support form and transcript; expose tickets and status follow-up in admin.
+- [ ] Test escalation rules, FAQ precedence, public submission/readback, admin access when available, and clean preview.
+
 # Mobile homepage
 - [x] Simplify mobile header, refine hero typography and paired CTAs, compact readiness badge, and clear chat bubble; checked Arabic/English at 320–1440px, drawer tools, language switch, chat opening and both CTA destinations. Homepage hydration/accessibility test passed and preview build is clean.
 
