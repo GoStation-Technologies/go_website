@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button";
 import { sendChatMessage } from "@/lib/chat.functions";
 import { getContentLanguage } from "@/lib/i18n";
 import { generalChatFallback } from "@/lib/chat-fallback";
+import ReactMarkdown from 'react-markdown';
+import { getAssistantPublic } from '@/lib/assistant.functions';
+import { defaultAgentSettings, matchPublishedFaq } from '@/lib/assistant-policy';
+import { SupportHandover } from './support-handover';
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -23,6 +27,10 @@ export function ChatWidget() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
+  const [knowledge,setKnowledge] = useState<Awaited<ReturnType<typeof getAssistantPublic>> | null>(null);
+  const [escalate,setEscalate] = useState(false);
+  const [attempts,setAttempts] = useState(0);
+  const loadKnowledge = useServerFn(getAssistantPublic);
   const send = useServerFn(sendChatMessage);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -37,6 +45,10 @@ export function ChatWidget() {
   }, []);
 
   useEffect(() => {
+    if (open) void loadKnowledge().then(setKnowledge).catch(() => undefined);
+  }, [open,loadKnowledge]);
+
+  useEffect(() => {
     if (open && messages.length === 0) {
       setMessages([{ role: "assistant", content: t("chat.greeting") }]);
     }
@@ -46,26 +58,29 @@ export function ChatWidget() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = input.trim();
+  const sendText = async (text: string) => {
     if (!text || busy || !sessionId) return;
     setInput("");
     setMessages((m) => [...m, { role: "user", content: text }]);
     setBusy(true);
     try {
-      const res = await send({ data: { sessionId, message: text, lang } });
+      const res = await send({ data: { sessionId, message: text, lang, history:messages, unresolvedAttempts:attempts } });
       if (res.ok) {
         setMessages((m) => [...m, { role: "assistant", content: res.reply }]);
+        setEscalate(Boolean(res.escalate));
+        setAttempts(res.unresolved ? attempts + 1 : 0);
       } else {
         setMessages((m) => [...m, { role: "assistant", content: res.error }]);
       }
     } catch {
-      setMessages((m) => [...m, { role: "assistant", content: generalChatFallback(lang) }]);
+      const faq = matchPublishedFaq(text,knowledge?.faqs ?? [],lang);
+      setMessages((m) => [...m, { role: "assistant", content: faq ?? generalChatFallback(lang) }]);
+      setEscalate(true);
     } finally {
       setBusy(false);
     }
   };
+  const onSubmit = (e: React.FormEvent) => { e.preventDefault(); void sendText(input.trim()); };
 
   return (
     <>
@@ -87,14 +102,16 @@ export function ChatWidget() {
               <p className="text-sm font-semibold">{t("chat.title")}</p>
               <p className="text-xs opacity-80">{t("chat.subtitle")}</p>
             </div>
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               type="button"
               onClick={() => setOpen(false)}
               aria-label={t("chat.close")}
               className="rounded-md p-1 hover:bg-primary-foreground/10"
             >
               <X className="h-4 w-4" />
-            </button>
+            </Button>
           </header>
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
             {messages.map((m, i) => (
@@ -109,10 +126,12 @@ export function ChatWidget() {
                       : "bg-muted text-foreground"
                   }`}
                 >
-                  {m.content}
+                  <ReactMarkdown components={{a:({href,children})=><a className="underline underline-offset-2" href={href} target={href?.startsWith('https:')?'_blank':undefined} rel="noopener noreferrer">{children}</a>}}>{m.content.replace(/(^|\s)(\/(?:stations|franchise|careers|contact|acquisitions|investors))\b/g,'$1[$2]($2)')}</ReactMarkdown>
                 </div>
               </div>
             ))}
+            {messages.length <= 1 && <div className="flex flex-wrap gap-2">{(knowledge?.quick_actions ?? defaultAgentSettings.quick_actions).map((action,i)=><Button key={i} size="sm" variant="outline" disabled={busy} className="h-auto whitespace-normal text-xs" onClick={()=>void sendText(action[lang])}>{action[lang]}</Button>)}</div>}
+            {escalate && <SupportHandover lang={lang} sessionId={sessionId} messages={messages} whatsapp={knowledge?.whatsapp ?? ''}/>}
             {busy && (
               <div className="flex justify-start">
                 <div className="rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground">

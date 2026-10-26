@@ -29,6 +29,7 @@ import { Route as CareersSlugRouteImport } from './routes/careers.$slug'
 import { Route as ManagePortal9f4c2ab7IndexRouteImport } from './routes/manage-portal-9f4c2ab7.index'
 import { Route as ManagePortal9f4c2ab7AboutStoryRouteImport } from './routes/manage-portal-9f4c2ab7.about-story'
 import { Route as ManagePortal9f4c2ab7AbuseRouteImport } from './routes/manage-portal-9f4c2ab7.abuse'
+import { Route as ManagePortal9f4c2ab7AgentSettingsRouteImport } from './routes/manage-portal-9f4c2ab7.agent-settings'
 import { Route as ManagePortal9f4c2ab7ApplicationsRouteImport } from './routes/manage-portal-9f4c2ab7.applications'
 import { Route as ManagePortal9f4c2ab7AuditRouteImport } from './routes/manage-portal-9f4c2ab7.audit'
 import { Route as ManagePortal9f4c2ab7AwardsRouteImport } from './routes/manage-portal-9f4c2ab7.awards'
@@ -45,6 +46,7 @@ import { Route as ManagePortal9f4c2ab7ReportsRouteImport } from './routes/manage
 import { Route as ManagePortal9f4c2ab7SettingsRouteImport } from './routes/manage-portal-9f4c2ab7.settings'
 import { Route as ManagePortal9f4c2ab7StationsRouteImport } from './routes/manage-portal-9f4c2ab7.stations'
 import { Route as ManagePortal9f4c2ab7SubmissionsRouteImport } from './routes/manage-portal-9f4c2ab7.submissions'
+import { Route as ManagePortal9f4c2ab7SupportTicketsRouteImport } from './routes/manage-portal-9f4c2ab7.support-tickets'
 import { Route as ManagePortal9f4c2ab7TestimonialsRouteImport } from './routes/manage-portal-9f4c2ab7.testimonials'
 import { Route as ManagePortal9f4c2ab7LoginRouteImport } from './routes/manage-portal-9f4c2ab7_.login'
 import { Route as MediaIndexRouteImport } from './routes/media.index'
@@ -163,6 +165,12 @@ const ManagePortal9f4c2ab7AbuseRoute =
     path: '/abuse',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const ManagePortal9f4c2ab7AgentSettingsRoute =
+  ManagePortal9f4c2ab7AgentSettingsRouteImport.update({
+    id: '/agent-settings',
+    path: '/agent-settings',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ManagePortal9f4c2ab7ApplicationsRoute =
   ManagePortal9f4c2ab7ApplicationsRouteImport.update({
     id: '/applications',
@@ -259,6 +267,12 @@ const ManagePortal9f4c2ab7SubmissionsRoute =
     path: '/submissions',
     getParentRoute: () => ManagePortal9f4c2ab7Route,
   } as any)
+const ManagePortal9f4c2ab7SupportTicketsRoute =
+  ManagePortal9f4c2ab7SupportTicketsRouteImport.update({
+    id: '/support-tickets',
+    path: '/support-tickets',
+    getParentRoute: () => ManagePortal9f4c2ab7Route,
+  } as any)
 const ManagePortal9f4c2ab7TestimonialsRoute =
   ManagePortal9f4c2ab7TestimonialsRouteImport.update({
     id: '/testimonials',
@@ -345,6 +359,7 @@ export interface FileRoutesByFullPath {
   '/careers/$slug': typeof CareersSlugRoute
   '/manage-portal-9f4c2ab7/about-story': typeof ManagePortal9f4c2ab7AboutStoryRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/agent-settings': typeof ManagePortal9f4c2ab7AgentSettingsRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/awards': typeof ManagePortal9f4c2ab7AwardsRoute
@@ -361,6 +376,7 @@ export interface FileRoutesByFullPath {
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/support-tickets': typeof ManagePortal9f4c2ab7SupportTicketsRoute
   '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
@@ -394,6 +410,7 @@ export interface FileRoutesByTo {
   '/careers/$slug': typeof CareersSlugRoute
   '/manage-portal-9f4c2ab7/about-story': typeof ManagePortal9f4c2ab7AboutStoryRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/agent-settings': typeof ManagePortal9f4c2ab7AgentSettingsRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/awards': typeof ManagePortal9f4c2ab7AwardsRoute
@@ -410,6 +427,7 @@ export interface FileRoutesByTo {
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/support-tickets': typeof ManagePortal9f4c2ab7SupportTicketsRoute
   '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
@@ -445,6 +463,7 @@ export interface FileRoutesById {
   '/careers/$slug': typeof CareersSlugRoute
   '/manage-portal-9f4c2ab7/about-story': typeof ManagePortal9f4c2ab7AboutStoryRoute
   '/manage-portal-9f4c2ab7/abuse': typeof ManagePortal9f4c2ab7AbuseRoute
+  '/manage-portal-9f4c2ab7/agent-settings': typeof ManagePortal9f4c2ab7AgentSettingsRoute
   '/manage-portal-9f4c2ab7/applications': typeof ManagePortal9f4c2ab7ApplicationsRoute
   '/manage-portal-9f4c2ab7/audit': typeof ManagePortal9f4c2ab7AuditRoute
   '/manage-portal-9f4c2ab7/awards': typeof ManagePortal9f4c2ab7AwardsRoute
@@ -461,6 +480,7 @@ export interface FileRoutesById {
   '/manage-portal-9f4c2ab7/settings': typeof ManagePortal9f4c2ab7SettingsRoute
   '/manage-portal-9f4c2ab7/stations': typeof ManagePortal9f4c2ab7StationsRoute
   '/manage-portal-9f4c2ab7/submissions': typeof ManagePortal9f4c2ab7SubmissionsRoute
+  '/manage-portal-9f4c2ab7/support-tickets': typeof ManagePortal9f4c2ab7SupportTicketsRoute
   '/manage-portal-9f4c2ab7/testimonials': typeof ManagePortal9f4c2ab7TestimonialsRoute
   '/manage-portal-9f4c2ab7_/login': typeof ManagePortal9f4c2ab7LoginRoute
   '/media/$slug': typeof MediaSlugRoute
@@ -497,6 +517,7 @@ export interface FileRouteTypes {
     | '/careers/$slug'
     | '/manage-portal-9f4c2ab7/about-story'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/agent-settings'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/awards'
@@ -513,6 +534,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/support-tickets'
     | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
@@ -546,6 +568,7 @@ export interface FileRouteTypes {
     | '/careers/$slug'
     | '/manage-portal-9f4c2ab7/about-story'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/agent-settings'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/awards'
@@ -562,6 +585,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/support-tickets'
     | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7/login'
     | '/media/$slug'
@@ -596,6 +620,7 @@ export interface FileRouteTypes {
     | '/careers/$slug'
     | '/manage-portal-9f4c2ab7/about-story'
     | '/manage-portal-9f4c2ab7/abuse'
+    | '/manage-portal-9f4c2ab7/agent-settings'
     | '/manage-portal-9f4c2ab7/applications'
     | '/manage-portal-9f4c2ab7/audit'
     | '/manage-portal-9f4c2ab7/awards'
@@ -612,6 +637,7 @@ export interface FileRouteTypes {
     | '/manage-portal-9f4c2ab7/settings'
     | '/manage-portal-9f4c2ab7/stations'
     | '/manage-portal-9f4c2ab7/submissions'
+    | '/manage-portal-9f4c2ab7/support-tickets'
     | '/manage-portal-9f4c2ab7/testimonials'
     | '/manage-portal-9f4c2ab7_/login'
     | '/media/$slug'
@@ -800,6 +826,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7AbuseRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/agent-settings': {
+      id: '/manage-portal-9f4c2ab7/agent-settings'
+      path: '/agent-settings'
+      fullPath: '/manage-portal-9f4c2ab7/agent-settings'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7AgentSettingsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/applications': {
       id: '/manage-portal-9f4c2ab7/applications'
       path: '/applications'
@@ -912,6 +945,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagePortal9f4c2ab7SubmissionsRouteImport
       parentRoute: typeof ManagePortal9f4c2ab7Route
     }
+    '/manage-portal-9f4c2ab7/support-tickets': {
+      id: '/manage-portal-9f4c2ab7/support-tickets'
+      path: '/support-tickets'
+      fullPath: '/manage-portal-9f4c2ab7/support-tickets'
+      preLoaderRoute: typeof ManagePortal9f4c2ab7SupportTicketsRouteImport
+      parentRoute: typeof ManagePortal9f4c2ab7Route
+    }
     '/manage-portal-9f4c2ab7/testimonials': {
       id: '/manage-portal-9f4c2ab7/testimonials'
       path: '/testimonials'
@@ -1002,6 +1042,7 @@ declare module '@tanstack/react-router' {
 interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7AboutStoryRoute: typeof ManagePortal9f4c2ab7AboutStoryRoute
   ManagePortal9f4c2ab7AbuseRoute: typeof ManagePortal9f4c2ab7AbuseRoute
+  ManagePortal9f4c2ab7AgentSettingsRoute: typeof ManagePortal9f4c2ab7AgentSettingsRoute
   ManagePortal9f4c2ab7ApplicationsRoute: typeof ManagePortal9f4c2ab7ApplicationsRoute
   ManagePortal9f4c2ab7AuditRoute: typeof ManagePortal9f4c2ab7AuditRoute
   ManagePortal9f4c2ab7AwardsRoute: typeof ManagePortal9f4c2ab7AwardsRoute
@@ -1018,6 +1059,7 @@ interface ManagePortal9f4c2ab7RouteChildren {
   ManagePortal9f4c2ab7SettingsRoute: typeof ManagePortal9f4c2ab7SettingsRoute
   ManagePortal9f4c2ab7StationsRoute: typeof ManagePortal9f4c2ab7StationsRoute
   ManagePortal9f4c2ab7SubmissionsRoute: typeof ManagePortal9f4c2ab7SubmissionsRoute
+  ManagePortal9f4c2ab7SupportTicketsRoute: typeof ManagePortal9f4c2ab7SupportTicketsRoute
   ManagePortal9f4c2ab7TestimonialsRoute: typeof ManagePortal9f4c2ab7TestimonialsRoute
   ManagePortal9f4c2ab7IndexRoute: typeof ManagePortal9f4c2ab7IndexRoute
   ManagePortal9f4c2ab7PagesSlugRoute: typeof ManagePortal9f4c2ab7PagesSlugRoute
@@ -1026,6 +1068,8 @@ interface ManagePortal9f4c2ab7RouteChildren {
 const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7AboutStoryRoute: ManagePortal9f4c2ab7AboutStoryRoute,
   ManagePortal9f4c2ab7AbuseRoute: ManagePortal9f4c2ab7AbuseRoute,
+  ManagePortal9f4c2ab7AgentSettingsRoute:
+    ManagePortal9f4c2ab7AgentSettingsRoute,
   ManagePortal9f4c2ab7ApplicationsRoute: ManagePortal9f4c2ab7ApplicationsRoute,
   ManagePortal9f4c2ab7AuditRoute: ManagePortal9f4c2ab7AuditRoute,
   ManagePortal9f4c2ab7AwardsRoute: ManagePortal9f4c2ab7AwardsRoute,
@@ -1043,6 +1087,8 @@ const ManagePortal9f4c2ab7RouteChildren: ManagePortal9f4c2ab7RouteChildren = {
   ManagePortal9f4c2ab7SettingsRoute: ManagePortal9f4c2ab7SettingsRoute,
   ManagePortal9f4c2ab7StationsRoute: ManagePortal9f4c2ab7StationsRoute,
   ManagePortal9f4c2ab7SubmissionsRoute: ManagePortal9f4c2ab7SubmissionsRoute,
+  ManagePortal9f4c2ab7SupportTicketsRoute:
+    ManagePortal9f4c2ab7SupportTicketsRoute,
   ManagePortal9f4c2ab7TestimonialsRoute: ManagePortal9f4c2ab7TestimonialsRoute,
   ManagePortal9f4c2ab7IndexRoute: ManagePortal9f4c2ab7IndexRoute,
   ManagePortal9f4c2ab7PagesSlugRoute: ManagePortal9f4c2ab7PagesSlugRoute,
