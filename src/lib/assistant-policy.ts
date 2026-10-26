@@ -49,7 +49,7 @@ export function mustEscalate(attempts: number, failed: boolean, human: boolean) 
 export function officialWhatsapp(value: unknown) {
   return normalizeWhatsapp(value);
 }
-export const supportInputSchema = z.object({sessionId:z.string().uuid(),full_name:z.string().trim().min(2).max(150),phone:z.string().trim().regex(/^\+?[\d\s()-]{8,20}$/),subject:z.string().trim().min(3).max(500),transcript:z.array(messageSchema).min(1).max(200)});
+export const supportInputSchema = z.object({sessionId:z.string().uuid(),handoverEventId:z.string().uuid().optional(),full_name:z.string().trim().min(2).max(150),phone:z.string().trim().regex(/^\+?[\d\s()-]{8,20}$/),subject:z.string().trim().min(3).max(500),transcript:z.array(messageSchema).min(1).max(200)});
 export function handoverReply(lang:'ar'|'en') { return lang === 'ar' ? 'يسعد فريق خدمة العملاء مساعدتك. تواصل معنا عبر الخيارات المتاحة أدناه أو صفحة التواصل /contact.' : 'Our customer-service team can help. Use the available options below or visit /contact.'; }
 export type HandoverReason = 'complaint'|'human'|'misses'|'failure';
 export function complaintMatches(message:string, settings:AgentSettings) {

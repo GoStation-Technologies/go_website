@@ -8,11 +8,12 @@ import { getContentLanguage } from "@/lib/i18n";
 import { localChatReply } from "@/lib/chat-fallback";
 import ReactMarkdown from 'react-markdown';
 import { getAssistantPublic } from '@/lib/assistant.functions';
-import { defaultAgentSettings, matchPublishedFaq } from '@/lib/assistant-policy';
+import { defaultAgentSettings, matchPublishedFaq, parseAgentSettings, complaintMatches, explicitHuman, actionReply, handoverChannels, businessAction, shouldHandoverAfterMiss, type HandoverReason } from '@/lib/assistant-policy';
+import { Link } from '@tanstack/react-router';
 import { SupportHandover } from './support-handover';
 import { useSupportChannels } from '@/hooks/use-cms';
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; navigation?:{to:'/leasing'|'/franchise'|'/acquisitions';label:string} };
 
 const STORAGE_KEY = "gs_chat_session";
 
@@ -32,6 +33,8 @@ export function ChatWidget() {
   const [knowledge,setKnowledge] = useState<Awaited<ReturnType<typeof getAssistantPublic>> | null>(null);
   const [escalate,setEscalate] = useState(false);
   const [attempts,setAttempts] = useState(0);
+  const [handoverReason,setHandoverReason]=useState<HandoverReason>('human');
+  const [handoverEventId,setHandoverEventId]=useState<string>();
   const loadKnowledge = useServerFn(getAssistantPublic);
   const send = useServerFn(sendChatMessage);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -68,16 +71,24 @@ export function ChatWidget() {
     try {
       const res = await send({ data: { sessionId, message: text, lang, history:messages, unresolvedAttempts:attempts } });
       if (res.ok) {
-        setMessages((m) => [...m, { role: "assistant", content: res.reply }]);
-        if (res.escalate) setEscalate(true);
+        setMessages((m) => [...m, { role: "assistant", content: res.reply, navigation:'navigation' in res?res.navigation:undefined }]);
+        setEscalate(res.escalate);
+        if ('handoverReason' in res && res.handoverReason) setHandoverReason(res.handoverReason);
+        setHandoverEventId('handoverEventId' in res?res.handoverEventId:undefined);
         setAttempts(res.unresolved ? attempts + 1 : 0);
       } else {
         setMessages((m) => [...m, { role: "assistant", content: res.error }]);
       }
     } catch {
       const faq = matchPublishedFaq(text,knowledge?.faqs ?? [],lang);
-      setMessages((m) => [...m, { role: "assistant", content: faq ?? localChatReply(text,lang,knowledge?.stations ?? []) }]);
-      setEscalate(true);
+      const settings=parseAgentSettings({...defaultAgentSettings,actions:knowledge?.actions ?? defaultAgentSettings.actions});
+      const service=businessAction(text,lang);
+      const reason=explicitHuman(text)?'human':complaintMatches(text,settings)?'complaint':!faq&&!service&&shouldHandoverAfterMiss(attempts+1,settings)?'misses':null;
+      setMessages((m) => [...m, { role: "assistant", content: reason?actionReply(reason,lang):faq ?? service?.reply ?? localChatReply(text,lang,knowledge?.stations ?? []),navigation:service?{to:service.to,label:service.label}:undefined }]);
+      setEscalate(Boolean(reason));
+      if(reason)setHandoverReason(reason);
+      setHandoverEventId(undefined);
+      setAttempts(faq||service?0:attempts+1);
     } finally {
       setBusy(false);
     }
@@ -128,12 +139,13 @@ export function ChatWidget() {
                       : "bg-muted text-foreground"
                   }`}
                 >
-                  <ReactMarkdown components={{a:({href,children})=><a className="underline underline-offset-2" href={href} target={href?.startsWith('https:')?'_blank':undefined} rel="noopener noreferrer">{children}</a>}}>{m.content.replace(/(^|\s)(\/(?:stations|franchise|careers|contact|acquisitions|investors))\b/g,'$1[$2]($2)')}</ReactMarkdown>
+                  <ReactMarkdown components={{a:({href,children})=><a className="underline underline-offset-2" href={href} target={href?.startsWith('https:')?'_blank':undefined} rel="noopener noreferrer">{children}</a>}}>{m.content.replace(/(^|\s)(\/(?:stations|leasing|franchise|careers|contact|acquisitions|investors))\b/g,'$1[$2]($2)')}</ReactMarkdown>
+                  {m.navigation && <Button asChild size="sm" variant="outline" className="mt-2"><Link to={m.navigation.to}>{m.navigation.label}</Link></Button>}
                 </div>
               </div>
             ))}
             {messages.length <= 1 && <div className="flex flex-wrap gap-2">{(knowledge?.quick_actions ?? defaultAgentSettings.quick_actions).map((action,i)=><Button key={i} size="sm" variant="outline" disabled={busy} className="h-auto whitespace-normal text-xs" onClick={()=>void sendText(action[lang])}>{action[lang]}</Button>)}</div>}
-            {escalate && <SupportHandover lang={lang} sessionId={sessionId} messages={messages} channels={channels}/>}
+            {escalate && <SupportHandover lang={lang} sessionId={sessionId} messages={messages} channels={handoverChannels(channels,knowledge?.actions ?? defaultAgentSettings.actions,handoverReason)} handoverEventId={handoverEventId}/>}
             {busy && (
               <div className="flex justify-start">
                 <div className="rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground">

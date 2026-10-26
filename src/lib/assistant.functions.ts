@@ -13,7 +13,7 @@ export const getAssistantPublic = createServerFn({method:'GET'}).handler(async (
   const {getServerSupabase} = await import('./supabase-server.server');
   const {client} = await getServerSupabase();
   const stations = client ? await client.from('stations').select('name_ar,name_en,city_ar,city_en,district_ar,district_en,services,is_active,status').order('name_en').limit(1000) : null;
-  return {quick_actions:data.settings.quick_actions,faqs:data.faqs,channels:data.channels,stations:stations?.data ?? []};
+  return {quick_actions:data.settings.quick_actions,faqs:data.faqs,channels:data.channels,actions:data.settings.actions,stations:stations?.data ?? []};
 });
 export const getAgentSettings = createServerFn({method:'GET'}).middleware([requireSupabaseAuth]).handler(async ({context}) => {
   const {data,error} = await context.supabase.from('site_settings').select('value').eq('key','ai_agent').maybeSingle();
@@ -36,7 +36,9 @@ export const submitSupportTicket = createServerFn({method:'POST'}).inputValidato
   const ip = await hashIp(extractIp(getRequest().headers));
   const limit = await checkPersistentRate(db,`support:${ip || data.sessionId}`,3600,10);
   if (!limit.allowed) return {ok:false as const};
-  const {data:ticket,error} = await db.from('support_tickets').insert({full_name:data.full_name,contact:data.phone,issue:data.subject,session_id:data.sessionId,transcript:data.transcript,status:'new',handoff_requested:true}).select('id,reference').single();
+  const event=data.handoverEventId ? await db.from('assistant_handover_events').select('reason').eq('id',data.handoverEventId).eq('session_id',data.sessionId).gte('created_at',new Date(Date.now()-24*3600000).toISOString()).maybeSingle():null;
+  const priority=event?.data?.reason==='complaint'?'priority':'normal';
+  const {data:ticket,error} = await db.from('support_tickets').insert({full_name:data.full_name,contact:data.phone,issue:data.subject,session_id:data.sessionId,transcript:data.transcript,status:'new',handoff_requested:true,priority}).select('id,reference').single();
   if (error || !ticket) return {ok:false as const};
   // A caller-supplied session ID does not authorize changing another conversation.
   // The bounded transcript snapshot is the complete attachment for this ticket.
@@ -51,5 +53,16 @@ export const listSupportTickets = createServerFn({method:'GET'}).middleware([req
 export const updateSupportTicket = createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((raw:unknown)=>z.object({id:z.string().uuid(),status:z.enum(['new','reviewing','closed']),internal_notes:z.string().max(8000)}).parse(raw)).handler(async ({data,context})=>{
   const {error,data:updated} = await context.supabase.from('support_tickets').update({status:data.status,internal_notes:data.internal_notes}).eq('id',data.id).select('id').single();
   if(error || !updated) throw new Error('Unable to update support ticket');
+  return {ok:true};
+});
+export const unresolvedQuestionsQuery={queryKey:['admin','unresolved-questions'],queryFn:()=>listUnresolvedQuestions()};
+export const listUnresolvedQuestions=createServerFn({method:'GET'}).middleware([requireSupabaseAuth]).handler(async({context})=>{
+  const {data,error}=await context.supabase.from('unresolved_questions').select('*').order('created_at',{ascending:false}).limit(500);
+  if(error) throw new Error('Unable to load unanswered questions');
+  return data??[];
+});
+export const reviewUnresolvedQuestion=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((raw:unknown)=>z.object({id:z.string().uuid()}).parse(raw)).handler(async({data,context})=>{
+  const {error}=await context.supabase.from('unresolved_questions').update({status:'reviewed'}).eq('id',data.id).select('id').single();
+  if(error) throw new Error('Unable to update unanswered question');
   return {ok:true};
 });

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { resolveAiConfig } from "./ai-provider.server";
 import { requestChatReply } from "./chat-provider.server";
 import { localChatReply, matchingStations, type FallbackStation } from "./chat-fallback";
-import { messageSchema, matchPublishedFaq, requestsHuman, mustEscalate, handoverReply } from './assistant-policy';
+import { messageSchema, matchPublishedFaq, handoverReply, parseAgentSettings, complaintMatches, explicitHuman, actionReply, businessAction, shouldHandoverAfterMiss, type HandoverReason } from './assistant-policy';
 import { getServerSupabase } from "./supabase-server.server";
 import { retrieveGrounding, formatGrounding } from "./chat.grounding";
 import {
@@ -199,12 +199,32 @@ export const sendChatMessage = createServerFn({ method: "POST" })
 
     const { loadAssistantData } = await import('./assistant-data.server');
     const knowledge = await loadAssistantData().catch(() => null);
-    const human = requestsHuman(data.message, knowledge?.settings.escalation_keywords ?? []);
+    const settings = knowledge?.settings ?? parseAgentSettings(null);
+    const handover = async (reason:HandoverReason, unresolved=false) => {
+      const reply=actionReply(reason,data.lang);
+      let handoverEventId:string|undefined;
+      if(isAdmin) {
+        const event=await supabaseAdmin.from('assistant_handover_events').insert({session_id:data.sessionId,reason}).select('id').single();
+        handoverEventId=event.data?.id;
+        if(event.error) console.error('[chat] handover event unavailable');
+        await supabaseAdmin.from('chatbot_messages').insert({session_id:data.sessionId,role:'assistant',content:reply});
+        if(reason==='misses') {
+          const prior=[...data.history].reverse().find(m=>m.role==='user');
+          const questions=[...(prior?[prior.content]:[]),data.message];
+          const logged=await supabaseAdmin.from('unresolved_questions').insert([...new Set(questions)].map(question=>({session_id:data.sessionId,question:question.slice(0,2000),language:data.lang})));
+          if(logged.error) console.error('[chat] unanswered question logging unavailable');
+        }
+      }
+      return {ok:true as const,reply,escalate:true,unresolved,handoverReason:reason,handoverEventId};
+    };
+    if(explicitHuman(data.message)) return handover('human');
+    if(complaintMatches(data.message,settings)) return handover('complaint');
+    const service=businessAction(data.message,data.lang);
     const faq = matchPublishedFaq(data.message, knowledge?.faqs ?? [], data.lang);
-    if (human || faq) {
-      const reply = human ? handoverReply(data.lang) : (faq ?? handoverReply(data.lang));
+    if (faq || service) {
+      const reply = faq ?? service?.reply ?? handoverReply(data.lang);
       if (isAdmin) await supabaseAdmin.from('chatbot_messages').insert({session_id:data.sessionId,role:'assistant',content:reply});
-      return {ok:true as const,reply,escalate:human,unresolved:false};
+      return {ok:true as const,reply,escalate:false,unresolved:false,navigation:service?{to:service.to,label:service.label}:undefined};
     }
 
     // Retrieve grounding context from stations, news, jobs
@@ -228,12 +248,11 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     }
     let reply: string;
     let unresolved = false;
-    let failed = result.kind === 'fallback';
     if (result.kind === "answer") {
       unresolved = result.reply.includes('[HANDOVER]');
       reply = unresolved ? handoverReply(data.lang) : result.reply;
       if (/RESOURCE_EXHAUSTED|insufficient.*(credit|balance)|token limit|quota exceeded|الرصيد غير كاف/i.test(reply)) {
-        reply = handoverReply(data.lang); unresolved = true; failed = true;
+        reply = handoverReply(data.lang); unresolved = true;
       }
     } else {
       let stations: FallbackStation[] = [];
@@ -249,11 +268,13 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       unresolved = matchingStations(data.message, stations).length === 0;
     }
 
+    if(unresolved && shouldHandoverAfterMiss(data.unresolvedAttempts+1,settings)) return handover('misses',true);
+
     if (isAdmin) await supabaseAdmin.from("chatbot_messages").insert({
       session_id: data.sessionId,
       role: "assistant",
       content: reply,
     });
 
-    return { ok: true as const, reply, unresolved, escalate: mustEscalate(data.unresolvedAttempts + (unresolved ? 1 : 0), failed, false) };
+    return { ok: true as const, reply, unresolved, escalate: false };
   });

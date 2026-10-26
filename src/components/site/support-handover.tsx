@@ -8,7 +8,7 @@ import { supportInputSchema, type messageSchema } from '@/lib/assistant-policy';
 import type { z } from 'zod';
 import { Link } from '@tanstack/react-router';
 import type { PublicSupportChannels } from '@/lib/support-channels';
-export function SupportHandover({lang,sessionId,messages,channels}:{lang:'ar'|'en';sessionId:string;messages:z.infer<typeof messageSchema>[];channels:PublicSupportChannels}) {
+export function SupportHandover({lang,sessionId,messages,channels,handoverEventId}:{lang:'ar'|'en';sessionId:string;messages:z.infer<typeof messageSchema>[];channels:PublicSupportChannels;handoverEventId?:string}) {
   const ar = lang === 'ar';
   const submit = useServerFn(submitSupportTicket);
   const [busy,setBusy] = useState(false);
@@ -18,7 +18,7 @@ export function SupportHandover({lang,sessionId,messages,channels}:{lang:'ar'|'e
   const onSubmit = async (e:React.FormEvent) => {
     e.preventDefault(); setError('');
     if (!channels.ticket_enabled) return;
-    const parsed = supportInputSchema.safeParse({...draft,sessionId,transcript:messages});
+    const parsed = supportInputSchema.safeParse({...draft,sessionId,handoverEventId,transcript:messages});
     if(!parsed.success) {setError(ar?'يرجى إدخال الاسم ورقم هاتف صحيح وموضوع الطلب.':'Please enter your name, a valid phone number and subject.');return;}
     setBusy(true);
     try { const result = await submit({data:parsed.data}); if(result.ok) {setReference(result.reference);} else setError(ar?'لم يتم إرسال الطلب. يرجى المحاولة مجدداً أو زيارة صفحة التواصل.':'Your request was not sent. Please retry or visit our contact page.'); }
