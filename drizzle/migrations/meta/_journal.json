@@ -99,6 +99,13 @@
       "when": 1793007102158,
       "tag": "0013_support_conversation_transcripts",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1793007554124,
+      "tag": "0014_protect_support_ticket_submission",
+      "breakpoints": true
     }
   ]
 }
