@@ -2,7 +2,8 @@
 - [x] Simplify mobile header, refine hero typography and paired CTAs, compact readiness badge, and clear chat bubble; checked Arabic/English at 320–1440px, drawer tools, language switch, chat opening and both CTA destinations. Homepage hydration/accessibility test passed and preview build is clean.
 
 # Assistant fallback
-- [ ] Add deterministic bilingual station/service matching and general fallback, prevent paid provider fallback, protect credentials and abuse controls, and verify failure cases plus live chat.
+- [x] Add deterministic bilingual station/service matching and general fallback, prevent paid provider fallback, protect credentials and abuse controls; 24 tests pass and live Arabic plus interrupted-network replies verified. Gemini key saved securely.
+- [ ] Verify successful Gemini generation/free-tier eligibility: Google returned 402 RESOURCE_EXHAUSTED; owner must restore free-tier access. All 224 station service arrays are currently empty, so service/brand availability cannot be confirmed until staff record it.
 
 # About Senior Management
 - [x] Apply the image-204 circular-portrait and centered-statement reference to both homepage and Senior Management; verified desktop/mobile Arabic and English, loaded available portraits and no overflow or runtime errors. Homepage CEO official portrait remains awaiting upload as noted below.
