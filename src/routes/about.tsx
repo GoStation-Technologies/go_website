@@ -96,7 +96,7 @@ function AboutPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4">
           <h1 className="text-4xl font-extrabold md:text-5xl">{cms.field("hero", "title", t("about.title"))}</h1>
-          <p className="mt-4 max-w-2xl text-white/80 md:max-w-xl">{cms.field("hero", "content", get("story_body"))}</p>
+          <p className="mt-4 max-w-3xl leading-relaxed text-white/80">{cms.field("hero", "content", get("story_body"))}</p>
         </div>
       </section>
 
@@ -120,7 +120,7 @@ function AboutPage() {
                 <h2 className="font-display text-xl font-bold text-accent">{cms.field("story", "title", t("about.founding.title"))}</h2>
               </div>
               <CardContent className="p-8">
-                <p className="max-w-4xl whitespace-pre-line leading-relaxed text-muted-foreground">{cms.field("story", "content", t("about.founding.body"))}</p>
+                <p className="mx-auto max-w-6xl whitespace-pre-line leading-relaxed text-muted-foreground">{cms.field("story", "content", t("about.founding.body"))}</p>
               </CardContent>
             </Card>
 
