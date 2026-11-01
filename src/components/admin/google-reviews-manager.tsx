@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ExternalLink, Loader2, Plus, RefreshCw, Star, X } from "lucide-react";
 
-import { adminListGoogleReviews, adminSaveGoogleReviews, adminSearchGooglePlaces } from "@/lib/google-reviews.functions";
+import { adminListGoogleReviews, adminSaveGoogleReviews, adminSearchGooglePlaces, type GoogleReview } from "@/lib/google-reviews.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -31,7 +31,9 @@ export function GoogleReviewsManager() {
   }, [q.data]);
 
   const save = useMutation({
-    mutationFn: (v: { places: string[]; shown: string[] }) => adminSaveGoogleReviews({ data: v }),
+    mutationFn: (v: { places: string[]; shown: string[] }) => adminSaveGoogleReviews({ data: {
+      ...v, reviews: (q.data?.reviews ?? []).filter((r: GoogleReview) => v.shown.includes(r.id)),
+    } }),
     onSuccess: () => {
       toast.success(ar ? "تم الحفظ" : "Saved");
       void qc.invalidateQueries({ queryKey: ["admin", "google-reviews"] });
