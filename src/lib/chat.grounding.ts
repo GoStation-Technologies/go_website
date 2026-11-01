@@ -200,6 +200,12 @@ export function formatGrounding(ctx: GroundingContext, lang: GroundingLang): str
       lines.push(`- ${j.title} (/careers/${j.slug})${meta ? ` — ${meta}` : ""}`);
     }
   }
+  if (ctx.pages.length) {
+    lines.push(`\n${L.pages}:`);
+    for (const p of ctx.pages) {
+      lines.push(`- ${p.title} (${p.path}): ${p.snippet}`);
+    }
+  }
 
   return lines.join("\n");
 }
