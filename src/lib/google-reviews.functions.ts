@@ -3,11 +3,11 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { publicSupabaseEnv } from "@/lib/public-supabase-env";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { googlePlacesKey, parsePlaceReviews, type GoogleReview, type PlaceDetails } from "./google-reviews";
+import { googlePlacesAccess, parsePlaceReviews, redact, type GoogleReview, type PlaceDetails } from "./google-reviews";
 export type { GoogleReview } from "./google-reviews";
 
 /**
- * Google Maps reviews, fetched directly from Places REST using a user-owned Google API key.
+ * Google Maps reviews from Places (New) REST: your own Google key directly, or the linked Maps connection.
  * Only listing IDs and the admin's chosen review IDs are stored (site_settings.google_reviews);
  * review text is never copied into the database. Google returns at most 5 reviews per listing.
  */
@@ -41,25 +41,22 @@ function parseConfig(v: unknown): Config {
 }
 
 async function fetchPlaceReviews(placeId: string, lang: string): Promise<GoogleReview[]> {
-  const mapsKey = googlePlacesKey(process.env);
-  const query = new URLSearchParams({
-    place_id: placeId,
-    fields: "name,rating,reviews,user_ratings_total",
-    key: mapsKey,
-    language: lang,
-  });
+  const access = googlePlacesAccess(process.env);
   try {
-    const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?${query}`, {
-      signal: AbortSignal.timeout(10000),
-    });
+    const res = await fetch(
+      `${access.baseUrl}/places/v1/places/${encodeURIComponent(placeId)}?languageCode=${lang}`,
+      {
+        headers: { ...access.headers, "X-Goog-FieldMask": "id,displayName,googleMapsUri,reviews" },
+        signal: AbortSignal.timeout(10000),
+      },
+    );
     if (!res.ok) {
-      const body = (await res.text()).split(mapsKey).join("[redacted]");
+      const body = redact(await res.text(), access.secrets);
       throw new Error(`Google Places request failed [${res.status}]: ${body}`);
     }
-    return parsePlaceReviews(placeId, await res.json() as PlaceDetails);
+    return parsePlaceReviews(placeId, (await res.json()) as PlaceDetails);
   } catch (error) {
-    // Never log the request URL: it contains the private Google API key.
-    const message = (error instanceof Error ? error.message : "Google Places request failed").split(mapsKey).join("[redacted]");
+    const message = redact(error instanceof Error ? error.message : "Google Places request failed", access.secrets);
     console.error(`Google reviews: ${message}`);
     throw new Error(message);
   }
@@ -104,11 +101,11 @@ export const adminSearchGooglePlaces = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ query: z.string().trim().min(2).max(200), lang: Lang }).parse(d))
   .handler(async ({ data, context }) => {
     await assertCmsAdmin(context.supabase, context.userId);
-    const mapsKey = googlePlacesKey(process.env);
-    const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
+    const access = googlePlacesAccess(process.env);
+    const res = await fetch(`${access.baseUrl}/places/v1/places:searchText`, {
       method: "POST",
       headers: {
-        "X-Goog-Api-Key": mapsKey,
+        ...access.headers,
         "Content-Type": "application/json",
         "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.userRatingCount",
       },
@@ -116,7 +113,7 @@ export const adminSearchGooglePlaces = createServerFn({ method: "POST" })
       signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) {
-      const body = (await res.text()).split(mapsKey).join("[redacted]");
+      const body = redact(await res.text(), access.secrets);
       console.error(`Google place search failed [${res.status}]: ${body}`);
       throw new Error(`Google search failed [${res.status}]: ${body}`);
     }

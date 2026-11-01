@@ -13,49 +13,70 @@ export type GoogleReview = {
   googleMapsUri: string | null;
 };
 
-export function googlePlacesKey(env: Record<string, string | undefined>) {
-  const mapsKey = env.GOOGLE_PLACES_API_KEY || env.GOOGLE_MAPS_API_KEY || env.VITE_GOOGLE_MAPS_API_KEY;
-  if (!mapsKey) throw new Error("Google Maps is not connected: Missing GOOGLE_PLACES_API_KEY");
-  return mapsKey;
+export const PLACES_GATEWAY_URL = "https://connector-gateway.lovable.dev/google_maps";
+
+export type PlacesAccess =
+  | { mode: "direct"; baseUrl: string; headers: Record<string, string>; secrets: string[] }
+  | { mode: "gateway"; baseUrl: string; headers: Record<string, string>; secrets: string[] };
+
+/**
+ * Resolve how to reach Google Places (New) REST.
+ * 1. GOOGLE_PLACES_API_KEY → your own Google key, called directly.
+ * 2. GOOGLE_MAPS_API_KEY + LOVABLE_API_KEY → the linked Maps connection (that key only works via the relay).
+ * 3. GOOGLE_MAPS_API_KEY / VITE_GOOGLE_MAPS_API_KEY alone → treated as your own Google key.
+ */
+export function googlePlacesAccess(env: Record<string, string | undefined>): PlacesAccess {
+  const own = env.GOOGLE_PLACES_API_KEY;
+  if (own) return { mode: "direct", baseUrl: "https://places.googleapis.com", headers: { "X-Goog-Api-Key": own }, secrets: [own] };
+  const conn = env.GOOGLE_MAPS_API_KEY;
+  const lovable = env.LOVABLE_API_KEY;
+  if (conn && lovable) {
+    return {
+      mode: "gateway",
+      baseUrl: PLACES_GATEWAY_URL,
+      headers: { Authorization: `Bearer ${lovable}`, "X-Connection-Api-Key": conn },
+      secrets: [conn, lovable],
+    };
+  }
+  const fallback = conn || env.VITE_GOOGLE_MAPS_API_KEY;
+  if (!fallback) throw new Error("Google Maps is not connected: Missing GOOGLE_PLACES_API_KEY");
+  return { mode: "direct", baseUrl: "https://places.googleapis.com", headers: { "X-Goog-Api-Key": fallback }, secrets: [fallback] };
+}
+
+export function redact(text: string, secrets: string[]) {
+  return secrets.reduce((t, s) => (s ? t.split(s).join("[redacted]") : t), text);
 }
 
 export type PlaceDetails = {
-  status?: string;
-  error_message?: string;
-  result?: {
+  id?: string;
+  displayName?: { text?: string };
+  googleMapsUri?: string;
+  reviews?: Array<{
     name?: string;
     rating?: number;
-    user_ratings_total?: number;
-    reviews?: Array<{
-      author_name?: string;
-      author_url?: string;
-      profile_photo_url?: string;
-      rating?: number;
-      text?: string;
-      language?: string;
-      relative_time_description?: string;
-      time?: number;
-    }>;
-  };
+    text?: { text?: string; languageCode?: string };
+    originalText?: { text?: string; languageCode?: string };
+    relativePublishTimeDescription?: string;
+    publishTime?: string;
+    authorAttribution?: { displayName?: string; uri?: string; photoUri?: string };
+  }>;
 };
 
 export function parsePlaceReviews(placeId: string, data: PlaceDetails): GoogleReview[] {
-  if (data.status !== "OK" && data.status !== "ZERO_RESULTS") {
-    throw new Error(`Google Places [${data.status ?? "INVALID_RESPONSE"}]: ${data.error_message ?? "Place details unavailable"}`);
-  }
-  return (data.result?.reviews ?? []).map((review) => ({
-    // Legacy Places has no review resource ID. Author + timestamp is stable across translations.
-    id: `places/${placeId}/reviews/${encodeURIComponent(review.author_url ?? review.author_name ?? "Google user")}/${review.time ?? 0}`,
+  const placeName = data.displayName?.text ?? "";
+  return (data.reviews ?? []).map((review, i) => ({
+    // Google's review resource name is stable across languages and matches saved selections.
+    id: review.name ?? `places/${placeId}/reviews/unknown-${i}`,
     placeId,
-    placeName: data.result?.name ?? "",
-    author: review.author_name ?? "Google user",
-    authorPhoto: review.profile_photo_url ?? null,
-    authorUri: review.author_url ?? null,
+    placeName,
+    author: review.authorAttribution?.displayName ?? "Google user",
+    authorPhoto: review.authorAttribution?.photoUri ?? null,
+    authorUri: review.authorAttribution?.uri ?? null,
     rating: Number(review.rating ?? 0),
-    text: review.text ?? "",
-    lang: review.language ?? null,
-    relativeTime: review.relative_time_description ?? "",
-    publishTime: review.time === undefined ? "" : new Date(review.time * 1000).toISOString(),
-    googleMapsUri: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.result?.name ?? placeId)}&query_place_id=${encodeURIComponent(placeId)}`,
+    text: review.text?.text ?? review.originalText?.text ?? "",
+    lang: review.text?.languageCode ?? review.originalText?.languageCode ?? null,
+    relativeTime: review.relativePublishTimeDescription ?? "",
+    publishTime: review.publishTime ?? "",
+    googleMapsUri: data.googleMapsUri ?? null,
   }));
 }
