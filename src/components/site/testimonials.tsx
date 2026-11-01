@@ -1,13 +1,15 @@
-import { Quote, Star } from "lucide-react";
+import { ExternalLink, Quote, Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useTestimonials } from "@/hooks/use-cms";
 import { getPublicGoogleReviews } from "@/lib/google-reviews.functions";
+import { googleReviewUrl } from "@/lib/google-reviews";
+import { Button } from "@/components/ui/button";
 
 /** Customer reviews grid: admin-selected Google Maps reviews (live) + CMS testimonials. */
 export function Testimonials({ title, subtitle }: { title: string; subtitle?: string }) {
   const { items: cms, isLoading } = useTestimonials();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const lang = (i18n.resolvedLanguage ?? i18n.language).startsWith("ar") ? "ar" : "en";
   const g = useQuery({
     queryKey: ["public", "google-reviews", lang],
@@ -23,8 +25,9 @@ export function Testimonials({ title, subtitle }: { title: string; subtitle?: st
     quote: r.text,
     avatar_url: r.authorPhoto,
     rating: Math.round(r.rating),
+    googleMapsUri: googleReviewUrl(r.googleMapsUri),
   }));
-  const live = [...google, ...cms];
+  const live = [...google, ...cms.map((r) => ({ ...r, googleMapsUri: null }))];
 
   if ((isLoading && g.isLoading) || live.length === 0) return null;
   // Only actual published CMS records and selected Google reviews are displayed.
@@ -66,6 +69,14 @@ export function Testimonials({ title, subtitle }: { title: string; subtitle?: st
                 ))}
               </div>
             </div>
+            {r.googleMapsUri ? (
+              <Button asChild variant="link" size="sm" className="mt-4 h-auto justify-start whitespace-normal px-0 text-start">
+                <a href={r.googleMapsUri} target="_blank" rel="noopener noreferrer">
+                  <span>{lang === "ar" ? "عرض التقييم على خرائط Google" : "View review on Google Maps"}</span>
+                  <ExternalLink aria-hidden="true" />
+                </a>
+              </Button>
+            ) : null}
           </figure>
         ))}
       </div>

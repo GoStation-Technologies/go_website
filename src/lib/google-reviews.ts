@@ -90,6 +90,7 @@ export type PlaceDetails = {
   googleMapsUri?: string;
   reviews?: Array<{
     name?: string;
+    googleMapsUri?: string;
     rating?: number;
     text?: { text?: string; languageCode?: string };
     originalText?: { text?: string; languageCode?: string };
@@ -114,6 +115,17 @@ export function parsePlaceReviews(placeId: string, data: PlaceDetails): GoogleRe
     lang: review.text?.languageCode ?? review.originalText?.languageCode ?? null,
     relativeTime: review.relativePublishTimeDescription ?? "",
     publishTime: review.publishTime ?? "",
-    googleMapsUri: data.googleMapsUri ?? null,
+    googleMapsUri: review.googleMapsUri ?? null,
   }));
+}
+
+/** Missing or unsafe review links render as ordinary, non-linked reviews. */
+export function googleReviewUrl(uri: string | null | undefined): string | null {
+  if (!uri) return null;
+  try {
+    const url = new URL(uri);
+    return url.protocol === "https:" ? url.href : null;
+  } catch {
+    return null;
+  }
 }
