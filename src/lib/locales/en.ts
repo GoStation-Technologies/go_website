@@ -933,6 +933,7 @@ export const en = {
       pageAcquisitions: "Acquisitions page",
       pageLeasing: "Real Estate Leasing page",
       pageInvestors: "Investor Relations page",
+      pageContact: "Contact Us page",
       reports: "Annual reports",
       pageValues: "Company values",
       pagePrivacy: "Privacy Policy",
