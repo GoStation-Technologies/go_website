@@ -169,12 +169,12 @@ export async function retrieveGrounding(
 }
 
 export function formatGrounding(ctx: GroundingContext, lang: GroundingLang): string {
-  const empty = ctx.stations.length + ctx.news.length + ctx.jobs.length === 0;
+  const empty = ctx.stations.length + ctx.news.length + ctx.jobs.length + ctx.pages.length === 0;
   if (empty) return "";
 
   const L = lang === "ar"
-    ? { header: "معلومات من قاعدة بيانات قوستيشن (استخدمها فقط، لا تخترع غيرها):", stations: "المحطات", news: "الأخبار/الفعاليات", jobs: "الوظائف المتاحة", h24: "٢٤ ساعة", none: "لا يوجد" }
-    : { header: "GoStation database context (use only this data — do not invent):", stations: "Stations", news: "News/Events", jobs: "Open jobs", h24: "24h", none: "none" };
+    ? { header: "معلومات من قاعدة بيانات قوستيشن (استخدمها فقط، لا تخترع غيرها):", stations: "المحطات", news: "الأخبار/الفعاليات", jobs: "الوظائف المتاحة", pages: "محتوى صفحات الموقع", h24: "٢٤ ساعة", none: "لا يوجد" }
+    : { header: "GoStation database context (use only this data — do not invent):", stations: "Stations", news: "News/Events", jobs: "Open jobs", pages: "Website page content", h24: "24h", none: "none" };
 
   const lines: string[] = [L.header];
 
