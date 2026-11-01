@@ -26,19 +26,9 @@ export function Testimonials({ title, subtitle }: { title: string; subtitle?: st
   }));
   const live = [...google, ...cms];
 
-  if (isLoading && g.isLoading) return null;
-
-  // Never hide the section: fall back to static reviews when the fetch
-  // fails or no reviews are published yet.
-  const fallback = (
-    t("home.reviewsFallback", { returnObjects: true }) as {
-      author: string;
-      role: string;
-      quote: string;
-      rating: number;
-    }[]
-  ).map((r, i) => ({ ...r, id: `fallback-${i}`, avatar_url: null as string | null }));
-  const items = live.length > 0 ? live : fallback;
+  if ((isLoading && g.isLoading) || live.length === 0) return null;
+  // Only actual published CMS records and selected Google reviews are displayed.
+  const items = live;
 
 
   return (

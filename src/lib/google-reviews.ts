@@ -22,15 +22,16 @@ export type PlacesAccess =
 /**
  * Resolve how to reach Google Places (New) REST.
  * 1. GOOGLE_PLACES_API_KEY → your own Google key, called directly.
- * 2. GOOGLE_MAPS_API_KEY + LOVABLE_API_KEY → the linked Maps connection (that key only works via the relay).
- * 3. GOOGLE_MAPS_API_KEY / VITE_GOOGLE_MAPS_API_KEY alone → treated as your own Google key.
+ * The relay is allowed only on explicitly recognized Lovable hosting.
+ * Standalone hosting always uses a server-runtime Google key directly.
  */
-export function googlePlacesAccess(env: Record<string, string | undefined>): PlacesAccess {
+export function googlePlacesAccess(env: Record<string, string | undefined>, allowGateway = false): PlacesAccess {
+  const apiKey = env.GOOGLE_PLACES_API_KEY || env.GOOGLE_MAPS_API_KEY;
   const own = env.GOOGLE_PLACES_API_KEY;
   if (own) return { mode: "direct", baseUrl: "https://places.googleapis.com", headers: { "X-Goog-Api-Key": own }, secrets: [own] };
   const conn = env.GOOGLE_MAPS_API_KEY;
   const lovable = env.LOVABLE_API_KEY;
-  if (conn && lovable) {
+  if (allowGateway && conn && lovable) {
     return {
       mode: "gateway",
       baseUrl: PLACES_GATEWAY_URL,
@@ -38,9 +39,45 @@ export function googlePlacesAccess(env: Record<string, string | undefined>): Pla
       secrets: [conn, lovable],
     };
   }
-  const fallback = conn || env.VITE_GOOGLE_MAPS_API_KEY;
+  const fallback = apiKey;
   if (!fallback) throw new Error("Google Maps is not connected: Missing GOOGLE_PLACES_API_KEY");
   return { mode: "direct", baseUrl: "https://places.googleapis.com", headers: { "X-Goog-Api-Key": fallback }, secrets: [fallback] };
+}
+
+export function isLovableReviewsHost(hostname: string, development = false) {
+  return hostname.endsWith(".lovable.app") || hostname.endsWith(".lovableproject.com") ||
+    (development && (hostname === "localhost" || hostname === "127.0.0.1"));
+}
+
+export const storedGoogleReviewSchema = {
+  // Runtime validation is supplied by the server's Zod schema before persistence.
+  maxAgeMs: 30 * 24 * 60 * 60 * 1000,
+};
+
+export function selectedStoredReviews(reviews: GoogleReview[], shown: string[], places: string[], savedAt: string | undefined, now: number) {
+  const saved = Date.parse(savedAt ?? "");
+  if (!Number.isFinite(saved) || saved > now || now - saved > storedGoogleReviewSchema.maxAgeMs) return [];
+  const byId = new Map(reviews.filter((r) => places.includes(r.placeId)).map((r) => [r.id, r]));
+  return shown.flatMap((id) => {
+    const review = byId.get(id);
+    return review ? [review] : [];
+  });
+}
+
+export async function loadSelectedGoogleReviews(
+  config: { reviews: GoogleReview[]; shown: string[]; places: string[]; savedAt?: string },
+  now: number,
+  fetchLive: () => Promise<{ reviews: GoogleReview[]; errors: string[] }>,
+) {
+  if (!config.shown.length) return { reviews: [] as GoogleReview[], errors: [] as string[] };
+  const stored = selectedStoredReviews(config.reviews, config.shown, config.places, config.savedAt, now);
+  if (stored.length === new Set(config.shown).size) return { reviews: stored, errors: [] as string[] };
+  const live = await fetchLive();
+  const byId = new Map([...stored, ...live.reviews].map((r) => [r.id, r]));
+  return { reviews: config.shown.flatMap((id) => {
+    const review = byId.get(id);
+    return review && config.places.includes(review.placeId) ? [review] : [];
+  }), errors: live.errors };
 }
 
 export function redact(text: string, secrets: string[]) {
