@@ -14,6 +14,8 @@
 Open: admin Contact editor not click-tested (no admin account for requesting user in preview); AI answers still need a working Google key (402 on current key) — grounding code path ready.
 
 ## Direct Google reviews
+- [x] Production fix: server-runtime key resolution, stored selected reviews first, no sample fallback, detailed errors; 15 review tests passed and build OK.
+- [ ] Production deployment/Google validation: requires gostation.sa redeployment with a real runtime Google key and admin refresh/save of existing ID-only selections; server and Google behavior cannot be tested from the sandbox.
 - [x] Remove proprietary token dependency from review fetching and listing search; resolve the three requested key fallbacks and preserve Google error details.
 - [x] Keep review configuration reads/writes on standard public/authenticated clients without service-role requirements.
 - [x] Verify local tests and build signals: 19 tests passed and build OK; Google-dependent live checks remain unverified and require user validation on an authorized deployed origin with a real Google key (not a connector token). Existing Places (New) review selections need reselection because legacy review IDs differ.
