@@ -16,4 +16,4 @@ Open: admin Contact editor not click-tested (no admin account for requesting use
 ## Direct Google reviews
 - [x] Remove proprietary token dependency from review fetching and listing search; resolve the three requested key fallbacks and preserve Google error details.
 - [x] Keep review configuration reads/writes on standard public/authenticated clients without service-role requirements.
-- [ ] Verify local tests and build signals; Google-dependent live checks require an authorized deployed origin.
+- [x] Verify local tests and build signals: 19 tests passed and build OK; Google-dependent live checks remain unverified and require user validation on an authorized deployed origin with a real Google key (not a connector token). Existing Places (New) review selections need reselection because legacy review IDs differ.
