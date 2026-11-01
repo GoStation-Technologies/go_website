@@ -9,17 +9,28 @@ export function stationStatusLabel(station: { is_active: boolean; status?: strin
   if (status?.toLowerCase() === "under maintenance") return ar ? "تحت الصيانة" : "Under maintenance";
   return ar ? "غير مشغّلة حالياً" : "Not operating";
 }
-/** Station label in the latest naming: "GO44 - short name". The code comes from the English source name. */
+/** Station label: "GO01 - District". Falls back to the city when the district is missing. */
 export function stationDisplayName(
-  s: { name_ar?: string | null; name_en?: string | null },
+  s: {
+    name_ar?: string | null;
+    name_en?: string | null;
+    district_ar?: string | null;
+    district_en?: string | null;
+    city_ar?: string | null;
+    city_en?: string | null;
+  },
   ar: boolean,
 ): string {
   const en = (s.name_en ?? "").trim();
   const code = en.match(/^(GO\s*\d+)/i)?.[1]?.replace(/\s+/g, "").toUpperCase() ?? "";
+  const district = ((ar ? s.district_ar : s.district_en) ?? "").trim();
+  const city = ((ar ? s.city_ar : s.city_en) ?? "").trim();
+  const place = district || city;
+  if (code && place) return `${code} - ${place}`;
+  if (code) return code;
+  if (place) return place;
   const base = ((ar ? s.name_ar : s.name_en) ?? "").trim();
-  if (!code) return base || "GoStation";
-  const short = base.replace(/^GO\s*\d+\s*[-–:]\s*/i, "").trim();
-  return short ? `${code} - ${short}` : code;
+  return base || "GoStation";
 }
 
 /** Numeric station code for sorting (GO44 → 44). */
