@@ -23,7 +23,7 @@ function NewsArchivePage() {
   const { t, i18n } = useTranslation();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
-  const { data = [] } = useQuery({
+  const { data = [], isLoading } = useQuery({
     queryKey: ["media-news-archive"],
     queryFn: async () => {
       const { data } = await supabase
@@ -34,6 +34,7 @@ function NewsArchivePage() {
         .order("published_at", { ascending: false });
       return data ?? [];
     },
+    refetchOnMount: "always",
   });
 
   const fmt = (d?: string | null) =>
@@ -57,7 +58,20 @@ function NewsArchivePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-14">
-        {data.length === 0 ? (
+        {isLoading ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="overflow-hidden rounded-2xl border border-border bg-card">
+                <div className="aspect-[16/10] animate-pulse bg-muted" />
+                <div className="space-y-2 p-5">
+                  <div className="h-3 w-1/4 animate-pulse rounded bg-muted" />
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+                  <div className="h-3 w-full animate-pulse rounded bg-muted" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : data.length === 0 ? (
           <p className="text-muted-foreground">{t("media.empty")}</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

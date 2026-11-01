@@ -34,7 +34,7 @@ function MediaPage() {
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const [filter, setFilter] = useState<Filter>("all");
 
-  const { data = [] } = useQuery({
+  const { data = [], isLoading } = useQuery({
     queryKey: ["media"],
     queryFn: async () => {
       const { data } = await supabase
