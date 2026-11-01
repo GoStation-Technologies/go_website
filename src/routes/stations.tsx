@@ -40,13 +40,14 @@ function StationsPage() {
   const ar = lng === "ar";
   const [region, setRegion] = useState("all");
   const [fuel, setFuel] = useState("all");
-  const { data = [] } = useQuery({
+  const { data = [], isLoading } = useQuery({
     queryKey: ["stations", "all"],
     queryFn: async () => {
       const { data, error } = await supabase.from("stations").select("*");
       if (error) throw error;
       return data ?? [];
     },
+    refetchOnMount: "always",
   });
 
   const { data: allRegions = [] } = useActiveStationRegions();
@@ -215,7 +216,15 @@ function StationsPage() {
             </ClientOnly>
           </Card>
           <div className="max-h-[520px] space-y-3 overflow-y-auto pe-2">
-            {filtered.map((s) => (
+            {isLoading
+              ? Array.from({ length: 5 }).map((_, i) => (
+                  <Card key={i}><CardContent className="space-y-2 p-4">
+                    <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
+                    <div className="h-3 w-1/3 animate-pulse rounded bg-muted" />
+                    <div className="h-3 w-1/2 animate-pulse rounded bg-muted" />
+                  </CardContent></Card>
+                ))
+              : filtered.map((s) => (
               <Card key={s.id} className="transition hover:shadow-md">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-2">
