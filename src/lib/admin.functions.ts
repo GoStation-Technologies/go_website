@@ -4,6 +4,7 @@ import { submissionTables } from "./investor-inquiry";
 import { filterSubmissionCategory } from "./leasing-request";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { writeAudit, type AuditEntity } from "./audit";
+import { uniqueSlug } from "./slug";
 
 
 /**

@@ -6,6 +6,20 @@ export type GroundingContext = {
   stations: Array<{ name: string; city: string; district?: string | null; is_24h: boolean; services: string[] }>;
   news: Array<{ title: string; slug: string; excerpt?: string | null; kind: string; published_at?: string | null }>;
   jobs: Array<{ title: string; slug: string; department?: string | null; city?: string | null; employment_type?: string | null }>;
+  pages: Array<{ title: string; path: string; snippet: string }>;
+};
+
+/** Public page slugs the assistant may quote, mapped to their public paths. */
+const PAGE_PATHS: Record<string, string> = {
+  home: "/",
+  about: "/about",
+  values: "/about",
+  franchise: "/franchise",
+  acquisitions: "/acquisitions",
+  leasing: "/leasing",
+  investors: "/investors",
+  contact: "/contact",
+  careers: "/careers",
 };
 
 // Very light stop-word list — keep short & focused; retrieval is ilike-based.
