@@ -150,6 +150,7 @@ function MediaPage() {
                 </Link>
               ))}
             </div>
+            )}
             <div className="mt-8 flex justify-center">
               <Button
                 asChild

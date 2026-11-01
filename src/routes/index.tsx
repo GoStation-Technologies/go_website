@@ -110,7 +110,7 @@ function HomePage() {
       const { data } = await supabase
         .from("news_articles")
         .select(
-          "id, slug, kind, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at, event_date, event_location_ar, event_location_en, views_count, duration_seconds",
+        "id, slug, kind, title_ar, title_en, excerpt_ar, excerpt_en, cover_url, published_at, event_date, event_location_ar, event_location_en, views_count, duration_seconds",
         )
         .eq("is_published", true)
         .in("kind", ["news", "event", "video"])
@@ -118,6 +118,7 @@ function HomePage() {
         .limit(12);
       return data ?? [];
     },
+    refetchOnMount: "always",
   });
 
 
