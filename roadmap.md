@@ -1,5 +1,7 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
+- [x] Add the missing email control directly to the Contact Us page editor, using the shared contact setting.
+
 - [x] 1. News images cropping: object-contain on all news/event covers (home, media, archive, detail)
 - [x] 2. About Us brief text width: hero max-w-3xl, story max-w-6xl mx-auto leading-relaxed
 - [x] 3. Contact page fully CMS-editable: contact PageDef (hero/info/hq/channels/hours/form/map) + sidebar link + page wired to cms.field

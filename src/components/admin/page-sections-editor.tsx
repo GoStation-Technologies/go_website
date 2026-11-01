@@ -15,6 +15,7 @@ import { Field, FormGrid, FormRow, inputCls } from "@/components/admin/form-kit"
 import { getContentLanguage } from "@/lib/i18n";
 import { LEGAL_PAGES } from "@/lib/legal-pages";
 import { METRIC_DEFINITIONS } from "@/lib/investor-content";
+import { ContactEmailEditor } from "@/components/admin/contact-email-editor";
 
 export type SectionDef = {
   key: string;
@@ -427,6 +428,8 @@ export function PageSectionsEditor({ page }: { page: PageDef }) {
           {t("admin.common.loading")}
         </div>
       ) : null}
+
+      {page.slug === "contact" && <ContactEmailEditor />}
 
       {page.sections.map((def, i) => {
         const stored = rows.find((r) => r.section_key === def.key);
