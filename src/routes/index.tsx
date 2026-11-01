@@ -496,7 +496,7 @@ function HomePage() {
                         <img
                           src={n.cover_url}
                           alt=""
-                          className="absolute inset-0 h-full w-full object-cover transition-colors duration-200"
+                          className="absolute inset-0 h-full w-full object-contain"
                           loading="lazy"
                         />
                       ) : (

@@ -70,7 +70,7 @@ function NewsArchivePage() {
                         src={n.cover_url}
                         alt={lng === "ar" ? n.title_ar : n.title_en}
                         loading="lazy"
-                        className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                        className="h-full w-full object-contain"
                       />
                     ) : (
                       <div className="h-full w-full bg-gradient-to-br from-primary to-accent/60" />

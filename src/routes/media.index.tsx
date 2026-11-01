@@ -114,7 +114,7 @@ function MediaPage() {
                           src={n.cover_url}
                           alt={lng === "ar" ? n.title_ar : n.title_en}
                           loading="lazy"
-                          className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          className="h-full w-full object-contain"
                         />
                       ) : (
                         <div className="h-full w-full bg-gradient-to-br from-primary to-accent/60" />
@@ -166,7 +166,7 @@ function MediaPage() {
                   <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl">
                     <div className="relative aspect-[16/9] overflow-hidden bg-muted">
                       {e.cover_url ? (
-                        <img src={e.cover_url} alt={lng === "ar" ? e.title_ar : e.title_en} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                        <img src={e.cover_url} alt={lng === "ar" ? e.title_ar : e.title_en} loading="lazy" className="h-full w-full object-contain" />
                       ) : (
                         <div className="h-full w-full bg-gradient-to-br from-primary to-accent/60" />
                       )}
