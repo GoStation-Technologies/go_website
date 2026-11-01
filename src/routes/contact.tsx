@@ -38,7 +38,8 @@ function ContactPage() {
   const HQ_DIRECTIONS = setting("contact", "maps_url", HQ_DIRECTIONS_FALLBACK);
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
-  const channels = (t("contact.channels", { returnObjects: true }) as string[]) ?? [];
+  const cmsChannels = cms.field("channels", "content", "").split("\n").map((x) => x.trim()).filter(Boolean);
+  const channels = cmsChannels.length ? cmsChannels : ((t("contact.channels", { returnObjects: true }) as string[]) ?? []);
   const cats = ["general", "support", "complaint", "franchise", "acquisition", "media", "investor"] as const;
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -161,16 +162,16 @@ function ContactPage() {
           <Card>
             <CardContent className="space-y-5 p-6">
               <div>
-                <h2 className="text-lg font-bold text-accent">{t("contact.infoTitle")}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("contact.infoBody")}</p>
+                <h2 className="text-lg font-bold text-accent">{cms.field("info", "title", t("contact.infoTitle"))}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{cms.field("info", "content", t("contact.infoBody"))}</p>
               </div>
               <div>
-                <div className="text-sm font-semibold text-accent">{t("contact.hqTitle")}</div>
-                <div className="mt-1 text-sm font-medium">{t("contact.hqName")}</div>
-                <div className="text-sm text-muted-foreground">{t("contact.hqAddress")}</div>
+                <div className="text-sm font-semibold text-accent">{cms.field("hq", "title", t("contact.hqTitle"))}</div>
+                <div className="mt-1 text-sm font-medium">{cms.field("hq", "subtitle", t("contact.hqName"))}</div>
+                <div className="text-sm text-muted-foreground">{cms.field("hq", "content", t("contact.hqAddress"))}</div>
               </div>
               <div>
-                <div className="text-sm font-semibold text-accent">{t("contact.channelsTitle")}</div>
+                <div className="text-sm font-semibold text-accent">{cms.field("channels", "title", t("contact.channelsTitle"))}</div>
                 <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
                   {channels.filter((_,index) => index !== 0 || Boolean(phone)).map((c) => (
                     <li key={c} className="flex gap-2">
@@ -182,7 +183,7 @@ function ContactPage() {
               </div>
             </CardContent>
           </Card>
-          <InfoRow icon={Clock} title={t("contact.hours")} text={t("contact.address")} />
+          <InfoRow icon={Clock} title={cms.field("hours", "title", t("contact.hours"))} text={cms.field("hours", "content", t("contact.address"))} />
           <InfoRow icon={Mail} title="Email" text={email} />
           {phone && <InfoRow icon={Phone} title={t("contact.callCenter")} text={phone} tel />}
           {whatsapp && <InfoRow icon={MessageCircle} title="WhatsApp" text="WhatsApp" href={whatsapp} />}
@@ -191,8 +192,8 @@ function ContactPage() {
         <Card id="contact-form">
           <CardContent className="p-8">
             <div className="mb-6">
-              <h2 className="text-xl font-extrabold">{t("contact.formTitle")}</h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t("contact.formSub")}</p>
+              <h2 className="text-xl font-extrabold">{cms.field("form", "title", t("contact.formTitle"))}</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{cms.field("form", "content", t("contact.formSub"))}</p>
             </div>
             {ref && (
               <div className="mb-6 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm">
@@ -227,8 +228,8 @@ function ContactPage() {
       <section id="hq-map" className="mx-auto max-w-7xl px-4 pb-20">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-extrabold">{t("contact.mapTitle")}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{t("contact.mapSub")}</p>
+            <h2 className="text-2xl font-extrabold">{cms.field("map", "title", t("contact.mapTitle"))}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{cms.field("map", "content", t("contact.mapSub"))}</p>
           </div>
           <a
             href={HQ_DIRECTIONS}
@@ -246,8 +247,8 @@ function ContactPage() {
                 id: "hq",
                 lat: HQ.lat,
                 lng: HQ.lng,
-                title: t("contact.hqName"),
-                subtitle: t("contact.hqAddress"),
+                title: cms.field("hq", "subtitle", t("contact.hqName")),
+                subtitle: cms.field("hq", "content", t("contact.hqAddress")),
                 href: HQ_DIRECTIONS,
               },
             ]}

@@ -6,6 +6,20 @@ export type GroundingContext = {
   stations: Array<{ name: string; city: string; district?: string | null; is_24h: boolean; services: string[] }>;
   news: Array<{ title: string; slug: string; excerpt?: string | null; kind: string; published_at?: string | null }>;
   jobs: Array<{ title: string; slug: string; department?: string | null; city?: string | null; employment_type?: string | null }>;
+  pages: Array<{ title: string; path: string; snippet: string }>;
+};
+
+/** Public page slugs the assistant may quote, mapped to their public paths. */
+const PAGE_PATHS: Record<string, string> = {
+  home: "/",
+  about: "/about",
+  values: "/about",
+  franchise: "/franchise",
+  acquisitions: "/acquisitions",
+  leasing: "/leasing",
+  investors: "/investors",
+  contact: "/contact",
+  careers: "/careers",
 };
 
 // Very light stop-word list — keep short & focused; retrieval is ilike-based.
@@ -43,7 +57,7 @@ export async function retrieveGrounding(
   lang: GroundingLang,
 ): Promise<GroundingContext> {
   const terms = extractTerms(message);
-  const ctx: GroundingContext = { stations: [], news: [], jobs: [] };
+  const ctx: GroundingContext = { stations: [], news: [], jobs: [], pages: [] };
 
   // Stations
   {
@@ -122,16 +136,45 @@ export async function retrieveGrounding(
     }
   }
 
+  // Public website pages (CMS page_sections) — grounds policy/service questions
+  // in the actual published content of About, Franchise, Leasing, Careers, etc.
+  {
+    const q = supabase
+      .from("page_sections")
+      .select("page_slug,section_key,title_en,title_ar,content_en,content_ar")
+      .eq("is_visible", true)
+      .in("page_slug", Object.keys(PAGE_PATHS))
+      .limit(4);
+    const or = buildOr(
+      lang === "ar"
+        ? ["title_ar", "content_ar"]
+        : ["title_en", "content_en"],
+      terms,
+    );
+    const { data } = or ? await q.or(or) : await q;
+    for (const p of data ?? []) {
+      const title = ((lang === "ar" ? p.title_ar : p.title_en) ?? p.title_en ?? "").trim();
+      const content = ((lang === "ar" ? p.content_ar : p.content_en) ?? p.content_en ?? "").trim();
+      const snippet = (content || title).replace(/\s+/g, " ").slice(0, 280);
+      if (!snippet) continue;
+      ctx.pages.push({
+        title: title || p.section_key,
+        path: PAGE_PATHS[p.page_slug] ?? "/",
+        snippet,
+      });
+    }
+  }
+
   return ctx;
 }
 
 export function formatGrounding(ctx: GroundingContext, lang: GroundingLang): string {
-  const empty = ctx.stations.length + ctx.news.length + ctx.jobs.length === 0;
+  const empty = ctx.stations.length + ctx.news.length + ctx.jobs.length + ctx.pages.length === 0;
   if (empty) return "";
 
   const L = lang === "ar"
-    ? { header: "معلومات من قاعدة بيانات قوستيشن (استخدمها فقط، لا تخترع غيرها):", stations: "المحطات", news: "الأخبار/الفعاليات", jobs: "الوظائف المتاحة", h24: "٢٤ ساعة", none: "لا يوجد" }
-    : { header: "GoStation database context (use only this data — do not invent):", stations: "Stations", news: "News/Events", jobs: "Open jobs", h24: "24h", none: "none" };
+    ? { header: "معلومات من قاعدة بيانات قوستيشن (استخدمها فقط، لا تخترع غيرها):", stations: "المحطات", news: "الأخبار/الفعاليات", jobs: "الوظائف المتاحة", pages: "محتوى صفحات الموقع", h24: "٢٤ ساعة", none: "لا يوجد" }
+    : { header: "GoStation database context (use only this data — do not invent):", stations: "Stations", news: "News/Events", jobs: "Open jobs", pages: "Website page content", h24: "24h", none: "none" };
 
   const lines: string[] = [L.header];
 
@@ -155,6 +198,12 @@ export function formatGrounding(ctx: GroundingContext, lang: GroundingLang): str
     for (const j of ctx.jobs) {
       const meta = [j.department, j.city, j.employment_type].filter(Boolean).join(", ");
       lines.push(`- ${j.title} (/careers/${j.slug})${meta ? ` — ${meta}` : ""}`);
+    }
+  }
+  if (ctx.pages.length) {
+    lines.push(`\n${L.pages}:`);
+    for (const p of ctx.pages) {
+      lines.push(`- ${p.title} (${p.path}): ${p.snippet}`);
     }
   }
 

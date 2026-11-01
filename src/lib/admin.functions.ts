@@ -4,6 +4,7 @@ import { submissionTables } from "./investor-inquiry";
 import { filterSubmissionCategory } from "./leasing-request";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { writeAudit, type AuditEntity } from "./audit";
+import { uniqueSlug } from "./slug";
 
 
 /**
@@ -584,8 +585,20 @@ export const adminUpsertJob = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => JobInput.parse(raw))
   .handler(async ({ data, context }) => {
+    // Duplicate job titles are allowed; only the slug must stay unique.
+    const base = data.slug;
+    const { data: conflicts } = await context.supabase
+      .from("job_openings")
+      .select("id, slug")
+      .or(`slug.eq.${base},slug.like.${base}-%`);
+    const taken = new Set(
+      (conflicts ?? []).filter((r) => r.id !== data.id).map((r) => r.slug as string),
+    );
+    const slug = uniqueSlug(base, taken);
+
     const { error } = await context.supabase.from("job_openings").upsert({
       ...data,
+      slug,
       department: data.department_en,
       city: data.city_en,
     });

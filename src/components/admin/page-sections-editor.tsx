@@ -238,6 +238,65 @@ export const PAGE_CMS: PageDef[] = [
     ],
   },
   {
+    slug: "contact",
+    en: "Contact Us",
+    ar: "تواصل معنا",
+    descEn: "Contact page header, office details, channels, working hours, form and map text.",
+    descAr: "عنوان صفحة التواصل وبيانات المكتب والقنوات وساعات العمل ونصوص النموذج والخريطة.",
+    sections: [
+      {
+        key: "hero", en: "Hero", ar: "البانر الرئيسي", fields: ["title", "subtitle"],
+        labels: {
+          title: { en: "Page title", ar: "عنوان الصفحة" },
+          subtitle: { en: "Introduction", ar: "النص التعريفي" },
+        },
+      },
+      {
+        key: "info", en: "Contact information card", ar: "بطاقة معلومات التواصل", fields: ["title", "content"],
+        labels: {
+          title: { en: "Card heading", ar: "عنوان البطاقة" },
+          content: { en: "Card text", ar: "نص البطاقة" },
+        },
+      },
+      {
+        key: "hq", en: "Head office", ar: "المقر الرئيسي",
+        labels: {
+          title: { en: "Section heading", ar: "عنوان القسم" },
+          subtitle: { en: "Company name", ar: "اسم الشركة" },
+          content: { en: "Address", ar: "العنوان" },
+        },
+      },
+      {
+        key: "channels", en: "Channels & response times", ar: "القنوات ومدة الرد", fields: ["title", "content"],
+        labels: {
+          title: { en: "Section heading", ar: "عنوان القسم" },
+          content: { en: "Channels (one per line)", ar: "القنوات (قناة في كل سطر)" },
+        },
+      },
+      {
+        key: "hours", en: "Working hours", ar: "ساعات العمل", fields: ["title", "content"],
+        labels: {
+          title: { en: "Label", ar: "التسمية" },
+          content: { en: "Hours text", ar: "نص الساعات" },
+        },
+      },
+      {
+        key: "form", en: "Form intro", ar: "مقدمة النموذج", fields: ["title", "content"],
+        labels: {
+          title: { en: "Form heading", ar: "عنوان النموذج" },
+          content: { en: "Form description", ar: "وصف النموذج" },
+        },
+      },
+      {
+        key: "map", en: "Map section", ar: "قسم الخريطة", fields: ["title", "content"],
+        labels: {
+          title: { en: "Map heading", ar: "عنوان الخريطة" },
+          content: { en: "Map description", ar: "وصف الخريطة" },
+        },
+      },
+    ],
+  },
+  {
     slug: "leasing",
     en: "Real Estate Leasing",
     ar: "التأجير العقاري",

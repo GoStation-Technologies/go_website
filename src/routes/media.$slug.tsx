@@ -111,6 +111,6 @@ function ArticleMedia({ videoUrl, cover, title }: { videoUrl: string | null; cov
       </video>
     );
   }
-  if (cover) return <img src={cover} alt={title} className="my-8 aspect-[16/9] w-full rounded-2xl object-cover" />;
+  if (cover) return <img src={cover} alt={title} className="my-8 aspect-[16/9] w-full rounded-2xl bg-muted object-contain" />;
   return <div className="my-8 aspect-[16/9] rounded-2xl bg-gradient-to-br from-primary to-accent/60" />;
 }

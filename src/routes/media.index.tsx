@@ -34,7 +34,7 @@ function MediaPage() {
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const [filter, setFilter] = useState<Filter>("all");
 
-  const { data = [] } = useQuery({
+  const { data = [], isLoading } = useQuery({
     queryKey: ["media"],
     queryFn: async () => {
       const { data } = await supabase
@@ -44,6 +44,7 @@ function MediaPage() {
         .order("published_at", { ascending: false });
       return data ?? [];
     },
+    refetchOnMount: "always",
   });
 
   const news = data.filter((d) => d.kind === "news");
@@ -97,8 +98,21 @@ function MediaPage() {
         {data.length === 0 && <p className="mt-12 text-muted-foreground">{t("media.empty")}</p>}
 
         {/* news rail */}
-        {show("news") && news.length > 0 && (
+        {show("news") && (isLoading || news.length > 0) && (
           <Section title={t("media.latestNews")}>
+            {isLoading ? (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="overflow-hidden rounded-2xl border border-border bg-card">
+                    <div className="aspect-[16/10] animate-pulse bg-muted" />
+                    <div className="space-y-2 p-5">
+                      <div className="h-3 w-1/4 animate-pulse rounded bg-muted" />
+                      <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {news.slice(0, 6).map((n) => (
                 <Link
@@ -114,7 +128,7 @@ function MediaPage() {
                           src={n.cover_url}
                           alt={lng === "ar" ? n.title_ar : n.title_en}
                           loading="lazy"
-                          className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          className="h-full w-full object-contain"
                         />
                       ) : (
                         <div className="h-full w-full bg-gradient-to-br from-primary to-accent/60" />
@@ -136,6 +150,7 @@ function MediaPage() {
                 </Link>
               ))}
             </div>
+            )}
             <div className="mt-8 flex justify-center">
               <Button
                 asChild
@@ -166,7 +181,7 @@ function MediaPage() {
                   <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl">
                     <div className="relative aspect-[16/9] overflow-hidden bg-muted">
                       {e.cover_url ? (
-                        <img src={e.cover_url} alt={lng === "ar" ? e.title_ar : e.title_en} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                        <img src={e.cover_url} alt={lng === "ar" ? e.title_ar : e.title_en} loading="lazy" className="h-full w-full object-contain" />
                       ) : (
                         <div className="h-full w-full bg-gradient-to-br from-primary to-accent/60" />
                       )}

@@ -213,8 +213,9 @@ export const adminApplicationCvUrl = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!row?.cv_path) return { url: null as string | null };
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: signed, error: sErr } = await supabaseAdmin.storage
+    // Signed URL via the staff member's own session (the "cvs staff read"
+    // storage policy allows authenticated reads); no service-role key needed.
+    const { data: signed, error: sErr } = await context.supabase.storage
       .from("cvs")
       .createSignedUrl(row.cv_path, 300);
     if (sErr) throw new Error(sErr.message);

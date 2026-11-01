@@ -58,7 +58,7 @@ export function complaintMatches(message:string, settings:AgentSettings) {
 }
 export function explicitHuman(message:string) {
   const query = normalizeSearch(message);
-  return ['التحدث مع موظف','موظف بشري','تواصل مع موظف','اكلم موظف','speak to a person','talk to a person','speak to an agent','human','manager','مدير'].some(k => (` ${query} `).includes(` ${normalizeSearch(k)} `));
+  return ['التحدث مع موظف','موظف بشري','تواصل مع موظف','اكلم موظف','موظف','موظفة','بشري','انسان','إنسان','اكلم احد','اتحدث مع احد','خدمة العملاء','speak to a person','talk to a person','speak to an agent','real person','talk to someone','customer service','agent','human','manager','مدير'].some(k => (` ${query} `).includes(` ${normalizeSearch(k)} `));
 }
 export function actionReply(reason:HandoverReason,lang:'ar'|'en') {
   if(reason==='complaint') return lang==='ar'?'نعتذر عن أي تجربة غير مرضية. تم تحويلك مباشرة لقنوات المساعدة المعتمدة:':'We apologize for any unsatisfactory experience. You have been directed to our approved support channels:';

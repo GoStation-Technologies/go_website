@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { UploadCloud } from "lucide-react";
+import { UploadCloud, Loader2 } from "lucide-react";
 
 const MAX_CV_BYTES = 4 * 1024 * 1024;
 
@@ -136,6 +136,7 @@ export function ApplyDialog({
               <Textarea rows={4} name="cover" />
             </F>
             <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
+              {busy && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
               {busy ? t("common.submitting") : t("common.submit")}
             </Button>
           </form>
