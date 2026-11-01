@@ -239,7 +239,7 @@ export const sendChatMessage = createServerFn({ method: "POST" })
     const groundingBlock = grounding ? formatGrounding(grounding, data.lang) : "";
 
     const persona = data.lang === 'ar' ? knowledge?.settings.prompt_ar : knowledge?.settings.prompt_en;
-    const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (persona ? `\nCompany guidance:\n${persona}` : '') + '\nIf the question cannot be resolved from supplied information, return exactly [HANDOVER]. Never display technical credit, quota or token errors. Never include phone numbers or WhatsApp links in replies; customer service channels are shown separately. Direct contact queries to /contact.' + (groundingBlock ? `\n\n${groundingBlock}` : "");
+    const systemPrompt = (data.lang === "ar" ? SYSTEM_AR : SYSTEM_EN) + (persona ? `\nCompany guidance (always obey these instructions):\n${persona}` : '') + '\nIf the user asks for a human agent, employee, or customer service, or files a complaint, return exactly [HANDOVER] and do not suggest stations. If the question cannot be resolved from supplied information, return exactly [HANDOVER]. Never display technical credit, quota or token errors. Never include phone numbers or WhatsApp links in replies; customer service channels are shown separately. Direct contact queries to /contact.' + (groundingBlock ? `\n\n${groundingBlock}` : "");
 
     const result = await requestChatReply(ai, systemPrompt, data.history.length ? data.history : history ?? [], data.message);
     if (result.kind === "denied") {
