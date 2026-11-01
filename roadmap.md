@@ -12,3 +12,8 @@
 - [x] 8. Mock-data flash: no hardcoded fallback arrays exist; added skeleton loaders + refetchOnMount:"always" on stations/news queries
 
 Open: admin Contact editor not click-tested (no admin account for requesting user in preview); AI answers still need a working Google key (402 on current key) — grounding code path ready.
+
+## Direct Google reviews
+- [x] Remove proprietary token dependency from review fetching and listing search; resolve the three requested key fallbacks and preserve Google error details.
+- [x] Keep review configuration reads/writes on standard public/authenticated clients without service-role requirements.
+- [ ] Verify local tests and build signals; Google-dependent live checks require an authorized deployed origin.
