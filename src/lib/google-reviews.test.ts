@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { googlePlacesAccess, isLovableReviewsHost, loadSelectedGoogleReviews, parsePlaceReviews, redact } from "./google-reviews";
+import { googlePlacesAccess, googleReviewUrl, isLovableReviewsHost, loadSelectedGoogleReviews, parsePlaceReviews, redact } from "./google-reviews";
 
 describe("Google Places access resolution", () => {
   it("uses your own GOOGLE_PLACES_API_KEY directly, even when the connection exists", () => {
@@ -92,5 +92,23 @@ describe("Google review parsing", () => {
   });
   it("returns no reviews when the listing has none", () => {
     expect(parsePlaceReviews("p1", {})).toEqual([]);
+  });
+  it("preserves the actual review URL rather than the station URL", async () => {
+    const uri = "https://www.google.com/maps/reviews/data=review1";
+    const reviews = parsePlaceReviews("p1", { googleMapsUri: "https://maps.google.com/?cid=station", reviews: [{ name: "places/p1/reviews/r1", googleMapsUri: uri }] });
+    const result = await loadSelectedGoogleReviews({ places: ["p1"], shown: ["places/p1/reviews/r1"], reviews: JSON.parse(JSON.stringify(reviews)), savedAt: "2026-11-01T16:00:00Z" }, Date.parse("2026-11-01T17:22:00Z"), async () => ({ reviews: [], errors: [] }));
+    expect(result.reviews[0].googleMapsUri).toBe(uri);
+    expect(googleReviewUrl(result.reviews[0].googleMapsUri)).toBe(uri);
+  });
+  it("does not substitute a station link when the actual review URL is missing", () => {
+    expect(parsePlaceReviews("p1", { googleMapsUri: "https://maps.google.com/?cid=station", reviews: [{}] })[0].googleMapsUri).toBeNull();
+    expect(googleReviewUrl(null)).toBeNull();
+    expect(googleReviewUrl(undefined)).toBeNull();
+    expect(googleReviewUrl("")).toBeNull();
+  });
+  it("rejects malformed and unsafe external links", () => {
+    expect(googleReviewUrl("javascript:alert(1)")).toBeNull();
+    expect(googleReviewUrl("not a URL")).toBeNull();
+    expect(googleReviewUrl("http://maps.google.com")).toBeNull();
   });
 });
