@@ -57,7 +57,7 @@ export async function retrieveGrounding(
   lang: GroundingLang,
 ): Promise<GroundingContext> {
   const terms = extractTerms(message);
-  const ctx: GroundingContext = { stations: [], news: [], jobs: [] };
+  const ctx: GroundingContext = { stations: [], news: [], jobs: [], pages: [] };
 
   // Stations
   {
@@ -132,6 +132,35 @@ export async function retrieveGrounding(
         department: j.department,
         city: j.city,
         employment_type: j.employment_type,
+      });
+    }
+  }
+
+  // Public website pages (CMS page_sections) — grounds policy/service questions
+  // in the actual published content of About, Franchise, Leasing, Careers, etc.
+  {
+    const q = supabase
+      .from("page_sections")
+      .select("page_slug,section_key,title_en,title_ar,content_en,content_ar")
+      .eq("is_visible", true)
+      .in("page_slug", Object.keys(PAGE_PATHS))
+      .limit(4);
+    const or = buildOr(
+      lang === "ar"
+        ? ["title_ar", "content_ar"]
+        : ["title_en", "content_en"],
+      terms,
+    );
+    const { data } = or ? await q.or(or) : await q;
+    for (const p of data ?? []) {
+      const title = ((lang === "ar" ? p.title_ar : p.title_en) ?? p.title_en ?? "").trim();
+      const content = ((lang === "ar" ? p.content_ar : p.content_en) ?? p.content_en ?? "").trim();
+      const snippet = (content || title).replace(/\s+/g, " ").slice(0, 280);
+      if (!snippet) continue;
+      ctx.pages.push({
+        title: title || p.section_key,
+        path: PAGE_PATHS[p.page_slug] ?? "/",
+        snippet,
       });
     }
   }
