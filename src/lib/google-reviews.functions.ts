@@ -21,7 +21,7 @@ const Review = z.object({
   id: z.string().max(300), placeId: z.string().max(200), placeName: z.string().max(500),
   author: z.string().max(500), authorPhoto: z.string().max(2000).nullable(), authorUri: z.string().max(2000).nullable(),
   rating: z.number().min(0).max(5), text: z.string().max(20000), lang: z.string().max(30).nullable(),
-  relativeTime: z.string().max(500), publishTime: z.string().max(100), googleMapsUri: z.string().max(2000).nullable(),
+  relativeTime: z.string().max(500), publishTime: z.string().max(100), googleMapsUri: z.string().max(2000).nullable().default(null),
 });
 type Config = { places: string[]; shown: string[]; reviews: GoogleReview[]; savedAt?: string };
 
