@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 - Public marketing links are stored in `site_settings` so Admin Settings remains the single editable source of truth.
+- The Contact page editor edits email through the existing contact site setting, preserving other contact fields, so it stays synchronized with Site Settings and public contact displays.
 - Investor inquiry form and server validation share one schema; admin submission mappings include the same `ir_inquiries` table so public submissions and staff management stay aligned.
 - Investor metrics use bilingual `page_sections` records; annual PDFs use `financial_reports`, RLS-controlled admin management and loader-primed public reads, so edits and publication have one source of truth. Uploaded reports store relative CMS paths; the public report endpoint checks publication and sets inline/attachment headers for portable PDF actions.
 - Render public customer testimonials through the shared CMS-driven Testimonials component, never a parallel system-cache grid, so publication controls govern every displayed review.
