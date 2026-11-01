@@ -1,10 +1,12 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
-- [ ] 1. News images cropping: responsive aspect ratio, no harsh fixed heights, object-cover object-center / contain
-- [ ] 2. About Us brief text width: expand max-w to 5xl/6xl, leading-relaxed, mx-auto
-- [ ] 3. Contact page fully CMS-editable (header, description, address, hours, email, response notes) AR+EN via admin
-- [ ] 4. AI assistant: ground with public page content, obey admin persona, human/complaint → escalation card (no station search)
-- [ ] 5. Careers job application submission fix: handler, CV upload bucket perms, job_applications anon INSERT RLS, spinner/toast/success modal with reference
-- [ ] 6. Allow duplicate job titles: drop UNIQUE on title, rely on UUID id
-- [ ] 7. Map station labels: "[Code] - [District]" format, fallback to city
-- [ ] 8. Remove mock-data flash: no hardcoded fallback arrays, skeleton loaders, proper cache invalidation
+- [x] 1. News images cropping: object-contain on all news/event covers (home, media, archive, detail)
+- [x] 2. About Us brief text width: hero max-w-3xl, story max-w-6xl mx-auto leading-relaxed
+- [x] 3. Contact page fully CMS-editable: contact PageDef (hero/info/hq/channels/hours/form/map) + sidebar link + page wired to cms.field
+- [x] 4. AI assistant: page_sections grounding added, bare "موظف"/"بشري"/"agent" etc. trigger handover card (verified live: no station match), persona enforced in prompt
+- [x] 5. Job application fix: cvs bucket storage policies (public upload, staff read), signed URL via staff session, spinner; live test GS-JOB-2026-00043 with CV upload
+- [x] 6. Duplicate job titles: uniqueSlug() auto-suffixes slugs (accountant-2…); titles free to repeat
+- [x] 7. Map station labels: "GO1 - ضاحية الملك فهد" format, district with city fallback (verified live)
+- [x] 8. Mock-data flash: no hardcoded fallback arrays exist; added skeleton loaders + refetchOnMount:"always" on stations/news queries
+
+Open: admin Contact editor not click-tested (no admin account for requesting user in preview); AI answers still need a working Google key (402 on current key) — grounding code path ready.
