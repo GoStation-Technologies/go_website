@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { writeAudit } from "./audit";
+import { optionalUrlSchema, phoneSchema } from "./form-validation";
 
 export const APPLICATION_STAGES = [
   "new",
@@ -13,56 +14,32 @@ export const APPLICATION_STAGES = [
 ] as const;
 export type ApplicationStage = (typeof APPLICATION_STAGES)[number];
 
-const MAX_CV_BYTES = 4 * 1024 * 1024;
-
 const ApplyInput = z.object({
   job_id: z.string().uuid(),
   full_name: z.string().trim().min(1).max(200),
   email: z.string().trim().email().max(255),
-  phone: z.string().trim().min(1).max(50),
-  linkedin_url: z.string().trim().max(300).optional().default(""),
-  cover_letter: z.string().trim().max(4000).optional().default(""),
-  cv: z
-    .object({
-      name: z.string().min(1).max(200),
-      type: z.string().max(120).default("application/pdf"),
-      /** base64 (no data: prefix) */
-      data: z.string().min(1),
-    })
+  phone: phoneSchema,
+  linkedin_url: optionalUrlSchema,
+  cover_letter: z.string().trim().max(10000).optional().default(""),
+  /** Storage path of a CV the browser uploaded directly to the private "cvs" bucket. */
+  cv_path: z
+    .string()
+    .regex(/^[0-9a-f-]{36}\/[0-9a-f-]{36}\.(pdf|doc|docx)$/)
     .nullable()
     .optional()
     .default(null),
 });
+export { ApplyInput };
 
-function decodeBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
-}
-
-/** Public job application submission: stores the CV privately, then inserts the row. */
+/** Public job application submission; the CV is already in private storage. */
 export const submitJobApplication = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => ApplyInput.parse(raw))
   .handler(async ({ data }) => {
     const { getServerSupabase } = await import("./supabase-server.server");
     const { client } = await getServerSupabase();
     if (!client) throw new Error("submission_unavailable");
-
-    let cvPath: string | null = null;
-    if (data.cv) {
-      const bytes = decodeBase64(data.cv.data);
-      if (bytes.byteLength > MAX_CV_BYTES) throw new Error("cv_too_large");
-      const ext = (data.cv.name.split(".").pop() ?? "pdf").toLowerCase().replace(/[^a-z0-9]/g, "");
-      cvPath = `${data.job_id}/${crypto.randomUUID()}.${ext || "pdf"}`;
-      const { error: upErr } = await client.storage
-        .from("cvs")
-        .upload(cvPath, bytes, { contentType: data.cv.type || "application/octet-stream" });
-      if (upErr) {
-        console.error("[careers] cv upload failed", upErr);
-        throw new Error("cv_upload_failed");
-      }
-    }
+    if (data.cv_path && !data.cv_path.startsWith(`${data.job_id}/`)) throw new Error("invalid_cv");
+    const cvPath = data.cv_path;
 
     const { data: reference, error } = await (client.rpc as any)("submit_job_application", {
       payload: {
@@ -77,7 +54,7 @@ export const submitJobApplication = createServerFn({ method: "POST" })
     });
     if (error) {
       console.error("[careers] application insert failed", error);
-      throw new Error("submission_failed");
+      throw new Error(String(error.message).includes("invalid_job") ? "invalid_job" : "submission_failed");
     }
     const row = { reference: reference as string };
 
