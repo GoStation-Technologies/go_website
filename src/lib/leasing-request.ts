@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { phoneSchema } from "./form-validation";
 
 const text = (max: number) => z.string().trim().max(max).default("");
 const optionalNumber = z.preprocess((value) => value === "" || value == null ? null : value, z.coerce.number().positive().nullable());
@@ -9,9 +10,9 @@ export const LeasingMetadata = z.object({
 });
 export const LeasingInput = z.object({
   full_name: z.string().trim().min(1).max(200), email: z.string().trim().email().max(255),
-  phone: z.string().trim().min(1).max(50), notes: text(4000),
+  phone: phoneSchema, notes: text(4000),
   requirements: LeasingMetadata.omit({ documents: true }),
-  documents: z.array(z.object({ name: z.string().min(1).max(200), type: z.enum(["application/pdf", "image/jpeg", "image/png"]), data: z.string().min(1).max(7_000_000) })).max(5).default([]),
+  documents: z.array(z.object({ name: z.string().trim().min(1).max(200), path: z.string().regex(/^requests\/[0-9a-f-]{36}\.(pdf|png|jpg)$/) })).max(5).default([]),
 });
 
 export function leasingMetadata(row: Record<string, unknown>) {
