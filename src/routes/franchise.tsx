@@ -1,10 +1,12 @@
+import { useFormErrors } from "@/hooks/use-form-errors";
+import { FieldError, invalidProps } from "@/components/site/field-error";
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePageContent } from "@/hooks/use-cms";
 import { useStationStats } from "@/hooks/use-station-stats";
-import { submitFranchiseApplication } from "@/lib/submissions.functions";
+import { FranchiseInput, submitFranchiseApplication } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
 
@@ -37,22 +39,15 @@ function FranchisePage() {
   const { stationsCount, activeRegionsCount } = useStationStats();
   const [step, setStep] = useState<0 | 1 | 2>(0);
   const [busy, setBusy] = useState(false);
+  const { errors, validate, fail } = useFormErrors();
   const [ref, setRef] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, string>>({});
 
   const upd = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = async () => {
-    const missing = ["full_name", "phone", "email", "city"].some((k) => !(form[k] ?? "").trim());
-    if (missing || !/^\S+@\S+\.\S+$/.test((form.email ?? "").trim())) {
-      setStep(0);
-      toast.error(t("common.requiredFields", "Please fill in your name, phone, a valid email and city."));
-      return;
-    }
-    setBusy(true);
-    try {
-      const res = await submitFranchiseApplication({
-        data: {
+    if (busy) return;
+    const data = validate(FranchiseInput, {
           full_name: form.full_name ?? "",
           phone: form.phone ?? "",
           email: form.email ?? "",
@@ -63,12 +58,19 @@ function FranchisePage() {
           ownership_status: form.ownership_status ?? "",
           investment_capital_sar: form.investment_capital_sar ?? "",
           notes: form.notes ?? "",
-        },
-      });
+        });
+    if (!data) {
+      setStep(0);
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await submitFranchiseApplication({ data });
+      setForm({});
       setRef(res.reference);
       toast.success(t("common.thanks"));
-    } catch {
-      toast.error(t("common.error"));
+    } catch (error) {
+      fail(error, "franchise");
     } finally {
       setBusy(false);
     }
@@ -235,10 +237,10 @@ function FranchisePage() {
 
             {step === 0 && (
               <div className="grid gap-4 sm:grid-cols-2">
-                <F label={t("common.fullName")}><Input value={form.full_name ?? ""} onChange={(e) => upd("full_name", e.target.value)} /></F>
-                <F label={t("common.phone")}><Input value={form.phone ?? ""} onChange={(e) => upd("phone", e.target.value)} /></F>
-                <F label={t("common.email")}><Input type="email" value={form.email ?? ""} onChange={(e) => upd("email", e.target.value)} /></F>
-                <F label={t("common.city")}><CitySelect value={form.city} onChange={(v) => upd("city", v)} /></F>
+                <F label={t("common.fullName")}><Input id="f-name" maxLength={200} value={form.full_name ?? ""} onChange={(e) => upd("full_name", e.target.value)} {...invalidProps("f-name", errors.full_name)} /><FieldError id="f-name" code={errors.full_name} /></F>
+                <F label={t("common.phone")}><Input id="f-phone" type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" value={form.phone ?? ""} onChange={(e) => upd("phone", e.target.value)} {...invalidProps("f-phone", errors.phone)} /><FieldError id="f-phone" code={errors.phone} /></F>
+                <F label={t("common.email")}><Input id="f-email" type="email" maxLength={255} value={form.email ?? ""} onChange={(e) => upd("email", e.target.value)} {...invalidProps("f-email", errors.email)} /><FieldError id="f-email" code={errors.email} /></F>
+                <F label={t("common.city")}><CitySelect value={form.city} onChange={(v) => upd("city", v)} /><FieldError id="f-city" code={errors.city} /></F>
               </div>
             )}
             {step === 1 && (
@@ -252,7 +254,7 @@ function FranchisePage() {
             {step === 2 && (
               <div className="grid gap-4">
                 <F label={t("franchise.f.capital")}><Input type="number" value={form.investment_capital_sar ?? ""} onChange={(e) => upd("investment_capital_sar", e.target.value)} /></F>
-                <F label={t("common.message")}><Textarea rows={5} value={form.notes ?? ""} onChange={(e) => upd("notes", e.target.value)} /></F>
+                <F label={t("common.message")}><Textarea rows={5} maxLength={4000} value={form.notes ?? ""} onChange={(e) => upd("notes", e.target.value)} /></F>
               </div>
             )}
 

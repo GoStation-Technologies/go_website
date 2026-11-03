@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { IrInput } from "./investor-inquiry";
 import { LeasingInput } from "./leasing-request";
+import { optionalPhoneSchema, phoneSchema } from "./form-validation";
 
 // Public form submissions are handled server-side. The underlying
 // SECURITY DEFINER database functions are no longer callable by anon /
@@ -9,18 +10,18 @@ import { LeasingInput } from "./leasing-request";
 
 const str = (max: number) => z.string().trim().max(max);
 
-const ContactInput = z.object({
+export const ContactInput = z.object({
   full_name: str(200).min(1),
   email: str(255).email(),
-  phone: str(50).optional().default(""),
+  phone: optionalPhoneSchema,
   category: str(40).min(1),
   subject: str(200).min(1),
   message: str(4000).min(1),
 });
 
-const AcquisitionInput = z.object({
+export const AcquisitionInput = z.object({
   full_name: str(200).min(1),
-  phone: str(50).min(1),
+  phone: phoneSchema,
   email: str(255).email(),
   station_name: str(200).optional().default(""),
   city: str(120).optional().default(""),
@@ -31,9 +32,9 @@ const AcquisitionInput = z.object({
   notes: str(4000).optional().default(""),
 });
 
-const FranchiseInput = z.object({
+export const FranchiseInput = z.object({
   full_name: str(200).min(1),
-  phone: str(50).min(1),
+  phone: phoneSchema,
   email: str(255).email(),
   city: str(120).min(1),
   proposed_city: str(120).optional().default(""),
@@ -84,38 +85,26 @@ export const submitContactMessage = createServerFn({ method: "POST" })
 export const submitLeasingRequest = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => LeasingInput.parse(raw))
   .handler(async ({ data }) => {
-    const { getAdminClientOrNull } = await import("./supabase-server.server");
-    const client = await getAdminClientOrNull();
+    const { getServerSupabase } = await import("./supabase-server.server");
+    const { client } = await getServerSupabase();
     if (!client) throw new Error("submission_unavailable");
-    const documents: Array<{ name: string; path: string }> = [];
-    try {
-      for (const file of data.documents) {
-        const bytes = Uint8Array.from(atob(file.data), (c) => c.charCodeAt(0));
-        if (bytes.length > 5 * 1024 * 1024) throw new Error("document_too_large");
-        const pdf = String.fromCharCode(...bytes.slice(0, 5)) === "%PDF-";
-        const png = bytes[0] === 137 && bytes[1] === 80 && bytes[2] === 78 && bytes[3] === 71;
-        const jpg = bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
-        if (!(file.type === "application/pdf" ? pdf : file.type === "image/png" ? png : jpg)) throw new Error("invalid_document");
-        const ext = file.type === "application/pdf" ? "pdf" : file.type === "image/png" ? "png" : "jpg";
-        const path = `requests/${crypto.randomUUID()}.${ext}`;
-        const { error } = await client.storage.from("leasing-documents").upload(path, bytes, { contentType: file.type });
-        if (error) throw new Error("document_upload_failed");
-        documents.push({ name: file.name, path });
-      }
+    // Documents were uploaded by the browser straight to private storage.
+    const documents = data.documents;
+    {
       const { data: reference, error } = await client.rpc("submit_contact_message", { payload: {
         full_name: data.full_name, email: data.email, phone: data.phone, category: "leasing",
         subject: "طلب تأجير مساحة / Leasing request", message: data.notes || "Leasing request",
         leasing_metadata: { ...data.requirements, documents },
       } });
-      if (error) throw new Error("submission_failed");
+      if (error) {
+        console.error("[leasing] submission failed", error);
+        throw new Error("submission_failed");
+      }
       try {
         const { notifySubmission } = await import("./notify.server");
         await notifySubmission({ category: "contact", title: "New leasing request", reference: String(reference), fields: { full_name: data.full_name, email: data.email, phone: data.phone, ...Object.fromEntries(Object.entries(data.requirements).map(([k,v]) => [k, String(v ?? "")])), message: data.notes } });
       } catch (error) { console.warn("[leasing] notification skipped", error); }
       return { reference: String(reference) };
-    } catch (error) {
-      if (documents.length) await client.storage.from("leasing-documents").remove(documents.map((d) => d.path));
-      throw error;
     }
   });
 

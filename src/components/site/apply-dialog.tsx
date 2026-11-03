@@ -8,20 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { UploadCloud, Loader2 } from "lucide-react";
-
-const MAX_CV_BYTES = 4 * 1024 * 1024;
-
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("read_failed"));
-    reader.onload = () => {
-      const result = String(reader.result ?? "");
-      resolve(result.slice(result.indexOf(",") + 1));
-    };
-    reader.readAsDataURL(file);
-  });
-}
+import { ApplyInput } from "@/lib/job-application";
+import { CV_EXTENSIONS, MAX_CV_BYTES, fieldErrors, fileExtension, formMessage, serverErrorKey } from "@/lib/form-validation";
+import { uploadPublicFile } from "@/lib/public-upload";
+import { FieldError, invalidProps } from "@/components/site/field-error";
 
 function F({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -45,36 +35,55 @@ export function ApplyDialog({
   className?: string;
   label?: string;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const lang = i18n.resolvedLanguage ?? i18n.language;
+
+  const checkFile = (file: File | null) => {
+    if (!file || file.size === 0) return undefined;
+    if (!(CV_EXTENSIONS as readonly string[]).includes(fileExtension(file.name))) return "cvType";
+    if (file.size > MAX_CV_BYTES) return "cvTooLarge";
+    return undefined;
+  };
+
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    if (busy) return;
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const file = fd.get("cv") as File | null;
-    if (file && file.size > MAX_CV_BYTES) return toast.error(t("careers.cvTooLarge"));
+    const payload = {
+      job_id: jobId,
+      full_name: String(fd.get("name") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      phone: String(fd.get("phone") ?? ""),
+      linkedin_url: String(fd.get("linkedin") ?? ""),
+      cover_letter: String(fd.get("cover") ?? ""),
+      cv_path: null as string | null,
+    };
+    const parsed = ApplyInput.safeParse(payload);
+    const next = parsed.success ? {} : fieldErrors(parsed.error);
+    const fileError = checkFile(file);
+    if (fileError) next.cv = fileError;
+    setErrors(next);
+    if (Object.keys(next).length) return toast.error(formMessage(lang, "fixFields"));
     setBusy(true);
     try {
-      const cv =
-        file && file.size > 0
-          ? { name: file.name, type: file.type || "application/pdf", data: await fileToBase64(file) }
-          : null;
-      const res = await submitJobApplication({
-        data: {
-          job_id: jobId,
-          full_name: String(fd.get("name")),
-          email: String(fd.get("email")),
-          phone: String(fd.get("phone")),
-          linkedin_url: String(fd.get("linkedin") ?? ""),
-          cover_letter: String(fd.get("cover") ?? ""),
-          cv,
-        },
-      });
+      if (file && file.size > 0) {
+        payload.cv_path = await uploadPublicFile("cvs", `${jobId}/${crypto.randomUUID()}.${fileExtension(file.name)}`, file);
+      }
+      const res = await submitJobApplication({ data: payload });
+      form.reset();
       setRef(res.reference);
       toast.success(t("common.thanks"));
-    } catch {
-      toast.error(t("common.error"));
+    } catch (error) {
+      console.error("[careers] submission failed", error);
+      const key = serverErrorKey(error);
+      if (key === "uploadFailed") setErrors({ cv: key });
+      toast.error(formMessage(lang, key));
     } finally {
       setBusy(false);
     }
@@ -115,25 +124,26 @@ export function ApplyDialog({
               />
             </F>
             <F label={t("common.fullName")}>
-              <Input name="name" required />
+              <Input id="apply-name" name="name" required maxLength={200} {...invalidProps("apply-name", errors.full_name)} /><FieldError id="apply-name" code={errors.full_name} />
             </F>
             <F label={t("common.email")}>
-              <Input type="email" name="email" required />
+              <Input id="apply-email" type="email" name="email" required maxLength={255} {...invalidProps("apply-email", errors.email)} /><FieldError id="apply-email" code={errors.email} />
             </F>
             <F label={t("common.phone")}>
-              <Input name="phone" required />
+              <Input id="apply-phone" name="phone" type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" required {...invalidProps("apply-phone", errors.phone)} /><FieldError id="apply-phone" code={errors.phone} />
             </F>
             <F label="LinkedIn URL">
-              <Input name="linkedin" />
+              <Input id="apply-linkedin" name="linkedin" type="text" inputMode="url" dir="ltr" placeholder="https://www.linkedin.com/in/…" maxLength={2048} {...invalidProps("apply-linkedin", errors.linkedin_url)} /><FieldError id="apply-linkedin" code={errors.linkedin_url} />
             </F>
             <F label={t("careers.cv")}>
               <div className="flex items-center gap-2 rounded-md border border-dashed p-2">
                 <UploadCloud className="h-4 w-4 text-muted-foreground" />
-                <Input type="file" name="cv" accept=".pdf,.doc,.docx" className="border-0 p-0 shadow-none" />
+                <Input id="apply-cv" type="file" name="cv" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="border-0 p-0 shadow-none" aria-invalid={errors.cv ? true : undefined} aria-describedby={errors.cv ? "apply-cv-error" : undefined} onChange={(e) => { const cvError = checkFile(e.currentTarget.files?.[0] ?? null) ?? ""; setErrors((prev) => ({ ...prev, cv: cvError })); }} />
               </div>
+              <FieldError id="apply-cv" code={errors.cv || undefined} />
             </F>
             <F label={t("careers.coverLetter")}>
-              <Textarea rows={4} name="cover" />
+              <Textarea id="apply-cover" rows={4} name="cover" maxLength={10000} {...invalidProps("apply-cover", errors.cover_letter)} /><FieldError id="apply-cover" code={errors.cover_letter} />
             </F>
             <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
               {busy && <Loader2 className="me-2 h-4 w-4 animate-spin" />}

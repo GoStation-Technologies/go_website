@@ -1,6 +1,8 @@
+import { useFormErrors } from "@/hooks/use-form-errors";
+import { FieldError, invalidProps } from "@/components/site/field-error";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { inquiryFromForm } from "@/lib/investor-inquiry";
+import { IrInput, inquiryValues } from "@/lib/investor-inquiry";
 import { pageHead } from "@/lib/seo";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -60,6 +62,7 @@ function IRPage() {
   const [busy, setBusy] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
   const [inquiryType, setInquiryType] = useState("general");
+  const { errors, validate, fail } = useFormErrors();
   const submitInquiry = useServerFn(submitIrInquiry);
   const recordDownload = useServerFn(logReportDownload);
 
@@ -67,16 +70,18 @@ function IRPage() {
     e.preventDefault();
     if (busy) return;
     const fd = new FormData(e.currentTarget);
-    setBusy(true);
     const form = e.currentTarget;
+    const data = validate(IrInput, inquiryValues(fd));
+    if (!data) return;
+    setBusy(true);
     let reference: string;
     try {
-      const res = await submitInquiry({ data: inquiryFromForm(fd) });
+      const res = await submitInquiry({ data });
       if (!res.reference) throw new Error("submission_failed");
       reference = res.reference;
-    } catch {
+    } catch (error) {
       setBusy(false);
-      return toast.error(t("common.error"));
+      return fail(error, "investors");
     }
     setBusy(false);
     setRef(reference);
@@ -297,9 +302,9 @@ function IRPage() {
         <Card><CardContent className="p-8">
           {ref && <div role="status" className="mb-4 rounded-lg border border-accent/40 bg-accent/10 p-3 text-sm">{t("investors.submitted")} {t("common.referenceSaved")} <bdi className="font-mono">{ref}</bdi></div>}
           <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
-            <F label={t("common.fullName")}><Input name="name" maxLength={200} required /></F>
-            <F label={t("common.email")}><Input type="email" name="email" maxLength={255} required /></F>
-            <F label={t("common.phone")}><Input name="phone" maxLength={50} /></F>
+            <F label={t("common.fullName")}><Input id="i-name" name="name" maxLength={200} required {...invalidProps("i-name", errors.full_name)} /><FieldError id="i-name" code={errors.full_name} /></F>
+            <F label={t("common.email")}><Input id="i-email" type="email" name="email" maxLength={255} required {...invalidProps("i-email", errors.email)} /><FieldError id="i-email" code={errors.email} /></F>
+            <F label={t("common.phone")}><Input id="i-phone" name="phone" type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" {...invalidProps("i-phone", errors.phone)} /><FieldError id="i-phone" code={errors.phone} /></F>
             <F label={t("investors.org")}><Input name="org" maxLength={200} placeholder={t("investors.org")} /></F>
             <F label={t("investors.inquiryType")} className="sm:col-span-2">
               <Select name="type" value={inquiryType} onValueChange={setInquiryType} required>
@@ -312,7 +317,7 @@ function IRPage() {
                 </SelectContent>
               </Select>
             </F>
-            <F label={t("common.message")} className="sm:col-span-2"><Textarea rows={5} name="message" maxLength={4000} required /></F>
+            <F label={t("common.message")} className="sm:col-span-2"><Textarea id="i-message" rows={5} name="message" maxLength={4000} required {...invalidProps("i-message", errors.message)} /><FieldError id="i-message" code={errors.message} /></F>
             <div className="sm:col-span-2">
               <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
                 {busy ? t("common.submitting") : t("common.submit")}

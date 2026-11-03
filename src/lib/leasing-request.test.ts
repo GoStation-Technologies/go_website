@@ -18,7 +18,7 @@ describe("leasing requests", () => {
   });
   it("preserves contact details and all space requirements independently of language", () => {
     const data = LeasingInput.parse({ full_name: "Leasing Test", email: "leasing@example.com", phone: "+966500000000", notes: "Cafe space", requirements: { company: "Test Company", activity: "Cafe", city: "riyadh", district: "Olaya", area_sqm: "85.5", lease_years: "3" } });
-    expect(data).toEqual({ full_name: "Leasing Test", email: "leasing@example.com", phone: "+966500000000", notes: "Cafe space", requirements: { company: "Test Company", activity: "Cafe", city: "riyadh", district: "Olaya", area_sqm: 85.5, lease_years: 3 }, documents: [] });
+    expect(data).toEqual({ full_name: "Leasing Test", email: "leasing@example.com", phone: "0500000000", notes: "Cafe space", requirements: { company: "Test Company", activity: "Cafe", city: "riyadh", district: "Olaya", area_sqm: 85.5, lease_years: 3 }, documents: [] });
   });
   it("reads saved document names and private paths", () => {
     expect(leasingMetadata({ leasing_metadata: { documents: [{ name: "Business profile.pdf", path: "requests/test.pdf" }] } }).documents).toEqual([{ name: "Business profile.pdf", path: "requests/test.pdf" }]);
