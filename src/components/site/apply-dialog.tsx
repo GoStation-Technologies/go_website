@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { UploadCloud, Loader2 } from "lucide-react";
-import { ApplyInput } from "@/lib/careers.functions";
+import { ApplyInput } from "@/lib/job-application";
 import { CV_EXTENSIONS, MAX_CV_BYTES, fieldErrors, fileExtension, formMessage, serverErrorKey } from "@/lib/form-validation";
 import { uploadPublicFile } from "@/lib/public-upload";
 import { FieldError, invalidProps } from "@/components/site/field-error";

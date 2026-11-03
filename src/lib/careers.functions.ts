@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { writeAudit } from "./audit";
-import { optionalUrlSchema, phoneSchema } from "./form-validation";
 
 export const APPLICATION_STAGES = [
   "new",
@@ -14,21 +13,7 @@ export const APPLICATION_STAGES = [
 ] as const;
 export type ApplicationStage = (typeof APPLICATION_STAGES)[number];
 
-const ApplyInput = z.object({
-  job_id: z.string().uuid(),
-  full_name: z.string().trim().min(1).max(200),
-  email: z.string().trim().email().max(255),
-  phone: phoneSchema,
-  linkedin_url: optionalUrlSchema,
-  cover_letter: z.string().trim().max(10000).optional().default(""),
-  /** Storage path of a CV the browser uploaded directly to the private "cvs" bucket. */
-  cv_path: z
-    .string()
-    .regex(/^[0-9a-f-]{36}\/[0-9a-f-]{36}\.(pdf|doc|docx)$/)
-    .nullable()
-    .optional()
-    .default(null),
-});
+import { ApplyInput } from "./job-application";
 export { ApplyInput };
 
 /** Public job application submission; the CV is already in private storage. */

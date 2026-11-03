@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { normalizeSaudiPhone, optionalUrlSchema } from "./form-validation";
-import { ApplyInput } from "./careers.functions";
+import { ApplyInput } from "./job-application";
 
 describe("Saudi phone formats", () => {
   it.each(["+966 512345678", "966512345678", "0512345678", "512345678", "00966 51 234 5678"])("accepts %s", (v) => {
