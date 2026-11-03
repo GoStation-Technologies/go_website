@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { optionalPhoneSchema } from "./form-validation";
 
 export const IrInput = z.object({
   full_name: z.string().trim().min(1).max(200),
   email: z.string().trim().email().max(255),
-  phone: z.string().trim().max(50).default(""),
+  phone: optionalPhoneSchema,
   organization: z.string().trim().max(200).default(""),
   inquiry_type: z.enum(["general", "analyst", "press", "investor"]).default("general"),
   message: z.string().trim().min(1).max(4000),
