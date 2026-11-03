@@ -41,17 +41,19 @@ export const adminSaveReport = createServerFn({ method: "POST" })
 export const logReportDownload = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => LogInput.parse(raw))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    const { data: report } = await supabaseAdmin
-      .from("financial_reports")
-      .select("id")
-      .eq("id", data.reportId)
-      .eq("is_published", true)
-      .maybeSingle();
-
-    if (!report) return { logged: false as const };
-
-    await supabaseAdmin.from("report_downloads").insert({ report_id: report.id });
-    return { logged: true as const };
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: report } = await supabaseAdmin
+        .from("financial_reports")
+        .select("id")
+        .eq("id", data.reportId)
+        .eq("is_published", true)
+        .maybeSingle();
+      if (!report) return { logged: false as const };
+      await supabaseAdmin.from("report_downloads").insert({ report_id: report.id });
+      return { logged: true as const };
+    } catch (error) {
+      console.error("Report download logging unavailable", error);
+      return { logged: false as const };
+    }
   });
