@@ -1,9 +1,11 @@
+import { useFormErrors } from "@/hooks/use-form-errors";
+import { FieldError, invalidProps } from "@/components/site/field-error";
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePageContent } from "@/hooks/use-cms";
-import { submitAcquisitionRequest } from "@/lib/submissions.functions";
+import { AcquisitionInput, submitAcquisitionRequest } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { CitySelect } from "@/components/site/city-select";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,16 +32,16 @@ function AcqPage() {
   const { t } = useTranslation();
   const cms = usePageContent("acquisitions");
   const [busy, setBusy] = useState(false);
+  const { errors, validate, fail } = useFormErrors();
   const [ref, setRef] = useState<string | null>(null);
   const [city, setCity] = useState("");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    setBusy(true);
-    try {
-      const res = await submitAcquisitionRequest({
-        data: {
+    if (busy) return;
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const data = validate(AcquisitionInput, {
           full_name: String(fd.get("name") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           email: String(fd.get("email") ?? ""),
@@ -50,12 +52,17 @@ function AcqPage() {
           fuel_pumps_count: String(fd.get("pumps") ?? ""),
           avg_daily_sales_sar: String(fd.get("sales") ?? ""),
           notes: String(fd.get("notes") ?? ""),
-        },
-      });
+        });
+    if (!data) return;
+    setBusy(true);
+    try {
+      const res = await submitAcquisitionRequest({ data });
+      form.reset();
+      setCity("");
       setRef(res.reference);
       toast.success(t("common.thanks"));
-    } catch {
-      toast.error(t("common.error"));
+    } catch (error) {
+      fail(error, "acquisition");
     } finally {
       setBusy(false);
     }
@@ -149,16 +156,16 @@ function AcqPage() {
                   </div>
 
                   <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
-                    <F label={t("common.fullName")}><Input name="name" required /></F>
-                    <F label={t("common.phone")}><Input name="phone" required /></F>
-                    <F label={t("common.email")} className="sm:col-span-2"><Input type="email" name="email" required /></F>
+                    <F label={t("common.fullName")}><Input id="a-name" name="name" required maxLength={200} {...invalidProps("a-name", errors.full_name)} /><FieldError id="a-name" code={errors.full_name} /></F>
+                    <F label={t("common.phone")}><Input id="a-phone" name="phone" required type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" {...invalidProps("a-phone", errors.phone)} /><FieldError id="a-phone" code={errors.phone} /></F>
+                    <F label={t("common.email")} className="sm:col-span-2"><Input id="a-email" type="email" name="email" required maxLength={255} {...invalidProps("a-email", errors.email)} /><FieldError id="a-email" code={errors.email} /></F>
                     <F label={t("acq.f.stationName")}><Input name="station" /></F>
                     <F label={t("common.city")}><CitySelect value={city} onChange={setCity} /></F>
                     <F label={t("acq.f.district")}><Input name="district" /></F>
                     <F label={t("acq.f.landArea")}><Input type="number" name="area" /></F>
                     <F label={t("acq.f.pumps")}><Input type="number" name="pumps" /></F>
                     <F label={t("acq.f.avgSales")}><Input type="number" name="sales" /></F>
-                    <F label={t("common.message")} className="sm:col-span-2"><Textarea rows={4} name="notes" /></F>
+                    <F label={t("common.message")} className="sm:col-span-2"><Textarea id="a-notes" rows={4} name="notes" maxLength={4000} {...invalidProps("a-notes", errors.notes)} /><FieldError id="a-notes" code={errors.notes} /></F>
                     <div className="flex flex-wrap gap-3 sm:col-span-2">
                       <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
                         {busy ? t("common.submitting") : t("acq.submitCta")}

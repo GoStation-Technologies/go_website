@@ -1,8 +1,10 @@
+import { useFormErrors } from "@/hooks/use-form-errors";
+import { FieldError, invalidProps } from "@/components/site/field-error";
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { submitContactMessage } from "@/lib/submissions.functions";
+import { ContactInput, submitContactMessage } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -37,6 +39,7 @@ function ContactPage() {
   const {phone,whatsapp} = useSupportChannels();
   const HQ_DIRECTIONS = setting("contact", "maps_url", HQ_DIRECTIONS_FALLBACK);
   const [busy, setBusy] = useState(false);
+  const { errors, validate, fail } = useFormErrors();
   const [ref, setRef] = useState<string | null>(null);
   const cmsChannels = cms.field("channels", "content", "").split("\n").map((x) => x.trim()).filter(Boolean);
   const channels = cmsChannels.length ? cmsChannels : ((t("contact.channels", { returnObjects: true }) as string[]) ?? []);
@@ -44,25 +47,26 @@ function ContactPage() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (busy) return;
     const fd = new FormData(e.currentTarget);
-    setBusy(true);
     const form = e.currentTarget;
-    try {
-      const res = await submitContactMessage({
-        data: {
+    const data = validate(ContactInput, {
           full_name: String(fd.get("name") ?? ""),
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           category: String(fd.get("category") ?? ""),
           subject: String(fd.get("subject") ?? ""),
           message: String(fd.get("message") ?? ""),
-        },
-      });
+        });
+    if (!data) return;
+    setBusy(true);
+    try {
+      const res = await submitContactMessage({ data });
       setRef(res.reference);
       toast.success(t("common.thanks"));
       form.reset();
-    } catch {
-      toast.error(t("common.error"));
+    } catch (error) {
+      fail(error, "contact");
     } finally {
       setBusy(false);
     }
@@ -202,9 +206,9 @@ function ContactPage() {
               </div>
             )}
             <form onSubmit={onSubmit} className="grid gap-4 md:grid-cols-2">
-              <Field label={t("common.fullName")}><Input name="name" required /></Field>
-              <Field label={t("common.email")}><Input name="email" type="email" required /></Field>
-              <Field label={t("common.phone")}><Input name="phone" /></Field>
+              <Field label={t("common.fullName")}><Input id="c-name" name="name" required maxLength={200} {...invalidProps("c-name", errors.full_name)} /><FieldError id="c-name" code={errors.full_name} /></Field>
+              <Field label={t("common.email")}><Input id="c-email" name="email" type="email" required maxLength={255} {...invalidProps("c-email", errors.email)} /><FieldError id="c-email" code={errors.email} /></Field>
+              <Field label={t("common.phone")}><Input id="c-phone" name="phone" type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" {...invalidProps("c-phone", errors.phone)} /><FieldError id="c-phone" code={errors.phone} /></Field>
               <Field label={t("common.category")}>
                 <Select name="category" defaultValue="general" required>
                   <SelectTrigger><SelectValue /></SelectTrigger>
@@ -213,8 +217,8 @@ function ContactPage() {
                   </SelectContent>
                 </Select>
               </Field>
-              <Field label={t("common.subject")} className="md:col-span-2"><Input name="subject" required /></Field>
-              <Field label={t("common.message")} className="md:col-span-2"><Textarea name="message" rows={6} required /></Field>
+              <Field label={t("common.subject")} className="md:col-span-2"><Input id="c-subject" name="subject" required maxLength={200} {...invalidProps("c-subject", errors.subject)} /><FieldError id="c-subject" code={errors.subject} /></Field>
+              <Field label={t("common.message")} className="md:col-span-2"><Textarea id="c-message" name="message" rows={6} required maxLength={4000} {...invalidProps("c-message", errors.message)} /><FieldError id="c-message" code={errors.message} /></Field>
               <div className="md:col-span-2">
                 <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
                   {busy ? t("common.submitting") : t("common.submit")}

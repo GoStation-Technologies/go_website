@@ -10,15 +10,19 @@ export const IrInput = z.object({
   message: z.string().trim().min(1).max(4000),
 });
 
-export function inquiryFromForm(form: FormData) {
-  return IrInput.parse({
+export function inquiryValues(form: FormData) {
+  return {
     full_name: form.get("name"),
     email: form.get("email"),
     phone: form.get("phone") ?? "",
     organization: form.get("org") ?? "",
     inquiry_type: form.get("type") ?? "general",
-    message: form.get("message"),
-  });
+    message: form.get("message") ?? "",
+  };
+}
+
+export function inquiryFromForm(form: FormData) {
+  return IrInput.parse(inquiryValues(form));
 }
 
 export const submissionTables = {
