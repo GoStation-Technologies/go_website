@@ -31,9 +31,10 @@ export const optionalUrlSchema = z
   .transform((v) => (v && !/^https?:\/\//i.test(v) ? `https://${v}` : v))
   .refine((v) => {
     if (!v) return true;
+    if (/\s/.test(v)) return false;
     try {
       const u = new URL(v);
-      return u.protocol === "https:" || u.protocol === "http:";
+      return (u.protocol === "https:" || u.protocol === "http:") && /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(u.hostname);
     } catch {
       return false;
     }
