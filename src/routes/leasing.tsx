@@ -1,3 +1,7 @@
+import { useFormErrors } from "@/hooks/use-form-errors";
+import { FieldError, invalidProps } from "@/components/site/field-error";
+import { MAX_LEASING_DOC_BYTES, formMessage, serverErrorKey } from "@/lib/form-validation";
+import { uploadPublicFile } from "@/lib/public-upload";
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useState } from "react";
@@ -45,33 +49,45 @@ function LeasingPage() {
   const [city, setCity] = useState("");
   const submit = useServerFn(submitLeasingRequest);
 
+  const { errors, setErrors, validate, fail, lang } = useFormErrors();
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    if (busy) return;
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const files = fd.getAll("documents").filter((f): f is File => f instanceof File && f.size > 0);
+    const extOf = (f: File) => ({ "application/pdf": "pdf", "image/png": "png", "image/jpeg": "jpg" } as Record<string, string>)[f.type];
+    const docError = files.length > 5 || files.some((f) => !extOf(f)) ? "docType" : files.some((f) => f.size > MAX_LEASING_DOC_BYTES) ? "docTooLarge" : undefined;
+    const data = validate(LeasingInput, {
+      full_name: String(fd.get("name") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      phone: String(fd.get("phone") ?? ""),
+      notes: String(fd.get("notes") ?? ""),
+      requirements: { company: fd.get("company") ?? "", activity: fd.get("activity") ?? "", city, district: fd.get("district") ?? "", area_sqm: fd.get("area"), lease_years: fd.get("duration") },
+      documents: [],
+    });
+    if (docError) {
+      setErrors((prev) => ({ ...prev, documents: docError }));
+      if (data) toast.error(formMessage(lang, docError));
+      return;
+    }
+    if (!data) return;
     setBusy(true);
     try {
-      const files = fd.getAll("documents").filter((f): f is File => f instanceof File && f.size > 0);
-      if (files.length > 5 || files.some((f) => f.size > 5 * 1024 * 1024)) throw new Error("invalid_documents");
-      const documents = await Promise.all(files.map(async (file) => ({ name: file.name, type: file.type, data: await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(String(reader.result).split(",")[1] ?? "");
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      }) })));
-      const res = await submit({
-        data: LeasingInput.parse({
-          full_name: String(fd.get("name") ?? ""),
-          email: String(fd.get("email") ?? ""),
-          phone: String(fd.get("phone") ?? ""),
-          notes: String(fd.get("notes") ?? ""),
-          requirements: { company: fd.get("company"), activity: fd.get("activity"), city, district: fd.get("district"), area_sqm: fd.get("area"), lease_years: fd.get("duration") },
-          documents,
-        }),
-      });
+      const documents = [];
+      for (const file of files) {
+        const path = await uploadPublicFile("leasing-documents", `requests/${crypto.randomUUID()}.${extOf(file)}`, file);
+        documents.push({ name: file.name.slice(0, 200), path });
+      }
+      const res = await submit({ data: { ...data, documents } });
+      form.reset();
+      setCity("");
       setRef(res.reference);
       toast.success(t("common.thanks"));
-    } catch {
-      toast.error(t("common.error"));
+    } catch (error) {
+      if (serverErrorKey(error) === "uploadFailed") setErrors({ documents: "uploadFailed" });
+      fail(error, "leasing");
     } finally {
       setBusy(false);
     }
