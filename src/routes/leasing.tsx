@@ -168,17 +168,17 @@ function LeasingPage() {
                   </div>
 
                   <form onSubmit={onSubmit} onReset={() => setCity("")} className="mt-6 grid gap-4 sm:grid-cols-2">
-                    <F label={t("common.fullName")}><Input name="name" required /></F>
-                    <F label={t("common.phone")}><Input name="phone" required /></F>
-                    <F label={t("common.email")} className="sm:col-span-2"><Input type="email" name="email" required /></F>
+                    <F label={t("common.fullName")}><Input id="l-name" name="name" required maxLength={200} {...invalidProps("l-name", errors.full_name)} /><FieldError id="l-name" code={errors.full_name} /></F>
+                    <F label={t("common.phone")}><Input id="l-phone" name="phone" required type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" {...invalidProps("l-phone", errors.phone)} /><FieldError id="l-phone" code={errors.phone} /></F>
+                    <F label={t("common.email")} className="sm:col-span-2"><Input id="l-email" type="email" name="email" required maxLength={255} {...invalidProps("l-email", errors.email)} /><FieldError id="l-email" code={errors.email} /></F>
                     <F label={t("lease.f.company")}><Input name="company" /></F>
                     <F label={t("lease.f.activity")}><Input name="activity" /></F>
                     <F label={t("common.city")}><CitySelect value={city} onChange={setCity} /></F>
                     <F label={t("lease.f.district")}><Input name="district" /></F>
                     <F label={t("lease.f.area")}><Input type="number" min="0.01" step="any" name="area" /></F>
                     <F label={t("lease.f.duration")}><Input type="number" min="0.01" step="any" name="duration" /></F>
-                    <F label={t("lease.f.documents")} className="sm:col-span-2"><Input type="file" name="documents" multiple accept="application/pdf,image/jpeg,image/png" aria-label={t("lease.f.documents")} disabled={busy} /></F>
-                    <F label={t("common.message")} className="sm:col-span-2"><Textarea rows={4} name="notes" /></F>
+                    <F label={t("lease.f.documents")} className="sm:col-span-2"><Input type="file" name="documents" multiple accept="application/pdf,image/jpeg,image/png" aria-label={t("lease.f.documents")} disabled={busy} aria-invalid={errors.documents ? true : undefined} /><FieldError id="l-docs" code={errors.documents} /></F>
+                    <F label={t("common.message")} className="sm:col-span-2"><Textarea id="l-notes" rows={4} name="notes" maxLength={4000} {...invalidProps("l-notes", errors.notes)} /><FieldError id="l-notes" code={errors.notes} /></F>
                     <div className="flex flex-wrap gap-3 sm:col-span-2">
                       <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
                         {busy ? t("common.submitting") : t("lease.submitCta")}
