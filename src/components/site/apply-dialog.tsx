@@ -133,7 +133,7 @@ export function ApplyDialog({
               <Input id="apply-phone" name="phone" type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" required {...invalidProps("apply-phone", errors.phone)} /><FieldError id="apply-phone" code={errors.phone} />
             </F>
             <F label="LinkedIn URL">
-              <Input id="apply-linkedin" name="linkedin" type="url" inputMode="url" dir="ltr" placeholder="https://www.linkedin.com/in/…" maxLength={2048} {...invalidProps("apply-linkedin", errors.linkedin_url)} /><FieldError id="apply-linkedin" code={errors.linkedin_url} />
+              <Input id="apply-linkedin" name="linkedin" type="text" inputMode="url" dir="ltr" placeholder="https://www.linkedin.com/in/…" maxLength={2048} {...invalidProps("apply-linkedin", errors.linkedin_url)} /><FieldError id="apply-linkedin" code={errors.linkedin_url} />
             </F>
             <F label={t("careers.cv")}>
               <div className="flex items-center gap-2 rounded-md border border-dashed p-2">
