@@ -138,7 +138,7 @@ export function ApplyDialog({
             <F label={t("careers.cv")}>
               <div className="flex items-center gap-2 rounded-md border border-dashed p-2">
                 <UploadCloud className="h-4 w-4 text-muted-foreground" />
-                <Input id="apply-cv" type="file" name="cv" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="border-0 p-0 shadow-none" aria-invalid={errors.cv ? true : undefined} aria-describedby={errors.cv ? "apply-cv-error" : undefined} onChange={(e) => setErrors((prev) => ({ ...prev, cv: checkFile(e.currentTarget.files?.[0] ?? null) ?? "" }))} />
+                <Input id="apply-cv" type="file" name="cv" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="border-0 p-0 shadow-none" aria-invalid={errors.cv ? true : undefined} aria-describedby={errors.cv ? "apply-cv-error" : undefined} onChange={(e) => { const cvError = checkFile(e.currentTarget.files?.[0] ?? null) ?? ""; setErrors((prev) => ({ ...prev, cv: cvError })); }} />
               </div>
               <FieldError id="apply-cv" code={errors.cv || undefined} />
             </F>
