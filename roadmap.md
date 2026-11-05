@@ -1,5 +1,8 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
+## Station locator visibility
+- [ ] Preserve full-footprint total; show only active and development/renovation stations in public maps/lists, with green/amber status markers; verify tests and public views.
+
 ## Email notifications
 - [x] Prepare notify.gostation.sa managed sending and branded form template; authenticated preview renders and unauthenticated preview returns 401. Central dispatch now uses saved category routing, true CC, safe domain sender, full job details and signed attachment links; investor routing and save-before-test corrected. Provider supports one To plus four CC; no bulk recipient loop.
 - [ ] Verify real notification delivery and admin live test after notify.gostation.sa DNS verification, then publish/redeploy. Sending domain is still verifying; no successful delivery claimed.
