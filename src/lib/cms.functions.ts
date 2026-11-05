@@ -196,8 +196,8 @@ export const adminListLeaders = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("leaders")
       .select("*")
-      .order("sort_order")
-      .order("created_at");
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true });
     if (error) throw new Error(error.message);
     return { rows: data ?? [] };
   });
