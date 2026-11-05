@@ -2,11 +2,12 @@ import * as React from 'react'
 import { render } from '@react-email/render'
 import { EmailAPIError, sendLovableEmail } from '@lovable.dev/email-js'
 import { TEMPLATES } from './registry'
+import { notificationSender } from '../notification-policy'
 
 // Server-only: reads LOVABLE_API_KEY. Never import from client components.
 
 // Configuration baked in at scaffold time
-const SITE_NAME = "Org Website Builder"
+const SITE_NAME = "GoStation"
 // SENDER_DOMAIN is the verified sender FQDN: a delegated subdomain (e.g., "notify.example.com"), or, on a
 // domain registered through Lovable, the domain itself or a name under it (e.g., "example.com", "app.example.com").
 // It MUST match the sender verified in Lovable's email setup.
@@ -24,6 +25,9 @@ export interface SendTemplateEmailOptions {
   /** Dedupes retries of the same logical send; defaults to a random UUID (no dedupe). */
   idempotencyKey?: string
   replyTo?: string
+  cc?: string[]
+  fromName?: string
+  fromEmail?: string | null
 }
 
 /**
@@ -70,7 +74,7 @@ export async function sendTemplateEmail(
     await sendLovableEmail(
       {
         to: recipient,
-        from: { name: SITE_NAME, address: `noreply@${FROM_DOMAIN}` },
+        from: { name: options.fromName || SITE_NAME, address: notificationSender(options.fromEmail ?? null, FROM_DOMAIN) },
         sender_domain: SENDER_DOMAIN,
         subject,
         html,
@@ -79,6 +83,7 @@ export async function sendTemplateEmail(
         label: templateName,
         idempotency_key: options.idempotencyKey || crypto.randomUUID(),
         ...(options.replyTo ? { reply_to: options.replyTo } : {}),
+        ...(options.cc?.length ? { cc: options.cc } : {}),
       },
       { apiKey, sendUrl: process.env['LOVABLE_SEND_URL'] }
     )
