@@ -20,7 +20,7 @@ describe("Submission notification delivery", () => {
     expect(await notifySubmission(args)).toEqual({ sent: false, reason: "recipient_suppressed" });
   });
   it("contains provider failure without throwing or undoing the saved submission", async () => {
-    send.mockImplementation(async () => { throw new Error("Provider unavailable"); });
+    send.mockImplementation(() => { throw new Error("Provider unavailable"); });
     expect(await notifySubmission(args)).toMatchObject({ sent: false });
   });
 });
