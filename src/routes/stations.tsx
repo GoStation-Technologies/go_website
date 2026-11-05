@@ -3,7 +3,7 @@ import { pageHead } from "@/lib/seo";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { locatorStationsQuery } from "@/lib/locator-stations";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,10 +13,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Fuel, Star, Clock, X, LocateFixed, Navigation } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
 import { fuelLabel } from "@/lib/regions";
-import { useActiveStationRegions } from "@/hooks/use-station-stats";
+import { useActiveStationRegions, useStationStats } from "@/hooks/use-station-stats";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { haversineKm, formatDistance } from "@/lib/geo";
-import { stationDisplayName, stationNumber, stationStatusLabel } from "@/lib/station-status";
+import { stationDisplayName, stationNumber, stationStatusLabel, stationLocatorStatus } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/stations")({
       path: "/stations",
       title: "Find a GoStation — Station Locator & Live Fuel Prices",
       description:
-        "Explore all GoStation locations across Saudi Arabia, including operating and inactive stations. Filter by region and fuel type, view station status, and get map directions.",
+        "Find operational and under-development GoStation locations across Saudi Arabia. Filter by region and fuel type, view station status, and get map directions.",
     }),
 });
 
@@ -40,15 +40,8 @@ function StationsPage() {
   const ar = lng === "ar";
   const [region, setRegion] = useState("all");
   const [fuel, setFuel] = useState("all");
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["stations", "all"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("stations").select("*");
-      if (error) throw error;
-      return data ?? [];
-    },
-    refetchOnMount: "always",
-  });
+  const { data = [], isLoading } = useQuery(locatorStationsQuery);
+  const { stationsCount } = useStationStats();
 
   const { data: allRegions = [] } = useActiveStationRegions();
   const regionOptions = useMemo(() => {
@@ -96,7 +89,7 @@ function StationsPage() {
         .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
         .map((s) => ({
           id: s.id,
-          inactive: !s.is_active,
+          status: stationLocatorStatus(s) ?? undefined,
           statusLabel: stationStatusLabel(s, ar),
           lat: s.lat as number,
           lng: s.lng as number,
@@ -162,14 +155,13 @@ function StationsPage() {
             </Button>
           )}
           <div className="text-sm font-medium text-foreground">
-            {filtered.length === data.length
-              ? ar ? `إجمالي المحطات: ${data.length}` : `Total stations: ${data.length}`
-              : ar ? `${filtered.length} من ${data.length} محطة` : `${filtered.length} of ${data.length} stations`}
+            {ar ? `إجمالي المحطات: ${stationsCount}` : `Total stations: ${stationsCount}`}
+            <span className="ms-3 text-muted-foreground">{ar ? `المعروضة: ${filtered.length}` : `Shown: ${filtered.length}`}</span>
           </div>
         </div>
         <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-accent" />{ar ? "تعمل الآن" : "Operating"}</span>
-          <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-station-inactive" />{ar ? "غير مشغّلة حالياً" : "Not operating"}</span>
+          <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-station-active" />{ar ? "نشطة" : "Operating"}</span>
+          <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-station-development" />{ar ? "تحت التطوير" : "Under development"}</span>
         </div>
 
         {(geoStatus === "denied" || geoStatus === "unavailable") && (
@@ -230,7 +222,7 @@ function StationsPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <h3 className="font-semibold">{stationDisplayName(s, lng === "ar")}</h3>
-                      <p className={`mt-1 text-xs font-semibold ${s.is_active ? "text-accent" : "text-muted-foreground"}`}>{stationStatusLabel(s, ar)}</p>
+                      <p className={`mt-1 text-xs font-semibold ${stationLocatorStatus(s) === "active" ? "text-station-active" : "text-station-development"}`}>{stationStatusLabel(s, ar)}</p>
                       <p className="text-xs text-muted-foreground">{lng === "ar" ? `${s.city_ar} · ${s.district_ar ?? ""}` : `${s.city_en} · ${s.district_en ?? ""}`}</p>
                       {s.distanceKm != null && (
                         <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-accent">
@@ -239,7 +231,7 @@ function StationsPage() {
                         </p>
                       )}
                     </div>
-                    {s.is_active && s.is_24h && <Badge className="bg-accent text-accent-foreground"><Clock className="me-1 h-3 w-3" />{t("stations.open24")}</Badge>}
+                    {stationLocatorStatus(s) === "active" && s.is_24h && <Badge className="bg-accent text-accent-foreground"><Clock className="me-1 h-3 w-3" />{t("stations.open24")}</Badge>}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-1">
                     {(s.fuel_types ?? []).map((f: string) => (

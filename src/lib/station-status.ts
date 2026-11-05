@@ -1,12 +1,30 @@
-/** Preserve source statuses without implying that inactive stations are open. */
-export function stationStatusLabel(station: { is_active: boolean; status?: string | null }, ar: boolean) {
-  if (station.is_active) return ar ? "تعمل الآن" : "Operating";
+type StationState = { is_active: boolean; status?: string | null };
+export type LocatorStatus = "active" | "under_development";
+
+/** Explicit closure/development takes precedence over a stale active flag. */
+export function stationLocatorStatus(station: StationState): LocatorStatus | null {
+  const status = (station.status ?? "").trim().toLowerCase()
+    .replace(/[أإآ]/g, "ا").replace(/[_-]/g, " ").replace(/\s+/g, " ");
+  if (["closed", "permanently closed", "مغلقة", "مغلق"].includes(status)) return null;
+  if (["under development", "under renovation", "under construction", "under maintenance", "تحت التطوير", "تحت التاهيل", "تحت الانشاء", "تحت الصيانة"].includes(status)) return "under_development";
+  if (station.is_active || ["active", "operational", "open", "نشطة", "شغالة", "مفتوحة"].includes(status)) return "active";
+  return null;
+}
+
+export function isLocatorStation(station: StationState): boolean {
+  return stationLocatorStatus(station) !== null;
+}
+
+/** Keep specific development labels without advertising those stations as open. */
+export function stationStatusLabel(station: StationState, ar: boolean) {
+  if (stationLocatorStatus(station) === "active") return ar ? "نشطة" : "Operating";
   const status = station.status?.trim();
   if (status === "تحت الانشاء") return ar ? "تحت الإنشاء" : "Under construction";
   if (status === "تحت التاهيل") return ar ? "تحت التأهيل" : "Under renovation";
   if (status === "تحت التطوير") return ar ? "تحت التطوير" : "Under development";
   if (status === "مغلقة") return ar ? "مغلقة" : "Closed";
   if (status?.toLowerCase() === "under maintenance") return ar ? "تحت الصيانة" : "Under maintenance";
+  if (stationLocatorStatus(station) === "under_development") return ar ? "تحت التطوير" : "Under development";
   return ar ? "غير مشغّلة حالياً" : "Not operating";
 }
 /** Station label: "GO01 - District". Falls back to the city when the district is missing. */

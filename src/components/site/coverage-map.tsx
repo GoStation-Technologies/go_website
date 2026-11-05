@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { ClientOnly } from "@tanstack/react-router";
 import { MapPin } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { locatorStationsQuery } from "@/lib/locator-stations";
 import { getContentLanguage } from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fuelLabel } from "@/lib/regions";
-import { useActiveStationRegions } from "@/hooks/use-station-stats";
-import { stationDisplayName, stationStatusLabel } from "@/lib/station-status";
+import { useActiveStationRegions, useStationStats } from "@/hooks/use-station-stats";
+import { stationDisplayName, stationStatusLabel, stationLocatorStatus } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
   import("@/components/stations-map").then((m) => ({ default: m.StationsMap })),
@@ -24,14 +24,9 @@ export function CoverageMap() {
   const [fuel, setFuel] = useState("all");
   const { data: regions = [] } = useActiveStationRegions();
 
-  const { data = [] } = useQuery({
-    queryKey: ["stations", "all"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("stations").select("*");
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const { data = [] } = useQuery(locatorStationsQuery);
+  const { stationsCount } = useStationStats();
+  const regionOptions = regions.filter(r => data.some(s => s.region_id === r.id));
 
   const fuelOptions = useMemo(() => {
     const set = new Set<string>();
@@ -51,7 +46,7 @@ export function CoverageMap() {
         .filter((s) => typeof s.lat === "number" && typeof s.lng === "number")
         .map((s) => ({
           id: s.id,
-          inactive: !s.is_active,
+          status: stationLocatorStatus(s) ?? undefined,
           statusLabel: stationStatusLabel(s, ar),
           lat: s.lat as number,
           lng: s.lng as number,
@@ -80,7 +75,7 @@ export function CoverageMap() {
           </SelectTrigger>
           <SelectContent className="z-[2000]">
             <SelectItem value="all">{ar ? "كل المناطق" : "All regions"}</SelectItem>
-            {regions.map((r) => (
+            {regionOptions.map((r) => (
               <SelectItem key={r.id} value={r.id}>
                 {(ar ? r.name_ar : r.name_en) ?? r.name}
               </SelectItem>
@@ -102,9 +97,10 @@ export function CoverageMap() {
           </SelectContent>
         </Select>
         <span className="ms-auto text-sm text-muted-foreground">
-          <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-accent" />{ar ? "تعمل الآن" : "Operating"}</span>
-          <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-station-inactive" />{ar ? "غير مشغّلة حالياً" : "Not operating"}</span>
-          {points.length} {ar ? "محطة" : "stations"}
+          <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-station-active" />{ar ? "نشطة" : "Operating"}</span>
+          <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-station-development" />{ar ? "تحت التطوير" : "Under development"}</span>
+          {stationsCount} {ar ? "محطة" : "stations"}
+          <span className="ms-3">{ar ? `المعروضة: ${points.length}` : `Shown: ${points.length}`}</span>
         </span>
       </div>
       <ClientOnly fallback={fallback}>
