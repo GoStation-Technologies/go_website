@@ -7,7 +7,7 @@ type Point = {
   title: string;
   subtitle?: string;
   href?: string;
-  inactive?: boolean;
+  status?: "active" | "under_development";
   statusLabel?: string;
 };
 
@@ -83,8 +83,8 @@ export function StationsMap({
         iconSize: [18, 18],
         iconAnchor: [9, 9],
       });
-      const inactiveIcon = L.divIcon({
-        className: "gs-marker gs-marker-inactive",
+      const developmentIcon = L.divIcon({
+        className: "gs-marker gs-marker-development",
         html: `<span class="gs-marker-dot"></span>`,
         iconSize: [18, 18],
         iconAnchor: [9, 9],
@@ -94,12 +94,12 @@ export function StationsMap({
         .filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng))
         .map((p) => {
           const m = L.marker([p.lat, p.lng], {
-            icon: p.inactive ? inactiveIcon : icon,
+            icon: p.status === "under_development" ? developmentIcon : icon,
             title: [p.title, p.statusLabel].filter(Boolean).join(" — "),
           });
           const html = `<div style="min-width:160px"><strong>${escapeHtml(p.title)}</strong>${
             p.subtitle ? `<div style="font-size:12px;opacity:.7;margin-top:2px">${escapeHtml(p.subtitle)}</div>` : ""
-          }${p.statusLabel ? `<div class="gs-popup-status">${escapeHtml(p.statusLabel)}</div>` : ""}${
+          }${p.statusLabel ? `<div class="gs-popup-status gs-popup-status-${p.status ?? "active"}">${escapeHtml(p.statusLabel)}</div>` : ""}${
             p.href
               ? `<div style="margin-top:6px"><a href="${p.href}" target="_blank" rel="noreferrer" style="color:#ea580c;font-weight:600;font-size:12px">Directions →</a></div>`
               : ""

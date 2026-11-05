@@ -24,6 +24,8 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-station-inactive: var(--station-inactive);
+  --color-station-active: var(--station-active);
+  --color-station-development: var(--station-development);
   --color-statement-quote-end: var(--statement-quote-end);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
@@ -77,6 +79,8 @@
   --muted: oklch(0.963 0.008 279);
   --muted-foreground: oklch(0.5 0.045 279);
   --station-inactive: oklch(0.55 0 0);
+  --station-active: oklch(0.53 0.15 150);
+  --station-development: oklch(0.64 0.15 75);
   --statement-quote-end: oklch(0.7 0.1 225);
   --accent: oklch(0.698 0.174 44);
   --accent-foreground: oklch(1 0 0);
@@ -473,7 +477,7 @@ html[dir="rtl"] .animate-wave-flow-slow {
   width: 12px;
   height: 12px;
   border-radius: 9999px;
-  background: var(--ember);
+  background: var(--station-active);
   border: 2px solid #fff;
   box-shadow: 0 2px 6px color-mix(in oklab, var(--ink) 40%, transparent);
   z-index: 2;
@@ -485,11 +489,17 @@ html[dir="rtl"] .animate-wave-flow-slow {
   width: 24px;
   height: 24px;
   border-radius: 9999px;
-  background: color-mix(in oklab, var(--ember) 45%, transparent);
+  background: color-mix(in oklab, var(--station-active) 45%, transparent);
   animation: pulse-glow 2.2s ease-in-out infinite;
 }
-.gs-marker-inactive .gs-marker-dot {
-  background: var(--station-inactive);
+.gs-marker-development .gs-marker-dot {
+  background: var(--station-development);
+}
+.gs-popup-status-active {
+  color: var(--station-active);
+}
+.gs-popup-status-under_development {
+  color: var(--station-development);
 }
 .gs-popup-status {
   margin-top: 4px;
