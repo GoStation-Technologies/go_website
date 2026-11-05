@@ -45,7 +45,7 @@ export async function notifySubmission(args: {
     });
     return result.sent ? { sent: true, recipients: 1 + routing.cc.length } : result;
   } catch (error) {
-    const reason = error instanceof EmailAPIError ? error.code : "configuration_error";
+    const reason = error instanceof EmailAPIError ? error.code ?? "error" : "configuration_error";
     const status = error instanceof EmailAPIError ? error.status : undefined;
     // Do not log credentials, recipient addresses or submitted personal details.
     console.error("[notify] dispatch failed", { category: args.category, reference: args.reference, reason, status });

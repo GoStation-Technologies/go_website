@@ -108,7 +108,7 @@ function NotificationsSettingsPage() {
       return testEmail({ data: { category: category as (typeof NOTIFY_CATEGORIES)[number] } });
     },
     onSuccess: (res) => {
-      if ((res as { sent: boolean }).sent) toast.success(t("admin.notifications.testSent"));
+      if (res.sent) toast.success(t("admin.notifications.testSent"));
       else toast.error(notificationDiagnostic(res.reason, dir === "rtl"));
     },
     onError: (e) => toast.error((e as Error).message),
