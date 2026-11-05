@@ -1,5 +1,8 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
+## Email notifications
+- [ ] Repair centralized notifications, dynamic saved recipients/CC/sender/reply-to/prefix, complete form details and private attachment links, and diagnostic live test sending. Blocked: no sender domain is configured; email setup must be completed before scaffolding and delivery verification.
+
 ## Leadership hierarchy
 - [x] Enforce chairman separately and CEO → deputy → COO → CFO in the executive grid, independent of edits; six hierarchy tests pass, Arabic desktop/mobile verified, build OK. Existing admin saves explicitly preserve sort_order; admin save/readback was not exercised.
 
