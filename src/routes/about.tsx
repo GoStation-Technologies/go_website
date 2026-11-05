@@ -353,7 +353,7 @@ function AboutPage() {
 
           <TabsContent value="leaders" className="mt-10 space-y-12" dir={lng === "ar" ? "rtl" : "ltr"}>
             {(() => {
-              const { chairman, executives } = managementTeam(leaders.data ?? []);
+              const { chairman, ceo, executives } = managementTeam(leaders.data ?? []);
               return (
                 <>
                   <div>
@@ -368,7 +368,7 @@ function AboutPage() {
                     <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "فريق الإدارة التنفيذية" : "Executive Management Team"}</h2>
                     <div className="grid auto-rows-fr items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-4">
                       {executives.map((leader) => <ManagementProfile key={leader.id} leader={leader} language={lng}
-                        photo={leader === managementTeam(leaders.data ?? []).ceo ? cms.media("ceo", leader.photo_url ?? "") : undefined} />)}
+                        photo={leader === ceo ? cms.media("ceo", leader.photo_url ?? "") : undefined} />)}
                     </div>
                   </div>
                 </>
