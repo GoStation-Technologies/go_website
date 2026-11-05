@@ -15,7 +15,7 @@ export function ManagementProfile({ leader, language, statement, photo }: {
   const description = language === "ar" ? leader.bio_ar : leader.bio_en;
   const portrait = photo || leader.photo_url;
   return (
-    <Card className="flex h-full flex-col overflow-hidden rounded-lg border-border shadow-none">
+    <Card className="flex h-full min-w-0 flex-col overflow-hidden rounded-lg border-border shadow-none">
       <div className={`flex shrink-0 items-end justify-center overflow-hidden bg-muted/40 ${statement ? "h-72 sm:h-80" : "h-72"}`}>
         {portrait ? (
           <img src={portrait} alt={name} className="h-full w-full object-contain object-bottom" loading="lazy" />
