@@ -45,15 +45,20 @@ export const submitJobApplication = createServerFn({ method: "POST" })
 
     try {
       const { notifySubmission } = await import("./notify.server");
+      const { data: job } = await client.from("job_openings").select("title_ar,title_en").eq("id", data.job_id).maybeSingle();
       await notifySubmission({
         category: "careers",
         title: "New job application",
         reference: row.reference,
+        client,
+        attachments: cvPath ? [{ bucket: "cvs", path: cvPath, name: "CV / السيرة الذاتية" }] : [],
         fields: {
           full_name: data.full_name,
           email: data.email,
           phone: data.phone,
           linkedin_url: data.linkedin_url,
+          job_title: job ? `${job.title_ar} / ${job.title_en}` : data.job_id,
+          cover_letter: data.cover_letter,
           cv_attached: cvPath ? "yes" : "no",
         },
       });

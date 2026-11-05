@@ -1,7 +1,8 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
 ## Email notifications
-- [ ] Repair centralized notifications, dynamic saved recipients/CC/sender/reply-to/prefix, complete form details and private attachment links, and diagnostic live test sending. Blocked: no sender domain is configured; email setup must be completed before scaffolding and delivery verification.
+- [x] Prepare notify.gostation.sa managed sending and branded form template; authenticated preview renders and unauthenticated preview returns 401. Central dispatch now uses saved category routing, true CC, safe domain sender, full job details and signed attachment links; investor routing and save-before-test corrected. Provider supports one To plus four CC; no bulk recipient loop.
+- [ ] Verify real notification delivery and admin live test after notify.gostation.sa DNS verification, then publish/redeploy. Sending domain is still verifying; no successful delivery claimed.
 
 ## Leadership hierarchy
 - [x] Enforce chairman separately and CEO → deputy → COO → CFO in the executive grid, independent of edits; six hierarchy tests pass, Arabic desktop/mobile verified, build OK. Existing admin saves explicitly preserve sort_order; admin save/readback was not exercised.
