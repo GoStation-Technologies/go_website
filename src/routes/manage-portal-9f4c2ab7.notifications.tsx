@@ -16,8 +16,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { notificationDiagnostic } from "@/lib/notification-policy";
+import { pageHead } from "@/lib/seo";
+import { useServerFn } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/manage-portal-9f4c2ab7/notifications")({
+  head: () => pageHead({ path: "/manage-portal-9f4c2ab7/notifications", title: "Email Notifications — GoStation Admin", description: "Manage GoStation form notification recipients and test delivery." }),
   component: NotificationsSettingsPage,
 });
 
@@ -48,6 +52,8 @@ function NotificationsSettingsPage() {
   const dir = i18n.language?.startsWith("ar") ? "rtl" : "ltr";
   const align = dir === "rtl" ? ("text-right" as const) : ("text-left" as const);
   const qc = useQueryClient();
+  const testEmail = useServerFn(adminNotificationTestSend);
+  const saveSettings = useServerFn(adminNotificationSettingsSave);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["admin", "notification-settings"],
     queryFn: () => adminNotificationSettingsList(),
@@ -95,11 +101,15 @@ function NotificationsSettingsPage() {
   });
 
   const testSend = useMutation({
-    mutationFn: (category: string) =>
-      adminNotificationTestSend({ data: { category: category as (typeof NOTIFY_CATEGORIES)[number] } }),
+    mutationFn: async (category: string) => {
+      const row = draft[category];
+      if (!row) throw new Error("Save notification settings first.");
+      await saveSettings({ data: { ...row, category: category as (typeof NOTIFY_CATEGORIES)[number], from_email: row.from_email ?? "", reply_to: row.reply_to ?? "", subject_prefix: row.subject_prefix ?? "" } });
+      return testEmail({ data: { category: category as (typeof NOTIFY_CATEGORIES)[number] } });
+    },
     onSuccess: (res) => {
       if ((res as { sent: boolean }).sent) toast.success(t("admin.notifications.testSent"));
-      else toast.error(t("admin.notifications.testFailed", { reason: (res as { reason: string }).reason }));
+      else toast.error(notificationDiagnostic(res.reason, dir === "rtl"));
     },
     onError: (e) => toast.error((e as Error).message),
   });

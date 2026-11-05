@@ -97,6 +97,8 @@ export const adminNotificationTestSend = createServerFn({ method: "POST" })
       title: `Test notification (${data.category})`,
       reference: `TEST-${Date.now()}`,
       fields: { note: "This is a test notification triggered from the admin panel." },
+      client: context.supabase,
+      test: true,
     });
     return res;
   });

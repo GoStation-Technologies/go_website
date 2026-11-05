@@ -48,7 +48,7 @@ export const FranchiseInput = z.object({
 async function callSubmit(
   fn: string,
   payload: Record<string, string>,
-  notify: { category: "franchise" | "acquisition" | "contact"; title: string },
+  notify: { category: "franchise" | "acquisition" | "contact" | "investor"; title: string },
 ) {
   const { getServerSupabase } = await import("./supabase-server.server");
   const { client } = await getServerSupabase();
@@ -68,6 +68,7 @@ async function callSubmit(
       title: notify.title,
       reference,
       fields: payload,
+      client,
     });
   } catch (e) {
     console.warn("[submissions] notification skipped", e);
@@ -102,7 +103,9 @@ export const submitLeasingRequest = createServerFn({ method: "POST" })
       }
       try {
         const { notifySubmission } = await import("./notify.server");
-        await notifySubmission({ category: "contact", title: "New leasing request", reference: String(reference), fields: { full_name: data.full_name, email: data.email, phone: data.phone, ...Object.fromEntries(Object.entries(data.requirements).map(([k,v]) => [k, String(v ?? "")])), message: data.notes } });
+        await notifySubmission({ category: "contact", title: "New leasing request", reference: String(reference), client,
+          attachments: documents.map(document => ({ bucket: "leasing-documents", path: document.path, name: document.name })),
+          fields: { full_name: data.full_name, email: data.email, phone: data.phone, ...data.requirements, message: data.notes } });
       } catch (error) { console.warn("[leasing] notification skipped", error); }
       return { reference: String(reference) };
     }
@@ -130,5 +133,5 @@ export const submitFranchiseApplication = createServerFn({ method: "POST" })
 export const submitIrInquiry = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => IrInput.parse(raw))
   .handler(async ({ data }) =>
-    callSubmit("submit_ir_inquiry", data, { category: "contact", title: "New investor relations inquiry" }),
+    callSubmit("submit_ir_inquiry", data, { category: "investor", title: "New investor relations inquiry" }),
   );
