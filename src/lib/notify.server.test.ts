@@ -19,8 +19,9 @@ describe("Submission notification delivery", () => {
     send.mockResolvedValue({ sent: false, reason: "recipient_suppressed" });
     expect(await notifySubmission(args)).toEqual({ sent: false, reason: "recipient_suppressed" });
   });
-  it("contains provider failure without throwing or undoing the saved submission", async () => {
-    send.mockImplementation(() => { throw new Error("Provider unavailable"); });
-    expect(await notifySubmission(args)).toMatchObject({ sent: false });
+  it("contains a settings failure without undoing the saved submission", async () => {
+    const failedClient = { from: () => ({ select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: null, error: { code: "unavailable" } }) }) }) }) } as unknown as SupabaseClient<Database>;
+    expect(await notifySubmission({ ...args, client: failedClient })).toMatchObject({ sent: false, reason: "configuration_error" });
+    expect(send).not.toHaveBeenCalled();
   });
 });
