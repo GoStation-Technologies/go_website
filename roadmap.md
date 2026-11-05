@@ -1,7 +1,7 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
 ## Leadership hierarchy
-- [ ] Enforce chairman separately and CEO → deputy → COO → CFO in the executive grid, independent of edits; verify existing admin order preservation and responsive Arabic layout.
+- [x] Enforce chairman separately and CEO → deputy → COO → CFO in the executive grid, independent of edits; six hierarchy tests pass, Arabic desktop/mobile verified, build OK. Existing admin saves explicitly preserve sort_order; admin save/readback was not exercised.
 
 - [x] Add the missing email control directly to the Contact Us page editor, using the shared contact setting.
 
