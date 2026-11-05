@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { EmailAPIError } from "@lovable.dev/email-js";
 const send = vi.hoisted(() => vi.fn());
 vi.mock("./email-templates/send-email", () => ({ sendTemplateEmail: send }));
 import { notifySubmission } from "./notify.server";
@@ -21,7 +20,7 @@ describe("Submission notification delivery", () => {
     expect(await notifySubmission(args)).toEqual({ sent: false, reason: "recipient_suppressed" });
   });
   it("contains provider failure without throwing or undoing the saved submission", async () => {
-    send.mockRejectedValue(new Error("unavailable"));
+    send.mockRejectedValue({ code: "provider_unavailable" });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(await notifySubmission(args)).toMatchObject({ sent: false });
     log.mockRestore();
