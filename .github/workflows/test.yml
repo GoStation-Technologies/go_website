@@ -56,7 +56,8 @@ jobs:
         run: kill $(cat server.pid) || true
 
   e2e-prod:
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 supports Ubuntu 24.04, not newer ubuntu-latest images.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
