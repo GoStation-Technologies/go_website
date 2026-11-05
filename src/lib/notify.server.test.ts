@@ -21,8 +21,6 @@ describe("Submission notification delivery", () => {
   });
   it("contains provider failure without throwing or undoing the saved submission", async () => {
     send.mockImplementation(async () => { throw new Error("Provider unavailable"); });
-    const log = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(await notifySubmission(args)).toMatchObject({ sent: false });
-    log.mockRestore();
   });
 });
