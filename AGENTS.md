@@ -10,7 +10,7 @@
 <!-- LOVABLE:END -->
 
 - Public marketing links are stored in `site_settings` so Admin Settings remains the single editable source of truth.
-- Form notifications use the scaffolded email helper, verified sender domain and saved category routing; one owner notice with true CC, private signed attachment links and non-blocking structured failures avoids duplicate or simulated delivery.
+- Form notifications render registered templates through a central server-only Resend sender with saved category routing, a policy-locked sender and visitor-first Reply-To; one request with true CC, private signed attachment links and non-blocking structured failures prevents duplicate or simulated delivery.
 - Let HTML/email dependencies resolve their own `entities` versions and package exports; global aliases or version overrides break parser subpath imports across incompatible major versions.
 - Pin the browser-test CI job to a Playwright-supported Ubuntu release rather than `ubuntu-latest`, so runner upgrades cannot break browser dependency installation.
 - The Contact page editor edits email through the existing contact site setting, preserving other contact fields, so it stays synchronized with Site Settings and public contact displays.
