@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { writeAudit } from "./audit";
+import { NOTIFICATION_SENDER, NOTIFICATION_SENDER_NAME } from "./notification-policy";
 
 export const NOTIFY_CATEGORIES = [
   "franchise",
@@ -63,8 +64,8 @@ export const adminNotificationSettingsSave = createServerFn({ method: "POST" })
       is_enabled: data.is_enabled,
       recipients: data.recipients,
       cc_recipients: data.cc_recipients,
-      from_name: data.from_name,
-      from_email: data.from_email || null,
+      from_name: NOTIFICATION_SENDER_NAME,
+      from_email: NOTIFICATION_SENDER,
       reply_to: data.reply_to || null,
       subject_prefix: data.subject_prefix || null,
     };
