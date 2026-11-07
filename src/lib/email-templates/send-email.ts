@@ -3,16 +3,9 @@ import { render } from '@react-email/render'
 import { TEMPLATES } from './registry'
 import { notificationSender, NOTIFICATION_SENDER_NAME } from '../notification-policy'
 
-// Server-only: reads LOVABLE_API_KEY. Never import from client components.
-
-// Configuration baked in at scaffold time
+// Server-only credentials are resolved for every send, never in browser code.
 const SITE_NAME = NOTIFICATION_SENDER_NAME
-// SENDER_DOMAIN is the verified sender FQDN: a delegated subdomain (e.g., "notify.example.com"), or, on a
-// domain registered through Lovable, the domain itself or a name under it (e.g., "example.com", "app.example.com").
-// It MUST match the sender verified in Lovable's email setup.
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend"
-// FROM_DOMAIN is the domain shown in the From: header (e.g., "example.com").
-// Can be the root domain when display_from_root is enabled — this is cosmetic only.
 
 export type SendTemplateEmailResult =
   | { sent: true }
@@ -35,11 +28,8 @@ export interface SendTemplateEmailOptions {
 }
 
 /**
- * Renders a registered template and sends it through Lovable's managed email
- * API. Suppression, retries, and rate limits are enforced by Lovable
- * server-side. A suppressed recipient is an expected outcome
- * ({ sent: false }); any other failure throws — EmailAPIError exposes
- * .code and .status for branching.
+ * Renders a registered template and submits a single transactional Resend email.
+ * Resend failures retain their status and body for authenticated diagnostics.
  */
 export async function sendTemplateEmail(
   templateName: string,
@@ -57,8 +47,7 @@ export async function sendTemplateEmail(
     )
   }
 
-  // Template-level `to` takes precedence — notification templates always
-  // send to their fixed address.
+  // Optional fixed-recipient templates override the caller's routing.
   const recipient = template.to || to
   if (!recipient || (Array.isArray(recipient) && !recipient.length)) {
     throw new Error('Recipient is required (the template defines no fixed recipient)')

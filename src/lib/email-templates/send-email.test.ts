@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { sendTemplateEmail, ResendDeliveryError } from "./send-email";
+import { sendTemplateEmail } from "./send-email";
 
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
 
