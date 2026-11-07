@@ -4,8 +4,11 @@
 - [x] Preserve full-footprint total; public maps/lists share active/development filtering and green/amber markers. Live checks: 224 total, 175 visible stations (128 active + 47 development/construction/renovation), all 40 closed and nine other inactive records excluded; desktop/mobile and homepage verified.
 
 ## Email notifications
+- [x] Switch transactional notifications to connected Resend, lock sender identity, prioritize visitor Reply-To and retain saved recipients/CC. Seventeen tests pass; a real application-helper franchise test was delivered, confirmed in Resend.
+- [ ] Click-test admin save/test with a super-admin session: no requesting-user account matches; user must sign in to preview. Contact, acquisition and investor recipients remain empty and need admin configuration.
 - [x] Prepare notify.gostation.sa managed sending and branded form template; authenticated preview renders and unauthenticated preview returns 401. Central dispatch now uses saved category routing, true CC, safe domain sender, full job details and signed attachment links; investor routing and save-before-test corrected. Provider supports one To plus four CC; no bulk recipient loop.
-- [ ] Verify real notification delivery and admin live test after notify.gostation.sa DNS verification, then publish/redeploy. Sending domain is still verifying; no successful delivery claimed.
+- [x] Replace the pending notify.gostation.sa sender with the user's verified gostation.sa Resend domain; real franchise test delivered from the locked sender to the saved recipient with true CC.
+- [ ] Redeploy gostation.sa with the connected Resend credentials available server-side; external server access is unavailable here.
 
 ## Leadership hierarchy
 - [x] Pair chairman and CEO in the featured Senior Management section above deputy → COO → CFO; immutable record IDs preserve slots after editable fields change. Seven tests pass; Arabic/English desktop/mobile verified with all portraits loaded and no overflow; build OK. Admin save/readback not exercised; existing saves preserve IDs and sort_order.

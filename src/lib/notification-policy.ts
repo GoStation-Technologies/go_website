@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+export const NOTIFICATION_SENDER = "noreply@gostation.sa";
+export const NOTIFICATION_SENDER_NAME = "GoStation | قوستيشن";
+
 export type NotificationRouting = {
   is_enabled: boolean;
   recipients: string[];
@@ -17,15 +20,19 @@ export function notificationRouting(s: NotificationRouting, test = false) {
   const cc = emails(s.cc_recipients).filter(v => !to.includes(v));
   if (!to.length) return { ok: false as const, reason: "no_recipients" };
   if ([...to, ...cc].some(v => !z.string().email().safeParse(v).success)) return { ok: false as const, reason: "invalid_recipient" };
-  // The managed sender accepts one To address and at most five total recipients.
-  if (to.length !== 1 || to.length + cc.length > 5) return { ok: false as const, reason: "recipient_limit" };
-  return { ok: true as const, to: to[0], cc, fromName: s.from_name.trim() || "GoStation", replyTo: s.reply_to || undefined, prefix: s.subject_prefix?.trim() || "" };
+  if (to.length + cc.length > 50) return { ok: false as const, reason: "recipient_limit" };
+  return { ok: true as const, to, cc, fromName: NOTIFICATION_SENDER_NAME, replyTo: notificationReplyTo(undefined, s.reply_to), prefix: s.subject_prefix?.trim() || "" };
 }
 
-export function notificationSender(from: string | null, domain: string) {
-  const address = from?.trim();
-  return address && z.string().email().safeParse(address).success && address.split("@")[1]?.toLowerCase() === domain
-    ? address : `noreply@${domain}`;
+export function notificationSender() {
+  return NOTIFICATION_SENDER;
+}
+
+export function notificationReplyTo(visitor: unknown, fallback?: string | null) {
+  for (const value of [visitor, fallback]) {
+    if (typeof value === "string" && z.string().email().safeParse(value.trim()).success) return value.trim();
+  }
+  return undefined;
 }
 
 export function notificationDiagnostic(reason: string, ar: boolean) {
@@ -34,8 +41,11 @@ export function notificationDiagnostic(reason: string, ar: boolean) {
     no_settings: ["Save the notification settings first.", "يرجى حفظ إعدادات الإشعارات أولاً."],
     no_recipients: ["Enter a recipient email.", "يرجى إدخال بريد المستلم."],
     invalid_recipient: ["A recipient email is invalid.", "أحد عناوين البريد الإلكتروني غير صحيح."],
-    recipient_limit: ["Use one recipient and up to four CC addresses.", "استخدم مستلماً واحداً وحتى أربعة عناوين في نسخة إلى."],
-    domain_not_verified: ["The sending domain is still awaiting verification in More → Emails.", "نطاق الإرسال ينتظر التحقق في المزيد ← البريد الإلكتروني."],
+    recipient_limit: ["Use at most 50 recipients including CC.", "استخدم حتى 50 مستلماً شاملاً النسخ."],
+    domain_not_verified: ["Verify gostation.sa in Resend before sending.", "تحقق من نطاق gostation.sa في Resend قبل الإرسال."],
+    validation_error: ["Resend rejected the email settings; check recipient addresses and sender domain.", "رفض Resend إعدادات البريد؛ تحقق من المستلمين ونطاق المرسل."],
+    restricted_api_key: ["The Resend key does not have permission to send emails.", "مفتاح Resend لا يملك صلاحية إرسال البريد."],
+    missing_api_key: ["Connect Resend before sending emails.", "اربط Resend قبل إرسال البريد."],
     emails_disabled: ["Email sending is disabled in More → Emails.", "إرسال البريد معطل في المزيد ← البريد الإلكتروني."],
     recipient_suppressed: ["Sending to this recipient is blocked after a bounce, complaint or unsubscribe.", "الإرسال لهذا المستلم محظور بعد ارتداد البريد أو شكوى أو إلغاء الاشتراك."],
     configuration_error: ["Email sending is not configured on this server.", "إرسال البريد غير مُعد على هذا الخادم."],

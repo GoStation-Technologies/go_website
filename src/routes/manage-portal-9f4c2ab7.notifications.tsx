@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { notificationDiagnostic } from "@/lib/notification-policy";
+import { notificationDiagnostic, NOTIFICATION_SENDER, NOTIFICATION_SENDER_NAME } from "@/lib/notification-policy";
 import { pageHead } from "@/lib/seo";
 import { useServerFn } from "@tanstack/react-start";
 
@@ -41,8 +41,8 @@ const blank = (category: string): Row => ({
   is_enabled: true,
   recipients: [],
   cc_recipients: [],
-  from_name: "GoStation",
-  from_email: "",
+  from_name: NOTIFICATION_SENDER_NAME,
+  from_email: NOTIFICATION_SENDER,
   reply_to: "",
   subject_prefix: "",
 });
@@ -54,9 +54,10 @@ function NotificationsSettingsPage() {
   const qc = useQueryClient();
   const testEmail = useServerFn(adminNotificationTestSend);
   const saveSettings = useServerFn(adminNotificationSettingsSave);
+  const listSettings = useServerFn(adminNotificationSettingsList);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["admin", "notification-settings"],
-    queryFn: () => adminNotificationSettingsList(),
+    queryFn: () => listSettings(),
   });
 
   const [draft, setDraft] = useState<Record<string, Row>>({});
@@ -71,7 +72,8 @@ function NotificationsSettingsPage() {
         ...r,
         recipients: r.recipients ?? [],
         cc_recipients: r.cc_recipients ?? [],
-        from_email: r.from_email ?? "",
+        from_name: NOTIFICATION_SENDER_NAME,
+        from_email: NOTIFICATION_SENDER,
         reply_to: r.reply_to ?? "",
         subject_prefix: r.subject_prefix ?? "",
       };
@@ -81,7 +83,7 @@ function NotificationsSettingsPage() {
 
   const save = useMutation({
     mutationFn: (row: Row) =>
-      adminNotificationSettingsSave({
+      saveSettings({
         data: {
           category: row.category as (typeof NOTIFY_CATEGORIES)[number],
           is_enabled: row.is_enabled,
@@ -109,7 +111,7 @@ function NotificationsSettingsPage() {
     },
     onSuccess: (res) => {
       if (res.sent) toast.success(t("admin.notifications.testSent"));
-      else toast.error(notificationDiagnostic(res.reason, dir === "rtl"));
+      else toast.error(`${notificationDiagnostic(res.reason, dir === "rtl")}${res.status ? ` (${res.status})` : ""}${res.detail ? ` — ${res.detail}` : ""}`, { duration: 10000 });
     },
     onError: (e) => toast.error((e as Error).message),
   });
@@ -182,20 +184,18 @@ function NotificationsSettingsPage() {
                 <EmailField
                   align={align}
                   label={t("admin.notifications.fromName")}
-                  value={row.from_name}
-                  onChange={(v) => update(c, { from_name: v })}
+                  value={NOTIFICATION_SENDER_NAME}
+                  readOnly
                 />
                 <EmailField
                   align={align}
                   label={t("admin.notifications.fromEmail")}
-                  hint={t("admin.notifications.fromHint")}
-                  value={row.from_email ?? ""}
-                  onChange={(v) => update(c, { from_email: v })}
-                  placeholder="notify@gostation.net"
+                  value={NOTIFICATION_SENDER}
+                  readOnly
                 />
                 <EmailField
                   align={align}
-                  label={t("admin.notifications.replyTo")}
+                  label={dir === "rtl" ? "بريد الرد الاحتياطي" : "Fallback reply email"}
                   value={row.reply_to ?? ""}
                   onChange={(v) => update(c, { reply_to: v })}
                   placeholder="franchise@gostation.net"
@@ -243,11 +243,13 @@ function EmailField({
   onChange,
   placeholder,
   align,
+  readOnly,
 }: {
   label: string;
   hint?: string;
   value: string;
-  onChange: (v: string) => void;
+  onChange?: (v: string) => void;
+  readOnly?: boolean;
   placeholder?: string;
   align: "text-left" | "text-right";
 }) {
@@ -261,7 +263,8 @@ function EmailField({
         className={`${inputCls} w-full text-left`}
         value={value}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
+        readOnly={readOnly}
+        onChange={(e) => onChange?.(e.target.value)}
       />
       {hint ? (
         <p className={`text-[11px] leading-snug text-muted-foreground ${align}`}>{hint}</p>

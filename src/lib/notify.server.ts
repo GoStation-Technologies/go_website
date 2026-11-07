@@ -1,12 +1,11 @@
-import { EmailAPIError } from "@lovable.dev/email-js";
-import { sendTemplateEmail } from "./email-templates/send-email";
-import { notificationRouting, type NotificationRouting } from "./notification-policy";
+import { sendTemplateEmail, ResendDeliveryError } from "./email-templates/send-email";
+import { notificationRouting, notificationReplyTo, type NotificationRouting } from "./notification-policy";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
 export type NotifyCategory = "franchise" | "acquisition" | "contact" | "careers" | "investor";
 export type NotificationSetting = NotificationRouting & { category: string };
-export type NotifyResult = { sent: true; recipients: number } | { sent: false; reason: string; status?: number };
+export type NotifyResult = { sent: true; recipients: number } | { sent: false; reason: string; status?: number; detail?: string };
 
 export async function getNotificationSetting(category: NotifyCategory, client?: SupabaseClient<Database>): Promise<NotificationSetting | null> {
   const db = client ?? (await import("./supabase-server.server").then(m => m.getAdminClientOrNull()));
@@ -39,16 +38,16 @@ export async function notifySubmission(args: {
     }
     const subject = `${routing.prefix ? routing.prefix + " " : ""}${args.title} — ${args.reference}`;
     const result = await sendTemplateEmail("form-notification", routing.to, {
-      cc: routing.cc, fromName: routing.fromName, fromEmail: settings.from_email, replyTo: routing.replyTo,
+      cc: routing.cc, replyTo: notificationReplyTo(args.fields.email, routing.replyTo),
       idempotencyKey: `form-notification-${args.category}-${args.reference}`,
       templateData: { title: args.title, reference: args.reference, timestamp: new Date().toISOString(), fields: args.fields, links, subject },
     });
-    return result.sent ? { sent: true, recipients: 1 + routing.cc.length } : result;
+    return result.sent ? { sent: true, recipients: routing.to.length + routing.cc.length } : result;
   } catch (error) {
-    const reason = error instanceof EmailAPIError ? error.code ?? "error" : "configuration_error";
-    const status = error instanceof EmailAPIError ? error.status : undefined;
+    const reason = error instanceof ResendDeliveryError ? error.code : "configuration_error";
+    const status = error instanceof ResendDeliveryError ? error.status : undefined;
     // Do not log credentials, recipient addresses or submitted personal details.
     console.error("[notify] dispatch failed", { category: args.category, reference: args.reference, reason, status });
-    return { sent: false, reason, status };
+    return { sent: false, reason, status, ...(args.test && error instanceof ResendDeliveryError ? { detail: error.providerBody } : {}) };
   }
 }
