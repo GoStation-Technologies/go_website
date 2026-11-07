@@ -4,6 +4,7 @@
 - [x] Preserve full-footprint total; public maps/lists share active/development filtering and green/amber markers. Live checks: 224 total, 175 visible stations (128 active + 47 development/construction/renovation), all 40 closed and nine other inactive records excluded; desktop/mobile and homepage verified.
 
 ## Email notifications
+- [ ] Switch transactional notifications to Resend, lock the sender, prioritize visitor Reply-To and verify the admin test with saved recipients.
 - [x] Prepare notify.gostation.sa managed sending and branded form template; authenticated preview renders and unauthenticated preview returns 401. Central dispatch now uses saved category routing, true CC, safe domain sender, full job details and signed attachment links; investor routing and save-before-test corrected. Provider supports one To plus four CC; no bulk recipient loop.
 - [ ] Verify real notification delivery and admin live test after notify.gostation.sa DNS verification, then publish/redeploy. Sending domain is still verifying; no successful delivery claimed.
 
