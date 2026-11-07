@@ -31,6 +31,16 @@ describe("Hosted notification boundary", () => {
     const result = await handlePipeline(new Request(HOSTED_PIPELINE_URL, { method: "POST", headers: { apikey: "sb_publishable_test" }, body: JSON.stringify({ operation: "test", payload: { category: "careers" } }) }));
     expect(result.status).toBe(401);
   });
+  it("denies a verified user without the super_admin role", async () => {
+    const fetcher = vi.fn().mockImplementation(async (url: string) => {
+      if (String(url).includes("/auth/v1/user")) return Response.json({ id: "12345678-1234-1234-1234-123456789012", aud: "authenticated", role: "authenticated" });
+      return Response.json(null);
+    });
+    vi.stubGlobal("fetch", fetcher);
+    const result = await handlePipeline(new Request(HOSTED_PIPELINE_URL, { method: "POST", headers: { apikey: "sb_publishable_test", Authorization: "Bearer test.user.session" }, body: JSON.stringify({ operation: "test", payload: { category: "careers" } }) }));
+    expect(result.status).toBe(403);
+    expect(fetcher.mock.calls.some(([url]) => String(url).includes("/emails"))).toBe(false);
+  });
   it("rejects arbitrary RPC actions and invalid form data", () => {
     expect(PipelineInput.safeParse({ operation: "rpc", payload: {} }).success).toBe(false);
     expect(PipelineInput.safeParse({ ...contact, payload: { ...contact.payload, email: "invalid" } }).success).toBe(false);

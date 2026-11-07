@@ -34,6 +34,7 @@ Open: admin Contact editor not click-tested (no admin account for requesting use
 - [x] Verify local tests and build signals: 19 tests passed and build OK; Google-dependent live checks remain unverified and require user validation on an authorized deployed origin with a real Google key (not a connector token). Existing Places (New) review selections need reselection because legacy review IDs differ.
 
 ## Hosted submission and notification pipeline
-- [ ] Route public submissions (including fleet/corporate contact enquiries) and admin test sends to a secured Lovable-hosted endpoint using the publishable client and caller bearer token.
-- [ ] Verify hosted validation, staff authorization, saved routing and non-blocking email failures; run regression tests.
+- [x] Route public submissions (including fleet/corporate contact enquiries) and admin test sends to a secured Lovable-hosted endpoint using the publishable client and caller bearer token.
+- [x] Verify hosted validation, anonymous test rejection, saved routing and non-blocking email failures; 38 regression tests pass, contact UI saved GS-MSG-2026-00054 and hosted endpoint saved GS-MSG-2026-00055; build OK.
+- [ ] Verify authenticated admin Send Test Email on the hosted endpoint; requires a requesting-user super-admin session, unavailable in the current preview.
 - [ ] Publish the hosted endpoint and redeploy gostation.sa; requires production deployment access/approval.
