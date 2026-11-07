@@ -1,12 +1,11 @@
 // Self-hosting friendly Supabase access for server code.
 // - Uses the service-role (admin) client when SUPABASE_SERVICE_ROLE_KEY is set.
-// - Otherwise logs a warning once and falls back to a public client built from
+// - Otherwise falls back to a public client built from
 //   SUPABASE_URL + SUPABASE_PUBLISHABLE_KEY (RLS applies, public reads only).
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { publicSupabaseEnv } from "@/lib/public-supabase-env";
 
-let warned = false;
 let publicClient: SupabaseClient<Database> | null = null;
 
 export function hasServiceRoleKey(): boolean {
@@ -32,17 +31,9 @@ function createPublicServerClient(): SupabaseClient<Database> | null {
   });
 }
 
-/** Admin client if available, else null (with a one-time warning). */
+/** Optional hosted admin client; a missing key is normal on standalone servers. */
 export async function getAdminClientOrNull(): Promise<SupabaseClient<Database> | null> {
-  if (!hasServiceRoleKey()) {
-    if (!warned) {
-      warned = true;
-      console.warn(
-        "[supabase] SUPABASE_SERVICE_ROLE_KEY not set — admin-only features are disabled; falling back to the public client where possible.",
-      );
-    }
-    return null;
-  }
+  if (!hasServiceRoleKey()) return null;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   return supabaseAdmin as unknown as SupabaseClient<Database>;
 }

@@ -20,6 +20,8 @@ export { ApplyInput };
 export const submitJobApplication = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => ApplyInput.parse(raw))
   .handler(async ({ data }) => {
+    const { shouldForwardPipeline, forwardPipeline } = await import("./hosted-pipeline.server");
+    if (shouldForwardPipeline()) return forwardPipeline<{ reference: string }>({ operation: "careers", payload: data });
     const { getServerSupabase } = await import("./supabase-server.server");
     const { client } = await getServerSupabase();
     if (!client) throw new Error("submission_unavailable");

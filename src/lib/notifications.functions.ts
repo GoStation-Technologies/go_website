@@ -91,6 +91,8 @@ export const adminNotificationTestSend = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => z.object({ category: z.enum(NOTIFY_CATEGORIES) }).parse(raw))
   .handler(async ({ data, context }) => {
+    const { shouldForwardPipeline, forwardPipeline } = await import("./hosted-pipeline.server");
+    if (shouldForwardPipeline()) return forwardPipeline<import("./notify.server").NotifyResult>({ operation: "test", payload: data });
     await assertSuperAdmin(context as any);
     const { notifySubmission } = await import("./notify.server");
     const res = await notifySubmission({
