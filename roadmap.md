@@ -8,7 +8,7 @@
 - [ ] Verify real notification delivery and admin live test after notify.gostation.sa DNS verification, then publish/redeploy. Sending domain is still verifying; no successful delivery claimed.
 
 ## Leadership hierarchy
-- [ ] Pair chairman and CEO in the featured Senior Management section above deputy → COO → CFO; preserve slots after profile edits and verify Arabic/English desktop/mobile.
+- [x] Pair chairman and CEO in the featured Senior Management section above deputy → COO → CFO; immutable record IDs preserve slots after editable fields change. Seven tests pass; Arabic/English desktop/mobile verified with all portraits loaded and no overflow; build OK. Admin save/readback not exercised; existing saves preserve IDs and sort_order.
 
 - [x] Add the missing email control directly to the Contact Us page editor, using the shared contact setting.
 
