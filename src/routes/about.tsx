@@ -10,7 +10,7 @@ import { SiteLayout } from "@/components/site/site-layout";
 import { StoryTimeline } from "@/components/site/story-timeline";
 import { FutureRoadmap } from "@/components/site/future-roadmap";
 import { ManagementProfile } from "@/components/site/management-profile";
-import { LeadershipStatement } from "@/components/site/leadership-statement";
+import { LeadershipStatement, StatementPair } from "@/components/site/leadership-statement";
 import { managementTeam } from "@/lib/management-team";
 const canopyImg = { url: "/station-canopy.jpg" };
 
@@ -357,18 +357,24 @@ function AboutPage() {
               return (
                 <>
                   <div>
-                    <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "القيادة العليا / مجلس الإدارة" : "Senior Leadership / Board of Directors"}</h2>
+                    <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "الإدارة العليا" : "Senior Leadership"}</h2>
+                    <StatementPair>
                       {chairman && cms.visible("chairman") && (
                         <LeadershipStatement name={lng === "ar" ? chairman.name_ar : chairman.name_en} role={lng === "ar" ? chairman.title_ar : chairman.title_en}
                           photo={cms.media("chairman", chairman.photo_url ?? "")}
                           quote={cms.field("chairman", "content", homeCms.field("chairman", "content", t("home.chairmanQuote")))} />
                       )}
+                      {ceo && cms.visible("ceo") && (
+                        <LeadershipStatement name={lng === "ar" ? ceo.name_ar : ceo.name_en} role={lng === "ar" ? ceo.title_ar : ceo.title_en}
+                          photo={cms.media("ceo", ceo.photo_url ?? "")}
+                          quote={cms.field("ceo", "content", (lng === "ar" ? ceo.bio_ar : ceo.bio_en) || t("home.ceoQuote"))} />
+                      )}
+                    </StatementPair>
                   </div>
                   <div className="border-t border-border pt-10">
                     <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "فريق الإدارة التنفيذية" : "Executive Management Team"}</h2>
-                    <div className="grid auto-rows-fr items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                      {executives.map((leader) => <ManagementProfile key={leader.id} leader={leader} language={lng}
-                        photo={leader === ceo ? cms.media("ceo", leader.photo_url ?? "") : undefined} />)}
+                    <div className="grid auto-rows-fr items-stretch gap-6 md:grid-cols-3">
+                      {executives.map((leader) => <ManagementProfile key={leader.id} leader={leader} language={lng} />)}
                     </div>
                   </div>
                 </>
