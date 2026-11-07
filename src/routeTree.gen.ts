@@ -54,6 +54,7 @@ import { Route as MediaSlugRouteImport } from './routes/media.$slug'
 import { Route as MediaNewsRouteImport } from './routes/media.news'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as ApiPublicSubmissionsRouteImport } from './routes/api/public/submissions'
 import { Route as ManagePortal9f4c2ab7PagesSlugRouteImport } from './routes/manage-portal-9f4c2ab7.pages.$slug'
 import { Route as ApiPublicHooksProcessExportsRouteImport } from './routes/api/public/hooks/process-exports'
 import { Route as ApiPublicHooksSyncDataverseLocationsRouteImport } from './routes/api/public/hooks/sync-dataverse-locations'
@@ -312,6 +313,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicSubmissionsRoute = ApiPublicSubmissionsRouteImport.update({
+  id: '/api/public/submissions',
+  path: '/api/public/submissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ManagePortal9f4c2ab7PagesSlugRoute =
   ManagePortal9f4c2ab7PagesSlugRouteImport.update({
     id: '/pages/$slug',
@@ -393,6 +399,7 @@ export interface FileRoutesByFullPath {
   '/media/': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/public/submissions': typeof ApiPublicSubmissionsRoute
   '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
@@ -445,6 +452,7 @@ export interface FileRoutesByTo {
   '/media': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/public/submissions': typeof ApiPublicSubmissionsRoute
   '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
@@ -499,6 +507,7 @@ export interface FileRoutesById {
   '/media/': typeof MediaIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/public/submissions': typeof ApiPublicSubmissionsRoute
   '/manage-portal-9f4c2ab7/pages/$slug': typeof ManagePortal9f4c2ab7PagesSlugRoute
   '/api/public/hooks/process-exports': typeof ApiPublicHooksProcessExportsRoute
   '/api/public/hooks/sync-dataverse-locations': typeof ApiPublicHooksSyncDataverseLocationsRoute
@@ -554,6 +563,7 @@ export interface FileRouteTypes {
     | '/media/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/public/submissions'
     | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
@@ -606,6 +616,7 @@ export interface FileRouteTypes {
     | '/media'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/public/submissions'
     | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
@@ -659,6 +670,7 @@ export interface FileRouteTypes {
     | '/media/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/public/submissions'
     | '/manage-portal-9f4c2ab7/pages/$slug'
     | '/api/public/hooks/process-exports'
     | '/api/public/hooks/sync-dataverse-locations'
@@ -691,6 +703,7 @@ export interface RootRouteChildren {
   MediaIndexRoute: typeof MediaIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicSubmissionsRoute: typeof ApiPublicSubmissionsRoute
   ApiPublicHooksProcessExportsRoute: typeof ApiPublicHooksProcessExportsRoute
   ApiPublicHooksSyncDataverseLocationsRoute: typeof ApiPublicHooksSyncDataverseLocationsRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
@@ -1015,6 +1028,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/submissions': {
+      id: '/api/public/submissions'
+      path: '/api/public/submissions'
+      fullPath: '/api/public/submissions'
+      preLoaderRoute: typeof ApiPublicSubmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/manage-portal-9f4c2ab7/pages/$slug': {
       id: '/manage-portal-9f4c2ab7/pages/$slug'
       path: '/pages/$slug'
@@ -1143,6 +1163,7 @@ const rootRouteChildren: RootRouteChildren = {
   MediaIndexRoute: MediaIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicSubmissionsRoute: ApiPublicSubmissionsRoute,
   ApiPublicHooksProcessExportsRoute: ApiPublicHooksProcessExportsRoute,
   ApiPublicHooksSyncDataverseLocationsRoute:
     ApiPublicHooksSyncDataverseLocationsRoute,
