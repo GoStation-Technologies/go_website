@@ -1,55 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 import { IrInput } from "./investor-inquiry";
 import { LeasingInput } from "./leasing-request";
-import { optionalPhoneSchema, phoneSchema } from "./form-validation";
-
-// Public form submissions are handled server-side. The underlying
-// SECURITY DEFINER database functions are no longer callable by anon /
-// authenticated roles; only the trusted server runtime may invoke them.
-
-const str = (max: number) => z.string().trim().max(max);
-
-export const ContactInput = z.object({
-  full_name: str(200).min(1),
-  email: str(255).email(),
-  phone: optionalPhoneSchema,
-  category: str(40).min(1),
-  subject: str(200).min(1),
-  message: str(4000).min(1),
-});
-
-export const AcquisitionInput = z.object({
-  full_name: str(200).min(1),
-  phone: phoneSchema,
-  email: str(255).email(),
-  station_name: str(200).optional().default(""),
-  city: str(120).optional().default(""),
-  district: str(120).optional().default(""),
-  land_area_sqm: str(30).optional().default(""),
-  fuel_pumps_count: str(30).optional().default(""),
-  avg_daily_sales_sar: str(30).optional().default(""),
-  notes: str(4000).optional().default(""),
-});
-
-export const FranchiseInput = z.object({
-  full_name: str(200).min(1),
-  phone: phoneSchema,
-  email: str(255).email(),
-  city: str(120).min(1),
-  proposed_city: str(120).optional().default(""),
-  proposed_district: str(120).optional().default(""),
-  land_area_sqm: str(30).optional().default(""),
-  ownership_status: str(60).optional().default(""),
-  investment_capital_sar: str(30).optional().default(""),
-  notes: str(4000).optional().default(""),
-});
+import { ContactInput, AcquisitionInput, FranchiseInput } from "./submission-schemas";
+export { ContactInput, AcquisitionInput, FranchiseInput } from "./submission-schemas";
 
 async function callSubmit(
   fn: string,
   payload: Record<string, string>,
   notify: { category: "franchise" | "acquisition" | "contact" | "investor"; title: string },
 ) {
+  const { shouldForwardPipeline, forwardPipeline } = await import("./hosted-pipeline.server");
+  if (shouldForwardPipeline()) return forwardPipeline<{ reference: string }>({ operation: notify.category, payload } as import("./hosted-pipeline").PipelineRequest);
   const { getServerSupabase } = await import("./supabase-server.server");
   const { client } = await getServerSupabase();
   if (!client) throw new Error("submission_unavailable");
@@ -86,6 +47,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
 export const submitLeasingRequest = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => LeasingInput.parse(raw))
   .handler(async ({ data }) => {
+    const { shouldForwardPipeline, forwardPipeline } = await import("./hosted-pipeline.server");
+    if (shouldForwardPipeline()) return forwardPipeline<{ reference: string }>({ operation: "leasing", payload: data });
     const { getServerSupabase } = await import("./supabase-server.server");
     const { client } = await getServerSupabase();
     if (!client) throw new Error("submission_unavailable");
