@@ -349,7 +349,7 @@ export const en = {
 
     title: "Franchise application",
     intro: "Join a growing network. Fill in the form and our BD team will contact you.",
-    steps: { personal: "Personal", location: "Location", financial: "Financial" },
+    steps: { personal: "Personal Information", location: "Location Details", financial: "Financial Details" },
     formIntro: "Fill out the form and the franchise team will contact you",
     submit: "Submit application",
     about: {

@@ -29,7 +29,7 @@ export const Route = createFileRoute("/franchise")({
       path: "/franchise",
       title: "Franchise application — GoStation",
       description:
-        "Partner with GoStation and operate your own fuel station in Saudi Arabia. Review the requirements and submit your franchise application in three steps.",
+        "Partner with GoStation and operate your own fuel station in Saudi Arabia. Review the requirements and submit your franchise application in one simple form.",
     }),
 });
 
@@ -37,7 +37,6 @@ function FranchisePage() {
   const { t } = useTranslation();
   const cms = usePageContent("franchise");
   const { stationsCount, activeRegionsCount } = useStationStats();
-  const [step, setStep] = useState<0 | 1 | 2>(0);
   const [busy, setBusy] = useState(false);
   const { errors, validate, fail } = useFormErrors();
   const [ref, setRef] = useState<string | null>(null);
@@ -60,7 +59,7 @@ function FranchisePage() {
           notes: form.notes ?? "",
         });
     if (!data) {
-      setStep(0);
+      requestAnimationFrame(() => document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
       return;
     }
     setBusy(true);
@@ -77,7 +76,6 @@ function FranchisePage() {
   };
 
 
-  const steps = [t("franchise.steps.personal"), t("franchise.steps.location"), t("franchise.steps.financial")];
 
   return (
     <SiteLayout>
@@ -225,50 +223,35 @@ function FranchisePage() {
           </CardContent></Card>
         ) : (
           <Card><CardContent className="p-8">
-            <ol className="mb-8 flex items-center justify-between">
-              {steps.map((label, i) => (
-                <li key={i} className="flex flex-1 items-center">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${i <= step ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground"}`}>{i + 1}</div>
-                  <span className="ms-2 hidden text-sm sm:inline">{label}</span>
-                  {i < 2 && <div className={`mx-2 h-px flex-1 ${i < step ? "bg-accent" : "bg-border"}`} />}
-                </li>
-              ))}
-            </ol>
-
-            {step === 0 && (
+<form noValidate onSubmit={(e) => { e.preventDefault(); void submit(); }} className="space-y-8">
+            <section><h3 className="mb-4 border-b pb-2 text-lg font-semibold text-foreground">{t("franchise.steps.personal")}</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <F label={t("common.fullName")}><Input id="f-name" maxLength={200} value={form.full_name ?? ""} onChange={(e) => upd("full_name", e.target.value)} {...invalidProps("f-name", errors.full_name)} /><FieldError id="f-name" code={errors.full_name} /></F>
                 <F label={t("common.phone")}><Input id="f-phone" type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" value={form.phone ?? ""} onChange={(e) => upd("phone", e.target.value)} {...invalidProps("f-phone", errors.phone)} /><FieldError id="f-phone" code={errors.phone} /></F>
                 <F label={t("common.email")}><Input id="f-email" type="email" maxLength={255} value={form.email ?? ""} onChange={(e) => upd("email", e.target.value)} {...invalidProps("f-email", errors.email)} /><FieldError id="f-email" code={errors.email} /></F>
                 <F label={t("common.city")}><CitySelect value={form.city} onChange={(v) => upd("city", v)} /><FieldError id="f-city" code={errors.city} /></F>
               </div>
-            )}
-            {step === 1 && (
+            </section>
+            <section><h3 className="mb-4 border-b pb-2 text-lg font-semibold text-foreground">{t("franchise.steps.location")}</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <F label={t("franchise.f.proposedCity")}><CitySelect value={form.proposed_city} onChange={(v) => upd("proposed_city", v)} /></F>
                 <F label={t("franchise.f.proposedDistrict")}><Input value={form.proposed_district ?? ""} onChange={(e) => upd("proposed_district", e.target.value)} /></F>
                 <F label={t("franchise.f.landArea")}><Input type="number" value={form.land_area_sqm ?? ""} onChange={(e) => upd("land_area_sqm", e.target.value)} /></F>
                 <F label={t("franchise.f.ownership")}><Input placeholder={t("franchise.f.ownershipPlaceholder")} value={form.ownership_status ?? ""} onChange={(e) => upd("ownership_status", e.target.value)} /></F>
               </div>
-            )}
-            {step === 2 && (
-              <div className="grid gap-4">
+            </section>
+            <section><h3 className="mb-4 border-b pb-2 text-lg font-semibold text-foreground">{t("franchise.steps.financial")}</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
                 <F label={t("franchise.f.capital")}><Input type="number" value={form.investment_capital_sar ?? ""} onChange={(e) => upd("investment_capital_sar", e.target.value)} /></F>
-                <F label={t("common.message")}><Textarea rows={5} maxLength={4000} value={form.notes ?? ""} onChange={(e) => upd("notes", e.target.value)} /></F>
+                <div className="sm:col-span-2"><F label={t("common.message")}><Textarea rows={5} maxLength={4000} value={form.notes ?? ""} onChange={(e) => upd("notes", e.target.value)} /></F></div>
               </div>
-            )}
-
-            <div className="mt-8 flex items-center justify-between">
-              <Button variant="ghost" disabled={step === 0} onClick={() => setStep((s) => (s - 1) as 0 | 1 | 2)}>{t("common.back")}</Button>
-              {step < 2 ? (
-                <Button onClick={() => setStep((s) => (s + 1) as 0 | 1 | 2)} className="bg-accent text-accent-foreground hover:bg-accent/90">{t("common.next")}</Button>
-              ) : (
-
-                <Button onClick={submit} disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
-                  {busy ? t("common.submitting") : t("franchise.submit")}
-                </Button>
-              )}
+            </section>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
+                {busy ? t("common.submitting") : t("franchise.submit")}
+              </Button>
             </div>
+            </form>
           </CardContent></Card>
         )}
       </section>
