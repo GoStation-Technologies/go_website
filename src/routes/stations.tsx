@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Fuel, Star, Clock, X, LocateFixed, Navigation } from "lucide-react";
 import { ClientOnly } from "@tanstack/react-router";
 import { fuelLabel } from "@/lib/regions";
-import { useActiveStationRegions, useStationStats } from "@/hooks/use-station-stats";
+import { useActiveStationRegions } from "@/hooks/use-station-stats";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { haversineKm, formatDistance } from "@/lib/geo";
 import { stationDisplayName, stationNumber, stationStatusLabel, stationLocatorStatus } from "@/lib/station-status";
@@ -41,7 +41,6 @@ function StationsPage() {
   const [region, setRegion] = useState("all");
   const [fuel, setFuel] = useState("all");
   const { data = [], isLoading } = useQuery(locatorStationsQuery);
-  const { stationsCount } = useStationStats();
 
   const { data: allRegions = [] } = useActiveStationRegions();
   const regionOptions = useMemo(() => {
@@ -154,10 +153,6 @@ function StationsPage() {
               {ar ? "مسح" : "Clear"}
             </Button>
           )}
-          <div className="text-sm font-medium text-foreground">
-            {ar ? `إجمالي المحطات: ${stationsCount}` : `Total stations: ${stationsCount}`}
-            <span className="ms-3 text-muted-foreground">{ar ? `المعروضة: ${filtered.length}` : `Shown: ${filtered.length}`}</span>
-          </div>
         </div>
         <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-station-active" />{ar ? "نشطة" : "Operating"}</span>

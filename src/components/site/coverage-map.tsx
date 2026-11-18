@@ -7,7 +7,7 @@ import { locatorStationsQuery } from "@/lib/locator-stations";
 import { getContentLanguage } from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fuelLabel } from "@/lib/regions";
-import { useActiveStationRegions, useStationStats } from "@/hooks/use-station-stats";
+import { useActiveStationRegions } from "@/hooks/use-station-stats";
 import { stationDisplayName, stationStatusLabel, stationLocatorStatus } from "@/lib/station-status";
 
 const StationsMap = lazy(() =>
@@ -25,7 +25,6 @@ export function CoverageMap() {
   const { data: regions = [] } = useActiveStationRegions();
 
   const { data = [] } = useQuery(locatorStationsQuery);
-  const { stationsCount } = useStationStats();
   const regionOptions = regions.filter(r => data.some(s => s.region_id === r.id));
 
   const fuelOptions = useMemo(() => {
@@ -98,9 +97,7 @@ export function CoverageMap() {
         </Select>
         <span className="ms-auto text-sm text-muted-foreground">
           <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-station-active" />{ar ? "نشطة" : "Operating"}</span>
-          <span className="me-3 inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-station-development" />{ar ? "تحت التطوير" : "Under development"}</span>
-          {stationsCount} {ar ? "محطة" : "stations"}
-          <span className="ms-3">{ar ? `المعروضة: ${points.length}` : `Shown: ${points.length}`}</span>
+          <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-station-development" />{ar ? "تحت التطوير" : "Under development"}</span>
         </span>
       </div>
       <ClientOnly fallback={fallback}>
