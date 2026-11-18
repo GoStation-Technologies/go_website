@@ -353,12 +353,12 @@ function AboutPage() {
 
           <TabsContent value="leaders" className="mt-10 space-y-12" dir={lng === "ar" ? "rtl" : "ltr"}>
             {(() => {
-              const { chairman, ceo, executives } = managementTeam(leaders.data ?? []);
+              const { chairman, ceo, deputy, executives } = managementTeam(leaders.data ?? []);
               return (
                 <>
                   <div>
                     <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "الإدارة العليا" : "Senior Leadership"}</h2>
-                    <StatementPair>
+                    <StatementPair columns={3}>
                       {chairman && cms.visible("chairman") && (
                         <LeadershipStatement name={lng === "ar" ? chairman.name_ar : chairman.name_en} role={lng === "ar" ? chairman.title_ar : chairman.title_en}
                           photo={cms.media("chairman", chairman.photo_url ?? "")}
@@ -369,11 +369,16 @@ function AboutPage() {
                           photo={cms.media("ceo", ceo.photo_url ?? "")}
                           quote={cms.field("ceo", "content", (lng === "ar" ? ceo.bio_ar : ceo.bio_en) || t("home.ceoQuote"))} />
                       )}
+                      {deputy && cms.visible("deputy") && (
+                        <LeadershipStatement name={lng === "ar" ? deputy.name_ar : deputy.name_en} role={lng === "ar" ? deputy.title_ar : deputy.title_en}
+                          photo={cms.media("deputy", deputy.photo_url ?? "")}
+                          quote={cms.field("deputy", "content", "")} />
+                      )}
                     </StatementPair>
                   </div>
                   <div className="border-t border-border pt-10">
                     <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "فريق الإدارة التنفيذية" : "Executive Management Team"}</h2>
-                    <div className="grid auto-rows-fr items-stretch gap-6 md:grid-cols-3">
+                    <div className="mx-auto grid max-w-4xl auto-rows-fr items-stretch gap-6 md:grid-cols-2">
                       {executives.map((leader) => <ManagementProfile key={leader.id} leader={leader} language={lng} />)}
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 import { useId, type ReactNode } from "react";
 
-export function StatementPair({ children }: { children: ReactNode }) {
+export function StatementPair({ children, columns = 2 }: { children: ReactNode; columns?: 2 | 3 }) {
   const pattern = useId().replace(/:/g, "");
   return (
     <div className="relative isolate overflow-hidden bg-muted/40">
@@ -10,7 +10,7 @@ export function StatementPair({ children }: { children: ReactNode }) {
         </pattern></defs>
         <rect width="100%" height="100%" fill={`url(#${pattern})`} />
       </svg>
-      <div className="relative grid md:grid-cols-2 [&>figure+figure]:border-t [&>figure+figure]:border-border/70 md:[&>figure+figure]:border-t-0 md:[&>figure+figure]:border-s">
+      <div className={`relative grid ${columns === 3 ? "lg:grid-cols-3" : "md:grid-cols-2"} [&>figure+figure]:border-t [&>figure+figure]:border-border/70 ${columns === 3 ? "lg:[&>figure+figure]:border-t-0 lg:[&>figure+figure]:border-s" : "md:[&>figure+figure]:border-t-0 md:[&>figure+figure]:border-s"}`}>
         {children}
       </div>
     </div>
@@ -31,11 +31,11 @@ export function LeadershipStatement({ name, role, quote, photo, initials }: {
           <span className="grid h-full w-full place-items-center font-display text-3xl font-semibold text-accent">{initials || name.split(" ").slice(0, 2).map((part) => part[0]).join(" ")}</span>
         )}
       </div>
-      <blockquote className="mt-6 max-w-lg flex-1 text-pretty text-lg font-medium leading-8 text-foreground sm:text-xl sm:leading-9">
+      {quote.trim() ? <blockquote className="mt-6 max-w-lg flex-1 text-pretty text-lg font-medium leading-8 text-foreground sm:text-xl sm:leading-9">
         <span aria-hidden="true" className="me-1 font-serif text-3xl font-bold text-accent">“</span>
         {quote}
         <span aria-hidden="true" className="ms-1 font-serif text-3xl font-bold text-statement-quote-end">”</span>
-      </blockquote>
+      </blockquote> : <div aria-hidden="true" className="mt-6 min-h-24 flex-1" />}
       <figcaption className="mt-7">
         <h3 className="text-sm font-bold uppercase leading-6 tracking-normal text-accent">{name}</h3>
         <p className="mt-1 text-sm leading-6 text-foreground">{role}</p>

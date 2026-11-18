@@ -18,9 +18,12 @@ describe("Senior Management grouping", () => {
     expect(team.ceo?.name).toBe("سالم صالح النهدي");
     expect(team.executives).not.toContain(team.ceo);
   });
-  it("orders the lower executive grid as deputy, operations and finance", () => {
+  it("promotes Bakarman to the top tier as the third leader", () => {
+    expect(managementTeam(leaders).deputy?.name).toBe("عبد العزيز سالم باكرمان");
+  });
+  it("keeps only operations and finance in the lower executive grid", () => {
     expect(managementTeam(leaders).executives.map((leader) => leader.name)).toEqual([
-      "عبد العزيز سالم باكرمان", "عبد العزيز بن عايض القحطاني", "طارق فتحي",
+      "عبد العزيز بن عايض القحطاني", "طارق فتحي",
     ]);
   });
   it("recognizes the edited CEO title with a dash and abbreviation", () => {
@@ -31,9 +34,9 @@ describe("Senior Management grouping", () => {
   });
   it("preserves approved identity hierarchy when titles and row positions change", () => {
     const edited = leaders.map((leader) => ({ ...leader, name_ar: leader.name, title_ar: "", title_en: "Board Member", sort_order: 99 }));
-    expect(managementTeam(edited).executives.map((leader) => leader.name)).toEqual([
-      "عبد العزيز سالم باكرمان", "عبد العزيز بن عايض القحطاني", "طارق فتحي",
-    ]);
+    const team = managementTeam(edited);
+    expect(team.deputy?.name).toBe("عبد العزيز سالم باكرمان");
+    expect(team.executives.map((leader) => leader.name)).toEqual(["عبد العزيز بن عايض القحطاني", "طارق فتحي"]);
   });
   it("uses ascending stored display order for additional members without mutating records", () => {
     const additional = [

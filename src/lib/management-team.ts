@@ -30,6 +30,8 @@ export function managementTeam<T extends ManagementRole>(leaders: T[]) {
   const ordered = [...leaders].sort((a, b) => hierarchyRank(a) - hierarchyRank(b) || a.sort_order - b.sort_order);
   const chairman = ordered.find((leader) => hierarchyRank(leader) === 0);
   const ceo = ordered.find((leader) => hierarchyRank(leader) === 1);
-  const executives = ordered.filter((leader) => hierarchyRank(leader) > 1);
-  return { chairman, ceo, executives };
+  const deputy = ordered.find((leader) => hierarchyRank(leader) === 2);
+  // Top tier: chairman, CEO, deputy (slots 1–3); everyone else is the executive team (4, 5, ...).
+  const executives = ordered.filter((leader) => hierarchyRank(leader) > 2);
+  return { chairman, ceo, deputy, executives };
 }
