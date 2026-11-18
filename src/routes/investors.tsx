@@ -48,6 +48,8 @@ function IRPage() {
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
   const { data: investorContent } = useSuspenseQuery(investorContentQuery);
   const reports = investorContent.reports;
+  // Public reads only return visible rows, so a missing row means the admin hid it.
+  const showReports = reports.length > 0 && cms.get("reports")?.is_visible === true;
   const metric = (key: string) => investorContent.sections.find((section) => section.section_key === key);
   const metricField = (key: string, field: "title" | "subtitle", fallback: string) => metric(key)?.[`${field}_${lng}`]?.trim() || fallback;
 
@@ -190,6 +192,7 @@ function IRPage() {
         </div>
       </section>
 
+      {showReports && (
       <section className="mx-auto max-w-7xl px-4 pb-4 pt-20 md:pt-24">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -231,7 +234,6 @@ function IRPage() {
             ref={railRef}
             className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            {reports.length === 0 && <p className="text-muted-foreground">{t("investors.reportsEmpty")}</p>}
             {reports.map((r) => (
               <article key={r.id} className="w-[248px] shrink-0 snap-start md:w-[272px]">
                 <a
@@ -291,6 +293,7 @@ function IRPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ROI calculator hidden until its policy is approved. */}
 
