@@ -134,6 +134,13 @@
       "when": 1795008681394,
       "tag": "0018_tighten_cache_and_storage_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1795008706657,
+      "tag": "0019_cms_read_all_upload_folders",
+      "breakpoints": true
     }
   ]
 }
