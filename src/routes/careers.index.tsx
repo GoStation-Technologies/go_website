@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
 import { useTranslation } from "react-i18next";
-import { usePageContent } from "@/hooks/use-cms";
+import { usePageContent, useSiteSettings } from "@/hooks/use-cms";
+import { careersApplicationUrl } from "@/lib/careers-settings";
 import { useStationStats } from "@/hooks/use-station-stats";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Button } from "@/components/ui/button";
-import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud, Network, Users, BadgeCheck, TrendingUp, Send } from "lucide-react";
+import { Briefcase, MapPin, CalendarClock, Building2, UploadCloud, Network, Users, BadgeCheck, TrendingUp, Send, ExternalLink } from "lucide-react";
 const stationCanopy = { url: "/station-canopy.jpg" };
 
 
@@ -36,6 +37,8 @@ function useDateFmt() {
 
 function CareersPage() {
   const { t, i18n } = useTranslation();
+  const { setting } = useSiteSettings();
+  const applyUrl = careersApplicationUrl(setting("careers", "application_url"));
   const cms = usePageContent("careers");
   const { stationsCount, activeRegionsCount } = useStationStats();
   const lng = getContentLanguage(i18n.resolvedLanguage ?? i18n.language);
@@ -148,6 +151,18 @@ function CareersPage() {
               {t("careers.openingsTitle")}
             </h2>
           </div>
+          {applyUrl ? (
+            <Button asChild size="lg" className="self-start bg-accent text-accent-foreground hover:bg-accent/90 sm:self-auto">
+              <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+                {t("careers.applyRequest")}
+                <ExternalLink className="ms-2 h-4 w-4" />
+              </a>
+            </Button>
+          ) : (
+            <Button size="lg" disabled className="self-start bg-accent text-accent-foreground sm:self-auto" title={t("careers.applyUnavailable")}>
+              {t("careers.applyRequest")}
+            </Button>
+          )}
         </div>
 
         {jobs.length === 0 ? (

@@ -472,6 +472,8 @@ export const ar = {
     cvTooLarge: "حجم ملف السيرة الذاتية يتجاوز 4 ميجابايت.",
     coverLetter: "خطاب التقديم",
     openings: "الوظائف الشاغرة",
+    applyRequest: "طلب وظيفة",
+    applyUnavailable: "رابط طلب التوظيف غير متاح حالياً",
     openingsTitle: "الوظائف الشاغرة حالياً",
     noOpenings: "لا توجد وظائف شاغرة حالياً — تحقق لاحقاً.",
     eyebrow: "الوظائف",

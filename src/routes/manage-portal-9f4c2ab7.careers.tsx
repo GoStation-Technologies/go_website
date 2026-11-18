@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { CareersApplicationUrlSetting } from "@/components/admin/careers-application-url";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { adminListJobs, adminUpsertJob, adminDeleteJob } from "@/lib/admin.functions";
@@ -134,6 +135,7 @@ function CareersPage() {
           </DialogContent>
         </Dialog>
       </div>
+      <CareersApplicationUrlSetting />
 
       <ListToolbar
         q={view.q} onQ={view.setQ}
