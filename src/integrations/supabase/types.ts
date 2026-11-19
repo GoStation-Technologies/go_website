@@ -52,6 +52,7 @@ export type Database = {
       }
       acquisition_requests: {
         Row: {
+          application_details: Json
           assigned_to: string | null
           avg_daily_sales_sar: number | null
           city: string | null
@@ -76,6 +77,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          application_details?: Json
           assigned_to?: string | null
           avg_daily_sales_sar?: number | null
           city?: string | null
@@ -100,6 +102,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          application_details?: Json
           assigned_to?: string | null
           avg_daily_sales_sar?: number | null
           city?: string | null
@@ -498,6 +501,7 @@ export type Database = {
       }
       franchise_applications: {
         Row: {
+          application_details: Json
           assigned_to: string | null
           city: string
           cr_number: string | null
@@ -526,6 +530,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          application_details?: Json
           assigned_to?: string | null
           city: string
           cr_number?: string | null
@@ -554,6 +559,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          application_details?: Json
           assigned_to?: string | null
           city?: string
           cr_number?: string | null
@@ -1667,6 +1673,10 @@ export type Database = {
       submit_franchise_application: { Args: { payload: Json }; Returns: string }
       submit_ir_inquiry: { Args: { payload: Json }; Returns: string }
       submit_job_application: { Args: { payload: Json }; Returns: string }
+      validate_business_application: {
+        Args: { kind: string; payload: Json }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "super_admin" | "bd" | "hr" | "media" | "ir" | "ops" | "support"

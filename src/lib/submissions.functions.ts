@@ -6,7 +6,7 @@ export { ContactInput, AcquisitionInput, FranchiseInput } from "./submission-sch
 
 async function callSubmit(
   fn: string,
-  payload: Record<string, string>,
+  payload: Record<string, unknown>,
   notify: { category: "franchise" | "acquisition" | "contact" | "investor"; title: string },
 ) {
   const { shouldForwardPipeline, forwardPipeline } = await import("./hosted-pipeline.server");
@@ -29,6 +29,7 @@ async function callSubmit(
       title: notify.title,
       reference,
       fields: payload,
+      attachments: Array.isArray(payload.documents) ? (payload.documents as { path: string; name: string }[]).map(doc => ({ bucket: "application-documents" as const, ...doc })) : [],
       client,
     });
   } catch (e) {

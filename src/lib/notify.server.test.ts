@@ -20,6 +20,15 @@ describe("Submission notification delivery", () => {
     await notifySubmission({ ...args, fields: { email: "visitor@example.com" } });
     expect(send).toHaveBeenCalledWith("form-notification", ["owner@example.com"], expect.objectContaining({ replyTo: "visitor@example.com" }));
   });
+  it("includes private franchise document links with all application fields", async () => {
+    send.mockResolvedValue({ sent: true });
+    const sign = vi.fn().mockResolvedValue({ data: { signedUrl: "https://example.com/private-document?token=test" }, error: null });
+    const documentClient = { ...client, storage: { from: vi.fn(() => ({ createSignedUrl: sign })) } } as unknown as SupabaseClient<Database>;
+    const fields = { country: "Saudi Arabia", nationality: "Saudi", cr_number: "1234567890", station_count: "2", annual_income_sar: "100000", investment_capital_sar: "200000" };
+    await notifySubmission({ ...args, client: documentClient, fields, attachments: [{ bucket: "application-documents", path: "franchise/12345678-1234-1234-1234-123456789012.pdf", name: "proof.pdf" }] });
+    expect(sign).toHaveBeenCalledWith("franchise/12345678-1234-1234-1234-123456789012.pdf", 86400);
+    expect(send).toHaveBeenCalledWith("form-notification", ["owner@example.com"], expect.objectContaining({ templateData: expect.objectContaining({ fields, links: [{ label: "proof.pdf", url: "https://example.com/private-document?token=test" }] }) }));
+  });
   it("does not report suppressed recipients as successful sends", async () => {
     send.mockResolvedValue({ sent: false, reason: "recipient_suppressed" });
     expect(await notifySubmission(args)).toEqual({ sent: false, reason: "recipient_suppressed" });

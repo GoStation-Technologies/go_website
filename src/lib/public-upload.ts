@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
  * large attachments never travel through the server request body (which
  * reverse proxies often cap at 1 MB).
  */
-export async function uploadPublicFile(bucket: "cvs" | "leasing-documents", path: string, file: File) {
+export async function uploadPublicFile(bucket: "cvs" | "leasing-documents" | "application-documents", path: string, file: File) {
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
     contentType: file.type || "application/octet-stream",
     upsert: false,

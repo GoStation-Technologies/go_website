@@ -1,20 +1,11 @@
-import { useFormErrors } from "@/hooks/use-form-errors";
-import { FieldError, invalidProps } from "@/components/site/field-error";
+import { BusinessApplicationForm } from "@/components/site/business-application-form";
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePageContent } from "@/hooks/use-cms";
-import { AcquisitionInput, submitAcquisitionRequest } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
-import { CitySelect } from "@/components/site/city-select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { CheckCircle2, Building2, Info, Clock, FileText, Handshake } from "lucide-react";
+import { Info, Clock, FileText, Handshake } from "lucide-react";
 const stationImg = { url: "/station-canopy.jpg" };
 
 export const Route = createFileRoute("/acquisitions")({
@@ -31,43 +22,6 @@ export const Route = createFileRoute("/acquisitions")({
 function AcqPage() {
   const { t } = useTranslation();
   const cms = usePageContent("acquisitions");
-  const [busy, setBusy] = useState(false);
-  const { errors, validate, fail } = useFormErrors();
-  const [ref, setRef] = useState<string | null>(null);
-  const [city, setCity] = useState("");
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (busy) return;
-    const form = e.currentTarget;
-    const fd = new FormData(form);
-    const data = validate(AcquisitionInput, {
-          full_name: String(fd.get("name") ?? ""),
-          phone: String(fd.get("phone") ?? ""),
-          email: String(fd.get("email") ?? ""),
-          station_name: String(fd.get("station") ?? ""),
-          city,
-          district: String(fd.get("district") ?? ""),
-          land_area_sqm: String(fd.get("area") ?? ""),
-          fuel_pumps_count: String(fd.get("pumps") ?? ""),
-          avg_daily_sales_sar: String(fd.get("sales") ?? ""),
-          notes: String(fd.get("notes") ?? ""),
-        });
-    if (!data) return;
-    setBusy(true);
-    try {
-      const res = await submitAcquisitionRequest({ data });
-      form.reset();
-      setCity("");
-      setRef(res.reference);
-      toast.success(t("common.thanks"));
-    } catch (error) {
-      fail(error, "acquisition");
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const facts = [
     { icon: Info, title: t("acq.facts.valuation"), body: t("acq.facts.valuationBody") },
     { icon: Clock, title: t("acq.facts.timeline"), body: t("acq.facts.timelineBody") },
@@ -135,56 +89,12 @@ function AcqPage() {
           {/* Form */}
           <Card>
             <CardContent className="p-6 md:p-8">
-              {ref ? (
-                <div className="py-10 text-center">
-                  <CheckCircle2 className="mx-auto h-14 w-14 text-accent" />
-                  <h2 className="mt-4 text-2xl font-bold">{t("common.thanks")}</h2>
-                  <p className="mt-2 text-muted-foreground">
-                    {t("common.referenceSaved")} <span className="font-mono">{ref}</span>
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent/10 text-accent">
-                      <Building2 className="h-4.5 w-4.5" />
-                    </span>
-                    <div>
-                      <h2 className="text-lg font-bold">{cms.field("contact_callout", "title", t("acq.formTitle"))}</h2>
-                      <p className="text-sm text-muted-foreground">{t("acq.formSub")}</p>
-                    </div>
-                  </div>
-
-                  <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
-                    <F label={t("common.fullName")}><Input id="a-name" name="name" required maxLength={200} {...invalidProps("a-name", errors.full_name)} /><FieldError id="a-name" code={errors.full_name} /></F>
-                    <F label={t("common.phone")}><Input id="a-phone" name="phone" required type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" {...invalidProps("a-phone", errors.phone)} /><FieldError id="a-phone" code={errors.phone} /></F>
-                    <F label={t("common.email")} className="sm:col-span-2"><Input id="a-email" type="email" name="email" required maxLength={255} {...invalidProps("a-email", errors.email)} /><FieldError id="a-email" code={errors.email} /></F>
-                    <F label={t("acq.f.stationName")}><Input name="station" /></F>
-                    <F label={t("common.city")}><CitySelect value={city} onChange={setCity} /></F>
-                    <F label={t("acq.f.district")}><Input name="district" /></F>
-                    <F label={t("acq.f.landArea")}><Input type="number" name="area" /></F>
-                    <F label={t("acq.f.pumps")}><Input type="number" name="pumps" /></F>
-                    <F label={t("acq.f.avgSales")}><Input type="number" name="sales" /></F>
-                    <F label={t("common.message")} className="sm:col-span-2"><Textarea id="a-notes" rows={4} name="notes" maxLength={4000} {...invalidProps("a-notes", errors.notes)} /><FieldError id="a-notes" code={errors.notes} /></F>
-                    <div className="flex flex-wrap gap-3 sm:col-span-2">
-                      <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
-                        {busy ? t("common.submitting") : t("acq.submitCta")}
-                      </Button>
-                      <Button type="reset" variant="outline" disabled={busy}>
-                        {t("acq.cancel")}
-                      </Button>
-                    </div>
-                  </form>
-                </>
-              )}
+              <h2 className="mb-6 text-lg font-bold">{t("acq.formTitle")}</h2>
+              <BusinessApplicationForm kind="acquisition" />
             </CardContent>
           </Card>
         </div>
       </section>
     </SiteLayout>
   );
-}
-
-function F({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
-  return <div className={"grid gap-1.5 " + className}><Label>{label}</Label>{children}</div>;
 }

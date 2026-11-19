@@ -36,6 +36,7 @@ import { fmtDateTime } from "@/lib/format";
 import { cityLabel } from "@/lib/cities";
 import { pageHead } from "@/lib/seo";
 import { LeasingRequestDetails } from "@/components/admin/leasing-request-details";
+import { BusinessApplicationDetails } from "@/components/admin/business-application-details";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 type Kind = "franchise" | "acquisitions" | "contact" | "ir" | "leasing";
@@ -483,7 +484,7 @@ function SubmissionsPage() {
                       <div className="text-xs text-muted-foreground">{String(r.phone ?? "")}</div>
                     </td>
                     <td className="max-w-md px-3 py-2 text-xs text-muted-foreground">
-                      {kind === "leasing" ? <><LeasingRequestDetails row={r} /><Button variant="outline" size="sm" className="mt-3" onClick={() => setDetail(r)}>{t("admin.subs.viewDetails")}</Button></> : kind === "ir" ? (
+                      {kind === "franchise" || kind === "acquisitions" ? <BusinessApplicationDetails row={r} kind={kind === "franchise" ? "franchise" : "acquisition"} /> : kind === "leasing" ? <><LeasingRequestDetails row={r} /><Button variant="outline" size="sm" className="mt-3" onClick={() => setDetail(r)}>{t("admin.subs.viewDetails")}</Button></> : kind === "ir" ? (
                         <div className="space-y-2">
                           <div><span className="font-medium">{t("investors.org")}: </span>{String(r.organization || "—")}</div>
                           <div><span className="font-medium">{t("investors.inquiryType")}: </span>{t(`investors.inquiryTypes.${String(r.inquiry_type)}`, { defaultValue: String(r.inquiry_type ?? "—") })}</div>

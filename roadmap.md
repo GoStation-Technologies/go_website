@@ -1,5 +1,13 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
+## Franchise and acquisition forms
+- [x] Replace both forms with the requested single-page sections and shared required-field validation.
+- [x] Save all requested fields and private documents; include signed links in notifications and staff details.
+- [x] Verify bilingual/mobile layouts, 51 regression tests, real franchise/acquisition submissions and saved details; franchise email delivered with all new fields and signed document link.
+- [ ] Verify staff detail/download clicks: requesting user has no app account, so an admin sign-in is required.
+- [ ] Verify acquisition email delivery: acquisition recipients are empty; an admin must configure them.
+- [ ] Publish the updated hosted handlers and redeploy gostation.sa; production deployment access is unavailable.
+
 ## Station locator visibility
 - [x] Preserve full-footprint total; public maps/lists share active/development filtering and green/amber markers. Live checks: 224 total, 175 visible stations (128 active + 47 development/construction/renovation), all 40 closed and nine other inactive records excluded; desktop/mobile and homepage verified.
 

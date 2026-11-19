@@ -21,7 +21,7 @@ export async function getNotificationSetting(category: NotifyCategory, client?: 
 export async function notifySubmission(args: {
   category: NotifyCategory; title: string; reference: string; fields: Record<string, unknown>;
   client?: SupabaseClient<Database>; test?: boolean;
-  attachments?: { bucket: "cvs" | "leasing-documents"; path: string; name: string }[];
+  attachments?: { bucket: "cvs" | "leasing-documents" | "application-documents"; path: string; name: string }[];
 }): Promise<NotifyResult> {
   try {
     const settings = await getNotificationSetting(args.category, args.client);

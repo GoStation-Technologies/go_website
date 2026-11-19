@@ -1,22 +1,13 @@
-import { useFormErrors } from "@/hooks/use-form-errors";
-import { FieldError, invalidProps } from "@/components/site/field-error";
+import { BusinessApplicationForm } from "@/components/site/business-application-form";
 import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/seo";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePageContent } from "@/hooks/use-cms";
 import { useStationStats } from "@/hooks/use-station-stats";
-import { FranchiseInput, submitFranchiseApplication } from "@/lib/submissions.functions";
 import { SiteLayout } from "@/components/site/site-layout";
-import { CitySelect } from "@/components/site/city-select";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { CheckCircle2, Quote, Fuel, Handshake, Building2, Award, BarChart3, GraduationCap, Network, TrendingUp, Truck } from "lucide-react";
+import { Quote, Fuel, Handshake, Award, BarChart3, GraduationCap, Network, TrendingUp, Truck } from "lucide-react";
 const stationImg = { url: "/station-canopy.jpg" };
 const heroStationImg = { url: "/franchise-station.jpg" };
 
@@ -37,46 +28,6 @@ function FranchisePage() {
   const { t } = useTranslation();
   const cms = usePageContent("franchise");
   const { stationsCount, activeRegionsCount } = useStationStats();
-  const [busy, setBusy] = useState(false);
-  const { errors, validate, fail } = useFormErrors();
-  const [ref, setRef] = useState<string | null>(null);
-  const [form, setForm] = useState<Record<string, string>>({});
-
-  const upd = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
-
-  const submit = async () => {
-    if (busy) return;
-    const data = validate(FranchiseInput, {
-          full_name: form.full_name ?? "",
-          phone: form.phone ?? "",
-          email: form.email ?? "",
-          city: form.city ?? "",
-          proposed_city: form.proposed_city ?? "",
-          proposed_district: form.proposed_district ?? "",
-          land_area_sqm: form.land_area_sqm ?? "",
-          ownership_status: form.ownership_status ?? "",
-          investment_capital_sar: form.investment_capital_sar ?? "",
-          notes: form.notes ?? "",
-        });
-    if (!data) {
-      requestAnimationFrame(() => document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
-      return;
-    }
-    setBusy(true);
-    try {
-      const res = await submitFranchiseApplication({ data });
-      setForm({});
-      setRef(res.reference);
-      toast.success(t("common.thanks"));
-    } catch (error) {
-      fail(error, "franchise");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-
-
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden bg-brand-radial py-20 text-white md:py-24">
@@ -215,50 +166,8 @@ function FranchisePage() {
           </p>
         </div>
 
-        {ref ? (
-          <Card><CardContent className="p-10 text-center">
-            <CheckCircle2 className="mx-auto h-14 w-14 text-accent" />
-            <h2 className="mt-4 text-2xl font-bold">{t("common.thanks")}</h2>
-            <p className="mt-2 text-muted-foreground">{t("common.referenceSaved")} <span className="font-mono">{ref}</span></p>
-          </CardContent></Card>
-        ) : (
-          <Card><CardContent className="p-8">
-<form noValidate onSubmit={(e) => { e.preventDefault(); void submit(); }} className="space-y-8">
-            <section><h3 className="mb-4 border-b pb-2 text-lg font-semibold text-foreground">{t("franchise.steps.personal")}</h3>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <F label={t("common.fullName")}><Input id="f-name" maxLength={200} value={form.full_name ?? ""} onChange={(e) => upd("full_name", e.target.value)} {...invalidProps("f-name", errors.full_name)} /><FieldError id="f-name" code={errors.full_name} /></F>
-                <F label={t("common.phone")}><Input id="f-phone" type="tel" inputMode="tel" dir="ltr" placeholder="05xxxxxxxx" value={form.phone ?? ""} onChange={(e) => upd("phone", e.target.value)} {...invalidProps("f-phone", errors.phone)} /><FieldError id="f-phone" code={errors.phone} /></F>
-                <F label={t("common.email")}><Input id="f-email" type="email" maxLength={255} value={form.email ?? ""} onChange={(e) => upd("email", e.target.value)} {...invalidProps("f-email", errors.email)} /><FieldError id="f-email" code={errors.email} /></F>
-                <F label={t("common.city")}><CitySelect value={form.city} onChange={(v) => upd("city", v)} /><FieldError id="f-city" code={errors.city} /></F>
-              </div>
-            </section>
-            <section><h3 className="mb-4 border-b pb-2 text-lg font-semibold text-foreground">{t("franchise.steps.location")}</h3>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <F label={t("franchise.f.proposedCity")}><CitySelect value={form.proposed_city} onChange={(v) => upd("proposed_city", v)} /></F>
-                <F label={t("franchise.f.proposedDistrict")}><Input value={form.proposed_district ?? ""} onChange={(e) => upd("proposed_district", e.target.value)} /></F>
-                <F label={t("franchise.f.landArea")}><Input type="number" value={form.land_area_sqm ?? ""} onChange={(e) => upd("land_area_sqm", e.target.value)} /></F>
-                <F label={t("franchise.f.ownership")}><Input placeholder={t("franchise.f.ownershipPlaceholder")} value={form.ownership_status ?? ""} onChange={(e) => upd("ownership_status", e.target.value)} /></F>
-              </div>
-            </section>
-            <section><h3 className="mb-4 border-b pb-2 text-lg font-semibold text-foreground">{t("franchise.steps.financial")}</h3>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <F label={t("franchise.f.capital")}><Input type="number" value={form.investment_capital_sar ?? ""} onChange={(e) => upd("investment_capital_sar", e.target.value)} /></F>
-                <div className="sm:col-span-2"><F label={t("common.message")}><Textarea rows={5} maxLength={4000} value={form.notes ?? ""} onChange={(e) => upd("notes", e.target.value)} /></F></div>
-              </div>
-            </section>
-            <div className="flex justify-end">
-              <Button type="submit" disabled={busy} className="bg-accent text-accent-foreground hover:bg-accent/90">
-                {busy ? t("common.submitting") : t("franchise.submit")}
-              </Button>
-            </div>
-            </form>
-          </CardContent></Card>
-        )}
+        <Card><CardContent className="p-5 md:p-8"><BusinessApplicationForm kind="franchise" /></CardContent></Card>
       </section>
     </SiteLayout>
   );
-}
-
-function F({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="grid gap-1.5"><Label>{label}</Label>{children}</div>;
 }

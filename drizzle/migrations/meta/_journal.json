@@ -148,6 +148,13 @@
       "when": 1795009824841,
       "tag": "0020_careers_application_url_setting",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1795077067635,
+      "tag": "0021_business_application_details",
+      "breakpoints": true
     }
   ]
 }
