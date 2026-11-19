@@ -84,7 +84,7 @@ function NewsArchivePage() {
                         src={n.cover_url}
                         alt={lng === "ar" ? n.title_ar : n.title_en}
                         loading="lazy"
-                        className="h-full w-full object-contain"
+                        className="h-full w-full object-cover object-center"
                       />
                     ) : (
                       <div className="h-full w-full bg-gradient-to-br from-primary to-accent/60" />

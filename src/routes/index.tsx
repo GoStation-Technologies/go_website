@@ -497,7 +497,7 @@ function HomePage() {
                         <img
                           src={n.cover_url}
                           alt=""
-                          className="absolute inset-0 h-full w-full object-contain"
+                          className="absolute inset-0 h-full w-full object-cover object-center"
                           loading="lazy"
                         />
                       ) : (

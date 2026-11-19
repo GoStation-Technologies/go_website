@@ -13,7 +13,7 @@ export const Route = createFileRoute("/media/$slug")({
   loader: async ({ params }) => {
     const { data } = await supabase
       .from("news_articles")
-      .select("title_en, excerpt_en, published_at")
+      .select("title_en, excerpt_en, published_at, cover_url")
       .eq("slug", params.slug)
       .eq("is_published", true)
       .maybeSingle();
@@ -27,6 +27,10 @@ export const Route = createFileRoute("/media/$slug")({
     const base = pageHead({ path: `/media/${params.slug}`, title, description, ogType: "article" });
     return {
       ...base,
+      meta: [...base.meta, ...(a?.cover_url?.startsWith("https://") ? [
+        { property: "og:image", content: a.cover_url },
+        { name: "twitter:image", content: a.cover_url },
+      ] : [])],
       scripts: [
         {
           type: "application/ld+json",
@@ -111,6 +115,6 @@ function ArticleMedia({ videoUrl, cover, title }: { videoUrl: string | null; cov
       </video>
     );
   }
-  if (cover) return <img src={cover} alt={title} className="my-8 aspect-[16/9] w-full rounded-2xl bg-muted object-contain" />;
+  if (cover) return <img src={cover} alt={title} className="mx-auto my-8 h-auto max-h-[80vh] w-full rounded-xl object-contain" />;
   return <div className="my-8 aspect-[16/9] rounded-2xl bg-gradient-to-br from-primary to-accent/60" />;
 }
