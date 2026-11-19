@@ -155,6 +155,13 @@
       "when": 1795077067635,
       "tag": "0021_business_application_details",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1795078452764,
+      "tag": "0022_restrict_cms_downloads_to_published_content",
+      "breakpoints": true
     }
   ]
 }

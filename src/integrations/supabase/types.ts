@@ -1608,6 +1608,7 @@ export type Database = {
           stations_count: number
         }[]
       }
+      cms_asset_is_published: { Args: { _name: string }; Returns: boolean }
       export_jobs_lease: {
         Args: { _limit?: number }
         Returns: {
