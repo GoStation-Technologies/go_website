@@ -3,7 +3,7 @@
 ## Franchise and acquisition forms
 - [x] Replace both forms with the requested single-page sections and shared required-field validation.
 - [x] Save all requested fields and private documents; include signed links in notifications and staff details.
-- [x] Verify bilingual/mobile layouts, 51 regression tests, real franchise/acquisition submissions and saved details; franchise email delivered with all new fields and signed document link.
+- [x] Verify all 16 form/language/theme/desktop-mobile combinations, upload selection/removal, acquisition choices, 51 regression tests, real franchise/acquisition submissions and saved details; franchise email delivered with all new fields and signed document link. Preserve legacy submission fields in staff details.
 - [ ] Verify staff detail/download clicks: requesting user has no app account, so an admin sign-in is required.
 - [ ] Verify acquisition email delivery: acquisition recipients are empty; an admin must configure them.
 - [ ] Publish the updated hosted handlers and redeploy gostation.sa; production deployment access is unavailable.

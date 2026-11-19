@@ -85,7 +85,8 @@ export function BusinessApplicationForm({ kind }: { kind: ApplicationKind }) {
               <SelectTrigger id={id} className="w-full" {...invalidProps(id, errors[field.key])}><SelectValue placeholder={text("اختر نوع الاستحواذ", "Select acquisition type")} /></SelectTrigger>
               <SelectContent><SelectItem value="fuel_stations">{text("محطات وقود", "Fuel Stations")}</SelectItem><SelectItem value="land">{text("أرض", "Land")}</SelectItem></SelectContent>
             </Select> : <Input id={id} name={field.key} disabled={busy} required={field.required} value={form[field.key] ?? ""}
-              onChange={event => update(field.key, event.target.value)} type={field.type === "tel" ? "tel" : "text"}
+              onChange={event => update(field.key, event.target.value)} type={field.type === "tel" ? "tel" : field.type === "number" ? "number" : "text"}
+              min={field.type === "number" ? 0 : undefined} step={field.type === "number" ? field.key === "station_count" ? 1 : "0.01" : undefined}
               inputMode={field.type === "number" ? "decimal" : field.type === "tel" ? "tel" : "text"}
               dir={field.type === "tel" || field.type === "number" ? "ltr" : undefined}
               placeholder={field.type === "tel" ? "05xxxxxxxx" : label} maxLength={field.type === "tel" ? 10 : field.max ?? 200}
@@ -98,7 +99,7 @@ export function BusinessApplicationForm({ kind }: { kind: ApplicationKind }) {
     <section className="space-y-5">
       <h3 className="border-b pb-3 text-lg font-semibold">{text("معلومات عامة", "General Information")}</h3>
       <div className="grid gap-2"><Label htmlFor={`${kind}-notes`}>{text("الرسالة", "Message")}</Label>
-        <Textarea id={`${kind}-notes`} disabled={busy} rows={5} maxLength={4000} value={form.notes ?? ""} onChange={event => update("notes", event.target.value)} {...invalidProps(`${kind}-notes`, errors.notes)} />
+        <Textarea id={`${kind}-notes`} placeholder={text("اكتب رسالتك", "Enter your message")} disabled={busy} rows={5} maxLength={4000} value={form.notes ?? ""} onChange={event => update("notes", event.target.value)} {...invalidProps(`${kind}-notes`, errors.notes)} />
         <FieldError id={`${kind}-notes`} code={errors.notes} />
       </div>
       <div className="grid gap-2">

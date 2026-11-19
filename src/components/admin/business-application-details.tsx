@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export function BusinessApplicationDetails({ row, kind }: { row: Record<string, unknown>; kind: ApplicationKind }) {
   const { i18n, t } = useTranslation();
   const ar = i18n.language.startsWith("ar");
-  const details = row.application_details && typeof row.application_details === "object" ? row.application_details as Record<string, unknown> : row;
+  const details: Record<string, unknown> = { ...row, ...(row.application_details && typeof row.application_details === "object" ? row.application_details as Record<string, unknown> : {}) };
   const documents = ApplicationDocument.array().safeParse(details.documents ?? []);
   const download = async (path: string) => {
     const { data, error } = await supabase.storage.from("application-documents").createSignedUrl(path, 300, { download: true });
