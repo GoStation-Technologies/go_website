@@ -35,7 +35,7 @@ export function BusinessApplicationForm({ kind }: { kind: ApplicationKind }) {
     }
     const problem = next.map(item => documentFileError(item.file)).find(Boolean);
     if (problem) {
-      setFileError(problem === "type" ? text("يُسمح فقط بملفات PDF وDOCX وJPG وPNG.", "Only PDF, DOCX, JPG and PNG files are accepted.") : text("يجب ألا يتجاوز حجم الملف 5 ميجابايت، ولا يمكن رفع ملف فارغ.", "Each file must be nonempty and no larger than 5 MB.")); return;
+      setFileError(problem === "type" ? text("يُسمح فقط بملفات PDF وDOCX وJPG وPNG.", "Only PDF, DOCX, JPG and PNG files are accepted.") : text("حجم الملف يتجاوز الحد المسموح به (20 ميجابايت)", "File size exceeds the allowed limit (20 MB)")); return;
     }
     setFileError(""); setFiles(next);
   };
@@ -108,7 +108,7 @@ export function BusinessApplicationForm({ kind }: { kind: ApplicationKind }) {
           onDragOver={event => event.preventDefault()} onDrop={event => { event.preventDefault(); if (!busy) addFiles(event.dataTransfer.files); }}>
           <Upload className="h-6 w-6 text-accent" />
           <span className="text-sm font-medium">{text("اختر الملفات أو اسحبها هنا", "Choose files or drop them here")}</span>
-          <span className="text-xs text-muted-foreground">{text("PDF، DOCX، JPG، PNG — حتى 5 ملفات، 5 ميجابايت لكل ملف", "PDF, DOCX, JPG, PNG — up to 5 files, 5 MB each")}</span>
+          <span className="text-xs text-muted-foreground">{text("PDF، DOCX، JPG، PNG — حتى 5 ملفات، 20 ميجابايت لكل ملف", "PDF, DOCX, JPG, PNG — up to 5 files, 20 MB each")}</span>
           <input id={`${kind}-documents`} type="file" multiple disabled={busy} className="sr-only" accept=".pdf,.docx,.jpg,.jpeg,.png" onChange={event => { if (event.target.files) addFiles(event.target.files); event.target.value = ""; }} />
         </label>
         {fileError && <p role="alert" className="text-sm text-destructive">{fileError}</p>}

@@ -27,7 +27,7 @@ describe("Business application requirements", () => {
     for (const extension of ["pdf", "docx", "jpg", "png"]) expect(documentFileError({ name: `document.${extension}`, size: 100 })).toBeNull();
     expect(documentFileError({ name: "script.html", size: 100 })).toBe("type");
   });
-  it("rejects documents over 5 MB", () => expect(documentFileError({ name: "document.pdf", size: 5 * 1024 * 1024 + 1 })).toBe("size"));
+  it("rejects documents over 20 MB", () => { expect(documentFileError({ name: "document.pdf", size: 20 * 1024 * 1024 })).toBeNull(); expect(documentFileError({ name: "document.pdf", size: 20 * 1024 * 1024 + 1 })).toBe("size"); });
   it("accepts documents only from their application category", () => {
     const doc = { name: "proof.pdf", path: "acquisition/12345678-1234-1234-1234-123456789012.pdf" };
     expect(AcquisitionInput.safeParse({ ...acquisition, documents: [doc] }).success).toBe(true);

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const APPLICATION_DOCUMENT_LIMIT = 5;
-export const APPLICATION_DOCUMENT_BYTES = 5 * 1024 * 1024;
+export const APPLICATION_DOCUMENT_BYTES = 20 * 1024 * 1024;
 export const ApplicationDocument = z.object({
   name: z.string().trim().min(1).max(200),
   path: z.string().regex(/^(franchise|acquisition)\/[0-9a-f-]{36}\.(pdf|docx|jpg|png)$/),
