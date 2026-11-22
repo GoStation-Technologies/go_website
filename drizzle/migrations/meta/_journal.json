@@ -162,6 +162,13 @@
       "when": 1795078452764,
       "tag": "0022_restrict_cms_downloads_to_published_content",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1795355511080,
+      "tag": "0023_bind_visitor_uploads_to_caller",
+      "breakpoints": true
     }
   ]
 }
