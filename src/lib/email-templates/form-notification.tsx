@@ -2,6 +2,14 @@ import { Body, Container, Head, Heading, Html, Link, Preview, Section, Text } fr
 import type { TemplateEntry } from "./registry";
 
 type Props = { title?: string; reference?: string; timestamp?: string; fields?: Record<string, unknown>; links?: { label: string; url: string }[]; subject?: string };
+const fieldLabels: Record<string, string> = {
+  full_name: "الاسم الكامل / Full name", phone: "رقم الجوال / Phone", email: "البريد الإلكتروني / Email",
+  company: "اسم الشركة / النشاط / Company", activity: "نوع النشاط / Business activity",
+  city: "المدينة / City", district: "الحي المفضل / Preferred district",
+  area_sqm: "المساحة المطلوبة (م²) / Required area (m²)", lease_years: "مدة الإيجار (سنوات) / Lease term (years)",
+  message: "الرسالة / Message", job_title: "المسمى الوظيفي / Job title", department: "الإدارة / Department",
+  linkedin_url: "LinkedIn", cover_letter: "رسالة المتقدم / Cover note", cv_attached: "السيرة الذاتية المرفقة / CV attached",
+};
 function FormNotification({ title = "GoStation notification", reference = "", timestamp = "", fields = {}, links = [] }: Props) {
   return <Html><Head /><Preview>{title} — {reference}</Preview>
     <Body style={{ backgroundColor: "#ffffff", fontFamily: "Arial, sans-serif", color: "#1a1554" }}>
@@ -11,7 +19,7 @@ function FormNotification({ title = "GoStation notification", reference = "", ti
         <Text>Reference: {reference}</Text><Text>Submitted: {timestamp}</Text>
         {Object.entries(fields).filter(([, value]) => value !== null && value !== undefined && String(value).trim()).map(([label, value]) =>
           <Section key={label} style={{ borderBottom: "1px solid #e8e8ee", padding: "8px 0" }}>
-            <Text style={{ margin: "0", fontWeight: 700 }}>{label.replace(/_/g, " ")}</Text>
+            <Text dir="auto" style={{ margin: "0", fontWeight: 700 }}>{fieldLabels[label] ?? label.replace(/_/g, " ")}</Text>
             <Text dir="auto" style={{ margin: "4px 0", whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{typeof value === "object" ? JSON.stringify(value) : String(value)}</Text>
           </Section>)}
         {links.map(link => <Text key={link.url}><Link href={link.url}>{link.label}</Link></Text>)}

@@ -9,6 +9,9 @@ import { handlePipeline } from "./hosted-pipeline-handler.server";
 const contact = { operation: "contact" as const, payload: { full_name: "Test", email: "visitor@example.com", phone: "", category: "general", subject: "QA", message: "Test enquiry" } };
 afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 describe("Hosted notification boundary", () => {
+  it("accepts the dedicated Leasing category for authenticated email tests", () => {
+    expect(PipelineInput.parse({ operation: "test", payload: { category: "leasing" } }).payload).toEqual({ category: "leasing" });
+  });
   it("forwards gostation.sa submissions without a service-role key", async () => {
     vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "");
     currentRequest.value = new Request("https://gostation.sa/");

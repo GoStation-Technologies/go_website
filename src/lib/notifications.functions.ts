@@ -2,15 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { writeAudit } from "./audit";
-import { NOTIFICATION_SENDER, NOTIFICATION_SENDER_NAME } from "./notification-policy";
+import { NOTIFICATION_SENDER, NOTIFICATION_SENDER_NAME, NOTIFY_CATEGORIES } from "./notification-policy";
 
-export const NOTIFY_CATEGORIES = [
-  "franchise",
-  "acquisition",
-  "contact",
-  "careers",
-  "investor",
-] as const;
+export { NOTIFY_CATEGORIES } from "./notification-policy";
 
 const emailList = z
   .array(z.string().trim().email().max(255))

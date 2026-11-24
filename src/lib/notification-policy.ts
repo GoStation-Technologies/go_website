@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export const NOTIFY_CATEGORIES = ["franchise", "acquisition", "contact", "leasing", "careers", "investor"] as const;
+export type NotifyCategory = (typeof NOTIFY_CATEGORIES)[number];
+export const NOTIFICATION_DEFAULT_PREFIXES: Partial<Record<NotifyCategory, string>> = { leasing: "[طلب تأجير مساحة]", careers: "[طلب توظيف]" };
+
 export const NOTIFICATION_SENDER = "noreply@gostation.sa";
 export const NOTIFICATION_SENDER_NAME = "GoStation | قوستيشن";
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { NOTIFY_CATEGORIES } from "./notification-policy";
 import { ContactInput, AcquisitionInput, FranchiseInput } from "./submission-schemas";
 import { ApplyInput } from "./job-application";
 import { LeasingInput } from "./leasing-request";
@@ -12,7 +13,7 @@ export const PipelineInput = z.discriminatedUnion("operation", [
   z.object({ operation: z.literal("investor"), payload: IrInput }),
   z.object({ operation: z.literal("leasing"), payload: LeasingInput }),
   z.object({ operation: z.literal("careers"), payload: ApplyInput }),
-  z.object({ operation: z.literal("test"), payload: z.object({ category: z.enum(["franchise", "acquisition", "contact", "careers", "investor"]) }) }),
+  z.object({ operation: z.literal("test"), payload: z.object({ category: z.enum(NOTIFY_CATEGORIES) }) }),
 ]);
 export type PipelineRequest = z.infer<typeof PipelineInput>;
 

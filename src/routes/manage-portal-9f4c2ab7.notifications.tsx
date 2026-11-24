@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { notificationDiagnostic, NOTIFICATION_SENDER, NOTIFICATION_SENDER_NAME } from "@/lib/notification-policy";
+import { notificationDiagnostic, NOTIFICATION_SENDER, NOTIFICATION_SENDER_NAME, NOTIFICATION_DEFAULT_PREFIXES, type NotifyCategory } from "@/lib/notification-policy";
 import { pageHead } from "@/lib/seo";
 import { useServerFn } from "@tanstack/react-start";
 
@@ -44,7 +44,7 @@ const blank = (category: string): Row => ({
   from_name: NOTIFICATION_SENDER_NAME,
   from_email: NOTIFICATION_SENDER,
   reply_to: "",
-  subject_prefix: "",
+  subject_prefix: NOTIFICATION_DEFAULT_PREFIXES[category as NotifyCategory] ?? "",
 });
 
 function NotificationsSettingsPage() {

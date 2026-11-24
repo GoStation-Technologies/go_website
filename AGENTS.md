@@ -38,3 +38,5 @@
 - Standalone submission handlers and notification test sends forward through the publishable client to the fixed Lovable-hosted public pipeline; only the hosted handler performs privileged RPCs and Resend dispatch, preserving schema validation and caller-scoped super-admin checks without exporting service credentials.
 - Franchise and acquisition share client-safe field definitions and validation; private application documents are stored as category-bound paths in application_details and signed only for staff downloads or notification emails, keeping browser uploads out of proxy request bodies.
 - CMS downloads allow exact references from published content, signed-in owners, or authorized media staff; unreferenced files stay private rather than inheriting folder-wide public access.
+
+- Notification categories are defined in the client-safe notification policy and reused by settings and hosted test validation; Leasing uses its own category rather than Contact so team routing stays isolated.

@@ -67,7 +67,7 @@ export const submitLeasingRequest = createServerFn({ method: "POST" })
       }
       try {
         const { notifySubmission } = await import("./notify.server");
-        await notifySubmission({ category: "contact", title: "New leasing request", reference: String(reference), client,
+        await notifySubmission({ category: "leasing", title: "طلب تأجير مساحة / New space leasing request", reference: String(reference), client,
           attachments: documents.map(document => ({ bucket: "leasing-documents", path: document.path, name: document.name })),
           fields: { full_name: data.full_name, email: data.email, phone: data.phone, ...data.requirements, message: data.notes } });
       } catch (error) { console.warn("[leasing] notification skipped", error); }

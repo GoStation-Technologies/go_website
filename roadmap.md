@@ -46,3 +46,9 @@ Open: admin Contact editor not click-tested (no admin account for requesting use
 - [x] Verify hosted validation, anonymous test rejection, saved routing and non-blocking email failures; 38 regression tests pass, contact UI saved GS-MSG-2026-00054 and hosted endpoint saved GS-MSG-2026-00055; build OK.
 - [ ] Verify authenticated admin Send Test Email on the hosted endpoint; requires a requesting-user super-admin session, unavailable in the current preview.
 - [ ] Publish the hosted endpoint and redeploy gostation.sa; requires production deployment access/approval.
+
+## Leasing and HR email routing
+- [x] Add dedicated Leasing settings and reuse HR settings without changing saved recipients.
+- [x] Route leasing notices separately; include all requirements, job department, and private document links.
+- [ ] Verify form saves, delivery routing, and admin settings/test controls.
+- [ ] Configure Leasing recipients: awaiting the owner’s email addresses.

@@ -1,9 +1,9 @@
 import { sendTemplateEmail, ResendDeliveryError } from "./email-templates/send-email";
-import { notificationRouting, notificationReplyTo, type NotificationRouting } from "./notification-policy";
+import { notificationRouting, notificationReplyTo, type NotificationRouting, type NotifyCategory } from "./notification-policy";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-export type NotifyCategory = "franchise" | "acquisition" | "contact" | "careers" | "investor";
+export type { NotifyCategory } from "./notification-policy";
 export type NotificationSetting = NotificationRouting & { category: string };
 export type NotifyResult = { sent: true; recipients: number } | { sent: false; reason: string; status?: number; detail?: string };
 
