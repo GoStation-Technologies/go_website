@@ -50,5 +50,7 @@ Open: admin Contact editor not click-tested (no admin account for requesting use
 ## Leasing and HR email routing
 - [x] Add dedicated Leasing settings and reuse HR settings without changing saved recipients.
 - [x] Route leasing notices separately; include all requirements, job department, and private document links.
-- [ ] Verify form saves, delivery routing, and admin settings/test controls.
-- [ ] Configure Leasing recipients: awaiting the owner’s email addresses.
+- [x] Verified 25 tests, bilingual admin cards, Leasing save/test feedback, both form submissions with private uploads, and delivered HR test/application emails with a working signed CV link; test records removed.
+- [x] Keep Leasing recipients editable in Admin and empty until staff configure them, as requested.
+- [ ] Leasing email delivery remains unverified until staff enter recipients; saved requests work without email configuration.
+- [ ] Publish hosted changes and redeploy gostation.sa; external deployment access is unavailable.
