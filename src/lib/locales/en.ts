@@ -714,6 +714,7 @@ export const en = {
         vision_mission: "Vision & mission",
         // Home page
         ceo: "CEO statement",
+        executives: "Executive team heading",
         deputy: "Deputy CEO statement",
         chairman: "Chairman statement",
         acquisitions: "Acquisitions section",

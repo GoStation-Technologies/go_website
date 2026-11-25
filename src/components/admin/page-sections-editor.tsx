@@ -192,6 +192,7 @@ export const PAGE_CMS: PageDef[] = [
       { key: "chairman", en: "Senior management — Chairman statement", ar: "الإدارة العليا — كلمة رئيس مجلس الإدارة", media: true, fields: ["content"], labels: { content: { en: "Statement", ar: "نص الكلمة" } } },
       { key: "ceo", en: "Senior management — CEO / Board Member statement", ar: "الإدارة العليا — كلمة الرئيس التنفيذي / عضو مجلس الإدارة", media: true, fields: ["content"], labels: { content: { en: "Statement", ar: "نص الكلمة" } } },
       { key: "deputy", en: "Senior management — Deputy CEO statement", ar: "الإدارة العليا — كلمة نائب الرئيس التنفيذي", media: true, fields: ["content"], labels: { content: { en: "Statement", ar: "نص الكلمة" } } },
+      { key: "executives", en: "Senior management — Executive team heading", ar: "الإدارة العليا — عنوان فريق الإدارة التنفيذية", fields: ["title"], labels: { title: { en: "Secondary Section Title", ar: "عنوان القسم الثانوي" } } },
       { key: "awards", en: "Accreditations & awards", ar: "الاعتمادات والجوائز" },
     ],
   },

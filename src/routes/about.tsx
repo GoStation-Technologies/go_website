@@ -377,7 +377,7 @@ function AboutPage() {
                     </StatementPair>
                   </div>
                   <div className="border-t border-border pt-10">
-                    <h2 className="mb-6 font-display text-2xl font-bold">{lng === "ar" ? "فريق الإدارة التنفيذية" : "Executive Management Team"}</h2>
+                    <h2 className="mb-6 font-display text-2xl font-bold">{cms.field("executives", "title", lng === "ar" ? "فريق الإدارة التنفيذية" : "Executive Management Team")}</h2>
                     <div className="mx-auto grid max-w-4xl auto-rows-fr items-stretch gap-6 md:grid-cols-2">
                       {executives.map((leader) => <ManagementProfile key={leader.id} leader={leader} language={lng} />)}
                     </div>

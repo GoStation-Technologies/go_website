@@ -717,6 +717,7 @@ export const ar = {
         vision_mission: "الرؤية والرسالة",
         // Home page
         ceo: "كلمة الرئيس التنفيذي",
+        executives: "عنوان فريق الإدارة التنفيذية",
         deputy: "كلمة نائب الرئيس التنفيذي",
         chairman: "كلمة رئيس مجلس الإدارة",
         acquisitions: "قسم الاستحواذ",
