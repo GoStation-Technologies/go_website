@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { CheckCircle2, Store, Info, Clock, FileText, Building2 } from "lucide-react";
-const stationImg = { url: "/station-canopy.jpg" };
+const stationImg = { url: "/images/station-canopy.jpg" };
 
 export const Route = createFileRoute("/leasing")({
   loader: ({ context }) => context.queryClient.ensureQueryData(leasingContentQuery),

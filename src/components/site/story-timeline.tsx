@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStationStats } from "@/hooks/use-station-stats";
+import { localAsset } from "@/lib/local-assets";
 import { useAboutStory } from "@/lib/about-story";
 import { ChevronLeft, ChevronRight, Flag, Fuel, MapPin, Smartphone, Rocket, Trophy } from "lucide-react";
 const ICONS = [Flag, Fuel, MapPin, Smartphone, Rocket, Trophy];
@@ -99,7 +100,7 @@ export function StoryTimeline() {
             >
               <div className="relative h-36 overflow-hidden">
                 <img
-                  src={m.image || "/station-canopy.jpg"}
+                  src={localAsset(m.image || "/images/station-canopy.jpg")}
                   alt=""
                   aria-hidden
                   loading="lazy"

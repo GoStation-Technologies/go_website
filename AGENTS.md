@@ -40,3 +40,4 @@
 - CMS downloads allow exact references from published content, signed-in owners, or authorized media staff; unreferenced files stay private rather than inheriting folder-wide public access.
 
 - Notification categories are defined in the client-safe notification policy and reused by settings and hosted test validation; Leasing uses its own category rather than Contact so team routing stays isolated.
+- Serve website fonts and core static branding/hero/fallback images from root-relative public/fonts and public/images paths, with local font faces and primary preloads, so VPS deployments do not depend on media CDNs; keep newly edited CMS imagery dynamic.

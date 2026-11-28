@@ -17,7 +17,7 @@ import {
   MapPin,
   ClipboardList,
 } from "lucide-react";
-const stationCanopy = { url: "/station-canopy.jpg" };
+const stationCanopy = { url: "/images/station-canopy.jpg" };
 
 export const Route = createFileRoute("/careers/$slug")({
   component: JobDetailPage,

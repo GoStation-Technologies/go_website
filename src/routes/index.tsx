@@ -26,15 +26,15 @@ import {
   QrCode,
   Wallet,
 } from "lucide-react";
-const heroAsset = { url: "/hero-cinematic.jpg" };
-const stationCanopy = { url: "/station-canopy.jpg" };
-const logoAsset = { url: "/gostation-logo.png" };
-const chairmanCutoutAsset = { url: "/chairman-cutout.png" };
+const heroAsset = { url: "/images/home-hero.jpg" };
+const stationCanopy = { url: "/images/station-canopy.jpg" };
+const logoAsset = { url: "/images/gostation-logo.png" };
+const chairmanCutoutAsset = { url: "/images/chairman-cutout.png" };
 
-const appPoints = { url: "/go-app-points.jpg" };
-const appReports = { url: "/go-app-reports.jpg" };
-const goQr = { url: "/gostation-qr.png" };
-const partnerLogo = { url: "/gostation-logo.png" };
+const appPoints = { url: "/images/go-app-points.jpg" };
+const appReports = { url: "/images/go-app-reports.jpg" };
+const goQr = { url: "/images/gostation-qr.png" };
+const partnerLogo = { url: "/images/gostation-logo.png" };
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { StatCards } from "@/components/site/stat-cards";
 import { MediaCarousel } from "@/components/site/media-carousel";

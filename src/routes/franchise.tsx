@@ -8,8 +8,8 @@ import { SiteLayout } from "@/components/site/site-layout";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Quote, Fuel, Handshake, Award, BarChart3, GraduationCap, Network, TrendingUp, Truck } from "lucide-react";
-const stationImg = { url: "/station-canopy.jpg" };
-const heroStationImg = { url: "/franchise-station.jpg" };
+const stationImg = { url: "/images/station-canopy.jpg" };
+const heroStationImg = { url: "/images/franchise-station.jpg" };
 
 
 

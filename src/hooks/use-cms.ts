@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { getContentLanguage } from "@/lib/i18n";
+import { localAsset } from "@/lib/local-assets";
 import { getSupportChannelsPublic } from '@/lib/assistant.functions';
 
 /**
@@ -100,7 +101,7 @@ export function usePageContent(pageSlug: string) {
 
   /** Section image with static fallback. */
   const media = (sectionKey: string, fallback = ""): string =>
-    get(sectionKey)?.media_url?.trim() || fallback;
+    localAsset(get(sectionKey)?.media_url?.trim() || fallback);
 
   /** Sections default to visible when no record exists yet. */
   const visible = (sectionKey: string): boolean => get(sectionKey)?.is_visible ?? true;

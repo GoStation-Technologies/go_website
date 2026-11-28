@@ -1,5 +1,11 @@
 # Roadmap — QA fixes (ملاحظات الموقع 6-1)
 
+## Local fonts and core assets
+- [x] Bundle 14 WOFF2 files across all active font families/weights in public/fonts with licenses, local font faces and primary preloads.
+- [x] Serve 20 bundled logos, saved core banners and fallback illustrations from public/images; preserve new CMS uploads and dynamic editorial media.
+- [x] Nine tests passed; Arabic/English home and six public pages verified at phone/desktop sizes, no runtime errors, all local binaries return HTTP 200. Nitro source confirms public directory registration and node-server output conventions; build signal is clean.
+- [ ] Redeploy gostation.sa and verify the production .output/public payload: VPS deployment access is unavailable.
+
 ## Franchise and acquisition forms
 - [x] Replace both forms with the requested single-page sections and shared required-field validation.
 - [x] Save all requested fields and private documents; include signed links in notifications and staff details.

@@ -12,7 +12,7 @@ import { FutureRoadmap } from "@/components/site/future-roadmap";
 import { ManagementProfile } from "@/components/site/management-profile";
 import { LeadershipStatement, StatementPair } from "@/components/site/leadership-statement";
 import { managementTeam } from "@/lib/management-team";
-const canopyImg = { url: "/station-canopy.jpg" };
+const canopyImg = { url: "/images/about-hero.png" };
 
 
 import { useState } from "react";
@@ -86,6 +86,7 @@ function AboutPage() {
               maskImage: `linear-gradient(to ${lng === "ar" ? "left" : "right"}, transparent 0%, rgba(0,0,0,0.6) 40%, black 80%)`,
             }}
             loading="eager"
+            fetchPriority="high"
           />
         </div>
         {/* full-banner brand filter over everything */}

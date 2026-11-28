@@ -6,7 +6,7 @@ import { usePageContent } from "@/hooks/use-cms";
 import { SiteLayout } from "@/components/site/site-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Info, Clock, FileText, Handshake } from "lucide-react";
-const stationImg = { url: "/station-canopy.jpg" };
+const stationImg = { url: "/images/station-canopy.jpg" };
 
 export const Route = createFileRoute("/acquisitions")({
   component: AcqPage,

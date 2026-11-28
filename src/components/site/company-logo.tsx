@@ -1,6 +1,3 @@
-import markAsset from "@/assets/gostation-brand-mark.png";
-import whiteMarkAsset from "@/assets/gostation-brand-mark-white.png";
-
 /** Supplied brand symbol, paired with the bilingual legal company name. */
 export function CompanyLogo({
   inverse = false,
@@ -16,8 +13,8 @@ export function CompanyLogo({
       aria-label="GOStation — شركة هلا السعودية للخدمات البترولية — Hala Saudi Petroleum Services"
     >
       <span className="company-logo-mark" aria-hidden="true">
-        <img src={markAsset} alt="" width={868} height={829} className="company-logo-color" />
-        <img src={whiteMarkAsset} alt="" width={868} height={829} className="company-logo-white" />
+        <img src="/images/gostation-brand-mark.png" alt="" width={868} height={829} loading={footer ? "lazy" : "eager"} fetchPriority={footer ? "auto" : "high"} className="company-logo-color" />
+        <img src="/images/gostation-brand-mark-white.png" alt="" width={868} height={829} loading={footer ? "lazy" : "eager"} fetchPriority={footer ? "auto" : "high"} className="company-logo-white" />
       </span>
       <span className="company-logo-name" aria-hidden="true">
         <span className="company-logo-brand font-display" lang="en" dir="ltr">GOStation</span>

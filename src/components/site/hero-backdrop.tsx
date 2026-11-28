@@ -7,6 +7,8 @@ export function HeroBackdrop({ src, alt }: { src: string; alt: string }) {
         alt={alt}
         width={1600}
         height={1600}
+        loading="eager"
+        fetchPriority="high"
         className="h-full w-full object-cover"
       />
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-ink/70" />

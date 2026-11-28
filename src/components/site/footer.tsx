@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Instagram, Linkedin, Youtube, Facebook, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
 import { CompanyLogo } from "@/components/site/company-logo";
-const isoLogo = { url: "/iso-logo.png" };
+const isoLogo = { url: "/images/iso-logo.png" };
 import { useSiteSettings, useSupportChannels } from "@/hooks/use-cms";
 import { getContentLanguage } from "@/lib/i18n";
 

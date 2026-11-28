@@ -95,16 +95,15 @@ export const Route = createRootRouteWithContext<{
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "GoStation — A station and more" },
       { name: "twitter:description", content: "The fastest-growing fuel network in Saudi Arabia — live fuel prices, franchise opportunities, and a full station experience." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1fda0e7f-ceba-4d6b-bedb-10ff02e8e432/id-preview-f53b5882--c1862ef1-c082-4ae4-9879-6f18d23db5e4.lovable.app-1784669419270.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1fda0e7f-ceba-4d6b-bedb-10ff02e8e432/id-preview-f53b5882--c1862ef1-c082-4ae4-9879-6f18d23db5e4.lovable.app-1784669419270.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/gostation-logo.png" },
-      { rel: "apple-touch-icon", href: "/gostation-logo.png" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" },
+      { rel: "icon", type: "image/png", href: "/images/gostation-logo.png" },
+      { rel: "apple-touch-icon", href: "/images/gostation-logo.png" },
+      { rel: "preload", href: "/fonts/ibm-plex-sans-arabic-400.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+      { rel: "preload", href: "/fonts/ibm-plex-sans-arabic-700.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+      { rel: "preload", href: "/fonts/manrope-400.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+      { rel: "preload", href: "/fonts/sora-700.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
     ],
     scripts: [
       {

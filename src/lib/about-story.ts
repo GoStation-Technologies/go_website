@@ -15,7 +15,7 @@ export type AboutStory = {
 
 export const SETTING_KEY = "about_story";
 
-const IMGS = ["/gostation-pylon.jpg", "/station-canopy.jpg", "/franchise-station.jpg", "/go-app-download.jpg", "/hero-cinematic.jpg", "/station-canopy.jpg"];
+const IMGS = ["/images/gostation-pylon.jpg", "/images/station-canopy.jpg", "/images/franchise-station.jpg", "/images/go-app-download.jpg", "/images/hero-cinematic.jpg", "/images/station-canopy.jpg"];
 const YEARS = ["2016", "2018", "2020", "2022", "2024", "2026"];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

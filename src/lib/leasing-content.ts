@@ -1,3 +1,5 @@
+import { localAsset } from "./local-assets";
+
 export type LeasingSection = {
   section_key: string;
   title_en: string | null;
@@ -18,6 +20,6 @@ export function leasingContent(sections: LeasingSection[], language: "ar" | "en"
       const section = get(key);
       return (section?.is_visible !== false ? section?.[`${field}_${language}`]?.trim() || fallback : fallback).normalize("NFKC");
     },
-    media: (key: string, fallback: string) => get(key)?.is_visible !== false ? get(key)?.media_url?.trim() || fallback : fallback,
+    media: (key: string, fallback: string) => localAsset(get(key)?.is_visible !== false ? get(key)?.media_url?.trim() || fallback : fallback),
   };
 }

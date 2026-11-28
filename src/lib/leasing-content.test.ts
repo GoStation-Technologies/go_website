@@ -23,6 +23,6 @@ describe("leasing CMS defaults and publication", () => {
   it("does not expose hidden content or imagery", () => {
     const cms = leasingContent([{ ...section, is_visible: false }], "en");
     expect(cms.field("spaces", "content", "default")).toBe("default");
-    expect(cms.media("spaces", "/station-canopy.jpg")).toBe("/station-canopy.jpg");
+    expect(cms.media("spaces", "/station-canopy.jpg")).toBe("/images/station-canopy.jpg");
   });
 });
